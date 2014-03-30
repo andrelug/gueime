@@ -1,3 +1,6 @@
+body {
+  height: 1300px;
+}
 .row {
   max-width: 1650px;
 }
@@ -44,9 +47,20 @@ textarea {
 .top-bar {
   background-color: #479ecd;
 }
-.tagSelection {
+#tagSelection {
   height: 45px;
 }
-body {
-  height: 1300px;
+#tagSelection span {
+  position: relative;
+  top: 14px;
+  margin-right: 4px;
+  font-weight: 700;
+  color: #fff;
+  background-color: #27b899;
+  padding: 6px 8px 8px 8px;
+}
+#tagSelection span a {
+  margin-left: 6px;
+  color: #000;
+  font-size: 10pt;
 }

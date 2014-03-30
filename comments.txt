@@ -1,0 +1,25 @@
+
+SEARCH
+
+--> Todas as buscas serão feitas a partir dos Slugs
+
+--> Colocar o gif animado -> http://stackoverflow.com/questions/16881626/loading-gif-while-waiting-for-ajax-response
+
+--> A busca tem que ser async --> https://github.com/caolan/async
+
+--> Usar método de Facet --> http://blog.mongodb.org/post/59757486344/faceted-search-with-mongodb
+
+--> Fazer paginação com botão para carregar mais por ajax
+
+
+SAVE
+
+--> Transformar nomes em slugs
+
+--> Salvar o Facet para jogos e artigos
+
+
+
+HTML
+
+--> Usar estrutura isotope --> 3x para análises 1x para notícias 2x para artigos

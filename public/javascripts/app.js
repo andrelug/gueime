@@ -15,3 +15,14 @@ $(window).on({
     }
 });
 
+$('#mainInput').keypress(function (event) {
+    if (event.keyCode == 13) {
+        $('#tagSelection').append('<span>' + $(this).val() + '<a class="tag" id="' + $(this).val() + '">x</a></span>');
+        $(this).val('');
+    }
+});
+
+$(document).on('click', '.tag', function () {
+    var id = $(this).attr('id');
+    $("#" + id).parent().remove();
+});

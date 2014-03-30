@@ -29,6 +29,7 @@
     "bcrypt-nodejs": "*",
     "newrelic": "*",
     "ip": "*",
+    "async": "*",
     "connect-mongo": "*"
   },
   "noAnalyze": true,

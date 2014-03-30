@@ -1,6 +1,8 @@
 var Users = require('./models/user');
 var func = require('../config/functions');
+var facebook = require('../config/facebook.js');
 var ip = require('ip');
+var async = require('async');
 
 // Session check function
 var sessionReload = function(req, res, next){

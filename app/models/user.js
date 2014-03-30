@@ -9,7 +9,7 @@ var UserSchema = new mongoose.Schema({
         middle: String,
         last: String,
         nickName: String,
-        loginName: {type: String, lowercase: true, trim: true}
+        loginName: {type: String, lowercase: true, trim: true, unique: true}
     },
     birthDate: Date,
     email: {type: String, required: true, unique: true, index: true},
@@ -18,27 +18,17 @@ var UserSchema = new mongoose.Schema({
     bio: String,
     photo: String,
     password: {
-        main: String,
-        past: {
-            past1: String,
-            past2: String
-        }
+        main: String
     },
     localization: {
         country: String,
         state: String,
-        city: String,
-        zipcode: Number,
-        telephone: Number
-    },
-    scores:{
-        best: Number,
-        history:[{_id: false, score: Number, date: Date, time: [Number], won: Boolean}]
+        city: String
     },
     social: {
         facebook: {
             id: String,
-            token: String,
+            token: {type: String, index: true},
             email: String,
             name: String,
             url: String,
@@ -58,8 +48,9 @@ var UserSchema = new mongoose.Schema({
             url: String
         }
     },
-    deleted: {type: Boolean, default: false},
-    onOffSwitch: {type: Boolean, default: true}
+    follow: [{_id: false, type: mongoose.Schema.Types.ObjectId}],
+    followedBy: [{_id: false, type: mongoose.Schema.Types.ObjectId}],
+    deleted: {type: Boolean, default: false}
 });
 
 // methods ======================
