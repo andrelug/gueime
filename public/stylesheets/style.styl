@@ -70,26 +70,125 @@ input[type="text"], textarea
 /* GRID */
 
 .item
-    height 200px
+    height 250px
     margin-bottom 20px
     overflow hidden
-    width 25%
+    width 24.5%
     background-color gBlue
+    box-shadow 1px 1px 1px 0px black
+    -webkit-transition: all 400ms ease;
+    -moz-transition: all 400ms ease;
+    -ms-transition: all 400ms ease;
+    -o-transition: all 400ms ease;
+    transition: all 400ms ease;
+
+.hidden
+    position absolute
+    width 100%
+    height 100%
+    opacity 0
+    -webkit-transition: all 400ms ease;
+    -moz-transition: all 400ms ease;
+    -ms-transition: all 400ms ease;
+    -o-transition: all 400ms ease;
+    transition: all 400ms ease;
+
+    p
+        color white
+        padding 8px
+        position relative
+        top 60px
+    
+.infoGame
+    background-color gRed
+
+.infoArticle
+    background-color gGreen
+
+.item:hover
+    -webkit-transition: all 400ms ease;
+    -moz-transition: all 400ms ease;
+    -ms-transition: all 400ms ease;
+    -o-transition: all 400ms ease;
+    transition: all 400ms ease;
+
 
 .w4
-    width 50%
-    background-color gGreen
+    width 50.5%
 
 .w6
     width 100%
-    background-color gDarkBlue
     
 
 .ext
     height 300%
     width 300%
 
-
 #gridArticles
     max-width 100%
     margin-left 12.5%
+
+.details
+    background-color white
+    height 70px
+    width 100%
+    position absolute
+    top 180px
+
+    h2
+        color white
+        font-size 14pt
+        -webkit-transition: all 400ms ease;
+        -moz-transition: all 400ms ease;
+        -ms-transition: all 400ms ease;
+        -o-transition: all 400ms ease;
+        transition: all 400ms ease;
+
+    p
+        color #34495e
+        padding 0 5px
+        margin-top 4px
+
+        span
+            font-size 10pt
+            float right
+
+    p.graph
+        position relative
+        top -23px
+        float right
+
+    p.by
+        padding-bottom 10px
+        border-bottom 1px dotted #34495e
+            
+
+    .name
+        padding 1px 5px
+        width 100%
+        background-color gGreen
+
+    .game
+        padding 1px 5px
+        width 100%
+        background-color gRed
+
+.titleHover
+    position absolute
+    top -170px
+    -webkit-transition: all 400ms ease;
+    -moz-transition: all 400ms ease;
+    -ms-transition: all 400ms ease;
+    -o-transition: all 400ms ease;
+    transition: all 400ms ease;
+
+@media only screen and (max-width: 64.063em)
+    #gridArticles
+        margin-left 1%
+
+    .item
+        width 47%
+    .w4
+        width 97%
+    
+    
