@@ -1,6 +1,22 @@
 var container = $('#gridArticles');
 
+var string_to_slug = function (str) {
+    str = str.replace(/^\s+|\s+$/g, ''); // trim
+    str = str.toLowerCase();
+		  
+    // remove accents, swap ñ for n, etc
+    var from = "àãáäâèéëêìíïîòóõöôùúüûñç·/_,:;";
+    var to   = "aaaaaeeeeiiiiooooouuuunc------";
+    for (var i=0, l=from.length ; i<l ; i++) {
+        str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+    }
 
+    str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+    .replace(/\s+/g, '-') // collapse whitespace and replace by -
+    .replace(/-+/g, '-'); // collapse dashes
+
+    return str;
+}
 
 
 $('.item').hover(function () {
@@ -24,9 +40,17 @@ $(document).on('click', '.tag', function () {
     $("#" + id).parent().remove();
 });
 
-container.waitForImages( function () {
+$(document).on('click', '.item', function () {
+    var id = string_to_slug( $(this).find('.ref').html());
+    history.pushState({}, "page 2", "/"+id)
+});
+
+
+container.waitForImages(function () {
     $("#spinning").hide();
-    container.animate({'opacity': 1});
+    $('body').css('overflow-y', 'auto');
+    container.animate({ 'opacity': 1 });
+    
 
     container.packery({
         itemSelector: '.item',
@@ -39,19 +63,19 @@ container.waitForImages( function () {
     nav_sticky = nav.offset().top; //get the Y-position of section
 
     $(window).on({
-    scroll:function(){ // fires when user scrolls
-        if($(window).width() > 641){
-            var current_position = window.pageYOffset; // get the current window Y-Position
-            if( current_position > nav_sticky ) {
-                nav.addClass('sticky');
-                container.css('margin-top',137); // add class to make the nav sticky using css
-            } else {
-                nav.removeClass('sticky');
-                container.css('margin-top',0); // remove sticky css class
+        scroll: function () { // fires when user scrolls
+            if ($(window).width() > 641) {
+                var current_position = window.pageYOffset; // get the current window Y-Position
+                if (current_position > nav_sticky) {
+                    nav.addClass('sticky');
+                    container.css('margin-top', 137); // add class to make the nav sticky using css
+                } else {
+                    nav.removeClass('sticky');
+                    container.css('margin-top', 0); // remove sticky css class
+                }
             }
         }
-    }
-});
+    });
 
 
 

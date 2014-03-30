@@ -1,5 +1,5 @@
 body {
-  height: 1300px;
+  overflow: hidden;
 }
 .row {
   max-width: 100%;
