@@ -1,3 +1,5 @@
 
 /iisnode
 /favicon.ico
+/iisnode.yml
+/newrelic_agent.log
