@@ -11,6 +11,17 @@ html.no-js(lang="pt_BR")
         
     
         script(src="/javascripts/vendor/modernizr.js")
+        script.
+            var _gaq = _gaq || [];
+            _gaq.push(['_setAccount', 'UA-36793982-1']);
+            _gaq.push(['_setDomainName', 'gueime.com.br']);
+            _gaq.push(['_trackPageview']);
+
+            (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'stats.g.doubleclick.net/dc.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+            })();
     body
         block content
 
