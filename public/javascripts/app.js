@@ -15,4 +15,3 @@ $(window).on({
     }
 });
 
-mongodb://gueimeSessions:LXBDQfDIbf4xQz8I621ZXjuN.z_NosqUAu1B6H35LZE-@ds035747.mongolab.com:35747/gueimeSessions
