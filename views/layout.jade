@@ -1,7 +1,23 @@
-doctype 5
-html
-  head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
-  body
-    block content
+doctype html
+<!--[if IE 9]><html class="lt-ie10" lang="pt_BR" > <![endif]-->
+html.no-js(lang="pt_BR")
+    head
+        meta(charset="utf-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title= title
+        link(rel="stylesheet", href="/stylesheets/base/normalize.css")
+        link(rel="stylesheet", href="/stylesheets/base/foundation.css")
+        link(rel='stylesheet', href='/stylesheets/style.css')
+        
+    
+        script(src="/javascripts/vendor/modernizr.js")
+    body
+        block content
+
+        script(src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js")
+        script(src="/javascripts/vendor/fastclick.js")
+        script(src="/javascripts/vendor/placeholder.js")
+        script(src="/javascripts/foundation.min.js")
+        script(src="/javascripts/app.js")
+        script.
+            $(document).foundation();

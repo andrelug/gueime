@@ -1,5 +1,22 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+    div.row
+        div.large-4.large-centered.columns(style="height:10rem;")
+            span.vertical-align-helper
+            img.reflect(src="/images/gueime.png")
+  
+        div.socialclub.show-for-medium-up
+            img(src="/images/facebook.png")
+            img(src="/images/twitter.png")
+
+    div#nav-sticky
+        div.nav
+            div.row
+                div.large-5.medium-9.medium-centered.columns.large-centered
+                    input(type="text", placeholder="Ache tudo sobre Games!")
+
+        div.contain-to-grid
+            div.row
+                div.large-8.large-offset-2.medium-12.columns.tagSelection
+                            

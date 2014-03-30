@@ -1,8 +1,52 @@
-body {
-  padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+.row {
+  max-width: 1650px;
 }
-
-a {
-  color: #00B7FF;
+.vertical-align-helper {
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+.reflect {
+  -webkit-box-reflect: below 0px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(20%, transparent), to(rgba(255,255,255,0.12)));
+}
+.socialclub {
+  position: absolute;
+  top: 50px;
+  left: 68%;
+}
+.socialclub img {
+  margin-right: 5px;
+}
+.nav {
+  height: 52px;
+  background-color: #338ac3;
+}
+#nav-sticky {
+  background: transparent;
+  z-index: 50;
+  min-width: 100%;
+  padding: 0px;
+}
+.sticky {
+  top: 0px;
+  position: fixed;
+}
+input[type="text"],
+textarea {
+  height: 40px;
+  margin-top: 6px;
+}
+.contain-to-grid {
+  background-color: #479ecd;
+  margin-bottom: 40px;
+  box-shadow: 0px 3px 3px rgba(0,0,0,0.3);
+}
+.top-bar {
+  background-color: #479ecd;
+}
+.tagSelection {
+  height: 45px;
+}
+body {
+  height: 1300px;
 }
