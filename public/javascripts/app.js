@@ -41,8 +41,15 @@ $(document).on('click', '.tag', function () {
 });
 
 $(document).on('click', '.item', function () {
-    var id = string_to_slug( $(this).find('.ref').html());
-    history.pushState({}, "page 2", "/"+id)
+    var id = string_to_slug($(this).find('.ref').html());
+    history.pushState({}, "page 2", "/" + id);
+    $('.content-wrap').slideDown();
+    $('body').css('overflow-y', 'hidden')
+});
+
+$('.exit').on('click', function () {
+    $('.content-wrap').slideUp();
+    $('body').css('overflow-y', 'auto')
 });
 
 
