@@ -47,6 +47,13 @@ textarea {
 .top-bar {
   background-color: #479ecd;
 }
+#gridArticles {
+  opacity: 0;
+}
+#spinning {
+  text-align: center;
+  margin-top: 100px;
+}
 #tagSelection {
   height: 45px;
 }
