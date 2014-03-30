@@ -23,3 +23,8 @@ SAVE
 HTML
 
 --> Usar estrutura isotope --> 3x para análises 1x para notícias 2x para artigos
+
+
+TEXT
+
+--> Usar SirTravor --> http://madebymany.github.io/sir-trevor-js/

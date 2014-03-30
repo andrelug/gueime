@@ -2,7 +2,7 @@ body {
   height: 1300px;
 }
 .row {
-  max-width: 1650px;
+  max-width: 100%;
 }
 .vertical-align-helper {
   display: inline-block;
@@ -63,4 +63,28 @@ textarea {
   margin-left: 6px;
   color: #000;
   font-size: 10pt;
+}
+/* GRID */
+.item {
+  height: 200px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  width: 25%;
+  background-color: #479ecd;
+}
+.w4 {
+  width: 50%;
+  background-color: #27b899;
+}
+.w6 {
+  width: 100%;
+  background-color: #338ac3;
+}
+.ext {
+  height: 300%;
+  width: 300%;
+}
+#gridArticles {
+  max-width: 100%;
+  margin-left: 12.5%;
 }
