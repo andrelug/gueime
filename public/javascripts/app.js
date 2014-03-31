@@ -28,7 +28,7 @@ $('a').click(function () {
         var ajaxUrl = $(this).attr('href');
         ajaxPage(ajaxUrl);
         history.pushState(null, null, ajaxUrl);
-        ga('send', 'pageview');
+        ga('send', 'pageview', ajaxUrl);
         return false;
     }
 });
