@@ -1,23 +1,5 @@
 var container = $('#gridArticles');
 
-var string_to_slug = function (str) {
-    str = str.replace(/^\s+|\s+$/g, ''); // trim
-    str = str.toLowerCase();
-		  
-    // remove accents, swap ñ for n, etc
-    var from = "àãáäâèéëêìíïîòóõöôùúüûñç·/_,:;";
-    var to   = "aaaaaeeeeiiiiooooouuuunc------";
-    for (var i=0, l=from.length ; i<l ; i++) {
-        str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
-    }
-
-    str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
-    .replace(/\s+/g, '-') // collapse whitespace and replace by -
-    .replace(/-+/g, '-'); // collapse dashes
-
-    return str;
-}
-
 
 $('.item').hover(function () {
     $(this).find('.hidden').css('opacity', 1);
@@ -40,16 +22,48 @@ $(document).on('click', '.tag', function () {
     $("#" + id).parent().remove();
 });
 
-$(document).on('click', '.item', function () {
-    var id = string_to_slug($(this).find('.ref').html());
-    history.pushState({}, "page 2", "/" + id);
-    $('.content-wrap').slideDown();
-    $('body').css('overflow-y', 'hidden')
+$('a').click(function () {
+    if ($(this).data("link") == "ajax") {
+        console.log("data link correto");
+        var ajaxUrl = $(this).attr('href');
+        ajaxPage(ajaxUrl);
+        history.pushState(null, null, ajaxUrl);
+        return false;
+    }
+    return false;
+
 });
 
-$('.exit').on('click', function () {
+$(document).on('click', '.exit', function(){
     $('.content-wrap').slideUp();
-    $('body').css('overflow-y', 'auto')
+    $('body').css('overflow-y', 'auto');
+    history.pushState({}, "page 2", "/");
+})
+
+var ajaxPage = function (url) {
+    $.ajax({
+        type: "GET",
+        url: url,
+        dataType: 'html',
+        beforeSend: function () {
+            $('.content-wrap').slideDown();
+            $('body').css('overflow-y', 'hidden');
+        }
+    }).done(function (data) {
+        $('.content').html(data);
+    });
+}
+
+
+
+
+// Need to check if this is good for performance
+$(document).on('keyup', function (event) {
+    if(event.keyCode == 8 || event.keyCode == 27 ){
+        $('.content-wrap').slideUp();
+        $('body').css('overflow-y', 'auto');
+        history.pushState({}, "page 2", "/");
+    }
 });
 
 
@@ -57,7 +71,7 @@ container.waitForImages(function () {
     $("#spinning").hide();
     $('body').css('overflow-y', 'auto');
     container.animate({ 'opacity': 1 });
-    
+
 
     container.packery({
         itemSelector: '.item',
@@ -76,9 +90,14 @@ container.waitForImages(function () {
                 if (current_position > nav_sticky) {
                     nav.addClass('sticky');
                     container.css('margin-top', 137); // add class to make the nav sticky using css
+                    if ($(window).width() > 1025){
+                        $('.gueimeWhite').fadeIn();
+                    }
+                    
                 } else {
                     nav.removeClass('sticky');
                     container.css('margin-top', 0); // remove sticky css class
+                     $('.gueimeWhite').fadeOut();
                 }
             }
         }

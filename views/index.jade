@@ -3,15 +3,16 @@ extends layout
 block content
     div.content-wrap
         div.content
-            div.exit: a X
+            
+            
     div.row
         div.large-4.large-centered.columns(style="height:10rem;")
             span.vertical-align-helper
-            img.reflect(src="/images/gueime.png")
+            img.reflect(src="/images/gueime.png", alt="Gueime Logo")
   
         div.socialclub.show-for-medium-up
-            img(src="/images/facebook.png")
-            img(src="/images/twitter.png")
+            img(src="/images/facebook.png", alt="facebook page")
+            img(src="/images/twitter.png", alt="twitter page")
 
     div#nav-sticky
         div.nav
@@ -21,6 +22,8 @@ block content
 
         div.contain-to-grid
             div.row
+                div.gueimeWhite
+                    img(src="/images/gueime-white.png", alt="white logo")
                 div.large-8.large-offset-2.medium-12.columns#tagSelection
 
 
@@ -29,7 +32,7 @@ block content
     div.row#gridArticles
         div.grid-wrap
 
-        a.item
+        a(href="/artigos/naruto-ganha-novo-dlc", data-link="ajax").item
             div.hidden.infoArticle
                 p Naruto é um game bem interessante...ganhar do Gabriel é fácil fácil
             div.ext
@@ -42,7 +45,7 @@ block content
                     p.graph 400 <i class="fa fa-eye"></i> 30 <i class="fa fa-comment"></i>
 
 
-        a.item.w4
+        a(href="/artigos/naruto-shippudden-ultimate-ninja-storm-3", data-link="ajax").item.w4
             div.hidden.infoGame
                 p Naruto é um game bem interessante...ganhar do Gabriel é fácil fácil
             div.ext

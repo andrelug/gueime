@@ -30,4 +30,10 @@ module.exports = function (app, passport, mongoose) {
             });
         }
     });
+
+    app.get('/artigos/:artigo', function (req, res) {
+        var artigo = req.params.artigo;
+
+        res.render('artigo');
+    });
 }

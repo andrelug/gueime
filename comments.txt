@@ -28,3 +28,7 @@ HTML
 TEXT
 
 --> Usar SirTravor --> http://madebymany.github.io/sir-trevor-js/
+
+SEO
+
+--> Tenho que criar uma rota para puxar as url's em uma nova página
