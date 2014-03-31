@@ -30,8 +30,6 @@ $('a').click(function () {
         history.pushState(null, null, ajaxUrl);
         return false;
     }
-    return false;
-
 });
 
 $(document).on('click', '.exit', function(){
