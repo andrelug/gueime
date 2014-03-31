@@ -68,7 +68,7 @@ textarea {
   margin-top: 100px;
 }
 #spinningContent {
-  display: none;
+  position: relative;
   z-index: 99999999;
 }
 #tagSelection {

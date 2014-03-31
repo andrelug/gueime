@@ -47,14 +47,15 @@ var ajaxPage = function (url) {
             $('body').css('overflow-y', 'hidden');
             $('#darken').css('display', 'block');
             $('.content-wrap').slideDown();
-            $('#spinningContent').show();
+
         }
     }).done(function (data) {
 
-        $('.content').append(data);
-        $('#loading').waitForImages(function () {
-            $('#spinningContent').hide();
+        $('.content').html(data);
+        $('#loading').delay(500).waitForImages(function () {
+            $('#spinningContent').fadeOut(500);
             $('#loading').animate({ 'opacity': 1 });
+
         });
     });
 }
