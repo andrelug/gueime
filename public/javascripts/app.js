@@ -22,6 +22,9 @@ $(document).on('click', '.tag', function () {
     $("#" + id).parent().remove();
 });
 
+
+// Opening Overlay
+
 $('a').click(function () {
     if ($(this).data("link") == "ajax") {
         console.log("data link correto");
@@ -33,12 +36,7 @@ $('a').click(function () {
     }
 });
 
-$(document).on('click', '.exit', function(){
-    $('.content-wrap').slideUp();
-    $('body').css('overflow-y', 'auto');
-    history.pushState({}, "page 2", "/");
-    ga('send', 'pageview', '/');
-})
+
 
 var ajaxPage = function (url) {
     $.ajax({
@@ -48,6 +46,7 @@ var ajaxPage = function (url) {
         beforeSend: function () {
             $('.content-wrap').slideDown();
             $('body').css('overflow-y', 'hidden');
+            $('#darken').css('display', 'block');
         }
     }).done(function (data) {
         $('.content').html(data);
@@ -55,17 +54,26 @@ var ajaxPage = function (url) {
 }
 
 
-
+// Closing Overlay
 
 // Need to check if this is good for performance
 $(document).on('keyup', function (event) {
     if(event.keyCode == 8 || event.keyCode == 27 ){
         $('.content-wrap').slideUp();
         $('body').css('overflow-y', 'auto');
+        $('#darken').css('display', 'none');
         history.pushState({}, "page 2", "/");
         ga('send', 'pageview', '/');
     }
 });
+
+$(document).on('click', '.exit', function(){
+    $('.content-wrap').slideUp();
+    $('body').css('overflow-y', 'auto');
+    $('#darken').css('display', 'none');
+    history.pushState({}, "page 2", "/");
+    ga('send', 'pageview', '/');
+})
 
 
 container.waitForImages(function () {
