@@ -5,7 +5,7 @@ block content
         div.content
             
     div#darken       
-    div.row
+    div.row(style="background-color: white;")
         div.large-4.large-centered.columns(style="height:10rem;")
             span.vertical-align-helper
             img.reflect(src="/images/gueime.png", alt="Gueime Logo")
@@ -24,7 +24,7 @@ block content
             div.row
                 div.gueimeWhite
                     img(src="/images/gueime-white.png", alt="white logo")
-                div.large-3.columns
+                div.large-2.columns
                     if (!user)
                         a.facebook(href="/auth/facebook") <i class="fa fa-facebook"></i> Login
                     else
@@ -32,7 +32,7 @@ block content
                         a.create(href="/create") <i class="fa fa-pencil-square-o"></i> Create
                         a.logout(href="/logout") <i class="fa fa-sign-out"></i> sair
                         
-                div.large-8.medium-12.columns#tagSelection
+                div.large-10.medium-12.columns#tagSelection
 
 
     div#spinning

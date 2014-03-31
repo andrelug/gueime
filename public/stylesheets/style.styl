@@ -3,6 +3,7 @@
 
 body
     overflow hidden
+    background-color #ecf0f1
 
 .row
     max-width 100%
@@ -54,6 +55,7 @@ input[type="text"], textarea
     background-color gBlue
     margin-bottom 40px
     box-shadow 0px 3px 3px rgba(0,0,0,0.3)
+    overflow auto
 
 .top-bar
     background-color gBlue
@@ -67,15 +69,17 @@ input[type="text"], textarea
 
 #tagSelection
     height 45px
+    width 80%
 
 #tagSelection span
     position relative
     top 14px
-    margin-right 4px
+    margin -5px 5px 12px 0
     font-weight 700
     color white
     background-color gGreen
     padding 6px 8px 8px 8px
+    float left
 
 #tagSelection span a
     margin-left 6px
@@ -91,7 +95,7 @@ input[type="text"], textarea
     overflow hidden
     width 24.5%
     background-color gBlue
-    box-shadow 1px 1px 1px 0px black
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
     -webkit-transition: all 400ms ease;
     -moz-transition: all 400ms ease;
     -ms-transition: all 400ms ease;
