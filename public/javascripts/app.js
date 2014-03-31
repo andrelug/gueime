@@ -44,12 +44,18 @@ var ajaxPage = function (url) {
         url: url,
         dataType: 'html',
         beforeSend: function () {
-            $('.content-wrap').slideDown();
             $('body').css('overflow-y', 'hidden');
             $('#darken').css('display', 'block');
+            $('.content-wrap').slideDown();
+            $('#spinningContent').show();
         }
     }).done(function (data) {
-        $('.content').html(data);
+
+        $('.content').append(data);
+        $('#loading').waitForImages(function () {
+            $('#spinningContent').hide();
+            $('#loading').animate({ 'opacity': 1 });
+        });
     });
 }
 
