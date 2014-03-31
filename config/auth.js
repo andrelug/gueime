@@ -28,8 +28,8 @@ if('development' == app.get('env')) {
     module.exports = {
 
 	    'facebookAuth' : {
-		    'clientID' 		: '471413439653703', // your App ID
-		    'clientSecret' 	: 'b7c033b4c7877410afc5e25493b299ae', // your App Secret
+		    'clientID' 		: '561543940541408', // your App ID
+		    'clientSecret' 	: 'd550945b38741f8f0dde17027270218e', // your App Secret
 		    'callbackURL' 	: 'http://dev.gueime.com.br/auth/facebook/callback'
 	    },
 
