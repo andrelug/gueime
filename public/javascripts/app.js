@@ -37,6 +37,7 @@ $(document).on('click', '.exit', function(){
     $('.content-wrap').slideUp();
     $('body').css('overflow-y', 'auto');
     history.pushState({}, "page 2", "/");
+    ga('send', 'pageview', '/');
 })
 
 var ajaxPage = function (url) {
@@ -62,6 +63,7 @@ $(document).on('keyup', function (event) {
         $('.content-wrap').slideUp();
         $('body').css('overflow-y', 'auto');
         history.pushState({}, "page 2", "/");
+        ga('send', 'pageview', '/');
     }
 });
 

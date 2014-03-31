@@ -266,7 +266,8 @@ textarea {
   display: block;
 }
 .user,
-.logout {
+.logout,
+.create {
   color: #fff;
   margin: 0px;
   padding: 14px;

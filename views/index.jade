@@ -24,12 +24,14 @@ block content
             div.row
                 div.gueimeWhite
                     img(src="/images/gueime-white.png", alt="white logo")
-                div.large-2.columns
+                div.large-3.columns
                     if (!user)
                         a.facebook(href="/auth/facebook") <i class="fa fa-facebook"></i> Login
                     else
                         a(href="/profile").user <i class="fa fa-facebook"></i> #{user.name.first}
+                        a.create(href="/create") <i class="fa fa-pencil-square-o"></i> Create
                         a.logout(href="/logout") <i class="fa fa-sign-out"></i> sair
+                        
                 div.large-8.medium-12.columns#tagSelection
 
 

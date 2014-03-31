@@ -33,8 +33,16 @@ module.exports = function (app, passport, mongoose) {
 
     app.get('/artigos/:artigo', function (req, res) {
         var artigo = req.params.artigo;
+        if (req.xhr === true) {
+            res.render('artigo');
+        } else {
+            res.send('oooiii');
+        }
 
-        res.render('artigo');
+    });
+
+    app.get('/create', function (req, res) {
+        res.render('create');
     });
 
 
