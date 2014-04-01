@@ -13,17 +13,6 @@ body
     height 100%
     vertical-align middle
 
-.reflect
-    -webkit-box-reflect below 0px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(20%, transparent), to(rgba(255, 255, 255, 0.12)))
-
-.socialclub
-    position absolute
-    top 50px
-    left 68%
-
-.socialclub img
-    margin-right 5px
-
 .gueimeWhite
     display none
 
@@ -36,6 +25,19 @@ body
 .nav
     height 52px
     background-color gDarkBlue
+
+.facebook
+    color white
+    margin 0px
+    padding 14px
+    display block
+
+.user, .logout, .create
+    color white
+    margin 0px
+    padding 14px
+    display block
+    float left
 
 #nav-sticky
     background transparent
@@ -55,7 +57,6 @@ input[type="text"], textarea
     background-color gBlue
     margin-bottom 40px
     box-shadow 0px 3px 3px rgba(0,0,0,0.3)
-    overflow auto
 
 .top-bar
     background-color gBlue
@@ -73,7 +74,6 @@ input[type="text"], textarea
 
 #tagSelection
     height 45px
-    width 80%
 
 #tagSelection span
     position relative
@@ -119,9 +119,7 @@ input[type="text"], textarea
 
     p
         color white
-        padding 8px
-        position relative
-        top 60px
+        padding 20px
     
 .infoGame
     background-color gRed
@@ -197,15 +195,6 @@ input[type="text"], textarea
         width 100%
         background-color gRed
 
-.titleHover
-    position absolute
-    top -170px
-    -webkit-transition: all 400ms ease;
-    -moz-transition: all 400ms ease;
-    -ms-transition: all 400ms ease;
-    -o-transition: all 400ms ease;
-    transition: all 400ms ease;
-
 @media only screen and (max-width: 64.063em)
     #gridArticles
         margin-left 1%
@@ -223,23 +212,27 @@ input[type="text"], textarea
     display none
     overflow scroll
     
+
+/* Content */
 .content
     width 85%
-    height 200%
+    height 100%
     position relative
     margin 0 auto
     background-color white
     z-index 999999
     box-shadow 0px 0px 2px 1px gAsphalt
+    border-top 5px solid gGreen
 
 
     .exit
         background-color gRed
         position absolute
-        right 10px
-        top 10px
+        right 15px
+        top 15px
         padding 3px 2px 0px 2px
         border-radius 30px
+        z-index 4000
 
         a
             color white
@@ -248,43 +241,9 @@ input[type="text"], textarea
             display block
 
 
-/* Content */
-
-.content
-    border-top 5px solid gGreen
-
 @media only screen and (max-width: 40em)
     .content
         width 100%
-
-    .ext2
-        width 200%
-        position relative
-        left -50%
-
-    .mainImage
-        overflow hidden
-
-.mainImage
-    text-align center
-    background-color gDarkBlue
-
-.mainImage img
-    min-height 180px
-
-
-.facebook
-    color white
-    margin 0px
-    padding 14px
-    display block
-
-.user, .logout, .create
-    color white
-    margin 0px
-    padding 14px
-    display block
-    float left
 
 #darken
     position fixed
@@ -298,3 +257,50 @@ input[type="text"], textarea
 
 #loading
     opacity 0
+
+
+.header, .headerAjax
+    height 60px
+    position fixed
+    top 0px
+    left 0px
+    z-index 200
+    background-color white
+    box-shadow 0 1px 3px rgba(0, 0, 0, 0.1)
+    -webkit-box-shadow 0 1px 3px rgba(0, 0, 0, 0.1);
+
+    .articleLogo
+        width 180px
+        margin-top 7px
+
+.headerAjax
+    position absolute
+
+
+.mainImage, .mainImageAjax
+    width 100%
+    height auto
+    position fixed
+    overflow hidden
+    top 60px
+
+.mainImageAjax
+    position absolute
+
+.wrapImage
+    max-width 1200px
+    margin 0 auto
+    position relative
+
+.bloco
+    padding-top 10em
+    padding-bottom 10em
+
+    h1
+        text-align center
+
+.parallax
+    background-color #ffffff
+    position relative
+    overflow hidden
+    margin-top 380px

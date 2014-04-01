@@ -34,7 +34,7 @@ module.exports = function (app, passport, mongoose) {
     app.get('/artigos/:artigo', function (req, res) {
         var artigo = req.params.artigo;
         if (req.xhr === true) {
-            res.render('artigo');
+            res.render('articleAjax');
         } else {
             res.send('oooiii');
         }
@@ -43,6 +43,10 @@ module.exports = function (app, passport, mongoose) {
 
     app.get('/create', function (req, res) {
         res.render('create');
+    });
+
+    app.get('/busca', function (req, res) {
+        res.render('busca');
     });
 
 
@@ -78,6 +82,10 @@ module.exports = function (app, passport, mongoose) {
         } else {
             res.redirect("/");
         }
+    });
+
+    app.get('/artigo', function (req, res) {
+        res.render('artigo');
     });
 
 

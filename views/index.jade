@@ -8,11 +8,7 @@ block content
     div.row(style="background-color: white;")
         div.large-4.large-centered.columns(style="height:10rem;")
             span.vertical-align-helper
-            img.reflect(src="/images/gueime.png", alt="Gueime Logo")
-  
-        div.socialclub.show-for-medium-up
-            img(src="/images/facebook.png", alt="facebook page")
-            img(src="/images/twitter.png", alt="twitter page")
+            img(src="/images/gueime.png", alt="Gueime Logo")
 
     div#nav-sticky
         div.nav
@@ -20,7 +16,7 @@ block content
                 div.large-5.medium-9.medium-centered.columns.large-centered
                     input#mainInput(type="text", placeholder="Ache tudo sobre Games!")
 
-        div.contain-to-grid
+        div.contain-to-grid(style="overflow:auto;")
             div.row
                 div.gueimeWhite
                     img(src="/images/gueime-white.png", alt="white logo")
@@ -28,11 +24,15 @@ block content
                     if (!user)
                         a.facebook(href="/auth/facebook") <i class="fa fa-facebook"></i> Login
                     else
-                        a(href="/profile").user <i class="fa fa-facebook"></i> #{user.name.first}
+                        a(href="/profile").user <i class="fa fa-user"></i> #{user.name.first}
                         a.create(href="/create") <i class="fa fa-pencil-square-o"></i> Create
-                        a.logout(href="/logout") <i class="fa fa-sign-out"></i> sair
                         
-                div.large-10.medium-12.columns#tagSelection
+                            
+                div.large-8.medium-12.columns#tagSelection
+
+                if(user)
+                    div.large-2.columns
+                            a.logout(href="/logout") <i class="fa fa-sign-out"></i> sair
 
 
     div#spinning
@@ -104,3 +104,6 @@ block content
         a.item.w4
             div.ext
                             
+
+
+    

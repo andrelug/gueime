@@ -22,7 +22,7 @@ html.no-js(lang="pt_BR")
             ga('create', 'UA-36793982-5', 'gueime.com.br');
             ga('send', 'pageview');
 
-    body
+    body(style="overflow: auto;background-color:#34495e;")
         block content
 
         script(src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js")
@@ -34,16 +34,3 @@ html.no-js(lang="pt_BR")
         script(src="/javascripts/app.js")
         script.
             $(document).foundation();
-
-            // Closing Overlay
-
-            // Need to check if this is good for performance
-            $(document).on('keyup', function (event) {
-                if(event.keyCode == 27 ){
-                    $('.content-wrap').fadeOut();
-                    $('body').css('overflow-y', 'auto');
-                    $('#darken').css('display', 'none');
-                    window.history.go(-1);
-                    ga('send', 'pageview', '/');
-                }
-            });

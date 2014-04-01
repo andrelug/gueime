@@ -3,10 +3,8 @@ var container = $('#gridArticles');
 
 $('.item').hover(function () {
     $(this).find('.hidden').css('opacity', 1);
-    $(this).find('h2').addClass('titleHover')
 }, function(){
     $(this).find('.hidden').css('opacity', 0);
-    $(this).find('h2').removeClass('titleHover')
 });
 
 
@@ -14,7 +12,24 @@ $('#mainInput').keypress(function (event) {
     if (event.keyCode == 13) {
         $('#tagSelection').append('<span>' + $(this).val() + '<a class="tag" id="' + $(this).val() + '">x</a></span>');
         $(this).val('');
+
+        if ($('#check').html() == 'check') {
+            history.pushState(null, null, '/');
+            $.ajax({
+                type: "GET",
+                url: '/busca',
+                dataType: 'html',
+                beforeSend: function () {
+                    $('#wrapper').fadeOut();
+                    $('body').css('background-color', 'white');
+                }
+            }).done(function (data) {
+                $('#wrapper').fadeIn().html(data);
+            });
+
+        }
     }
+
 });
 
 $(document).on('click', '.tag', function () {
@@ -46,7 +61,7 @@ var ajaxPage = function (url) {
         beforeSend: function () {
             $('body').css('overflow-y', 'hidden');
             $('#darken').css('display', 'block');
-            $('.content-wrap').slideDown();
+            $('.content-wrap').fadeIn();
 
         }
     }).done(function (data) {
@@ -63,24 +78,21 @@ var ajaxPage = function (url) {
 
 // Closing Overlay
 
-// Need to check if this is good for performance
-$(document).on('keyup', function (event) {
-    if(event.keyCode == 8 || event.keyCode == 27 ){
-        $('.content-wrap').slideUp();
-        $('body').css('overflow-y', 'auto');
-        $('#darken').css('display', 'none');
-        history.pushState({}, "page 2", "/");
-        ga('send', 'pageview', '/');
-    }
+$(window).on('popstate', function () {
+    $('.content-wrap').fadeOut();
+    $('body').css('overflow-y', 'auto');
+    $('#darken').css('display', 'none');
+    ga('send', 'pageview', '/');
 });
 
 $(document).on('click', '.exit', function(){
-    $('.content-wrap').slideUp();
+    $('.content-wrap').fadeOut();
     $('body').css('overflow-y', 'auto');
     $('#darken').css('display', 'none');
-    history.pushState({}, "page 2", "/");
+    window.history.go(-1);
     ga('send', 'pageview', '/');
 })
+
 
 
 container.waitForImages(function () {
