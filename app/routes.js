@@ -66,22 +66,14 @@ module.exports = function (app, passport, mongoose) {
         // set where the file should actually exists - in this case it is in the "images" directory
         var target_path = './public/uploads/' + req.files.file.name;
         // move the file from the temporary location to the intended location
-        fs.rename(tmp_path, target_path, function (err) {
+        fs.rename(tmp_path, target_path, function(err) {
             if (err) throw err;
             // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
-            fs.unlink(tmp_path, function () {
+            fs.unlink(tmp_path, function() {
                 if (err) throw err;
-                res.render('mainImage', { image: '/uploads/' + req.files.file.name });
+                res.send('/uploads/' + req.files.file.name);
             });
         });
-    });
-
-    app.get('/mainImage/:image', function (req, res) {
-        var image = req.params.image;
-
-        res.render('mainImage', { image: '/uploads/' + image });
-
-
     });
 
 
