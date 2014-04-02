@@ -36,7 +36,7 @@ module.exports = function (app, passport, mongoose) {
         if (req.xhr === true) {
             res.render('articleAjax');
         } else {
-            res.send('oooiii');
+            res.render('artigo');
         }
 
     });
@@ -47,6 +47,7 @@ module.exports = function (app, passport, mongoose) {
 
     app.get('/busca', function (req, res) {
         res.render('busca');
+
     });
 
 

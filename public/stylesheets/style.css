@@ -108,7 +108,8 @@ textarea {
 }
 .hidden {
   position: absolute;
-  width: 100%;
+  width: 100% !important;
+  margin-left: 0px !important;
   height: 100%;
   opacity: 0;
   -webkit-transition: all 400ms ease;
@@ -117,14 +118,26 @@ textarea {
   -o-transition: all 400ms ease;
   transition: all 400ms ease;
 }
-.hidden p {
+.hidden p,
+.hidden .by,
+.hidden .graph {
   color: #fff;
-  padding: 20px;
+}
+.hidden .headline {
+  padding-top: 10px;
+  height: 175px;
+}
+.hidden .graph {
+  padding-top: 10px;
+  border-top: 1px dotted #fff;
+}
+.hidden:hover {
+  opacity: 1;
 }
 .infoGame {
   background-color: #e54c3c;
 }
-.infoArticle {
+.infoNews {
   background-color: #27b899;
 }
 .item:hover {
@@ -140,20 +153,18 @@ textarea {
 .w6 {
   width: 100%;
 }
-.ext {
-  height: 300%;
-  width: 300%;
+.articleImage {
+  height: 100%;
+  background-position: center center;
 }
 #gridArticles {
   max-width: 100%;
   margin-left: 12.5%;
 }
 .details {
-  background-color: #fff;
-  height: 70px;
   width: 100%;
   position: absolute;
-  top: 180px;
+  top: 210px;
 }
 .details h2 {
   color: #fff;
@@ -169,28 +180,17 @@ textarea {
   padding: 0 5px;
   margin-top: 4px;
 }
-.details p span {
-  font-size: 10pt;
-  float: right;
-}
-.details p.graph {
-  position: relative;
-  top: -23px;
-  float: right;
-}
-.details p.by {
-  padding-bottom: 10px;
-  border-bottom: 1px dotted #34495e;
-}
 .details .name {
-  padding: 1px 5px;
+  padding: 3px 14px 1px;
   width: 100%;
   background-color: #27b899;
+  height: 65px;
 }
 .details .game {
   padding: 1px 5px;
   width: 100%;
   background-color: #e54c3c;
+  height: 65px;
 }
 @media only screen and (max-width: 64.063em) {
   #gridArticles {
@@ -201,6 +201,17 @@ textarea {
   }
   .w4 {
     width: 97%;
+  }
+  .headline {
+    height: 150px !important;
+  }
+  .details {
+    top: 185px;
+  }
+}
+@media only screen and (min-width: 40em) {
+  .toRight {
+    float: right;
   }
 }
 .content-wrap {
@@ -240,6 +251,15 @@ textarea {
 @media only screen and (max-width: 40em) {
   .content {
     width: 100%;
+  }
+  .item {
+    width: 97%;
+  }
+  .hidden {
+    width: 106% !important;
+  }
+  .headline {
+    height: 140px !important;
   }
 }
 #darken {

@@ -4,6 +4,15 @@ block content
     div#check(style="display:none;") check
     
     header.header.row
+        div.content-wrap
+            div.content
+        div#darken
+        div.row#searchBack(style="background-color: white;display:none;")
+            div.large-4.medium-6.medium-centered.large-centered.columns(style="height:8rem;")
+                span.vertical-align-helper
+                img(src="/images/gueime.png", alt="Gueime Logo")
+
+        div#nav-sticky
             div.nav
                 div.row
                     div.large-5.medium-9.medium-centered.columns.large-centered
@@ -13,19 +22,24 @@ block content
                 div.row
                     div.gueimeWhite
                         img(src="/images/gueime-white.png", alt="white logo")
-                    div.large-2.columns
+                    div.large-3.medium-4.small-8.columns
                         if (!user)
                             a.facebook(href="/auth/facebook") <i class="fa fa-facebook"></i> Login
                         else
                             a(href="/profile").user <i class="fa fa-user"></i> #{user.name.first}
                             a.create(href="/create") <i class="fa fa-pencil-square-o"></i> Create
+
+                    div.show-for-small.small-4.columns
+                        a.logout(href="/logout") <i class="fa fa-sign-out"></i> sair
                         
                             
-                    div.large-8.medium-12.columns#tagSelection
+                    div.large-7.medium-6.columns.small-12#tagSelection
 
                     if(user)
-                        div.large-2.columns
+                        div.large-2.medium-2.show-for-medium-up.columns
                                 a.logout(href="/logout") <i class="fa fa-sign-out"></i> sair
+                    else
+                        div.large-2.medium-2.show-for-mediu-up.columns
 
     div#wrapper
         section.mainImage(style="background: url('/images/naruto.jpg') no-repeat center -230px;")
