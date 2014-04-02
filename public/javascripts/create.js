@@ -1,9 +1,10 @@
-$(function()
-{
-    $('#content').redactor({
+$(function(){
+
+
+    $('#createContent').redactor({
         lang: 'pt_br',
-        toolbarFixed: true,
-        air: true,
-        airButtons: ['formatting', 'bold', 'italic', 'deleted', 'unorderedlist', 'orderedlist', 'outdent', 'indent']
+        plugins: ['fontcolor', 'awesome', 'fontsize', 'fontfamily']
     });
+
+
 });

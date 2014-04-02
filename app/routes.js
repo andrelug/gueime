@@ -24,19 +24,28 @@ module.exports = function (app, passport, mongoose) {
         if (!user) {
             res.render("index", { title: "Gueime - O melhor site de games do Brasil!" });
         } else {
-            Users.find({ deleted: false }, function (err, docs) {
-                sessionReload(req, res, next);
-                res.render('index', { user: user, title: "Gueime - O melhor site de games do Brasil!" });
-            });
+
+            sessionReload(req, res, next);
+            res.render('index', { user: user, title: "Gueime - O melhor site de games do Brasil!" });
+
         }
     });
 
-    app.get('/artigos/:artigo', function (req, res) {
+    app.get('/artigos/:artigo', function (req, res, next) {
+        var user = req.user;
         var artigo = req.params.artigo;
         if (req.xhr === true) {
             res.render('articleAjax');
         } else {
-            res.render('artigo');
+            if (!user) {
+                res.render("artigo", { title: "Gueime - O melhor site de games do Brasil!" });
+            } else {
+
+                sessionReload(req, res, next);
+                res.render('artigo', { user: user, title: "Gueime - O melhor site de games do Brasil!" });
+
+            }
+            
         }
 
     });

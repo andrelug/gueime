@@ -42,3 +42,5 @@ BUGS
 --> Quando as tags vão pra linha de baixo ainda não há estilos
 
 --> Quando a pessoa entra no artigo pelo link e faz uma busca, ela não consegue voltar para o link (opção é http://stackoverflow.com/questions/3682805/javascript-load-a-page-on-button-click )
+
+--> Tem que impedir que o usuário crie uma pesquisa sem conteúdo

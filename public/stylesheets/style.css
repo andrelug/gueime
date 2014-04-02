@@ -261,6 +261,17 @@ textarea {
   .headline {
     height: 140px !important;
   }
+  #mainText {
+    width: 100%;
+  }
+  .header {
+    position: absolute !important;
+    top: -380px !important;
+  }
+  .mainImage {
+    position: absolute !important;
+    top: -295px !important;
+  }
 }
 #darken {
   position: fixed;
@@ -321,4 +332,27 @@ textarea {
   position: relative;
   overflow: hidden;
   margin-top: 380px;
+  min-height: 460px;
+}
+#mainText {
+  width: 85%;
+  margin: 0 auto;
+}
+#mainText #textTitle {
+  padding-top: 20px;
+}
+footer {
+  background-color: #e54c3c;
+  padding: 20px;
+  position: absolute;
+  bottom: 0px;
+}
+footer h4,
+footer p {
+  color: #fff;
+  margin-top: 22px;
+}
+/* CREATE */
+#createTitle {
+  font-size: 2.75em;
 }

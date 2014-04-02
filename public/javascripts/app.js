@@ -22,6 +22,7 @@ $('#mainInput').keypress(function (event) {
                 $('#wrapper').fadeIn().html(data);
                 $('header').removeClass('header row');
                 $('body').css('background-color', '#ecf0f1');
+                $('#check').remove();
             });
 
         }
