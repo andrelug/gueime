@@ -44,6 +44,7 @@ body {
   z-index: 50;
   min-width: 100%;
   padding: 0px;
+  font-family: 'Nexa';
 }
 .sticky {
   top: 0px;
@@ -340,11 +341,14 @@ textarea {
 }
 #mainText #textTitle {
   padding-top: 20px;
+  font-family: 'Nexa';
+  font-weight: bold;
+  color: #2c3e50;
 }
 footer {
   background-color: #e54c3c;
   padding: 20px;
-  position: absolute;
+  position: relative;
   bottom: 0px;
 }
 footer h4,
@@ -353,6 +357,22 @@ footer p {
   margin-top: 22px;
 }
 /* CREATE */
-#createTitle {
+#mainText .redactor_box:first-child p {
   font-size: 2.75em;
+  font-family: 'Nexa';
+  font-weight: bold;
+  color: #2c3e50;
+}
+.dropzone-previews {
+  width: 100%;
+  height: 500px;
+  position: absolute;
+  z-index: 1;
+}
+#dropzoneImage {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100px;
+  background-color: #fff;
 }

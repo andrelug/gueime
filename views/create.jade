@@ -40,16 +40,19 @@ block content
                         div.large-2.medium-2.show-for-mediu-up.columns
 
     div#wrapper
-        section.mainImage(style="background: url('/images/naruto.jpg') no-repeat center -230px;")
+        section.mainImage
+            div.dropzone-previews
+            form#dropzoneImage(action="/newCover", class="dropzone", enctype="multipart/form-data")
+                input(type="file", name="file")
             div.wrapImage
                 article.bloco
+                
 
 
         div.parallax(style="border-top:5px solid #27b899;")
             article#mainText
-                textarea#createTitle(name="content", placeholder="Seu texto sensacional")
-                br
-                textarea#createContent(name="content", placeholder="Seu texto sensacional")
+                textarea#createTitle(name="content", placeholder="Ótimo Título")
+                textarea#createContent(name="content")
 
         footer.row
             div.large-4.columns

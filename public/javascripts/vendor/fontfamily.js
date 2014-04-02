@@ -3,7 +3,7 @@ if (!RedactorPlugins) var RedactorPlugins = {};
 RedactorPlugins.fontfamily = {
 	init: function ()
 	{
-		var fonts = [ 'Helvetica Neue', 'Arial', 'Helvetica', 'Georgia', 'Times New Roman', 'Monospace' ];
+		var fonts = [ 'Lato', 'Nexa','Helvetica Neue', 'Arial', 'Helvetica', 'Georgia', 'Times New Roman', 'Monospace' ];
 		var that = this;
 		var dropdown = {};
 

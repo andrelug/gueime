@@ -3,6 +3,7 @@ var func = require('../config/functions');
 var facebook = require('../config/facebook.js');
 var ip = require('ip');
 var async = require('async');
+var fs = require("fs");
 
 // Session check function
 var sessionReload = function(req, res, next){
@@ -45,7 +46,7 @@ module.exports = function (app, passport, mongoose) {
                 res.render('artigo', { user: user, title: "Gueime - O melhor site de games do Brasil!" });
 
             }
-            
+
         }
 
     });
@@ -56,6 +57,30 @@ module.exports = function (app, passport, mongoose) {
 
     app.get('/busca', function (req, res) {
         res.render('busca');
+
+    });
+
+    app.post('/newCover', function (req, res, next) {
+        // get the temporary location of the file
+        var tmp_path = req.files.file.path;
+        // set where the file should actually exists - in this case it is in the "images" directory
+        var target_path = './public/uploads/' + req.files.file.name;
+        // move the file from the temporary location to the intended location
+        fs.rename(tmp_path, target_path, function (err) {
+            if (err) throw err;
+            // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
+            fs.unlink(tmp_path, function () {
+                if (err) throw err;
+                res.render('mainImage', { image: '/uploads/' + req.files.file.name });
+            });
+        });
+    });
+
+    app.get('/mainImage/:image', function (req, res) {
+        var image = req.params.image;
+
+        res.render('mainImage', { image: '/uploads/' + image });
+
 
     });
 

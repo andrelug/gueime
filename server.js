@@ -18,25 +18,25 @@ var gueimesessions = mongoose.createConnection(configDB.url2);
 
 require('./config/passport')(passport); // pass passport for configuration
 
-app.configure(function(){
-  app.set('port', process.env.PORT || 3000);
-  app.set('views', __dirname + '/views');
-  app.set('view engine', 'jade');
-  app.use(express.logger('dev'));
-  app.use(express.json());
-  app.use(express.urlencoded());
-  app.use(express.cookieParser());
-  app.use(express.methodOverride());
-  app.use(express.session({store: new MongoStore({
-      mongoose_connection: gueimesessions
-  }), secret: 'blablabladfkdaskldsfblkablafdsa34', cookie: {maxAge: 36000000 } })); // session secret
-  app.use(passport.initialize());
-  app.use(passport.session()); // persistent login sessions
-  app.use(flash()); // use connect-flash for flash messages stored in session
-  app.use(app.router);
-  app.use(require('stylus').middleware(path.join(__dirname, 'public')));
-  app.use(express.static(path.join(__dirname, 'public')));
-  app.enable('trust proxy');
+app.configure(function () {
+    app.set('port', process.env.PORT || 3000);
+    app.set('views', __dirname + '/views');
+    app.set('view engine', 'jade');
+    app.use(express.logger('dev'));
+    app.use(express.bodyParser({ keepExtensions: true, uploadDir: "uploads" }));
+    app.use(express.cookieParser());
+    app.use(express.methodOverride());
+    app.use(express.session({ store: new MongoStore({
+        mongoose_connection: gueimesessions
+    }), secret: 'blablabladfkdaskldsfblkablafdsa34', cookie: { maxAge: 36000000 }
+    })); // session secret
+    app.use(passport.initialize());
+    app.use(passport.session()); // persistent login sessions
+    app.use(flash()); // use connect-flash for flash messages stored in session
+    app.use(app.router);
+    app.use(require('stylus').middleware(path.join(__dirname, 'public')));
+    app.use(express.static(path.join(__dirname, 'public')));
+    app.enable('trust proxy');
 });
 
 app.configure('development', function(){
