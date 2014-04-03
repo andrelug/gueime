@@ -382,6 +382,10 @@ textarea {
   background-color: #fff;
   font-size: 20px;
   text-align: center;
+  -moz-transition: all 400ms ease;
+  -ms-transition: all 400ms ease;
+  -o-transition: all 400ms ease;
+  transition: all 400ms ease;
 }
 .dz-success-mark,
 .dz-error-mark {
@@ -428,4 +432,12 @@ textarea {
 .dropzone.dz-started .dz-message:hover,
 .dz-success .dz-message:hover {
   opacity: 0;
+}
+#dropzoneImage.dz-clickable.dz-drag-hover {
+  background-color: #f2a69e !important;
+  -webkit-transition: all 400ms ease;
+  -moz-transition: all 400ms ease;
+  -ms-transition: all 400ms ease;
+  -o-transition: all 400ms ease;
+  transition: all 400ms ease;
 }
