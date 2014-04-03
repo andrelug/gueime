@@ -1,77 +1,4 @@
-div#spinning
-    img(src="/images/spinning.gif")
-div.row#gridArticles
-    div.grid-wrap
-
-    a(href="/artigos/naruto-ganha-novo-dlc", data-link="ajax").item
-        div.hidden.infoNews.row
-            div.small-12.small-centered.columns.headline
-                p Naruto é um game bem interessante...ganhar do Gabriel é fácil fácil
-            div.small-12.small-centered.columns
-                div.row.graph
-                    div.large-6.medium-6.small-6.columns
-                        span André Lucas
-                    div.large-6.medium-6.small-6.columns
-                        span.toRight <i class="fa fa-eye"></i> 400<i class="fa fa-comment", style="margin-left:10px;"></i> 30
-        div.articleImage(style="background-image: url(http://www.osmais.com/wallpapers/201208/naruto-shippuden-wallpaper.jpg);")
-        div.details
-            div.name
-                h2.ref Naruto Ganha novo DLC
-                
-                    
-
-    a(href="/artigos/naruto-shippudden-ultimate-ninja-storm-3", data-link="ajax").item.w4
-        div.hidden.infoGame.row
-            div.small-12.small-centered.columns.headline
-                p Naruto é um game bem interessante...ganhar do Gabriel é fácil fácil
-            div.small-12.small-centered.columns
-                div.row.graph
-                    div.large-6.medium-6.small-6.columns
-                        span André Lucas
-                    div.large-6.medium-6.small-6.columns
-                        span.toRight <i class="fa fa-eye"></i> 400<i class="fa fa-comment", style="margin-left:10px;"></i> 30
-        div.articleImage(style="background-image: url(http://images2.fanpop.com/image/photos/11600000/Sasuke-vs-Naruto-sasuke-vs-naruto-11619028-1440-1075.jpg);")
-        div.details
-            div.game
-                h2.ref Naruto Ganha novo DLC
-                
-
-    a.item.w4
-        div.hidden.infoGame
-            p Naruto é um game bem interessante...ganhar do Gabriel é fácil fácil
-        div.articleImage(style="background-image: url(http://imagenface.com/imagens/imagenes-imajenes-de-naruto-40.jpg);")
-        div.details
-            div.game
-                h2.ref Naruto Shippudden Ultimate Ninja Storm 3
-            div.author
-                p.by por André Lucas <span> <i class="fa fa-calendar"></i> 12/04/2014</span>
-                p.graph 400 <i class="fa fa-eye"></i> 30 <i class="fa fa-comment"></i>
-
-    a.item
-        div.hidden.infoGame
-            p Naruto é um game bem interessante...ganhar do Gabriel é fácil fácil
-        div.ext
-        div.details
-            div.game
-                h2 Naruto Shippudden Ultimate Ninja Storm 3
-            div.author
-                p.by por André Lucas <span> <i class="fa fa-calendar"></i> 12/04/2014</span>
-                p.graph 400 <i class="fa fa-eye"></i> 30 <i class="fa fa-comment"></i>
-
-    a.item
-        div.ext
-
-    a.item
-        div.ext
-
-    a.item
-        div.ext
-
-    a.item
-        div.ext
-
-    a.item.w4
-        div.ext
+include partials/tiles
 
 
 script.
@@ -80,6 +7,7 @@ script.
         $("#spinning").hide();
         $('body').css('overflow-y', 'auto');
         container.animate({ 'opacity': 1 });
+        $('#specialLogo').remove();
 
 
         container.packery({

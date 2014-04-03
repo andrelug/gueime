@@ -1,4 +1,4 @@
-extends createLayout
+extends layouts/createLayout
 
 block content
     header.header.row
@@ -10,34 +10,7 @@ block content
                 span.vertical-align-helper
                 img(src="/images/gueime.png", alt="Gueime Logo")
 
-        div#nav-sticky
-            div.nav
-                div.row
-                    div.large-5.medium-9.medium-centered.columns.large-centered
-                        input#mainInput(type="text", placeholder="Ache tudo sobre Games!")
-
-            div.contain-to-grid
-                div.row
-                    div.gueimeWhite.show-for-large-up(style="display:block;right:30px;left:auto")
-                        img(src="/images/gueime-white.png", alt="white logo")
-                    div.large-3.medium-4.small-8.columns
-                        if (!user)
-                            a.facebook(href="/auth/facebook") <i class="fa fa-facebook"></i> Login
-                        else
-                            a(href="/profile").user <i class="fa fa-user"></i> #{user.name.first}
-                            a.create(href="/create") <i class="fa fa-pencil-square-o"></i> Create
-
-                    div.show-for-small.small-4.columns
-                        a.logout(href="/logout") <i class="fa fa-sign-out"></i> sair
-                        
-                            
-                    div.large-7.medium-6.columns.small-12#tagSelection
-
-                    if(user)
-                        div.large-2.medium-2.show-for-medium-up.columns
-                                a.logout(href="/logout") <i class="fa fa-sign-out"></i> sair
-                    else
-                        div.large-2.medium-2.show-for-mediu-up.columns
+        include partials/nav
 
     div#wrapper
         section.mainImage
@@ -55,6 +28,7 @@ block content
             article#mainText
                 textarea#createTitle(name="content", placeholder="Ótimo Título")
                 textarea#createContent(name="content")
+                div.teste
 
         footer.row
             div.large-4.columns

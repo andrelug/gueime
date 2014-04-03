@@ -1,0 +1,22 @@
+doctype html
+<!--[if IE 9]><html class="lt-ie10" lang="pt_BR" > <![endif]-->
+html.no-js(lang="pt_BR")
+    head
+        include head
+
+        link(rel="stylesheet", href="/stylesheets/vendor/redactor.css")
+        link(rel="stylesheet", href="/stylesheets/vendor/redactor-awesome.css")
+
+    body(style="overflow: auto;background-color:#34495e;")
+        block content
+
+        include scripts
+
+        script(src="/javascripts/vendor/redactor.min.js")
+        script(src="/javascripts/vendor/fontsize.js")
+        script(src="/javascripts/vendor/fontcolor.js")
+        script(src="/javascripts/vendor/fontfamily.js")
+        script(src="/javascripts/vendor/redactor-awesome.js")
+        script(src="/javascripts/vendor/pt_br.js")
+        script(src="/javascripts/vendor/dropzone.js")
+        script(src="/javascripts/create.js")

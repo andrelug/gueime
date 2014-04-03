@@ -8,11 +8,11 @@ $(function () {
         previewsContainer: null,
         init: function () {
             this.on('addedfile', function () {
-                $('#loadingAj').fadeIn();
+                $('#loadingAj').show();
             });
             this.on("complete", function (file) {
                 if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
-                    $('#dropzoneImage').css( 'width', '20%');
+                    $('#dropzoneImage').css('width', '20%');
                     $('#loadingAj').fadeOut();
                     $('.mainImage').delay(500).attr('style', 'background: url(/uploads/' + file.name + ') no-repeat center 0px;');
                 }
@@ -26,9 +26,17 @@ $(function () {
         placeholder: 'Texto sensacional',
         minHeight: 300,
         imageUpload: '/artigoImage',
+        convertImageLinks: true,
         imageUploadCallback: function (image, json) {
-            console.log(image);
-            console.log("json " + json);
+
+        },
+        autosave: '/novoArtigo',
+        autosaveInterval: 10, // seconds
+        autosaveCallback: function (json) {
+            console.log(json);
+            var nJson = decodeURIComponent(json.content);
+            $('.teste').html(nJson);
+
         }
     });
 

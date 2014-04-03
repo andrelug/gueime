@@ -32,6 +32,7 @@ module.exports = function (app, passport, mongoose) {
         }
     });
 
+    // AJAX E FALLBACK PARA ARTIGOS
     app.get('/artigos/:artigo', function (req, res, next) {
         var user = req.user;
         var artigo = req.params.artigo;
@@ -51,16 +52,28 @@ module.exports = function (app, passport, mongoose) {
 
     });
 
-    app.get('/create', function (req, res) {
+
+    // PÁGINA DE CRIAÇÃO DE NOVOS ARTIGOS
+    app.get('/create', function (req, res, next) {
         var user = req.user;
-        res.render('create', { user: user, title: "Gueime - Hora de criar um artigo sensacional!" });
+        if(!user){
+            res.render('/', {title: 'Gueime - O melhor site de games do Brasil!'})
+        }else{
+            sessionReload(req, res, next);
+            res.render('create', { user: user, title: "Gueime - Hora de criar um artigo sensacional!" });
+        }
+        
     });
 
+
+    // AJAX DA PÁGINA DO ARTIGO PARA BUSCAR ALGO NOVO
     app.get('/busca', function (req, res) {
         res.render('busca');
 
     });
 
+
+    // UPLOAD DE NOVA COVER NA CRIAÇÃO DE ARTIGOS
     app.post('/newCover', function (req, res, next) {
         // get the temporary location of the file
         var tmp_path = req.files.file.path;
@@ -77,6 +90,8 @@ module.exports = function (app, passport, mongoose) {
         });
     });
 
+
+    // UPLOAD DE IMAGENS DURANTE A CRIAÇÃO DE ARTIGOS
     app.post('/artigoImage', function (req, res, next) {
 
         // get the temporary location of the file
@@ -89,9 +104,16 @@ module.exports = function (app, passport, mongoose) {
             // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
             fs.unlink(tmp_path, function () {
                 if (err) throw err;
-                res.send({"filelink": '/uploads/' + req.files.file.name});
+                res.send({ "filelink": '/uploads/' + req.files.file.name });
             });
         });
+    });
+
+    // SALVAR NOVO ARTIGO
+    app.post('/novoArtigo', function (req, res) {
+
+        res.send(JSON.stringify(req.body));
+
     });
 
 
