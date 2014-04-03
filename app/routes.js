@@ -52,7 +52,8 @@ module.exports = function (app, passport, mongoose) {
     });
 
     app.get('/create', function (req, res) {
-        res.render('create');
+        var user = req.user;
+        res.render('create', { user: user, title: "Gueime - Hora de criar um artigo sensacional!" });
     });
 
     app.get('/busca', function (req, res) {

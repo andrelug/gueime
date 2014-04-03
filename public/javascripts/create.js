@@ -37,11 +37,6 @@ $(function () {
         toolbar: false,
         minHeight: 97
     });
-    $('#createImage').redactor({
-        lang: 'pt_br',
-        toolbar: false,
-        minHeight: 500
-    });
 });
 
 $(document).ready(function(){

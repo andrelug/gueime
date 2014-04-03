@@ -120,7 +120,6 @@ body .redactor_box_fullscreen {
   background: #fff;
   box-shadow: none !important;
   white-space: normal;
-  border: 1px solid #eee;
 }
 .redactor_editor:focus {
   outline: none;
@@ -318,7 +317,7 @@ body .redactor_box_fullscreen {
   line-height: 1 !important;
   background: #fff;
   border: none;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+ /* box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2); */
   z-index: 3;
 }
 .redactor_toolbar:after {
