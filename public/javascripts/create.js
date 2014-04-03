@@ -7,9 +7,14 @@ $(function () {
         addRemoveLinks: true,
         previewsContainer: null,
         init: function () {
+            this.on('addedfile', function () {
+                $('#loadingAj').show();
+            })
             this.on("complete", function (file) {
                 if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
-                    $('.mainImage').attr('style', 'background: url(/uploads/' + file.name + ') no-repeat center 0px;');
+                    $('#dropzoneImage').animate({ 'width': '20%' });
+                    $('#loadingAj').hide();
+                    $('.mainImage').delay(400).attr('style', 'background: url(/uploads/' + file.name + ') no-repeat center 0px;');
                 }
             });
         }

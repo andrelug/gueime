@@ -41,6 +41,8 @@ block content
 
     div#wrapper
         section.mainImage
+            div#loadingAj(style="display:none;")
+                img(src="/images/spinning.gif")
             div.dropzone-previews
             form#dropzoneImage(action="/newCover", class="dropzone", enctype="multipart/form-data")
                 input(type="file", name="file")

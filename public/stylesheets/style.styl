@@ -314,6 +314,7 @@ input[type="text"], textarea
     overflow hidden
     top 60px
 
+
 .mainImageAjax
     position absolute
 
@@ -373,10 +374,9 @@ footer
 #dropzoneImage
     position relative
     z-index 2
-    width 20%
+    width 100%
     height 350px
     background-color white
-    opacity 0.5
     font-size 20px
     text-align center
 
@@ -394,3 +394,31 @@ footer
 
 .dz-remove:hover
     color white
+
+#loadingAj
+    position absolute
+    text-align center
+    width 100%
+    top 115px
+
+
+.dropzone .dz-default.dz-message
+    background url(/images/cloud.png) no-repeat center 0;
+    position absolute
+    width 100%
+    height 100%
+    text-align center
+
+    span
+        display none
+
+.dropzone .dz-default.dz-message:hover
+    opacity 0.8
+
+.dropzone.dz-started .dz-message
+    opacity 0
+
+.dropzone.dz-started, .dz-success
+    background-color rgba(255,255,255,0.6) !important
+    .dz-message:hover
+        opacity 0
