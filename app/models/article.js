@@ -35,6 +35,11 @@ var ArticleSchema = new mongoose.Schema({
         punchLine: String,
         main: {type: Boolean, default: false}
     },
+    video: {
+        type: String,
+        canal: String,
+        url: String
+    },
     graph: {
         games: {
             main: {type: mongoose.Schema.Types.ObjectId, ref: 'Game'},
@@ -58,6 +63,10 @@ var ArticleSchema = new mongoose.Schema({
         },
         ageRange: String,
         views: Number
+    },
+    published: {
+        status: String,
+        highlight: Boolean
     },
     facet: {type: [String], index: true}
 });

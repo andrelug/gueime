@@ -37,7 +37,7 @@ module.exports = function (app, passport, mongoose) {
         var user = req.user;
         var artigo = req.params.noticia;
         if (req.xhr === true) {
-            res.render('articleAjax');
+            res.render('artigoAjax', {tipo: 'noticia'});
         } else {
             if (!user) {
                 res.render("artigo", { title: "Gueime - O melhor site de games do Brasil!", tipo: 'noticia' });
@@ -53,7 +53,7 @@ module.exports = function (app, passport, mongoose) {
         var user = req.user;
         var artigo = req.params.artigo;
         if (req.xhr === true) {
-            res.render('articleAjax');
+            res.render('artigoAjax', {tipo: 'artigo'});
         } else {
             if (!user) {
                 res.render("artigo", { title: "Gueime - O melhor site de games do Brasil!", tipo: 'artigo' });
@@ -69,7 +69,7 @@ module.exports = function (app, passport, mongoose) {
         var user = req.user;
         var artigo = req.params.analise;
         if (req.xhr === true) {
-            res.render('articleAjax');
+            res.render('artigoAjax', {tipo: 'analise'});
         } else {
             if (!user) {
                 res.render("artigo", { title: "Gueime - O melhor site de games do Brasil!", tipo: 'analise' });
@@ -87,7 +87,7 @@ module.exports = function (app, passport, mongoose) {
         var tipo = req.params.tipo;
 
         if (!user) {
-            res.render('/', { title: 'Gueime - O melhor site de games do Brasil!' })
+            res.redirect('/')
         } else {
             sessionReload(req, res, next);
             res.render('create', { user: user, title: "Gueime - Hora de criar um artigo sensacional!", tipo: tipo });

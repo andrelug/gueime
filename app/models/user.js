@@ -48,6 +48,7 @@ var UserSchema = new mongoose.Schema({
             url: String
         }
     },
+    creating: {type: Boolean, default: false},
     follow: [{_id: false, type: mongoose.Schema.Types.ObjectId}],
     followedBy: [{_id: false, type: mongoose.Schema.Types.ObjectId}],
     deleted: {type: Boolean, default: false}
