@@ -1,0 +1,33 @@
+section#author.row
+    div.large-3.medium-6.columns.autImage
+        div.row
+            div.small-6.columns
+                span#authorImage
+                img(src="http://graph.facebook.com/andrelug/picture?type=large")
+            div.small-6.columns
+                div#authorInfo
+                    div.row
+                        div.small-12.columns
+                            a(href="#") André lucas
+                        div.small-3.columns
+                            a(href="#", title="facebook") <i class="fa fa-facebook"></i>
+                        div.small-3.columns
+                            a(href="#", title="twitter") <i class="fa fa-twitter"></i>
+                        div.small-3.columns
+                            a(href="#", title="google plus") <i class="fa fa-google-plus"></i>
+                        div.small-3.columns
+                            a(href="#", title="Steam") <img src="/images/steam.png", style="width: 100%">
+
+    div.large-9.medium-6.columns.autShare
+        if(tipo == 'noticia')
+            div#share(style="background-color: #27B899")
+        else if(tipo == 'artigo')
+            div#share(style="background-color: rgb(71,158,205)")
+        else
+            div#share(style="background-color: #E54C3C")
+
+    div.large-7.columns#comments
+        div.fb-comments(data-href="", data-width="700", data-numposts="10", data-colorscheme="light")
+
+    div.large-5.columns
+

@@ -89,3 +89,16 @@ $(document).on('click', '.exit', function () {
     window.history.go(-1);
     ga('send', 'pageview', '/');
 });
+
+// Article comments
+
+var facebookComments = $(".fb-comments");
+
+facebookComments.attr("data-href", window.location.href);
+
+if($(window).width() < 760){
+    facebookComments.attr('data-width', 550)
+}
+if($(window).width() < 595){
+    facebookComments.attr('data-width', 380)
+}

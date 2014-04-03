@@ -270,6 +270,7 @@ textarea {
   }
   #mainText {
     width: 100% !important;
+    padding: 0 2%;
   }
   .header {
     position: absolute !important;
@@ -455,4 +456,50 @@ textarea {
   -ms-transition: all 400ms ease;
   -o-transition: all 400ms ease;
   transition: all 400ms ease;
+}
+#author {
+  width: 100%;
+  position: relative;
+  background-color: #fff;
+}
+#author #authorImage {
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+  height: 150px;
+}
+#author img {
+  min-height: 100px;
+  max-height: 150px;
+  vertical-align: middle;
+  border: 1px solid #fff;
+}
+#author #authorInfo {
+  margin-top: 20px;
+}
+#author #authorInfo a {
+  color: #fff;
+  font-size: 20pt;
+}
+#author #share {
+  background-color: #e54c3c;
+  height: 150px;
+}
+#author #comments {
+  background-color: #fff;
+  height: 100%;
+  padding: 20px;
+}
+.autImage {
+  padding-left: 0px;
+  background-color: #34495e;
+}
+.autShare {
+  padding-right: 0px;
+}
+@media only screen and (max-width: 64.063em) {
+  .autShare,
+  .autImage {
+    padding: 0;
+  }
 }

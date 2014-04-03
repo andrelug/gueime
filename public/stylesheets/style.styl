@@ -272,6 +272,7 @@ input[type="text"], textarea
 
     #mainText
         width 100% !important
+        padding 0 2%
 
     .header
         position absolute !important
@@ -455,3 +456,49 @@ textarea
     -ms-transition: all 400ms ease;
     -o-transition: all 400ms ease;
     transition: all 400ms ease;
+
+#author
+    width 100%
+    position relative
+    background-color white
+
+    #authorImage
+        display inline-block
+        height 100%
+        vertical-align middle
+        height 150px
+        
+
+    img
+        min-height 100px
+        max-height 150px
+        vertical-align middle
+        border 1px solid white
+
+    #authorInfo
+        margin-top 20px
+
+        a
+            color white
+            font-size 20pt
+
+    #share
+        background-color gRed
+        height 150px
+        
+
+    #comments
+        background-color white
+        height 100%
+        padding 20px
+
+.autImage
+    padding-left 0px
+    background-color gAsphalt
+
+.autShare
+    padding-right 0px
+
+@media only screen and (max-width: 64.063em)
+    .autShare, .autImage
+        padding 0
