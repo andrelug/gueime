@@ -10,10 +10,17 @@ div#nav-sticky
                 img(src="/images/gueime-white.png", alt="white logo")
             div.large-3.medium-4.small-8.columns
                 if (!user)
-                    a.facebook(href="/auth/facebook") <i class="fa fa-facebook"></i> Login
+                    a.facebook(href="/auth/facebook") <i class="fa fa-facebook"></i> Entrar com Facebook
                 else
                     a(href="/profile").user <i class="fa fa-user"></i> #{user.name.first}
-                    a.create(href="/create") <i class="fa fa-pencil-square-o"></i> Create
+                    a.create(href="#", data-dropdown="drop1") <i class="fa fa-pencil-square-o"></i> Criar
+                    ul#drop1.f-dropdown(data-dropdown-content)
+                        li
+                            a(href="/criar/noticia") Notícia
+                        li
+                            a(href="/criar/artigo") Artigo
+                        li
+                            a(href="/criar/analise") Análise
 
             div.show-for-small.small-4.columns
                 a.logout(href="/logout") <i class="fa fa-sign-out"></i> sair

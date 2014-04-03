@@ -31,6 +31,22 @@ module.exports = function (app, passport, mongoose) {
 
         }
     });
+    
+    // AJAX E FALLBACK PARA NOTICIAS
+    app.get('/noticias/:noticia', function (req, res, next) {
+        var user = req.user;
+        var artigo = req.params.noticia;
+        if (req.xhr === true) {
+            res.render('articleAjax');
+        } else {
+            if (!user) {
+                res.render("artigo", { title: "Gueime - O melhor site de games do Brasil!", tipo: 'noticia' });
+            } else {
+                sessionReload(req, res, next);
+                res.render('artigo', { user: user, title: "Gueime - O melhor site de games do Brasil!", tipo: 'noticia' });
+            }
+        }
+    });
 
     // AJAX E FALLBACK PARA ARTIGOS
     app.get('/artigos/:artigo', function (req, res, next) {
@@ -40,29 +56,43 @@ module.exports = function (app, passport, mongoose) {
             res.render('articleAjax');
         } else {
             if (!user) {
-                res.render("artigo", { title: "Gueime - O melhor site de games do Brasil!" });
+                res.render("artigo", { title: "Gueime - O melhor site de games do Brasil!", tipo: 'artigo' });
             } else {
-
                 sessionReload(req, res, next);
-                res.render('artigo', { user: user, title: "Gueime - O melhor site de games do Brasil!" });
-
+                res.render('artigo', { user: user, title: "Gueime - O melhor site de games do Brasil!", tipo: 'artigo' });
             }
-
         }
+    });
 
+    // AJAX E FALLBACK PARA ANALISES
+    app.get('/analises/:analise', function (req, res, next) {
+        var user = req.user;
+        var artigo = req.params.analise;
+        if (req.xhr === true) {
+            res.render('articleAjax');
+        } else {
+            if (!user) {
+                res.render("artigo", { title: "Gueime - O melhor site de games do Brasil!", tipo: 'analise' });
+            } else {
+                sessionReload(req, res, next);
+                res.render('artigo', { user: user, title: "Gueime - O melhor site de games do Brasil!", tipo: 'analise' });
+            }
+        }
     });
 
 
     // PÁGINA DE CRIAÇÃO DE NOVOS ARTIGOS
-    app.get('/create', function (req, res, next) {
+    app.get('/criar/:tipo', function (req, res, next) {
         var user = req.user;
-        if(!user){
-            res.render('/', {title: 'Gueime - O melhor site de games do Brasil!'})
-        }else{
+        var tipo = req.params.tipo;
+
+        if (!user) {
+            res.render('/', { title: 'Gueime - O melhor site de games do Brasil!' })
+        } else {
             sessionReload(req, res, next);
-            res.render('create', { user: user, title: "Gueime - Hora de criar um artigo sensacional!" });
+            res.render('create', { user: user, title: "Gueime - Hora de criar um artigo sensacional!", tipo: tipo });
         }
-        
+
     });
 
 

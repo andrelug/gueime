@@ -22,18 +22,26 @@ block content
             div.wrapImage
                 article.bloco
                 
+    mixin mainText
+        article#mainText
+            textarea#createTitle(name="content", placeholder="Ótimo Título")
+            textarea#createContent(name="content")
+            div.teste
 
-
+    if(tipo == 'noticia')
         div.parallax(style="border-top:5px solid #27b899;")
-            article#mainText
-                textarea#createTitle(name="content", placeholder="Ótimo Título")
-                textarea#createContent(name="content")
-                div.teste
+            mixin mainText
+    else if(tipo == 'artigo')
+        div.parallax(style="border-top:5px solid rgb(71,158,205);")
+            mixin mainText
+    else
+        div.parallax(style="border-top:5px solid #E54C3C;")
+            mixin mainText
 
-        footer.row
-            div.large-4.columns
-                img(src="/images/gueime-white.png")
-                h4 Você está acessando o Gueime 3.0
+    footer.row
+        div.large-4.columns
+            img(src="/images/gueime-white.png")
+            h4 Você está acessando o Gueime 3.0
 
-                p &copy; 2014 - Gueime
+            p &copy; 2014 - Gueime
     

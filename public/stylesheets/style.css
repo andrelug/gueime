@@ -63,6 +63,12 @@ textarea {
 .top-bar {
   background-color: #479ecd;
 }
+#drop1 {
+  width: 150px;
+}
+#drop1 li {
+  text-align: center;
+}
 #gridArticles {
   opacity: 0;
 }
@@ -334,6 +340,7 @@ textarea {
   overflow: hidden;
   margin-top: 380px;
   min-height: 460px;
+  padding-top: 10px;
 }
 #mainText {
   width: 75%;
