@@ -1,4 +1,4 @@
-var files;
+var bla;
 $(function () {
 
     Dropzone.options.dropzoneImage = {
@@ -12,9 +12,9 @@ $(function () {
             })
             this.on("complete", function (file) {
                 if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
-                    $('#dropzoneImage').animate({ 'width': '20%' });
+                    $('#dropzoneImage').animate({ 'width': '20%' }, 600);
                     $('#loadingAj').hide();
-                    $('.mainImage').delay(400).attr('style', 'background: url(/uploads/' + file.name + ') no-repeat center 0px;');
+                    $('.mainImage').delay(500).attr('style', 'background: url(/uploads/' + file.name + ') no-repeat center 0px;');
                 }
             });
         }
@@ -24,7 +24,12 @@ $(function () {
         lang: 'pt_br',
         plugins: ['fontcolor', 'awesome', 'fontsize', 'fontfamily'],
         placeholder: 'Texto sensacional',
-        minHeight: 300
+        minHeight: 300,
+        imageUpload: '/artigoImage',
+        imageUploadCallback: function (image, json) {
+            console.log(image);
+            console.log("json " + json);
+        }
     });
 
     $('#createTitle').redactor({
