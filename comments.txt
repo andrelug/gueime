@@ -46,3 +46,5 @@ BUGS
 --> Tem que impedir que o usuário crie uma pesquisa sem conteúdo
 
 --> Checar por imagens com nomes iguais antes de upload
+
+--> Quando o upload da erro, ele também anima

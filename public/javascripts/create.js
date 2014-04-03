@@ -8,12 +8,12 @@ $(function () {
         previewsContainer: null,
         init: function () {
             this.on('addedfile', function () {
-                $('#loadingAj').show();
+                $('#loadingAj').fadeIn();
             });
             this.on("complete", function (file) {
                 if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
-                    $('#dropzoneImage').animate({ 'width': '20%' }, 600);
-                    $('#loadingAj').hide();
+                    $('#dropzoneImage').css( 'width', '20%');
+                    $('#loadingAj').fadeOut();
                     $('.mainImage').delay(500).attr('style', 'background: url(/uploads/' + file.name + ') no-repeat center 0px;');
                 }
             });
