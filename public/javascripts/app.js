@@ -108,15 +108,6 @@ $(document).on('click', '.exit', function () {
 
 // Article comments
 
+$(document).ready(function () {
 
-var facebookComments = $(".fb-comments");
-
-facebookComments.attr("data-href", window.location.href);
-
-if($(window).width() < 760){
-    facebookComments.attr('data-width', 550)
-}
-if($(window).width() < 595){
-    facebookComments.attr('data-width', 380)
-}
-FB.XFBML.parse();
+});

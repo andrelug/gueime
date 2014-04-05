@@ -271,6 +271,7 @@ textarea {
   #mainText {
     width: 100% !important;
     padding: 0 2%;
+    padding-bottom: 20px;
   }
   .header {
     position: absolute !important;
@@ -346,6 +347,7 @@ textarea {
 #mainText {
   width: 75%;
   margin: 0 auto;
+  padding-bottom: 20px;
 }
 #mainText #textTitle {
   padding-top: 20px;
