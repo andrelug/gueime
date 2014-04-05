@@ -68,7 +68,7 @@ var ajaxPage = function (url) {
             $('#spinningContent').fadeOut(500);
             $('#loading').animate({ 'opacity': 1 }, function(){
 
-                FB.XFBML.parse();
+                
                 var facebookComments = $(".fb-comments");
 
                 facebookComments.attr("data-href", window.location.href);
@@ -79,6 +79,7 @@ var ajaxPage = function (url) {
                 if($(window).width() < 595){
                     facebookComments.attr('data-width', 380)
                 }
+                FB.XFBML.parse();
             });
 
             
@@ -107,6 +108,7 @@ $(document).on('click', '.exit', function () {
 
 // Article comments
 
+
 var facebookComments = $(".fb-comments");
 
 facebookComments.attr("data-href", window.location.href);
@@ -117,3 +119,4 @@ if($(window).width() < 760){
 if($(window).width() < 595){
     facebookComments.attr('data-width', 380)
 }
+FB.XFBML.parse();
