@@ -28,7 +28,9 @@ html.no-js(lang="pt_BR")
 
         script.
             var facebookComments = $(".fb-comments");
+            var facebookLikes = $('.fb-like');
 
+            facebookLikes.attr("data-href", window.location.href);
             facebookComments.attr("data-href", window.location.href);
 
             if($(window).width() < 760){
