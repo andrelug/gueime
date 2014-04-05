@@ -66,7 +66,22 @@ var ajaxPage = function (url) {
         $('.content').html(data);
         $('#loading').delay(500).waitForImages(function () {
             $('#spinningContent').fadeOut(500);
-            $('#loading').animate({ 'opacity': 1 });
+            $('#loading').animate({ 'opacity': 1 }, function(){
+
+                FB.XFBML.parse();
+                var facebookComments = $(".fb-comments");
+
+                facebookComments.attr("data-href", window.location.href);
+
+                if($(window).width() < 760){
+                    facebookComments.attr('data-width', 550)
+                }
+                if($(window).width() < 595){
+                    facebookComments.attr('data-width', 380)
+                }
+            });
+
+            
 
         });
     });

@@ -50,3 +50,5 @@ BUGS
 --> Quando o upload da erro, ele também anima
 
 --> Na hora de remover o arquivo, voltar com o width 100% do módulo de upload
+
+--> Comentários não estão abrindo quando abre o modal na página inicial (precisa mandar ele executar só depois que abre o modal)
