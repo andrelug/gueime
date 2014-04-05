@@ -27,22 +27,19 @@ block content
         div.parallax(style="border-top:5px solid #27b899;")
             article#mainText
                 include partials/noticia
-                div(style="overflow:hidden;")
-                    div.fb-like(data-href="", data-layout="button_count", data-action="like", data-show-faces="true", data-share="true")
+                div.fb-like(data-href="", data-layout="button_count", data-action="like", data-show-faces="true", data-share="true")
                 
     else if(tipo == 'artigo')
         div.parallax(style="border-top:5px solid rgb(71,158,205);")
             article#mainText
                 include partials/artigo
-                div(style="overflow:hidden;")
-                    div.fb-like(data-href="", data-layout="button_count", data-action="like", data-show-faces="true", data-share="true")
+                div.fb-like(data-href="", data-layout="button_count", data-action="like", data-show-faces="true", data-share="true")
                 
     else
         div.parallax(style="border-top:5px solid #E54C3C;")
             article#mainText
                 include partials/analise
-                div(style="overflow:hidden;")
-                    div.fb-like(data-href="", data-layout="button_count", data-action="like", data-show-faces="true", data-share="true")
+                div.fb-like(data-href="", data-layout="button_count", data-action="like", data-show-faces="true", data-share="true")
                 
 
     include partials/footer
