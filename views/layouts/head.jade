@@ -11,6 +11,8 @@ meta(property="fb:app_id", content="{561543940541408}")
         
     
 script(src="/javascripts/vendor/modernizr.js")
+
+// Google Analytics
 script.
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -19,3 +21,10 @@ script.
 
     ga('create', 'UA-36793982-5', 'gueime.com.br');
     ga('send', 'pageview');
+
+// Azure analytics
+script.
+    window.appInsights={queue:[],applicationInsightsId:null,accountId:null,appUserId:null,configUrl:null,start:function(n){function u(n,t){n[t]=function(){var i=arguments;n.queue.push(function(){n[t].apply(n,i)})}}function f(n){var t=document.createElement("script");return t.type="text/javascript",t.src=n,t.async=!0,t}function r(){i.appendChild(f("//az416426.vo.msecnd.net/scripts/ai.0.js"))}var i,t;this.applicationInsightsId=n;u(this,"logEvent");u(this,"logPageView");i=document.getElementsByTagName("script")[0].parentNode;this.configUrl===null?r():(t=f(this.configUrl),t.onload=r,t.onerror=r,i.appendChild(t));this.start=function(){}}};
+
+    appInsights.start("e4cc912c-51f6-43b4-baf1-2ff5252fdbc9");
+    appInsights.logPageView();
