@@ -6,7 +6,10 @@ var ArticleSchema = new mongoose.Schema({
     title: String,
     slug: {type: String, unique: true},
     description: String,
-    cover: Buffer,
+    cover: {
+        image: String,
+        position: [Number]
+    },
     subtitle: String,
     text: String,
     authors: {

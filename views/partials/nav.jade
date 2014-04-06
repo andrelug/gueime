@@ -21,9 +21,11 @@ div#nav-sticky
                             a(href="/criar/artigo") Artigo
                         li
                             a(href="/criar/analise") Análise
-
-            div.show-for-small.small-4.columns
-                a.logout(href="/logout") <i class="fa fa-sign-out"></i> sair
+            if (!user)
+                div.show-for-small.small-4.columns
+            else
+                div.show-for-small.small-4.columns
+                    a.logout(href="/logout") <i class="fa fa-sign-out"></i> sair
                         
                             
             div.large-7.medium-6.columns.small-12#tagSelection
