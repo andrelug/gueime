@@ -24,7 +24,12 @@ module.exports = function (app, passport, mongoose) {
     app.get('/', function (req, res, next) {
         var user = req.user;
         if (!user) {
-            res.render("index", { title: "Gueime - O melhor site de games do Brasil!" });
+            Artigos.find({}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(10).exec(function (err, docs) {
+                for (i = 0; i < docs.length; i++) {
+                    docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
+                }
+                res.render('index', { title: "Gueime - O melhor site de games do Brasil!", docs: docs });
+            });
         } else {
 
             sessionReload(req, res, next);
