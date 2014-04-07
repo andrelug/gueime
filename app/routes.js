@@ -137,10 +137,13 @@ module.exports = function (app, passport, mongoose) {
         var tipo = req.params.tipo;
 
         if (!user) {
-            res.redirect('/')
-        } else {
+            res.redirect('/parceiros')
+        } else if (user.status == 'admin' || user.status == 'parceiro') {
             sessionReload(req, res, next);
             res.render('create', { user: user, title: "Gueime - Hora de criar um artigo sensacional!", tipo: tipo });
+        } else {
+            sessionReload(req, res, next);
+            res.redirect('/parceiros');
         }
 
     });
@@ -155,38 +158,49 @@ module.exports = function (app, passport, mongoose) {
 
     // UPLOAD DE NOVA COVER NA CRIAÇÃO DE ARTIGOS
     app.post('/newCover', function (req, res, next) {
-        // get the temporary location of the file
-        var tmp_path = req.files.file.path;
-        // set where the file should actually exists - in this case it is in the "images" directory
-        var target_path = './public/uploads/' + req.files.file.name;
-        // move the file from the temporary location to the intended location
-        fs.rename(tmp_path, target_path, function (err) {
-            if (err) throw err;
-            // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
-            fs.unlink(tmp_path, function () {
+        var user = req.user;
+
+        if (user.status == 'admin' || user.status == 'parceiro') {
+            // get the temporary location of the file
+            var tmp_path = req.files.file.path;
+            // set where the file should actually exists - in this case it is in the "images" directory
+            var target_path = './public/uploads/' + req.files.file.name;
+            // move the file from the temporary location to the intended location
+            fs.rename(tmp_path, target_path, function (err) {
                 if (err) throw err;
-                res.send('/uploads/' + req.files.file.name);
+                // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
+                fs.unlink(tmp_path, function () {
+                    if (err) throw err;
+                    res.send('/uploads/' + req.files.file.name);
+                });
             });
-        });
+        } else {
+            res.redirect('/parceiros');
+        }
+
+
     });
 
 
     // UPLOAD DE IMAGENS DURANTE A CRIAÇÃO DE ARTIGOS
     app.post('/artigoImage', function (req, res, next) {
-
-        // get the temporary location of the file
-        var tmp_path = req.files.file.path;
-        // set where the file should actually exists - in this case it is in the "images" directory
-        var target_path = './public/uploads/' + req.files.file.name;
-        // move the file from the temporary location to the intended location
-        fs.rename(tmp_path, target_path, function (err) {
-            if (err) throw err;
-            // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
-            fs.unlink(tmp_path, function () {
+        var user = req.user;
+        if (user.status == 'admin' || user.status == 'parceiro') {
+            // get the temporary location of the file
+            var tmp_path = req.files.file.path;
+            // set where the file should actually exists - in this case it is in the "images" directory
+            var target_path = './public/uploads/' + req.files.file.name;
+            // move the file from the temporary location to the intended location
+            fs.rename(tmp_path, target_path, function (err) {
                 if (err) throw err;
-                res.send({ "filelink": '/uploads/' + req.files.file.name });
+                // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
+                fs.unlink(tmp_path, function () {
+                    if (err) throw err;
+                    res.send({ "filelink": '/uploads/' + req.files.file.name });
+                });
             });
-        });
+        }
+
     });
 
 
@@ -197,68 +211,63 @@ module.exports = function (app, passport, mongoose) {
     app.post('/novoArtigo', function (req, res) {
         var user = req.user;
 
-        if (user.creating == false) {
-            Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true} }, function (err) {
-                if (err)
-                    throw err
 
-                new Artigos({
-                    'authors.main': user._id,
-                    text: req.body.content,
-                    creating: true
-
-                }).save(function (err, docs) {
+        if (user.status == 'admin' || user.status == 'parceiro') {
+            if (user.creating == false) {
+                Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true} }, function (err) {
+                    if (err)
+                        throw err
+                    new Artigos({
+                        'authors.main': user._id,
+                        text: req.body.content,
+                        creating: true
+                    }).save(function (err, docs) {
+                        if (err)
+                            throw err
+                        res.send(JSON.stringify(req.body));
+                    });
+                });
+            } else {
+                Artigos.update({ $and: [{ creating: true }, { 'authors.main': user._id}] }, { $set: { text: req.body.content} }, function (err) {
                     if (err)
                         throw err
                     res.send(JSON.stringify(req.body));
                 });
-
-            });
+            }
         } else {
-            Artigos.update({ $and: [{ creating: true }, { 'authors.main': user._id}] }, { $set: { text: req.body.content} }, function (err) {
-                if (err)
-                    throw err
-                res.send(JSON.stringify(req.body));
-
-            });
+            res.redirect('/parceiros');
         }
-
-
-
     });
 
     // SALVAR NOVO TITULO
     app.post('/novoTitulo', function (req, res) {
         var user = req.user;
 
-        if (user.creating == false) {
-            Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true} }, function (err) {
-                if (err)
-                    throw err
-
-                new Artigos({
-                    'authors.main': user._id,
-                    title: req.body.content,
-                    creating: true
-
-                }).save(function (err, docs) {
+        if (user.status == 'admin' || user.status == 'parceiro') {
+            if (user.creating == false) {
+                Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true} }, function (err) {
+                    if (err)
+                        throw err
+                    new Artigos({
+                        'authors.main': user._id,
+                        title: req.body.content,
+                        creating: true
+                    }).save(function (err, docs) {
+                        if (err)
+                            throw err
+                        res.send(JSON.stringify(req.body));
+                    });
+                });
+            } else {
+                Artigos.update({ $and: [{ creating: true }, { 'authors.main': user._id}] }, { $set: { title: req.body.content} }, function (err) {
                     if (err)
                         throw err
                     res.send(JSON.stringify(req.body));
                 });
-
-            });
+            }
         } else {
-            Artigos.update({ $and: [{ creating: true }, { 'authors.main': user._id}] }, { $set: { title: req.body.content} }, function (err) {
-                if (err)
-                    throw err
-                res.send(JSON.stringify(req.body));
-
-            });
+            res.redirect('/parceiros');
         }
-
-
-
     });
 
     // GRAPH NOVO ARTIGO
@@ -266,156 +275,161 @@ module.exports = function (app, passport, mongoose) {
         var user = req.user;
         var b = req.body;
 
+        if (user.status == 'admin' || user.status == 'parceiro') {
+            // Não consegui ainda pensar num jeito simples de colocar $push apenas nas arrays e $set quando for único...no momento usarei esse código abaixo na hora de pegar as infos e jogar na página (transformando em arrays)
+            var games = b.jogo,
+                tags = b.tags,
+                consoles = b.consoles,
+                publicadoras = b.publicadoras,
+                desenvolvedores = b.desenvolvedores,
+                generos = b.generos,
+                categoriaArtigo = b.categoriaArtigo,
+                analiseBom = b.analiseBom,
+                analiseRuim = b.analiseRuim,
+                slug = func.string_to_slug(decodeURIComponent(b.docTitle.replace('<p>', '').replace('</p>', '')));
 
-        // Não consegui ainda pensar num jeito simples de colocar $push apenas nas arrays e $set quando for único...no momento usarei esse código abaixo na hora de pegar as infos e jogar na página (transformando em arrays)
-        var games = b.jogo,
-            tags = b.tags,
-            consoles = b.consoles,
-            publicadoras = b.publicadoras,
-            desenvolvedores = b.desenvolvedores,
-            generos = b.generos,
-            categoriaArtigo = b.categoriaArtigo,
-            analiseBom = b.analiseBom,
-            analiseRuim = b.analiseRuim,
-            slug = func.string_to_slug(decodeURIComponent(b.docTitle.replace('<p>', '').replace('</p>', '')));
+            var facet = [];
 
-        var facet = [];
+            if (games != undefined) { if (games.indexOf(',') > -1) { games = games.split(/[\s,]+/); facet = facet.concat(games); } else { facet.push(games.split(' ')) } }
+            if (tags != undefined) { if (tags.indexOf(',') > -1) { tags = tags.split(/[\s,]+/); facet = facet.concat(tags); } else { facet.push(tags.split(' ')) } }
+            if (consoles != undefined) { if (consoles.indexOf(',') > -1) { consoles = consoles.split(/[\s,]+/); facet = facet.concat(consoles); } else { facet.push(consoles.split(' ')) } }
+            if (publicadoras != undefined) { if (publicadoras.indexOf(',') > -1) { publicadoras = publicadoras.split(/[\s,]+/); facet = facet.concat(publicadoras); } else { facet.push(publicadoras.split(' ')) } }
+            if (desenvolvedores != undefined) { if (desenvolvedores.indexOf(',') > -1) { desenvolvedores = desenvolvedores.split(/[\s,]+/); facet = facet.concat(desenvolvedores); } else { facet.push(desenvolvedores.split(' ')) } }
+            if (generos != undefined) { if (generos.indexOf(',') > -1) { generos = generos.split(/[\s,]+/); facet = facet.concat(generos); } else { facet.push(generos.split(' ')) } }
+            if (categoriaArtigo != undefined) { if (categoriaArtigo.indexOf(',') > -1) { categoriaArtigo = categoriaArtigo.split(/[\s,]+/); facet = facet.concat(categoriaArtigo); } else { facet.push(categoriaArtigo.split(' ')) } }
+            if (analiseBom != undefined) { if (analiseBom.indexOf(',') > -1) { analiseBom = analiseBom.split(','); } }
+            if (analiseRuim != undefined) { if (analiseRuim.indexOf(',') > -1) { analiseRuim = analiseRuim.split(','); } }
 
-        if (games != undefined) { if (games.indexOf(',') > -1) { games = games.split(/[\s,]+/); facet = facet.concat(games); } else { facet.push(games.split(' ')) } }
-        if (tags != undefined) { if (tags.indexOf(',') > -1) { tags = tags.split(/[\s,]+/); facet = facet.concat(tags); } else { facet.push(tags.split(' ')) } }
-        if (consoles != undefined) { if (consoles.indexOf(',') > -1) { consoles = consoles.split(/[\s,]+/); facet = facet.concat(consoles); } else { facet.push(consoles.split(' ')) } }
-        if (publicadoras != undefined) { if (publicadoras.indexOf(',') > -1) { publicadoras = publicadoras.split(/[\s,]+/); facet = facet.concat(publicadoras); } else { facet.push(publicadoras.split(' ')) } }
-        if (desenvolvedores != undefined) { if (desenvolvedores.indexOf(',') > -1) { desenvolvedores = desenvolvedores.split(/[\s,]+/); facet = facet.concat(desenvolvedores); } else { facet.push(desenvolvedores.split(' ')) } }
-        if (generos != undefined) { if (generos.indexOf(',') > -1) { generos = generos.split(/[\s,]+/); facet = facet.concat(generos); } else { facet.push(generos.split(' ')) } }
-        if (categoriaArtigo != undefined) { if (categoriaArtigo.indexOf(',') > -1) { categoriaArtigo = categoriaArtigo.split(/[\s,]+/); facet = facet.concat(categoriaArtigo); } else { facet.push(categoriaArtigo.split(' ')) } }
-        if (analiseBom != undefined) { if (analiseBom.indexOf(',') > -1) { analiseBom = analiseBom.split(','); } }
-        if (analiseRuim != undefined) { if (analiseRuim.indexOf(',') > -1) { analiseRuim = analiseRuim.split(','); } }
-
-        facet.push(b.serieArtigo, b.tipoVideo, b.canalVideo);
-        facet = func.cleanArray(facet);
+            facet.push(b.serieArtigo, b.tipoVideo, b.canalVideo);
+            facet = func.cleanArray(facet);
 
 
 
-        if (b.tipo == 'noticia') {
-            Artigos.update({ $and: [{ creating: true }, { 'authors.main': user._id}] }, { $set: {
+            if (b.tipo == 'noticia') {
+                Artigos.update({ $and: [{ creating: true }, { 'authors.main': user._id}] }, { $set: {
 
-                type: b.tipo,
-                description: b.descricao,
-                creating: false,
-                'cover.image': b.coverUrl,
-                'cover.position': b.position,
-                tags: b.tags,
-                'graph.games': b.jogo,
-                'graph.consoles': b.consoles,
-                'graph.genres': b.generos,
-                'graph.developers': b.desenvolvedores,
-                'graph.publishers': b.publicadoras,
-                'news.story': b.continuacaoHistoria,
-                slug: slug
+                    type: b.tipo,
+                    description: b.descricao,
+                    creating: false,
+                    'cover.image': b.coverUrl,
+                    'cover.position': b.position,
+                    tags: b.tags,
+                    'graph.games': b.jogo,
+                    'graph.consoles': b.consoles,
+                    'graph.genres': b.generos,
+                    'graph.developers': b.desenvolvedores,
+                    'graph.publishers': b.publicadoras,
+                    'news.story': b.continuacaoHistoria,
+                    slug: slug
 
-            }, $addToSet: {
-                facet: { $each: [facet] }
-            }
-            }, function (err) {
-                if (err)
-                    throw err
-                Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false} }, function (err) {
+                }, $addToSet: {
+                    facet: { $each: [facet] }
+                }
+                }, function (err) {
                     if (err)
                         throw err
-                    res.redirect('/' + b.tipo + 's/' + slug);
+                    Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false} }, function (err) {
+                        if (err)
+                            throw err
+                        res.redirect('/' + b.tipo + 's/' + slug);
+                    });
+
                 });
+            } else if (b.tipo == 'artigo') {
+                Artigos.update({ $and: [{ creating: true }, { 'authors.main': user._id}] }, { $set: {
 
-            });
-        } else if (b.tipo == 'artigo') {
-            Artigos.update({ $and: [{ creating: true }, { 'authors.main': user._id}] }, { $set: {
+                    type: b.tipo,
+                    description: b.descricao,
+                    creating: false,
+                    'cover.image': b.coverUrl,
+                    'cover.position': b.position,
+                    tags: b.tags,
+                    'graph.games': b.jogo,
+                    'graph.consoles': b.consoles,
+                    'graph.genres': b.generos,
+                    'graph.developers': b.desenvolvedores,
+                    'graph.publishers': b.publicadoras,
+                    'article.category': b.categoriaArtigo,
+                    'article.serie': b.serieArtigo,
+                    slug: slug
 
-                type: b.tipo,
-                description: b.descricao,
-                creating: false,
-                'cover.image': b.coverUrl,
-                'cover.position': b.position,
-                tags: b.tags,
-                'graph.games': b.jogo,
-                'graph.consoles': b.consoles,
-                'graph.genres': b.generos,
-                'graph.developers': b.desenvolvedores,
-                'graph.publishers': b.publicadoras,
-                'article.category': b.categoriaArtigo,
-                'article.serie': b.serieArtigo,
-                slug: slug
-
-            }, $addToSet: {
-                facet: { $each: [facet] }
-            }
-            }, function (err) {
-                if (err)
-                    throw err
-                Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false} }, function (err) {
+                }, $addToSet: {
+                    facet: { $each: [facet] }
+                }
+                }, function (err) {
                     if (err)
                         throw err
-                    res.redirect('/' + b.tipo + 's/' + slug);
+                    Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false} }, function (err) {
+                        if (err)
+                            throw err
+                        res.redirect('/' + b.tipo + 's/' + slug);
+                    });
                 });
-            });
-        } else if (b.tipo == 'analise') {
-            Artigos.update({ $and: [{ creating: true }, { 'authors.main': user._id}] }, { $set: {
-                type: b.tipo,
-                description: b.descricao,
-                creating: false,
-                'cover.image': b.coverUrl,
-                'cover.position': b.position,
-                tags: b.tags,
-                'graph.games': b.games,
-                'review.score': b.nota,
-                'review.good': analiseBom,
-                'review.bad': analiseRuim,
-                'review.punchLine': b.analiseEfeito,
-                slug: slug
+            } else if (b.tipo == 'analise') {
+                Artigos.update({ $and: [{ creating: true }, { 'authors.main': user._id}] }, { $set: {
+                    type: b.tipo,
+                    description: b.descricao,
+                    creating: false,
+                    'cover.image': b.coverUrl,
+                    'cover.position': b.position,
+                    tags: b.tags,
+                    'graph.games': b.games,
+                    'review.score': b.nota,
+                    'review.good': analiseBom,
+                    'review.bad': analiseRuim,
+                    'review.punchLine': b.analiseEfeito,
+                    slug: slug
 
 
-            }, $addToSet: {
-                facet: { $each: [facet] }
-            }
-            }, function (err) {
-                if (err)
-                    throw err
-                Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false} }, function (err) {
+                }, $addToSet: {
+                    facet: { $each: [facet] }
+                }
+                }, function (err) {
                     if (err)
                         throw err
-                    res.redirect('/' + b.tipo + 's/' + slug);
+                    Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false} }, function (err) {
+                        if (err)
+                            throw err
+                        res.redirect('/' + b.tipo + 's/' + slug);
+                    });
                 });
-            });
+            } else {
+                Artigos.update({ $and: [{ creating: true }, { 'authors.main': user._id}] }, { $set: {
+
+                    type: b.tipo,
+                    description: b.descricao,
+                    creating: false,
+                    'cover.image': b.coverUrl,
+                    'cover.position': b.position,
+                    tags: b.tags,
+                    'graph.games': b.jogo,
+                    'graph.consoles': b.consoles,
+                    'graph.genres': b.generos,
+                    'graph.developers': b.desenvolvedores,
+                    'graph.publishers': b.publicadoras,
+                    'video.type': b.tipoVideo,
+                    'video.canal': b.canalVideo,
+                    'video.url': b.urlVideo,
+                    slug: slug
+
+                }, $addToSet: {
+                    facet: { $each: [facet] }
+                }
+                }, function (err) {
+                    if (err)
+                        throw err
+                    Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false} }, function (err) {
+                        if (err)
+                            throw err
+                        res.redirect('/' + b.tipo + 's/' + slug);
+                    });
+                });
+            }
         } else {
-            Artigos.update({ $and: [{ creating: true }, { 'authors.main': user._id}] }, { $set: {
-
-                type: b.tipo,
-                description: b.descricao,
-                creating: false,
-                'cover.image': b.coverUrl,
-                'cover.position': b.position,
-                tags: b.tags,
-                'graph.games': b.jogo,
-                'graph.consoles': b.consoles,
-                'graph.genres': b.generos,
-                'graph.developers': b.desenvolvedores,
-                'graph.publishers': b.publicadoras,
-                'video.type': b.tipoVideo,
-                'video.canal': b.canalVideo,
-                'video.url': b.urlVideo,
-                slug: slug
-
-            }, $addToSet: {
-                facet: { $each: [facet] }
-            }
-            }, function (err) {
-                if (err)
-                    throw err
-                Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false} }, function (err) {
-                    if (err)
-                        throw err
-                    res.redirect('/' + b.tipo + 's/' + slug);
-                });
-            });
+            res.redirect('/parceiros');
         }
+
+        
     });
 
     // =====================================
@@ -450,10 +464,6 @@ module.exports = function (app, passport, mongoose) {
         } else {
             res.redirect("/");
         }
-    });
-
-    app.get('/artigo', function (req, res) {
-        res.render('artigo');
     });
 
 
