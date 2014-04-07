@@ -1,5 +1,6 @@
 var imageCover;
 var docTitle;
+var nJson
 $(function () {
 
     Dropzone.options.dropzoneImage = {
@@ -29,6 +30,7 @@ $(function () {
         minHeight: 300,
         imageUpload: '/artigoImage',
         convertImageLinks: true,
+        convertVideoLinks: true,
         imageUploadCallback: function (image, json) {
 
         },
@@ -36,7 +38,6 @@ $(function () {
         autosaveInterval: 10, // seconds
         autosaveCallback: function (json) {
             console.log(json);
-            var nJson = decodeURIComponent(json.content);
 
         }
     });
@@ -45,12 +46,12 @@ $(function () {
         lang: 'pt_br',
         toolbar: false,
         minHeight: 97,
-        deniedTags: ['blockquote', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'span', 'link', 'meta', 'style', 'html', 'input', 'textarea', 'body', 'a', 'img', 'small', 'button', 'iframe', 'canvas', 'code', 'pre', 'ul', 'li', 'ol', 'dl', 'dt', 'form', 'hr','script',],
+        deniedTags: ['blockquote', 'p','div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'span', 'link', 'meta', 'style', 'html', 'input', 'textarea', 'body', 'a', 'img', 'small', 'button', 'iframe', 'canvas', 'code', 'pre', 'ul', 'li', 'ol', 'dl', 'dt', 'form', 'hr','script',],
         autosave: '/novoTitulo',
         autosaveInterval: 12, // seconds
         autosaveCallback: function (json) {
             console.log(json);
-            var nJson = decodeURIComponent(json.content);
+            nJson = decodeURIComponent(json.content);
             docTitle = decodeURIComponent(json.content);
             $('.teste').html(nJson);
 

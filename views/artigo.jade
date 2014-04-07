@@ -18,7 +18,7 @@ block content
         include partials/nav
 
     div#wrapper
-        section.mainImage(style="background: url('/images/naruto.jpg') no-repeat center -230px;")
+        section.mainImage(style="#{article.cover.position}")
             div.wrapImage
                 article.bloco
 
@@ -37,7 +37,7 @@ block content
                     div.fb-like(data-href="", data-layout="button_count", data-action="like", data-show-faces="true", data-share="true")
                 include partials/footer
 
-        else if(tipo == 'artigo')
+        else if(tipo == 'video')
             div.parallax(style="border-top:5px solid #34495e;")
                 article#mainText
                     include partials/video

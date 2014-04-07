@@ -16,7 +16,7 @@
     "express"
   ],
   "dependencies": {
-    "jade": "~1.3.0",
+    "jade": "*",
     "express": "~3.5.1",
     "mongoose": "*",
     "passport": "*",
@@ -29,7 +29,7 @@
     "bcrypt-nodejs": "*",
     "newrelic": "*",
     "ip": "*",
-    "async": "*",
+    "async": "~0.6.2",
     "connect-mongo": "*"
   },
   "noAnalyze": true,

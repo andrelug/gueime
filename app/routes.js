@@ -40,19 +40,26 @@ module.exports = function (app, passport, mongoose) {
         if (req.xhr === true) {
 
             Artigos.find({ slug: noticia }, function (err, docs) {
-                res.render('artigoAjax', { tipo: 'noticia', article: docs });
+                var title = decodeURIComponent(docs[0].title).replace('<p>', '').replace('</p>', ''),
+                    body = decodeURIComponent(docs[0].text);
+                res.render('artigoAjax', { tipo: 'noticia', article: docs[0], title: title, body: body });
             });
 
 
         } else {
             if (!user) {
                 Artigos.find({ slug: noticia }, function (err, docs) {
-                    res.render('artigo', { tipo: 'noticia', article: docs, title: docs.title });
+                    var title = decodeURIComponent(docs[0].title).replace('<p>', '').replace('</p>', ''),
+                        body = decodeURIComponent(docs[0].text);
+                    res.render('artigo', { tipo: 'noticia', article: docs[0], title: title, body: body });
                 });
             } else {
                 sessionReload(req, res, next);
                 Artigos.find({ slug: noticia }, function (err, docs) {
-                    res.render('artigo', { tipo: 'noticia', article: docs, title: docs.title, user: user });
+                    
+                    var title = decodeURIComponent(docs[0].title).replace('<p>', '').replace('</p>', ''),
+                        body = decodeURIComponent(docs[0].text);
+                    res.render('artigo', { tipo: 'noticia', article: docs[0], title: title, body: body, user: user });
                 });
             }
         }
@@ -65,18 +72,33 @@ module.exports = function (app, passport, mongoose) {
         if (req.xhr === true) {
 
             Artigos.find({ slug: artigo }, function (err, docs) {
-                res.render('artigoAjax', { tipo: 'artigo', article: docs });
+                var title = decodeURIComponent(docs[0].title).replace('<p>', '').replace('</p>', ''),
+                    body = decodeURIComponent(docs[0].text);
+                res.render('artigoAjax', { tipo: 'artigo', article: docs[0], title: title, body: body });
             });
 
         } else {
             if (!user) {
                 Artigos.find({ slug: artigo }, function (err, docs) {
-                    res.render('artigo', { tipo: 'artigo', article: docs, title: docs.title });
+                    var title = decodeURIComponent(docs[0].title).replace('<p>', '').replace('</p>', ''),
+                        body = decodeURIComponent(docs[0].text);
+
+                    res.render('artigo', { tipo: 'artigo', article: docs[0], title: title, body: body });
                 });
             } else {
                 sessionReload(req, res, next);
                 Artigos.find({ slug: artigo }, function (err, docs) {
-                    res.render('artigo', { tipo: 'artigo', article: docs, title: docs.title, user: user });
+                    var title = decodeURIComponent(docs[0].title).replace('<p>', '').replace('</p>', ''),
+                        body = decodeURIComponent(docs[0].text);
+
+                    Users.find({_id: docs[0].authors.main}, function(err, author){
+                        res.render('artigo', { tipo: 'artigo', article: docs[0], title: title, body: body, user: user, author: author[0] });
+                    })
+
+                    
+
+
+                    
                 });
             }
         }
@@ -89,18 +111,24 @@ module.exports = function (app, passport, mongoose) {
         if (req.xhr === true) {
 
             Artigos.find({ slug: artigo }, function (err, docs) {
-                res.render('artigoAjax', { tipo: 'analise', article: docs });
+                var title = decodeURIComponent(docs[0].title).replace('<p>', '').replace('</p>', ''),
+                    body = decodeURIComponent(docs[0].text);
+                res.render('artigoAjax', { tipo: 'analise', article: docs[0], title: title, body: body });
             });
 
         } else {
             if (!user) {
                 Artigos.find({ slug: analise }, function (err, docs) {
-                    res.render('artigo', { tipo: 'analise', article: docs, title: docs.title });
+                    var title = decodeURIComponent(docs[0].title).replace('<p>', '').replace('</p>', ''),
+                        body = decodeURIComponent(docs[0].text);
+                    res.render('artigo', { tipo: 'analise', article: docs[0], title: title, body: body });
                 });
             } else {
                 sessionReload(req, res, next);
                 Artigos.find({ slug: analise }, function (err, docs) {
-                    res.render('artigo', { tipo: 'analise', article: docs, title: docs.title, user: user });
+                    var title = decodeURIComponent(docs[0].title).replace('<p>', '').replace('</p>', ''),
+                        body = decodeURIComponent(docs[0].text);
+                    res.render('artigo', { tipo: 'analise', article: docs[0], title: title, body: body, user: user });
                 });
             }
         }
@@ -113,18 +141,24 @@ module.exports = function (app, passport, mongoose) {
         if (req.xhr === true) {
 
             Artigos.find({ slug: video }, function (err, docs) {
-                res.render('artigoAjax', { tipo: 'video', article: docs });
+                var title = decodeURIComponent(docs[0].title).replace('<p>', '').replace('</p>', ''),
+                    body = decodeURIComponent(docs[0].text);
+                res.render('artigoAjax', { tipo: 'video', article: docs[0], title: title, body: body });
             });
 
         } else {
             if (!user) {
                 Artigos.find({ slug: video }, function (err, docs) {
-                    res.render('artigo', { tipo: 'video', article: docs, title: docs.title });
+                    var title = decodeURIComponent(docs[0].title).replace('<p>', '').replace('</p>', ''),
+                        body = decodeURIComponent(docs[0].text);
+                    res.render('artigo', { tipo: 'video', article: docs[0], title: title, body: body });
                 });
             } else {
                 sessionReload(req, res, next);
                 Artigos.find({ slug: video }, function (err, docs) {
-                    res.render('artigo', { tipo: 'video', article: docs, title: docs.title, user: user });
+                    var title = decodeURIComponent(docs[0].title).replace('<p>', '').replace('</p>', ''),
+                        body = decodeURIComponent(docs[0].text);
+                    res.render('artigo', { tipo: 'video', article: docs[0], title: title, body: body, user: user });
                 });
             }
         }
@@ -375,13 +409,14 @@ module.exports = function (app, passport, mongoose) {
                 });
             } else if (b.tipo == 'analise') {
                 Artigos.update({ $and: [{ creating: true }, { 'authors.main': user._id}] }, { $set: {
+
                     type: b.tipo,
                     description: b.descricao,
                     creating: false,
                     'cover.image': b.coverUrl,
                     'cover.position': b.position,
                     tags: b.tags,
-                    'graph.games': b.games,
+                    'graph.games': b.jogo,
                     'review.score': b.nota,
                     'review.good': analiseBom,
                     'review.bad': analiseRuim,
