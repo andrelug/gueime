@@ -51,6 +51,6 @@ BUGS
 
 --> Na hora de remover o arquivo, voltar com o width 100% do módulo de upload
 
---> box do like do facebook está atrás do #author
+--> Adicionar validação do formulário de criação de artigos -> http://jqueryvalidation.org/
 
---> Na hora de voltar pra página principal o artigo fica embaixo
+--> Mudar pra $push na hora de colocar na db

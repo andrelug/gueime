@@ -49,6 +49,7 @@ var UserSchema = new mongoose.Schema({
         }
     },
     creating: {type: Boolean, default: false},
+    creatingId: {type: mongoose.Schema.Types.ObjectId, ref: 'Article'},
     follow: [{_id: false, type: mongoose.Schema.Types.ObjectId}],
     followedBy: [{_id: false, type: mongoose.Schema.Types.ObjectId}],
     deleted: {type: Boolean, default: false}

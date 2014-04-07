@@ -1,4 +1,5 @@
 var Users = require('./models/user');
+var Artigos = require('./models/article');
 var func = require('../config/functions');
 var facebook = require('../config/facebook.js');
 var ip = require('ip');
@@ -31,19 +32,28 @@ module.exports = function (app, passport, mongoose) {
 
         }
     });
-    
+
     // AJAX E FALLBACK PARA NOTICIAS
     app.get('/noticias/:noticia', function (req, res, next) {
         var user = req.user;
-        var artigo = req.params.noticia;
+        var noticia = req.params.noticia;
         if (req.xhr === true) {
-            res.render('artigoAjax', {tipo: 'noticia'});
+
+            Artigos.find({ slug: noticia }, function (err, docs) {
+                res.render('artigoAjax', { tipo: 'noticia', article: docs });
+            });
+
+
         } else {
             if (!user) {
-                res.render("artigo", { title: "Gueime - O melhor site de games do Brasil!", tipo: 'noticia' });
+                Artigos.find({ slug: noticia }, function (err, docs) {
+                    res.render('artigo', { tipo: 'noticia', article: docs, title: docs.title });
+                });
             } else {
                 sessionReload(req, res, next);
-                res.render('artigo', { user: user, title: "Gueime - O melhor site de games do Brasil!", tipo: 'noticia' });
+                Artigos.find({ slug: noticia }, function (err, docs) {
+                    res.render('artigo', { tipo: 'noticia', article: docs, title: docs.title, user: user });
+                });
             }
         }
     });
@@ -53,13 +63,21 @@ module.exports = function (app, passport, mongoose) {
         var user = req.user;
         var artigo = req.params.artigo;
         if (req.xhr === true) {
-            res.render('artigoAjax', {tipo: 'artigo'});
+
+            Artigos.find({ slug: artigo }, function (err, docs) {
+                res.render('artigoAjax', { tipo: 'artigo', article: docs });
+            });
+
         } else {
             if (!user) {
-                res.render("artigo", { title: "Gueime - O melhor site de games do Brasil!", tipo: 'artigo' });
+                Artigos.find({ slug: artigo }, function (err, docs) {
+                    res.render('artigo', { tipo: 'artigo', article: docs, title: docs.title });
+                });
             } else {
                 sessionReload(req, res, next);
-                res.render('artigo', { user: user, title: "Gueime - O melhor site de games do Brasil!", tipo: 'artigo' });
+                Artigos.find({ slug: artigo }, function (err, docs) {
+                    res.render('artigo', { tipo: 'artigo', article: docs, title: docs.title, user: user });
+                });
             }
         }
     });
@@ -67,15 +85,47 @@ module.exports = function (app, passport, mongoose) {
     // AJAX E FALLBACK PARA ANALISES
     app.get('/analises/:analise', function (req, res, next) {
         var user = req.user;
-        var artigo = req.params.analise;
+        var analise = req.params.analise;
         if (req.xhr === true) {
-            res.render('artigoAjax', {tipo: 'analise'});
+
+            Artigos.find({ slug: artigo }, function (err, docs) {
+                res.render('artigoAjax', { tipo: 'analise', article: docs });
+            });
+
         } else {
             if (!user) {
-                res.render("artigo", { title: "Gueime - O melhor site de games do Brasil!", tipo: 'analise' });
+                Artigos.find({ slug: analise }, function (err, docs) {
+                    res.render('artigo', { tipo: 'analise', article: docs, title: docs.title });
+                });
             } else {
                 sessionReload(req, res, next);
-                res.render('artigo', { user: user, title: "Gueime - O melhor site de games do Brasil!", tipo: 'analise' });
+                Artigos.find({ slug: analise }, function (err, docs) {
+                    res.render('artigo', { tipo: 'analise', article: docs, title: docs.title, user: user });
+                });
+            }
+        }
+    });
+
+    // AJAX E FALLBACK PARA VIDEOS
+    app.get('/videos/:video', function (req, res, next) {
+        var user = req.user;
+        var video = req.params.video;
+        if (req.xhr === true) {
+
+            Artigos.find({ slug: video }, function (err, docs) {
+                res.render('artigoAjax', { tipo: 'video', article: docs });
+            });
+
+        } else {
+            if (!user) {
+                Artigos.find({ slug: video }, function (err, docs) {
+                    res.render('artigo', { tipo: 'video', article: docs, title: docs.title });
+                });
+            } else {
+                sessionReload(req, res, next);
+                Artigos.find({ slug: video }, function (err, docs) {
+                    res.render('artigo', { tipo: 'video', article: docs, title: docs.title, user: user });
+                });
             }
         }
     });
@@ -139,13 +189,234 @@ module.exports = function (app, passport, mongoose) {
         });
     });
 
+
+
+
+
     // SALVAR NOVO ARTIGO
     app.post('/novoArtigo', function (req, res) {
+        var user = req.user;
 
-        res.send(JSON.stringify(req.body));
+        if (user.creating == false) {
+            Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true} }, function (err) {
+                if (err)
+                    throw err
+
+                new Artigos({
+                    'authors.main': user._id,
+                    text: req.body.content,
+                    creating: true
+
+                }).save(function (err, docs) {
+                    if (err)
+                        throw err
+                    res.send(JSON.stringify(req.body));
+                });
+
+            });
+        } else {
+            Artigos.update({ $and: [{ creating: true }, { 'authors.main': user._id}] }, { $set: { text: req.body.content} }, function (err) {
+                if (err)
+                    throw err
+                res.send(JSON.stringify(req.body));
+
+            });
+        }
+
+
 
     });
 
+    // SALVAR NOVO TITULO
+    app.post('/novoTitulo', function (req, res) {
+        var user = req.user;
+
+        if (user.creating == false) {
+            Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true} }, function (err) {
+                if (err)
+                    throw err
+
+                new Artigos({
+                    'authors.main': user._id,
+                    title: req.body.content,
+                    creating: true
+
+                }).save(function (err, docs) {
+                    if (err)
+                        throw err
+                    res.send(JSON.stringify(req.body));
+                });
+
+            });
+        } else {
+            Artigos.update({ $and: [{ creating: true }, { 'authors.main': user._id}] }, { $set: { title: req.body.content} }, function (err) {
+                if (err)
+                    throw err
+                res.send(JSON.stringify(req.body));
+
+            });
+        }
+
+
+
+    });
+
+    // GRAPH NOVO ARTIGO
+    app.post('/graph', function (req, res) {
+        var user = req.user;
+        var b = req.body;
+
+
+        // Não consegui ainda pensar num jeito simples de colocar $push apenas nas arrays e $set quando for único...no momento usarei esse código abaixo na hora de pegar as infos e jogar na página (transformando em arrays)
+        var games = b.jogo,
+            tags = b.tags,
+            consoles = b.consoles,
+            publicadoras = b.publicadoras,
+            desenvolvedores = b.desenvolvedores,
+            generos = b.generos,
+            categoriaArtigo = b.categoriaArtigo,
+            analiseBom = b.analiseBom,
+            analiseRuim = b.analiseRuim,
+            slug = func.string_to_slug(decodeURIComponent(b.docTitle.replace('<p>', '').replace('</p>', '')));
+
+        var facet = [];
+
+        if (games != undefined) { if (games.indexOf(',') > -1) { games = games.split(/[\s,]+/); facet = facet.concat(games); } else { facet.push(games.split(' ')) } }
+        if (tags != undefined) { if (tags.indexOf(',') > -1) { tags = tags.split(/[\s,]+/); facet = facet.concat(tags); } else { facet.push(tags.split(' ')) } }
+        if (consoles != undefined) { if (consoles.indexOf(',') > -1) { consoles = consoles.split(/[\s,]+/); facet = facet.concat(consoles); } else { facet.push(consoles.split(' ')) } }
+        if (publicadoras != undefined) { if (publicadoras.indexOf(',') > -1) { publicadoras = publicadoras.split(/[\s,]+/); facet = facet.concat(publicadoras); } else { facet.push(publicadoras.split(' ')) } }
+        if (desenvolvedores != undefined) { if (desenvolvedores.indexOf(',') > -1) { desenvolvedores = desenvolvedores.split(/[\s,]+/); facet = facet.concat(desenvolvedores); } else { facet.push(desenvolvedores.split(' ')) } }
+        if (generos != undefined) { if (generos.indexOf(',') > -1) { generos = generos.split(/[\s,]+/); facet = facet.concat(generos); } else { facet.push(generos.split(' ')) } }
+        if (categoriaArtigo != undefined) { if (categoriaArtigo.indexOf(',') > -1) { categoriaArtigo = categoriaArtigo.split(/[\s,]+/); facet = facet.concat(categoriaArtigo); } else { facet.push(categoriaArtigo.split(' ')) } }
+        if (analiseBom != undefined) { if (analiseBom.indexOf(',') > -1) { analiseBom = analiseBom.split(','); } }
+        if (analiseRuim != undefined) { if (analiseRuim.indexOf(',') > -1) { analiseRuim = analiseRuim.split(','); } }
+
+        facet.push(b.serieArtigo, b.tipoVideo, b.canalVideo);
+        facet = func.cleanArray(facet);
+
+
+
+        if (b.tipo == 'noticia') {
+            Artigos.update({ $and: [{ creating: true }, { 'authors.main': user._id}] }, { $set: {
+
+                type: b.tipo,
+                description: b.descricao,
+                creating: false,
+                'cover.image': b.coverUrl,
+                'cover.position': b.position,
+                tags: b.tags,
+                'graph.games': b.jogo,
+                'graph.consoles': b.consoles,
+                'graph.genres': b.generos,
+                'graph.developers': b.desenvolvedores,
+                'graph.publishers': b.publicadoras,
+                'news.story': b.continuacaoHistoria,
+                slug: slug
+
+            }, $addToSet: {
+                facet: { $each: [facet] }
+            }
+            }, function (err) {
+                if (err)
+                    throw err
+                Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false} }, function (err) {
+                    if (err)
+                        throw err
+                    res.redirect('/' + b.tipo + 's/' + slug);
+                });
+
+            });
+        } else if (b.tipo == 'artigo') {
+            Artigos.update({ $and: [{ creating: true }, { 'authors.main': user._id}] }, { $set: {
+
+                type: b.tipo,
+                description: b.descricao,
+                creating: false,
+                'cover.image': b.coverUrl,
+                'cover.position': b.position,
+                tags: b.tags,
+                'graph.games': b.jogo,
+                'graph.consoles': b.consoles,
+                'graph.genres': b.generos,
+                'graph.developers': b.desenvolvedores,
+                'graph.publishers': b.publicadoras,
+                'article.category': b.categoriaArtigo,
+                'article.serie': b.serieArtigo,
+                slug: slug
+
+            }, $addToSet: {
+                facet: { $each: [facet] }
+            }
+            }, function (err) {
+                if (err)
+                    throw err
+                Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false} }, function (err) {
+                    if (err)
+                        throw err
+                    res.redirect('/' + b.tipo + 's/' + slug);
+                });
+            });
+        } else if (b.tipo == 'analise') {
+            Artigos.update({ $and: [{ creating: true }, { 'authors.main': user._id}] }, { $set: {
+                type: b.tipo,
+                description: b.descricao,
+                creating: false,
+                'cover.image': b.coverUrl,
+                'cover.position': b.position,
+                tags: b.tags,
+                'graph.games': b.games,
+                'review.score': b.nota,
+                'review.good': analiseBom,
+                'review.bad': analiseRuim,
+                'review.punchLine': b.analiseEfeito,
+                slug: slug
+
+
+            }, $addToSet: {
+                facet: { $each: [facet] }
+            }
+            }, function (err) {
+                if (err)
+                    throw err
+                Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false} }, function (err) {
+                    if (err)
+                        throw err
+                    res.redirect('/' + b.tipo + 's/' + slug);
+                });
+            });
+        } else {
+            Artigos.update({ $and: [{ creating: true }, { 'authors.main': user._id}] }, { $set: {
+
+                type: b.tipo,
+                description: b.descricao,
+                creating: false,
+                'cover.image': b.coverUrl,
+                'cover.position': b.position,
+                tags: b.tags,
+                'graph.games': b.jogo,
+                'graph.consoles': b.consoles,
+                'graph.genres': b.generos,
+                'graph.developers': b.desenvolvedores,
+                'graph.publishers': b.publicadoras,
+                'video.type': b.tipoVideo,
+                'video.canal': b.canalVideo,
+                'video.url': b.urlVideo,
+                slug: slug
+
+            }, $addToSet: {
+                facet: { $each: [facet] }
+            }
+            }, function (err) {
+                if (err)
+                    throw err
+                Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false} }, function (err) {
+                    if (err)
+                        throw err
+                    res.redirect('/' + b.tipo + 's/' + slug);
+                });
+            });
+        }
+    });
 
     // =====================================
     // USER SIGNUP =========================

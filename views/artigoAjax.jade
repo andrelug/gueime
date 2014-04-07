@@ -15,15 +15,23 @@ div#loading
             article#mainText(style="width: 100%; padding: 0 5%;padding-bottom: 20px;")
                 include partials/noticia
                 div.fb-like(data-href="", data-layout="button_count", data-action="like", data-show-faces="true", data-share="true")
+            include partials/footer
     else if(tipo == 'artigo')
         div.parallax(style="border-top:5px solid rgb(71,158,205);")
             article#mainText(style="width: 100%; padding: 0 5%;padding-bottom: 20px;")
                 include partials/artigo
                 div.fb-like(data-href="", data-layout="button_count", data-action="like", data-show-faces="true", data-share="true")
+            include partials/footer
+
+    else if(tipo == 'video')
+        div.parallax(style="border-top:5px solid #34495e;")
+            article#mainText(style="width: 100%; padding: 0 5%;padding-bottom: 20px;")
+                include partials/video
+                div.fb-like(data-href="", data-layout="button_count", data-action="like", data-show-faces="true", data-share="true")
+            include partials/footer
     else
         div.parallax(style="border-top:5px solid #E54C3C;")
             article#mainText(style="width: 100%; padding: 0 5%;padding-bottom: 20px;")
                 include partials/analise
                 div.fb-like(data-href="", data-layout="button_count", data-action="like", data-show-faces="true", data-share="true")
-
-    include partials/footer
+            include partials/footer

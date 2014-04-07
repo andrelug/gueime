@@ -1,0 +1,215 @@
+div#perguntas
+    form#wizard(action="/graph", method="post")
+        input(type="hidden", name="position")
+        input(type="hidden", name="coverUrl")
+        input(type="hidden", name="docTitle")
+        input(type="hidden", name="tipo", value="#{tipo}")
+        h1 Tutorial
+        div
+            legend Tutorial
+            h4 Muito bem! Agora que finalizou sua produção, está na hora de classificá-la para que todos os usuários a encontrem de forma mais rápida!
+            h4 Vamos te perguntar um monte de coisa e faça o possível para preencher de forma objetiva e sincera. Quanto mais condizente com sua produção, mais chances terá de ser lido ou assistido aqui no Gueime. Divirta-se!
+                                
+        h1 Jogo
+        div
+            legend Sua produção fala de um ou mais jogos?
+            div.row#jogoSimNao
+                div.large-3.large-offset-3.columns
+                    a.button#sim sim
+                div.large-3.columns
+                    a.button#nao não
+                div.large-3.columns
+            div.row
+                div.large-8.large-centered.columns#qualJogo
+                    small se falar de mais de um jogo, adicione uma vírgula antes de cada um(ex: Mass Effect, Borderlands)
+                    input(type="text", placeholder="Qual jogo?", name="jogo")
+                    small: a na verdade não tem jogo...
+                                        
+            div.row
+                div.large-8.large-centered.columns#semJogo
+                    h4 Pode continuar para o próximo passo
+                    small: a na verdade tem jogo...
+
+        h1 Descrição
+        div
+            legend Curta descrição
+            div.row
+                div.large-8.large-centered.columns
+                    textarea.textareaInside(placeholder="Descrição", name="descricao")
+
+        h1 Autores
+        div
+            legend Essa produção foi feita com mais alguém?
+            div.row#autorSimNao
+                div.large-3.large-offset-3.columns
+                    a.button#sim sim
+                div.large-3.columns
+                    a.button#nao não
+                div.large-3.columns
+            div.row
+                div.large-8.large-centered.columns#qualAutor
+                    h4 Comece a digitar o nome
+                    input(type="text", placeholder="Quem?", name="outrosAutores")
+                    small: a na verdade não tem outro autor...
+                                        
+            div.row
+                div.large-8.large-centered.columns#semAutor
+                    h4 Pode continuar para o próximo passo
+                    small: a na verdade tem outro autor...
+
+        if(tipo == 'noticia')
+            h1 Continuação
+            div
+                legend Esta notícia é uma continuação de uma história?
+                div.row#continuaSimNao
+                    div.large-3.large-offset-3.columns
+                        a.button#sim sim
+                    div.large-3.columns
+                        a.button#nao não
+                    div.large-3.columns
+                div.row
+                    div.large-8.large-centered.columns#qualContinua
+                        h4 Comece a digitar o nome
+                        input(type="text", placeholder="Qual história?", name="continuacaoHistoria")
+                        small: a na verdade não é continuação...
+                                        
+                div.row
+                    div.large-8.large-centered.columns#semContinua
+                        h4 Então crie uma história
+                        input(type="text", placeholder="Crie uma história", name="continuacaoHistoria")
+                        small: a na verdade é continuação...
+
+
+
+        if(tipo == 'artigo')
+            h1 Categoria
+            div
+                legend Em que categoria seu artigo se encontra?
+                div.row
+                    div.large-8.large-centered.columns
+                        input(type="text", placeholder="Categoria do artigo", name="categoriaArtigo")
+
+
+            h1 Série
+            div
+                legend Este artigo é faz parte de alguma série?
+                div.row#serieSimNao
+                    div.large-3.large-offset-3.columns
+                        a.button#sim sim
+                    div.large-3.columns
+                        a.button#nao não
+                    div.large-3.columns
+                div.row
+                    div.large-8.large-centered.columns#qualSerie
+                        h4 Comece a digitar o nome da série
+                        input(type="text", placeholder="Qual série?", name="serieArtigo")
+                        small: a na verdade não tem outra série...
+                                        
+                div.row
+                    div.large-8.large-centered.columns#semSerie
+                        h4 Pode continuar para o próximo passo
+                        small: a na verdade tem outra série...
+
+                            
+        if(tipo == 'analise')
+            h1 Nota
+            div
+                legend Qual nota você dá para esse jogo?
+                div.row
+                    div.large-8.large-centered.columns
+                        input(type="number", placeholder="nota", name="nota")
+
+            h1 Bom
+            div
+                legend O que ele tem de bom?
+                div.row
+                    div.large-8.large-centered.columns
+                        small apresente até três motivos separados por vírgulas
+                        textarea.textareaInside(type="text", placeholder="Bom", name="analiseBom")
+
+            h1 Ruim
+            div
+                legend O que ele tem de ruim?
+                div.row
+                    div.large-8.large-centered.columns
+                        small apresente até três motivos separados por vírgulas
+                        textarea.textareaInside(type="text", placeholder="Ruim", name="analiseRuim")
+
+            h1 Frase de efeito
+            div
+                legend Qual é a frase de efeito para sua análise?
+                div.row
+                    div.large-8.large-centered.columns
+                        small algo que impacte!
+                        input(type="text", placeholder="Frase de efeito", name="analiseEfeito")
+
+
+
+        if(tipo == 'video')
+            h1 Tipo do Vídeo
+            div
+                legend Típo do vídeo
+                div.row
+                    div.large-8.large-centered.columns
+                        small ex: Vídeo Análise, gameplay, comentário geral
+                        input(type="text", placeholder="Tipo do vídeo", name="tipoVideo")
+
+            h1 Canal
+            div
+                legend Em qual canal do Youtube está o vídeo?
+                div.row
+                    div.large-8.large-centered.columns
+                        input(type="text", placeholder="Canal do Youtube", name="canalVideo")
+
+            h1 Url do vídeo
+            div
+                legend URL do vídeo
+                div.row
+                    div.large-8.large-centered.columns
+                        input(type="url", placeholder="URL do vídeo", name="urlVideo")
+
+        if(tipo != 'analise')
+            h1 Consoles
+            div
+                legend A produção se relaciona com qual console?
+                div.row
+                    div.large-8.large-centered.columns
+                        small se mais de um, separe por vírgulas
+                        input(type="text", placeholder="Console", name="consoles")
+
+            h1 Gênero
+            div
+                legend Sua produção se relaciona com qual gênero?
+                div.row
+                    div.large-8.large-centered.columns
+                        small se mais de um, separe por vírgulas
+                        input(type="text", placeholder="Gênero", name="generos")
+
+            h1 Desenvolvedor
+            div
+                legend Sua produção se relaciona com qual desenvolvedor?
+                div.row
+                    div.large-8.large-centered.columns
+                        small se mais de um, separe por vírgulas
+                        input(type="text", placeholder="Desenvolvedor", name="desenvolvedores")
+
+            h1 Publicadora
+            div
+                legend Sua produção se relaciona com qual publicadora?
+                div.row
+                    div.large-8.large-centered.columns
+                        small se mais de um, separe por vírgulas
+                        input(type="text", placeholder="Publicadora", name="publicadoras")
+                                    
+        h1 Tags
+        div
+            legend Tags
+            div.row
+                div.large-8.large-centered.columns
+                    h4 Pense em algumas palavras chaves que são relevantes para que os usuários achem sua produção
+                    small evite palavras que já foram utilizadas em outras perguntas
+                    input(type="text", placeholder="Tags", name="tags")
+
+        h1 Termino
+        div
+            legend Muito bem! Agora é só terminar

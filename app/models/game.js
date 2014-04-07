@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 
 var GameSchema = new mongoose.Schema({
 
-    title: String,
+    title: {type: String, unique: true, index: true},
     slug: {type: String, unique: true, index: true},
     description: String,
     text: String,
@@ -11,22 +11,10 @@ var GameSchema = new mongoose.Schema({
     images: [Buffer],
     release: Date,
     graph: {
-        console:{
-            main: String,
-            others: [String]
-        },
-        genre: {
-            main: String,
-            others: [String]
-        },
-        developer: {
-            main: String,
-            others: [String]
-        },
-        publisher: {
-            main: String,
-            others: [String]
-        },
+        console: [String],
+        genre: [String],
+        developer: [String],
+        publisher: [String],
         ageRange: String,
         views: Number
     },

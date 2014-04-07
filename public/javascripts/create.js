@@ -1,4 +1,5 @@
-var bla;
+var imageCover;
+var docTitle;
 $(function () {
 
     Dropzone.options.dropzoneImage = {
@@ -14,6 +15,7 @@ $(function () {
                 if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
                     $('#dropzoneImage').css('width', '20%');
                     $('#loadingAj').fadeOut();
+                    imageCover = '/uploads/' + file.name;
                     $('.mainImage').delay(500).attr('style', 'background: url(/uploads/' + file.name + ') no-repeat center 0px;');
                 }
             });
@@ -35,7 +37,6 @@ $(function () {
         autosaveCallback: function (json) {
             console.log(json);
             var nJson = decodeURIComponent(json.content);
-            $('.teste').html(nJson);
 
         }
     });
@@ -43,7 +44,16 @@ $(function () {
     $('#createTitle').redactor({
         lang: 'pt_br',
         toolbar: false,
-        minHeight: 97
+        minHeight: 97,
+        autosave: '/novoTitulo',
+        autosaveInterval: 12, // seconds
+        autosaveCallback: function (json) {
+            console.log(json);
+            var nJson = decodeURIComponent(json.content);
+            docTitle = decodeURIComponent(json.content);
+            $('.teste').html(nJson);
+
+        }
     });
 });
 
@@ -97,4 +107,117 @@ $(document).ready(function(){
 
     $bg.bind('mousedown mouseup mouseleave', handle);
     $bg.bind('dblclick', reset);
+});
+
+
+
+// Create Steps
+
+$("#wizard").steps({
+    transitionEffect: 2,
+    labels: {
+        current: "atual",
+        pagination: "paginação",
+        finish: "terminar",
+        next: "próximo",
+        previous: "anterior",
+        loading: "carregando"
+    },
+    onFinished: function (event, currentIndex) {
+        var form = $(this);
+
+        var image = $('.mainImage').attr('style');
+        $('input[name=position]').attr('value', image);
+        $('input[name=coverUrl]').attr('value', imageCover);
+        $('input[name=docTitle]').attr('value', docTitle);
+
+        form.submit();
+    }
+});
+$('#sendButton').on('click', function () {
+
+    $('#perguntas').slideDown();
+    $(this).slideUp();
+    $('.steps').css('display', 'none');
+
+})
+
+$('#jogoSimNao').find('a').on('click', function () {
+    if ($(this).html() === 'sim') {
+        $('#qualJogo').slideDown();
+        $('#jogoSimNao').slideUp();
+    }else{
+        $('#semJogo').slideDown();
+        $('#jogoSimNao').slideUp();
+    }
+
+});
+
+$('#autorSimNao').find('a').on('click', function () {
+    if ($(this).html() === 'sim') {
+        $('#qualAutor').slideDown();
+        $('#autorSimNao').slideUp();
+    }else{
+        $('#semAutor').slideDown();
+        $('#autorSimNao').slideUp();
+    }
+
+});
+
+$('#continuaSimNao').find('a').on('click', function () {
+    if ($(this).html() === 'sim') {
+        $('#qualContinua').slideDown();
+        $('#continuaSimNao').slideUp();
+    }else{
+        $('#semContinua').slideDown();
+        $('#continuaSimNao').slideUp();
+    }
+
+});
+
+$('#serieSimNao').find('a').on('click', function () {
+    if ($(this).html() === 'sim') {
+        $('#qualSerie').slideDown();
+        $('#serieSimNao').slideUp();
+    }else{
+        $('#semSerie').slideDown();
+        $('#serieSimNao').slideUp();
+    }
+
+});
+
+$('#qualJogo').find('a').on('click', function () {
+    $('#qualJogo').slideUp();
+    $('#jogoSimNao').slideDown();
+});
+$('#semJogo').find('a').on('click', function () {
+    $('#semJogo').slideUp();
+    $('#jogoSimNao').slideDown();
+});
+
+$('#qualAutor').find('a').on('click', function () {
+    $('#qualAutor').slideUp();
+    $('#autorSimNao').slideDown();
+});
+$('#semAutor').find('a').on('click', function () {
+    $('#semAutor').slideUp();
+    $('#autorSimNao').slideDown();
+});
+
+$('#qualContinua').find('a').on('click', function () {
+    $('#qualContinua').slideUp();
+    $('#continuaSimNao').slideDown();
+});
+$('#semContinua').find('a').on('click', function () {
+    $('#semContinua').slideUp();
+    $('#continuaSimNao').slideDown();
+});
+
+$('#qualSerie').find('a').on('click', function () {
+    $('#qualSerie').slideUp();
+    $('#serieSimNao').slideDown();
+});
+$('#semSerie').find('a').on('click', function () {
+    $('#semSerie').slideUp();
+    $('#serieSimNao').slideDown();
 });

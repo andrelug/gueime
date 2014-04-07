@@ -41,5 +41,15 @@ module.exports = {
 		    randomstring += chars.substring(rnum,rnum+1);
 	    }
 	    return randomstring;
+    },
+
+    cleanArray: function cleanArray(actual){
+        var newArray = new Array();
+        for(var i = 0; i<actual.length; i++){
+            if (actual[i]){
+                newArray.push(actual[i]);
+            }
+        }
+        return newArray;
     }
 }

@@ -2,7 +2,8 @@ div#nav-sticky
     div.nav
         div.row
             div.large-5.medium-9.medium-centered.columns.large-centered
-                input#mainInput(type="text", placeholder="Ache tudo sobre Games!")
+                div#suggestion
+                    input#mainInput(type="text", class="typeahead", placeholder="Ache tudo sobre Games!")
 
     div.contain-to-grid
         div.row
@@ -21,6 +22,8 @@ div#nav-sticky
                             a(href="/criar/artigo") Artigo
                         li
                             a(href="/criar/analise") Análise
+                        li
+                            a(href="/criar/video") Vídeo
             if (!user)
                 div.show-for-small.small-4.columns
             else

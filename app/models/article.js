@@ -8,7 +8,7 @@ var ArticleSchema = new mongoose.Schema({
     description: String,
     cover: {
         image: String,
-        position: [Number]
+        position: String
     },
     subtitle: String,
     text: String,
@@ -20,21 +20,19 @@ var ArticleSchema = new mongoose.Schema({
         _id: false,
         type: Date
     }],
+    tags: String,
     type: String,
     article: {
-        category: {
-            main: String,
-            others: [String]
-        }
+        category: [String],
+        serie: String
     },
     news:{
-        tags: [String],
-        story: {type: String, unique: true}
+        story: String
     },
     review: {
         score: Number,
-        good: [String],
-        bad: [String],
+        good: String,
+        bad: String,
         punchLine: String,
         main: {type: Boolean, default: false}
     },
@@ -44,33 +42,15 @@ var ArticleSchema = new mongoose.Schema({
         url: String
     },
     graph: {
-        games: {
-            main: {type: mongoose.Schema.Types.ObjectId, ref: 'Game'},
-            others: [{_id: false, type: mongoose.Schema.Types.ObjectId, ref: 'Game'}]
-        },
-        console:{
-            main: String,
-            others: [String]
-        },
-        genre: {
-            main: String,
-            others: [String]
-        },
-        developer: {
-            main: String,
-            others: [String]
-        },
-        publisher: {
-            main: String,
-            others: [String]
-        },
-        ageRange: String,
+        games: String,
+        consoles: String,
+        genres: String,
+        developers: String,
+        publishers: String,
         views: Number
     },
-    published: {
-        status: String,
-        highlight: Boolean
-    },
+    highlight: {type: Boolean, default: false},
+    creating: {type: Boolean, default: false},
     facet: {type: [String], index: true}
 });
 
