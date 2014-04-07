@@ -1,7 +1,7 @@
 
 module.exports = {
 
-// Get age from birthDate string
+    // Get age from birthDate string
     getAge: function getAge(dateString) {
         var today = new Date();
         var birthDate = new Date(dateString);
@@ -17,11 +17,11 @@ module.exports = {
     string_to_slug: function string_to_slug(str) {
         str = str.replace(/^\s+|\s+$/g, ''); // trim
         str = str.toLowerCase();
-		  
+
         // remove accents, swap ñ for n, etc
         var from = "àãáäâèéëêìíïîòóõöôùúüûñç·/_,:;";
-        var to   = "aaaaaeeeeiiiiooooouuuunc------";
-        for (var i=0, l=from.length ; i<l ; i++) {
+        var to = "aaaaaeeeeiiiiooooouuuunc------";
+        for (var i = 0, l = from.length; i < l; i++) {
             str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
         }
 
@@ -33,23 +33,24 @@ module.exports = {
     },
 
     randomString: function randomString() {
-	    var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
-	    var string_length = 16;
-	    var randomstring = '';
-	    for (var i=0; i<string_length; i++) {
-		    var rnum = Math.floor(Math.random() * chars.length);
-		    randomstring += chars.substring(rnum,rnum+1);
-	    }
-	    return randomstring;
+        var chars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz";
+        var string_length = 16;
+        var randomstring = '';
+        for (var i = 0; i < string_length; i++) {
+            var rnum = Math.floor(Math.random() * chars.length);
+            randomstring += chars.substring(rnum, rnum + 1);
+        }
+        return randomstring;
     },
 
-    cleanArray: function cleanArray(actual){
+    cleanArray: function cleanArray(actual) {
         var newArray = new Array();
-        for(var i = 0; i<actual.length; i++){
-            if (actual[i]){
-                newArray.push(actual[i].toLowerCase());
+        for (var i = 0; i < actual.length; i++) {
+            if (actual[i]) {
+                newArray.push(actual[i]);
             }
         }
         return newArray;
     }
+    
 }

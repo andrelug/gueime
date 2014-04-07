@@ -45,6 +45,7 @@ $(function () {
         lang: 'pt_br',
         toolbar: false,
         minHeight: 97,
+        deniedTags: ['blockquote', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'span', 'link', 'meta', 'style', 'html', 'input', 'textarea', 'body', 'a', 'img', 'small', 'button', 'iframe', 'canvas', 'code', 'pre', 'ul', 'li', 'ol', 'dl', 'dt', 'form', 'hr','script',],
         autosave: '/novoTitulo',
         autosaveInterval: 12, // seconds
         autosaveCallback: function (json) {

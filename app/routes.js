@@ -290,18 +290,26 @@ module.exports = function (app, passport, mongoose) {
 
             var facet = [];
 
-            if (games != undefined) { if (games.indexOf(',') > -1) { games = games.split(/[\s,]+/); facet = facet.concat(games); } else { facet.push(games.split(' ')) } }
-            if (tags != undefined) { if (tags.indexOf(',') > -1) { tags = tags.split(/[\s,]+/); facet = facet.concat(tags); } else { facet.push(tags.split(' ')) } }
-            if (consoles != undefined) { if (consoles.indexOf(',') > -1) { consoles = consoles.split(/[\s,]+/); facet = facet.concat(consoles); } else { facet.push(consoles.split(' ')) } }
-            if (publicadoras != undefined) { if (publicadoras.indexOf(',') > -1) { publicadoras = publicadoras.split(/[\s,]+/); facet = facet.concat(publicadoras); } else { facet.push(publicadoras.split(' ')) } }
-            if (desenvolvedores != undefined) { if (desenvolvedores.indexOf(',') > -1) { desenvolvedores = desenvolvedores.split(/[\s,]+/); facet = facet.concat(desenvolvedores); } else { facet.push(desenvolvedores.split(' ')) } }
-            if (generos != undefined) { if (generos.indexOf(',') > -1) { generos = generos.split(/[\s,]+/); facet = facet.concat(generos); } else { facet.push(generos.split(' ')) } }
-            if (categoriaArtigo != undefined) { if (categoriaArtigo.indexOf(',') > -1) { categoriaArtigo = categoriaArtigo.split(/[\s,]+/); facet = facet.concat(categoriaArtigo); } else { facet.push(categoriaArtigo.split(' ')) } }
+            if (games != undefined) { games = func.string_to_slug(b.jogo); if (games.indexOf('-') > -1) { games = games.split(/[\s,-]+/); facet = facet.concat(games); } else { facet.push(games.split(' ')) } }
+
+            if (tags != undefined) { tags = func.string_to_slug(b.tags); if (tags.indexOf('-') > -1) { tags = tags.split(/[\s,-]+/); facet = facet.concat(tags); } else { facet.push(tags.split(' ')) } }
+
+            if (consoles != undefined) { consoles = func.string_to_slug(b.consoles); if (consoles.indexOf('-') > -1) { consoles = consoles.split(/[\s,-]+/); facet = facet.concat(consoles); } else { facet.push(consoles.split(' ')) } }
+
+            if (publicadoras != undefined) { publicadoras = func.string_to_slug(b.publicadoras); if (publicadoras.indexOf('-') > -1) { publicadoras = publicadoras.split(/[\s,-]+/); facet = facet.concat(publicadoras); } else { facet.push(publicadoras.split(' ')) } }
+
+            if (desenvolvedores != undefined) { desenvolvedores = func.string_to_slug(b.desenvolvedores); if (desenvolvedores.indexOf('-') > -1) { desenvolvedores = desenvolvedores.split(/[\s,-]+/); facet = facet.concat(desenvolvedores); } else { facet.push(desenvolvedores.split(' ')) } }
+
+            if (generos != undefined) { if (generos.indexOf('-') > -1) { generos = generos.split(/[\s,-]+/); facet = facet.concat(generos); } else { facet.push(generos.split(' ')) } }
+
+            if (categoriaArtigo != undefined) { categoriaArtigo = func.string_to_slug(b.categoriaArtigo); if (categoriaArtigo.indexOf('-') > -1) { categoriaArtigo = categoriaArtigo.split(/[\s,]+/); facet = facet.concat(categoriaArtigo); } else { facet.push(categoriaArtigo.split(' ')) } }
+
             if (analiseBom != undefined) { if (analiseBom.indexOf(',') > -1) { analiseBom = analiseBom.split(','); } }
             if (analiseRuim != undefined) { if (analiseRuim.indexOf(',') > -1) { analiseRuim = analiseRuim.split(','); } }
-
+            console.log(facet);
             facet.push(b.serieArtigo, b.tipoVideo, b.canalVideo);
             facet = func.cleanArray(facet);
+            console.log(facet);
 
 
 
@@ -323,7 +331,7 @@ module.exports = function (app, passport, mongoose) {
                     slug: slug
 
                 }, $addToSet: {
-                    facet: { $each: [facet] }
+                    facet: { $each: facet }
                 }
                 }, function (err) {
                     if (err)
@@ -429,7 +437,7 @@ module.exports = function (app, passport, mongoose) {
             res.redirect('/parceiros');
         }
 
-        
+
     });
 
     // =====================================

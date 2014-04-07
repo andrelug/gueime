@@ -54,3 +54,7 @@ BUGS
 --> Adicionar validação do formulário de criação de artigos -> http://jqueryvalidation.org/
 
 --> Mudar pra $push na hora de colocar na db
+
+--> Array is not cleaning (facet) // acho que já corrigiu ...precisa de mais testes
+
+--> dar um trim() na array facet para tirar 'a', 'o', 'e' etc
