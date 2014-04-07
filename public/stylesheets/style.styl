@@ -130,7 +130,7 @@ input[type="text"], textarea
 
     .headline
         padding-top 10px
-        height 175px
+        height 150px
 
     .graph
         padding-top 10px
@@ -146,6 +146,12 @@ input[type="text"], textarea
 
 .infoNews
     background-color gGreen
+
+.infoArticle
+    background-color gBlue
+
+.infoVideo
+    background-color gAsphalt
 
 .item:hover
     -webkit-transition: all 400ms ease;
@@ -173,11 +179,11 @@ input[type="text"], textarea
 .details
     width 100%
     position absolute
-    top 210px
+    top 190px
 
     h2
         color white
-        font-size 14pt
+        font-size 12pt
         -webkit-transition: all 400ms ease;
         -moz-transition: all 400ms ease;
         -ms-transition: all 400ms ease;
@@ -199,6 +205,26 @@ input[type="text"], textarea
         padding 1px 5px
         width 100%
         background-color gRed
+        height 65px
+        
+        h2
+            font-size 16pt !important
+            padding-top 10px
+
+    .article
+        padding 1px 5px
+        width 100%
+        background-color gBlue
+        height 65px  
+        
+        h2
+            font-size 16pt !important  
+            padding-top 10px    
+
+    .video
+        padding 3px 14px 1px
+        width 100%
+        background-color gAsphalt
         height 65px
 
 @media only screen and (max-width: 64.063em)

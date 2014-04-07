@@ -1,10 +1,41 @@
 var container = $('#gridArticles');
 
+var searchStr = [];
+
+tagSearch = function (str) {
+    $.ajax({
+        type: "GET",
+        url: "/tags",
+        data: { str: str },
+        dataType: 'html',
+        beforeSend: function () {
+            $("#spinning").show();
+            $('body').css('overflow-y', 'hidden');
+            container.animate({ 'opacity': 0 }).remove();
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+        }
+    }).done(function (data) {
+        $('body').append(data);
+        $('#gridArticles').waitForImages(function () {
+            $("#spinning").hide();
+            $('body').css('overflow-y', 'auto');
+            container.animate({ 'opacity': 1 });
+
+        }, null, true);
+    });
+}
 
 $('#mainInput').keypress(function (event) {
     if (event.keyCode == 13) {
         $('#tagSelection').append('<span>' + $(this).val() + '<a class="tag" id="' + $(this).val() + '">x</a></span>');
+        // execute search
+        searchStr.push($(this).val());
+        console.log(searchStr);
+        tagSearch(searchStr);
+
         $(this).val('');
+
+
 
         // Ajax Busca na página de artigo
         if ($('#check').html() == 'check') {
@@ -32,6 +63,9 @@ $('#mainInput').keypress(function (event) {
 
 $(document).on('click', '.tag', function () {
     var id = $(this).attr('id');
+    var remove = searchStr.indexOf($("#" + id).parent().html().replace('<a class="tag" id="'+id+'">x</a>', ''));
+    searchStr.splice(remove, 1);
+    tagSearch(searchStr);
     $("#" + id).parent().remove();
 });
 

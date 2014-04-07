@@ -132,7 +132,7 @@ textarea {
 }
 .hidden .headline {
   padding-top: 10px;
-  height: 175px;
+  height: 150px;
 }
 .hidden .graph {
   padding-top: 10px;
@@ -146,6 +146,12 @@ textarea {
 }
 .infoNews {
   background-color: #27b899;
+}
+.infoArticle {
+  background-color: #479ecd;
+}
+.infoVideo {
+  background-color: #34495e;
 }
 .item:hover {
   -webkit-transition: all 400ms ease;
@@ -171,11 +177,11 @@ textarea {
 .details {
   width: 100%;
   position: absolute;
-  top: 210px;
+  top: 190px;
 }
 .details h2 {
   color: #fff;
-  font-size: 14pt;
+  font-size: 12pt;
   -webkit-transition: all 400ms ease;
   -moz-transition: all 400ms ease;
   -ms-transition: all 400ms ease;
@@ -197,6 +203,26 @@ textarea {
   padding: 1px 5px;
   width: 100%;
   background-color: #e54c3c;
+  height: 65px;
+}
+.details .game h2 {
+  font-size: 16pt !important;
+  padding-top: 10px;
+}
+.details .article {
+  padding: 1px 5px;
+  width: 100%;
+  background-color: #479ecd;
+  height: 65px;
+}
+.details .article h2 {
+  font-size: 16pt !important;
+  padding-top: 10px;
+}
+.details .video {
+  padding: 3px 14px 1px;
+  width: 100%;
+  background-color: #34495e;
   height: 65px;
 }
 @media only screen and (max-width: 64.063em) {

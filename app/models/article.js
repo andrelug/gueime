@@ -13,6 +13,7 @@ var ArticleSchema = new mongoose.Schema({
     subtitle: String,
     text: String,
     authors: {
+        name: String,
         main: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
         sub: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
     },
