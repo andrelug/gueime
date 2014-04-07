@@ -63,7 +63,7 @@ module.exports = function (app, passport, mongoose) {
             }
             searchStr = searchStr.toString().split(',');
 
-            Artigos.find({ facet: { $in: searchStr} }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).limit(10).exec(function (err, docs) {
+            Artigos.find({ facet: { $all: searchStr} }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).limit(10).exec(function (err, docs) {
                 for (i = 0; i < docs.length; i++) {
                     docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                 }
