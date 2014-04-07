@@ -251,13 +251,6 @@ module.exports = function (app, passport, mongoose) {
     });
 
 
-    // AJAX DA PÁGINA DO ARTIGO PARA BUSCAR ALGO NOVO
-    app.get('/busca', function (req, res) {
-        res.render('busca');
-
-    });
-
-
     // UPLOAD DE NOVA COVER NA CRIAÇÃO DE ARTIGOS
     app.post('/newCover', function (req, res, next) {
         var user = req.user;

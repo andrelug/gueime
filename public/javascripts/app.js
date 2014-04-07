@@ -13,6 +13,11 @@ tagSearch = function (str) {
             $('body').css('overflow-y', 'hidden');
             container.animate({ 'opacity': 0 }).remove();
             $("html, body").animate({ scrollTop: 0 }, "slow");
+
+            if ($('#check').html() == 'check') {
+                $('#wrapper').empty();
+                $('#searchBack').slideDown();
+            }
         }
     }).done(function (data) {
         $('body').append(data);
@@ -20,6 +25,12 @@ tagSearch = function (str) {
             $("#spinning").hide();
             $('body').css('overflow-y', 'auto');
             container.animate({ 'opacity': 1 });
+
+            if ($('#check').html() == 'check') {
+                $('header').removeClass('header row');
+                $('#check').remove();
+                history.pushState(null, null, '/');
+            }
 
         }, null, true);
     });
@@ -34,29 +45,6 @@ $('#mainInput').keypress(function (event) {
         tagSearch(searchStr);
 
         $(this).val('');
-
-
-
-        // Ajax Busca na página de artigo
-        if ($('#check').html() == 'check') {
-            history.pushState(null, null, '/');
-            $.ajax({
-                type: "GET",
-                url: '/busca',
-                dataType: 'html',
-                beforeSend: function () {
-                    $('#wrapper').fadeOut();
-                    $('body').css('background-color', 'white');
-                    $('#searchBack').slideDown();
-                }
-            }).done(function (data) {
-                $('#wrapper').fadeIn().html(data);
-                $('header').removeClass('header row');
-                $('body').css('background-color', '#ecf0f1');
-                $('#check').remove();
-            });
-
-        }
     }
 
 });
