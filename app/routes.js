@@ -165,7 +165,7 @@ module.exports = function (app, passport, mongoose) {
         var analise = req.params.analise;
         if (req.xhr === true) {
 
-            Artigos.find({ slug: artigo }, function (err, docs) {
+            Artigos.find({ slug: analise }, function (err, docs) {
                 var title = decodeURIComponent(docs[0].title),
                     body = decodeURIComponent(docs[0].text);
                 Users.find({ _id: docs[0].authors.main }, function (err, author) {
