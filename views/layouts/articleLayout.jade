@@ -41,19 +41,6 @@ html.no-js(lang="pt_BR")
             }
             FB.XFBML.parse();
 
-            // Need to check if this is good for performance
-            $(document).on('keyup', function (event) {
-                if($('#mainText').html() != undefined){
-                    if(event.keyCode == 27){
-                        $('.content-wrap').fadeOut();
-                        $('body').css('overflow-y', 'auto');
-                        $('#darken').css('display', 'none');
-                        window.history.go(-1);
-                        $('.content').empty();
-                    }
-                }       
-            });
-
             $(window).on('popstate', function () {
                 $('.content-wrap').fadeOut();
                 $('body').css('overflow-y', 'auto');

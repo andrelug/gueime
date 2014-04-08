@@ -22,7 +22,7 @@ tagSearch = function (str) {
     }).done(function (data) {
         $('body').append(data);
         history.pushState(null, null, '/?t=' + searchStr.toString().replace(',','-'));
-        ga('send', 'pageview', '/?t=' + searchStr.toString().replace(',','-'));
+        
         $('#gridArticles').waitForImages(function () {
             $("#spinning").hide();
             $('body').css('overflow-y', 'auto');
@@ -37,6 +37,8 @@ tagSearch = function (str) {
             if(searchStr.length < 1){
                 history.pushState(null, null, '/');
                 ga('send', 'pageview', '/');
+            }else{
+                ga('send', 'pageview', '/?t=' + searchStr.toString().replace(',','-'));
             }
 
         }, null, true);
