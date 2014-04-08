@@ -133,6 +133,7 @@ $(document).on('click', '.exit', function () {
     $('body').css('overflow-y', 'auto');
     $('#darken').css('display', 'none');
     window.history.go(-1);
+    ga('send', 'pageview', '/');
     $('.content').empty();
 });
 
