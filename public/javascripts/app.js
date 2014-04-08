@@ -37,9 +37,9 @@ tagSearch = function (str) {
             FB.XFBML.parse();
             if(searchStr.length < 1){
                 history.pushState(null, null, '/');
-              //  ga('send', 'pageview', '/');
+                ga('send', 'pageview', '/');
             }else{
-              //  ga('send', 'pageview', '/?t=' + searchStr.toString().replace(',','-'));
+                ga('send', 'pageview', '/?t=' + searchStr.toString().replace(',','-'));
             }
 
         }, null, true);
@@ -76,7 +76,7 @@ $(document).on('click', 'a', function () {
         var ajaxUrl = $(this).attr('href');
         ajaxPage(ajaxUrl);
         history.pushState(null, null, ajaxUrl);
-       // ga('send', 'pageview', ajaxUrl);
+        ga('send', 'pageview', ajaxUrl);
         return false;
     }
 });
@@ -230,5 +230,5 @@ $(function() {
 /* Page Exit */
     window.onbeforeunload = sendView;
     function sendView(){
-      //  ga('send', 'pageview', '/exit');
+        ga('send', 'pageview', '/exit');
     }
