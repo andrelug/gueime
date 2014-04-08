@@ -225,10 +225,3 @@ $(function() {
 	}).resize();
 
 });
-
-// Analytics specific
-/* Page Exit */
-    window.onbeforeunload = sendView;
-    function sendView(){
-        ga('send', 'pageview', '/exit');
-    }
