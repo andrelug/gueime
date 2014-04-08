@@ -21,6 +21,8 @@ tagSearch = function (str) {
         }
     }).done(function (data) {
         $('body').append(data);
+        history.pushState(null, null, '/?t=' + searchStr.toString().replace(',','-'));
+        ga('send', 'pageview', '/?t=' + searchStr.toString().replace(',','-'));
         $('#gridArticles').waitForImages(function () {
             $("#spinning").hide();
             $('body').css('overflow-y', 'auto');
@@ -29,7 +31,12 @@ tagSearch = function (str) {
             if ($('#check').html() == 'check') {
                 $('header').removeClass('header row');
                 $('#check').remove();
+                $('.smallLogo').remove();
+            }
+            FB.XFBML.parse();
+            if(searchStr.length < 1){
                 history.pushState(null, null, '/');
+                ga('send', 'pageview', '/');
             }
 
         }, null, true);
@@ -53,7 +60,8 @@ $(document).on('click', '.tag', function () {
     var id = $(this).attr('id');
     var remove = searchStr.indexOf($("#" + id).parent().html().replace('<a class="tag" id="'+id+'">x</a>', ''));
     searchStr.splice(remove, 1);
-    tagSearch(searchStr);
+    tagSearch(searchStr);  
+
     $("#" + id).parent().remove();
 });
 
@@ -115,6 +123,8 @@ var ajaxPage = function (url) {
 
 // Closing Overlay
 
+
+
 $(document).on('click', '.exit', function () {
     $('.content-wrap').fadeOut();
     $('body').css('overflow-y', 'auto');
@@ -171,3 +181,52 @@ $('#suggestion .typeahead').typeahead({
   displayKey: 'value',
   source: substringMatcher(states)
 });
+
+// 100% videos
+$(function() {
+
+	// Find all YouTube videos
+	var $allVideos = $("iframe[src^='//www.youtube.com']"),
+
+	    // The element that is fluid width
+	    $fluidEl = $("#mainText");
+
+	// Figure out and save aspect ratio for each video
+	$allVideos.each(function() {
+
+		$(this)
+			.data('aspectRatio', this.height / this.width)
+			
+			// and remove the hard coded width/height
+			.removeAttr('height')
+			.removeAttr('width');
+
+	});
+
+	// When the window is resized
+	// (You'll probably want to debounce this)
+	$(window).resize(function() {
+
+		var newWidth = $fluidEl.width();
+		
+		// Resize all videos according to their own aspect ratio
+		$allVideos.each(function() {
+
+			var $el = $(this);
+			$el
+				.width(newWidth)
+				.height(newWidth * $el.data('aspectRatio'));
+
+		});
+
+	// Kick off one resize to fix all videos on page load
+	}).resize();
+
+});
+
+// Analytics specific
+/* Page Exit */
+    window.onbeforeunload = sendView;
+    function sendView(){
+        ga('send', 'pageview', '/exit');
+    }

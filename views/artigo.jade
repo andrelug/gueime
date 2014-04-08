@@ -10,10 +10,13 @@ block content
         div.row#searchBack(style="background-color: white;display:none;")
             div.large-4.medium-6.medium-centered.large-centered.columns(style="height:8rem;")
                 span.vertical-align-helper
-                img(src="/images/gueime.png", alt="Gueime Logo")
+                a(href="/"): img(src="/images/gueime.png", alt="Gueime Logo")
 
         div#specialLogo.gueimeWhite.show-for-large-up(style="display:block;right:30px;left:auto")
-            img(src="/images/gueime-white.png", alt="white logo")
+            a(href="/"): img(src="/images/gueime-white.png", alt="white logo")
+
+        div#specialLogo.gueimeWhite.show-for-medium-down.smallLogo(style="display:block;left: auto; right:20px;position:absolute;")
+            a(href="/"): img(src="/images/gueime-white-small.png", alt="white logo")
 
         include partials/nav
 

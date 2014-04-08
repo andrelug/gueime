@@ -3,7 +3,7 @@ div.grid-wrap
 for doc in docs
         
     if(doc.type == 'noticia')
-        a(href="/artigos/#{doc.slug}", data-link="ajax").item
+        a(href="/noticias/#{doc.slug}", data-link="ajax").item
             div.hidden.infoNews.row
                 div.small-12.small-centered.columns.headline
                     p #{doc.description}
