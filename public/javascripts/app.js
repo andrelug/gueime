@@ -231,5 +231,5 @@ $(function() {
 /* Page Exit */
     window.onbeforeunload = sendView;
     function sendView(){
-        ga('send', 'event', 'time', 'exit', '/'+window.location.href );
+        ga('send', 'event', 'time', 'exit', '/'+window.location.href.replace('http://www.gueime.com.br/',''));
     }

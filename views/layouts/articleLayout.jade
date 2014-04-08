@@ -27,6 +27,15 @@ html.no-js(lang="pt_BR")
         include scripts
 
         script.
+            $(window).on('popstate', function () {
+                $('.content-wrap').fadeOut();
+                $('body').css('overflow-y', 'auto');
+                $('#darken').css('display', 'none');
+                if($('#mainText').html() !== undefined){
+                    ga('send', 'pageview', '/'+window.location.href.replace('http://www.gueime.com.br/',''));
+                }
+                $('.content').empty();
+            });
             var facebookComments = $(".fb-comments");
             var facebookLikes = $('.fb-like');
 
@@ -41,12 +50,4 @@ html.no-js(lang="pt_BR")
             }
             FB.XFBML.parse();
 
-            $(window).on('popstate', function () {
-                $('.content-wrap').fadeOut();
-                $('body').css('overflow-y', 'auto');
-                $('#darken').css('display', 'none');
-                if($('#mainText').html() !== undefined){
-                    ga('send', 'pageview', '/');
-                }
-                $('.content').empty();
-            });
+            

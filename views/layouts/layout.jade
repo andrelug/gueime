@@ -69,7 +69,7 @@ html.no-js(lang="pt_BR")
                 $('body').css('overflow-y', 'auto');
                 $('#darken').css('display', 'none');
                 if($('#mainText').html() !== undefined){
-                    ga('send', 'pageview', '/');
+                    ga('send', 'pageview', '/'+window.location.href.replace('http://www.gueime.com.br/',''));
                 }
                 $('.content').empty();
             });
