@@ -65,9 +65,11 @@ html.no-js(lang="pt_BR")
             }, null, true);
         script.
             $(window).on('popstate', function () {
-                $('.content-wrap').fadeOut();
-                $('body').css('overflow-y', 'auto');
-                $('#darken').css('display', 'none');
-                $('.content').empty();
-                ga('send', 'pageview', '/');
+                if($('#mainText').html() != undefined){
+                    $('.content-wrap').fadeOut();
+                    $('body').css('overflow-y', 'auto');
+                    $('#darken').css('display', 'none');
+                    $('.content').empty();
+                    ga('send', 'pageview', '/');
+                }
             });
