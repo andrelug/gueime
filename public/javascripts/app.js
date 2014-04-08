@@ -22,6 +22,7 @@ tagSearch = function (str) {
     }).done(function (data) {
         $('body').append(data);
         history.pushState(null, null, '/?t=' + searchStr.toString().replace(',','-'));
+        ga('send', 'pageview', '/?t=' + searchStr.toString().replace(',','-'));
         $('#gridArticles').waitForImages(function () {
             $("#spinning").hide();
             $('body').css('overflow-y', 'auto');
@@ -35,6 +36,7 @@ tagSearch = function (str) {
             FB.XFBML.parse();
             if(searchStr.length < 1){
                 history.pushState(null, null, '/');
+                ga('send', 'pageview', '/');
             }
 
         }, null, true);
@@ -71,6 +73,7 @@ $(document).on('click', 'a', function () {
         var ajaxUrl = $(this).attr('href');
         ajaxPage(ajaxUrl);
         history.pushState(null, null, ajaxUrl);
+        ga('send', 'pageview', ajaxUrl);
         return false;
     }
 });
@@ -128,6 +131,7 @@ $(document).on('click', '.exit', function () {
     $('#darken').css('display', 'none');
     window.history.go(-1);
     $('.content').empty();
+    ga('send', 'pageview', '/');
 });
 
 // Typeahead
