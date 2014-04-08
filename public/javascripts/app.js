@@ -230,5 +230,5 @@ $(function() {
 /* Page Exit */
     window.onbeforeunload = sendView;
     function sendView(){
-        ga('send', 'pageview', '/exit');
+        ga('send', 'event', 'time', 'exit', '/'+window.location.href );
     }
