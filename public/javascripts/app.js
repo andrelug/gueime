@@ -131,7 +131,6 @@ $(document).on('click', '.exit', function () {
     $('#darken').css('display', 'none');
     window.history.go(-1);
     $('.content').empty();
-    ga('send', 'pageview', '/');
 });
 
 // Typeahead
