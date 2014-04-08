@@ -45,8 +45,8 @@ html.no-js(lang="pt_BR")
                 $('.content-wrap').fadeOut();
                 $('body').css('overflow-y', 'auto');
                 $('#darken').css('display', 'none');
-                $('.content').empty();
                 if($('#mainText').html() !== undefined){
                     ga('send', 'pageview', '/');
                 }
+                $('.content').empty();
             });
