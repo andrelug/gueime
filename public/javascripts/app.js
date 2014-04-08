@@ -18,11 +18,12 @@ tagSearch = function (str) {
                 $('#wrapper').empty();
                 $('#searchBack').slideDown();
             }
+            $('.scriptLoad').remove();
         }
     }).done(function (data) {
         $('body').append(data);
-        history.pushState(null, null, '/?t=' + searchStr.toString().replace(',','-'));
-        
+        history.pushState(null, null, '/?t=' + searchStr.toString().replace(',', '-'));
+
         $('#gridArticles').waitForImages(function () {
             $("#spinning").hide();
             $('body').css('overflow-y', 'auto');
@@ -34,11 +35,11 @@ tagSearch = function (str) {
                 $('.smallLogo').remove();
             }
             FB.XFBML.parse();
-            if(searchStr.length < 1){
+            if (searchStr.length < 1) {
                 history.pushState(null, null, '/');
                 ga('send', 'pageview', '/');
-            }else{
-                ga('send', 'pageview', '/?t=' + searchStr.toString().replace(',','-'));
+            } else {
+                ga('send', 'pageview', '/?t=' + searchStr.toString().replace(',', '-'));
             }
 
         }, null, true);

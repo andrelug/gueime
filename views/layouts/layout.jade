@@ -26,7 +26,7 @@ html.no-js(lang="pt_BR")
         block content
 
         include scripts
-        script.
+        script.scriptLoad.
             container.waitForImages(function () {
                 $("#spinning").hide();
                 $('body').css('overflow-y', 'auto');
@@ -63,7 +63,7 @@ html.no-js(lang="pt_BR")
                     }
                 });
             }, null, true);
-
+        script.
             $(window).on('popstate', function () {
                 $('.content-wrap').fadeOut();
                 $('body').css('overflow-y', 'auto');
