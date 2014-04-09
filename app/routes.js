@@ -303,7 +303,7 @@ module.exports = function (app, passport, mongoose) {
             steps: {
                 ':original': {
                     robot: '/http/import',
-                    url: tmp_path
+                    url: 'http://www.gueime.com.br/uploads/' + tmp_path
                 }
             },
             template_id: '7ecc48d0c00a11e3a4a6730cb0abb3d1'
