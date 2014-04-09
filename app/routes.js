@@ -280,30 +280,31 @@ module.exports = function (app, passport, mongoose) {
     // UPLOAD DE NOVA COVER NA CRIAÇÃO DE ARTIGOS
     app.post('/newCover', function (req, res, next) {
         var user = req.user;
-         var tmp_path = req.files.file.name;
-      /*  if (user.status == 'admin' || user.status == 'parceiro') {
+        var sendImg = req.files.file.name;
+
+        if (user.status == 'admin' || user.status == 'parceiro') {
             // get the temporary location of the file
             var tmp_path = req.files.file.path;
             // set where the file should actually exists - in this case it is in the "images" directory
-            var target_path = './public/uploads/' + req.files.file.name;
+            var target_path = './public/uploads/' + sendImg;
             // move the file from the temporary location to the intended location
             fs.rename(tmp_path, target_path, function (err) {
                 if (err) throw err;
                 // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
                 fs.unlink(tmp_path, function () {
                     if (err) throw err;
-                    res.send('/uploads/' + req.files.file.name);
+                    res.send('/uploads/' + sendImg);
                 });
             });
         } else {
             res.redirect('/parceiros');
-        } */
+        }
 
         var params = {
             steps: {
                 ':original': {
                     robot: '/http/import',
-                    url: 'http://www.gueime.com.br/uploads/' + tmp_path
+                    url: 'http://www.gueime.com.br/uploads/' + sendImg
                 }
             },
             template_id: '7ecc48d0c00a11e3a4a6730cb0abb3d1'
@@ -325,20 +326,42 @@ module.exports = function (app, passport, mongoose) {
     // UPLOAD DE IMAGENS DURANTE A CRIAÇÃO DE ARTIGOS
     app.post('/artigoImage', function (req, res, next) {
         var user = req.user;
+        var sendImg = req.files.file.name;
+
         if (user.status == 'admin' || user.status == 'parceiro') {
             // get the temporary location of the file
             var tmp_path = req.files.file.path;
             // set where the file should actually exists - in this case it is in the "images" directory
-            var target_path = './public/uploads/' + req.files.file.name;
+            var target_path = './public/uploads/' + sendImg;
             // move the file from the temporary location to the intended location
             fs.rename(tmp_path, target_path, function (err) {
                 if (err) throw err;
                 // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
                 fs.unlink(tmp_path, function () {
                     if (err) throw err;
-                    res.send({ "filelink": '/uploads/' + req.files.file.name });
+                    res.send({ "filelink": 'https://s3-sa-east-1.amazonaws.com/portalgueime/images/' + sendImg });
                 });
             });
+
+            var params = {
+                steps: {
+                    ':original': {
+                        robot: '/http/import',
+                        url: 'http://www.gueime.com.br/uploads/' + sendImg
+                    }
+                },
+                template_id: '430dcd60c00e11e38c7673670f8168f5'
+            };
+
+            client.send(params, function(ok) {
+                // success callback [optional]
+                console.log('Success: ' + JSON.stringify(ok));
+                res.send(JSON.stringify(ok));
+            }, function(err) {
+                // error callback [optional]
+                console.log('Error: ' + JSON.stringify(err));
+            });
+
         }
 
     });
