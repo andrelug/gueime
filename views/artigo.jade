@@ -31,25 +31,29 @@ block content
                 article#mainText
                     include partials/noticia
                     div.fb-like(data-href="", data-layout="button_count", data-action="like", data-show-faces="true", data-share="true")
-                include partials/footer
+                include partials/author
                 
         else if(tipo == 'artigo')
             div.parallax(style="border-top:5px solid rgb(71,158,205);")
                 article#mainText
                     include partials/artigo
                     div.fb-like(data-href="", data-layout="button_count", data-action="like", data-show-faces="true", data-share="true")
-                include partials/footer
+                include partials/author
 
         else if(tipo == 'video')
             div.parallax(style="border-top:5px solid #34495e;")
                 article#mainText
                     include partials/video
                     div.fb-like(data-href="", data-layout="button_count", data-action="like", data-show-faces="true", data-share="true")
-                include partials/footer
+                include partials/author
                 
         else
             div.parallax(style="border-top:5px solid #E54C3C;")
                 article#mainText
                     include partials/analise
                     div.fb-like(data-href="", data-layout="button_count", data-action="like", data-show-faces="true", data-share="true")
-                include partials/footer
+                include partials/author
+                
+                
+                
+    include partials/footer

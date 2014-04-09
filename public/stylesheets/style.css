@@ -69,9 +69,6 @@ textarea {
 #drop1 li {
   text-align: center;
 }
-#gridArticles {
-  opacity: 0;
-}
 #spinning,
 #spinningContent {
   text-align: center;
@@ -172,7 +169,8 @@ textarea {
 }
 #gridArticles {
   max-width: 100%;
-  margin-left: 12.5%;
+  margin-left: 12%;
+  opacity: 0;
 }
 .details {
   width: 100%;
@@ -208,6 +206,7 @@ textarea {
 .details .game h2 {
   font-size: 16pt !important;
   padding-top: 10px;
+  padding-left: 10px;
 }
 .details .article {
   padding: 1px 5px;
@@ -218,6 +217,7 @@ textarea {
 .details .article h2 {
   font-size: 16pt !important;
   padding-top: 10px;
+  padding-left: 10px;
 }
 .details .video {
   padding: 3px 14px 1px;
@@ -227,13 +227,11 @@ textarea {
 }
 @media only screen and (max-width: 64.063em) {
   #gridArticles {
-    margin-left: 1%;
+    padding-left: 1%;
   }
-  .item {
-    width: 47%;
-  }
+  .item,
   .w4 {
-    width: 97%;
+    width: 47%;
   }
   .headline {
     height: 150px !important;
@@ -638,4 +636,7 @@ textarea {
 }
 .gist {
   font-size: 14px;
+}
+#loadMore {
+  width: 100%;
 }

@@ -58,3 +58,5 @@ BUGS
 --> Array is not cleaning (facet) // acho que já corrigiu ...precisa de mais testes
 
 --> dar um trim() na array facet para tirar 'a', 'o', 'e' etc
+
+--> Quando busca, não está voltando devagar para o topo da página

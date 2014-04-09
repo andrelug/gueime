@@ -32,13 +32,16 @@ html.no-js(lang="pt_BR")
                 $('body').css('overflow-y', 'auto');
                 container.animate({ 'opacity': 1 });
 
-
-                container.packery({
+                container.isotope({
                     itemSelector: '.item',
-                    gutter: 20,
-                    rowHeight: 10
+                    layoutMode: 'masonry',
+                    masonry:{
+                        gutter: 20,
+                        rowHeight: 10,
+                        columnWidth: 24
+                    }                    
+                    
                 });
-                var pckry = container.data('packery');
 
                 var nav = $('#nav-sticky');
                 nav_sticky = nav.offset().top; //get the Y-position of section

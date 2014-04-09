@@ -24,7 +24,7 @@ module.exports = function (app, passport, mongoose) {
     app.get('/', function (req, res, next) {
         var user = req.user;
         if (!user) {
-            Artigos.find({}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(10).exec(function (err, docs) {
+            Artigos.find({}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).exec(function (err, docs) {
                 for (i = 0; i < docs.length; i++) {
                     docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                 }
@@ -33,7 +33,7 @@ module.exports = function (app, passport, mongoose) {
         } else {
 
             sessionReload(req, res, next);
-            Artigos.find({}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(10).exec(function (err, docs) {
+            Artigos.find({}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).exec(function (err, docs) {
                 for (i = 0; i < docs.length; i++) {
                     docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                 }
@@ -44,16 +44,13 @@ module.exports = function (app, passport, mongoose) {
         }
     });
 
+    app.get('/pagination', function(req, res){
+        n = req.query.n;
 
-
-
-    // BUSCA TAGS
-
-    app.get('/tags', function (req, res) {
         var searchStr = [];
 
         if (!req.query.str) {
-            Artigos.find({}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(10).exec(function (err, docs) {
+            Artigos.find({}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).skip(n).exec(function (err, docs) {
                 for (i = 0; i < docs.length; i++) {
                     docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                 }
@@ -68,7 +65,38 @@ module.exports = function (app, passport, mongoose) {
             }
             searchStr = searchStr.toString().split(',');
 
-            Artigos.find({ facet: { $all: searchStr} }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).limit(10).exec(function (err, docs) {
+            Artigos.find({ facet: { $all: searchStr} }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).limit(6).skip(n).exec(function (err, docs) {
+                for (i = 0; i < docs.length; i++) {
+                    docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
+                }
+                res.render('tags', { docs: docs });
+            });
+        }
+    });
+
+
+    // BUSCA TAGS
+
+    app.get('/tags', function (req, res) {
+        var searchStr = [];
+
+        if (!req.query.str) {
+            Artigos.find({}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).exec(function (err, docs) {
+                for (i = 0; i < docs.length; i++) {
+                    docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
+                }
+                res.render('tags', { docs: docs });
+            });
+        } else {
+            for (i = 0; i < req.query.str.length; i++) {
+                searchStr.push(func.string_to_slug(req.query.str[i]));
+                if (searchStr[i].indexOf('-') > -1) {
+                    searchStr[i] = searchStr[i].split(/[\s,-]+/);
+                }
+            }
+            searchStr = searchStr.toString().split(',');
+
+            Artigos.find({ facet: { $all: searchStr} }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).limit(6).exec(function (err, docs) {
                 for (i = 0; i < docs.length; i++) {
                     docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                 }

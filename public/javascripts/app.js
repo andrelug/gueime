@@ -13,33 +13,35 @@ tagSearch = function (str) {
             $('body').css('overflow-y', 'hidden');
             container.animate({ 'opacity': 0 }).remove();
             $("html, body").animate({ scrollTop: 0 }, "slow");
-
+            $('footer').hide();
             if ($('#check').html() == 'check') {
                 $('#wrapper').empty();
+
                 $('#searchBack').slideDown();
             }
             $('.scriptLoad').remove();
         }
     }).done(function (data) {
-        $('body').append(data);
-        history.pushState(null, null, '/?t=' + searchStr.toString().replace(',','-'));
-        
+        $('#load').before(data);
+
+        history.pushState(null, null, '/?t=' + searchStr.toString().replace(',', '-'));
+
         $('#gridArticles').waitForImages(function () {
             $("#spinning").hide();
             $('body').css('overflow-y', 'auto');
             container.animate({ 'opacity': 1 });
-
+            $('footer').show();
             if ($('#check').html() == 'check') {
                 $('header').removeClass('header row');
                 $('#check').remove();
                 $('.smallLogo').remove();
             }
             FB.XFBML.parse();
-            if(searchStr.length < 1){
+            if (searchStr.length < 1) {
                 history.pushState(null, null, '/');
                 ga('send', 'pageview', '/');
-            }else{
-                ga('send', 'pageview', '/?t=' + searchStr.toString().replace(',','-'));
+            } else {
+                ga('send', 'pageview', '/?t=' + searchStr.toString().replace(',', '-'));
             }
 
         }, null, true);
@@ -126,7 +128,33 @@ var ajaxPage = function (url) {
 
 // Closing Overlay
 
+$(document).ready(function () {
+    n = $('.item').length;
+    if (n < 6) {
+        $.ajax({
+            type: "GET",
+            url: "/pagination",
+            data: {n: n},
+            dataType: 'html'
+        }).done(function (data) {
+            console.log(data);
+            container.isotope('insert', $(data));
+        });
+    }
+});
 
+$('#loadMore').on('click', function(){
+    n = $('.item').length;
+    $.ajax({
+        type: "GET",
+        url: "/pagination",
+        data: {n: n, str: searchStr},
+        dataType: 'html'
+    }).done(function (data) {
+        console.log(data);
+        container.isotope('insert', $(data));
+    });
+})
 
 $(document).on('click', '.exit', function () {
     $('.content-wrap').fadeOut();
@@ -231,5 +259,5 @@ $(function() {
 /* Page Exit */
     window.onbeforeunload = sendView;
     function sendView(){
-        ga('send', 'event', 'time', 'exit', '/'+window.location.href.replace('http://www.gueime.com.br/',''));
+        ga('send', 'event', 'time', 'exit', '/'+window.location.href.replace('http://www.gueime.com.br/'));
     }

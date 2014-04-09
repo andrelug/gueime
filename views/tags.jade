@@ -11,12 +11,16 @@ script.scriptLoad.
         $('#specialLogo').remove();
 
 
-        container.packery({
+        container.isotope({
             itemSelector: '.item',
-            gutter: 20,
-            rowHeight: 10
+            layoutMode: 'masonry',
+            masonry:{
+                gutter: 20,
+                rowHeight: 10,
+                columnWidth: 24
+            }
+                    
         });
-        var pckry = container.data('packery');
 
         var nav = $('#nav-sticky');
         nav_sticky = 128; //get the Y-position of section
