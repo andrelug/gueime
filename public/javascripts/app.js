@@ -14,6 +14,7 @@ tagSearch = function (str) {
             container.animate({ 'opacity': 0 }).remove();
             $("html, body").animate({ scrollTop: 0 }, "slow");
             $('footer').hide();
+            $('#load').hide();
             if ($('#check').html() == 'check') {
                 $('#wrapper').empty();
 
@@ -31,6 +32,7 @@ tagSearch = function (str) {
             $('body').css('overflow-y', 'auto');
             container.animate({ 'opacity': 1 });
             $('footer').show();
+            $('#load').show();
             if ($('#check').html() == 'check') {
                 $('header').removeClass('header row');
                 $('#check').remove();
@@ -125,9 +127,6 @@ var ajaxPage = function (url) {
     });
 }
 
-
-// Closing Overlay
-
 $(document).ready(function () {
     n = $('.item').length;
     if (n < 6) {
@@ -155,6 +154,9 @@ $('#loadMore').on('click', function(){
         container.isotope('insert', $(data));
     });
 })
+
+
+// Close overlay
 
 $(document).on('click', '.exit', function () {
     $('.content-wrap').fadeOut();
