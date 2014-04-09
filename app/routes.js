@@ -5,6 +5,9 @@ var facebook = require('../config/facebook.js');
 var ip = require('ip');
 var async = require('async');
 var fs = require("fs");
+var transloadit = require('node-transloadit');
+
+var client = new transloadit('6a960970bff411e38b2aefa7e162a72d', '293a0ad266df65f8e8396cb6d972da8d14f2e608');
 
 // Session check function
 var sessionReload = function(req, res, next){
@@ -277,8 +280,8 @@ module.exports = function (app, passport, mongoose) {
     // UPLOAD DE NOVA COVER NA CRIAÇÃO DE ARTIGOS
     app.post('/newCover', function (req, res, next) {
         var user = req.user;
-
-        if (user.status == 'admin' || user.status == 'parceiro') {
+         var tmp_path = req.files.file.path;
+      /*  if (user.status == 'admin' || user.status == 'parceiro') {
             // get the temporary location of the file
             var tmp_path = req.files.file.path;
             // set where the file should actually exists - in this case it is in the "images" directory
@@ -294,7 +297,26 @@ module.exports = function (app, passport, mongoose) {
             });
         } else {
             res.redirect('/parceiros');
-        }
+        } */
+
+        var params = {
+            steps: {
+                ':original': {
+                    robot: '/http/import',
+                    url: tmp_path
+                }
+            },
+            template_id: '7ecc48d0c00a11e3a4a6730cb0abb3d1'
+        };
+
+        client.send(params, function(ok) {
+            // success callback [optional]
+            console.log('Success: ' + JSON.stringify(ok));
+            res.send(JSON.stringify(ok));
+        }, function(err) {
+            // error callback [optional]
+            console.log('Error: ' + JSON.stringify(err));
+        });
 
 
     });
