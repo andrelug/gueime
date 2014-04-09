@@ -24,6 +24,13 @@ div#nav-sticky
                             a(href="/criar/analise") Análise
                         li
                             a(href="/criar/video") Vídeo
+                    if(!article)
+
+                    else
+                        if(article.authors.main == user.id || user.status == 'admin')
+                            if(tipo == 'noticia')
+                                a(href="/noticias/#{article.slug}/editar").editar <i class="fa fa-gears"></i> Editar
+                        
             if (!user)
                 div.show-for-small.small-4.columns
             else if(user.status == 'admin' || user.status == 'parceiro')

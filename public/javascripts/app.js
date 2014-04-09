@@ -17,7 +17,7 @@ tagSearch = function (str) {
             $('#load').hide();
             if ($('#check').html() == 'check') {
                 $('#wrapper').empty();
-
+                $('.editar').remove();
                 $('#searchBack').slideDown();
             }
             $('.scriptLoad').remove();
@@ -28,6 +28,7 @@ tagSearch = function (str) {
         history.pushState(null, null, '/?t=' + searchStr.toString().replace(',', '-'));
 
         $('#gridArticles').waitForImages(function () {
+            $('#load').show();
             $("#spinning").hide();
             $('body').css('overflow-y', 'auto');
             container.animate({ 'opacity': 1 });

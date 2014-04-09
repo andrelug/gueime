@@ -32,7 +32,8 @@ body {
 }
 .user,
 .logout,
-.create {
+.create,
+.editar {
   color: #fff;
   margin: 0px;
   padding: 14px;

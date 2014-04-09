@@ -278,6 +278,26 @@ module.exports = function (app, passport, mongoose) {
     });
 
 
+    // EDIÇÃO DE NOTICIAS
+    app.get('/noticias/:noticia/editar', function(req, res){
+        noticia = req.params.noticia;
+        user = req.user;
+
+        Artigos.find({slug: noticia}, function(err, docs){
+            if (user.status == 'admin' || docs.authors.main == user.id) {
+                var title = decodeURIComponent(docs[0].title),
+                    body = decodeURIComponent(docs[0].text);
+                res.render('editar', {user: user, article: docs[0], title: title, body: body, tipo: 'noticia'});
+            }
+        })
+
+        
+    });
+
+
+
+
+
     // UPLOAD DE NOVA COVER NA CRIAÇÃO DE ARTIGOS
     app.post('/newCover', function (req, res, next) {
         var user = req.user;
@@ -297,28 +317,28 @@ module.exports = function (app, passport, mongoose) {
                     
                 });
             });
-        } else {
-            res.redirect('/parceiros');
-        }
 
-        var params = {
-            steps: {
-                ':original': {
-                    robot: '/http/import',
-                    url: 'http://www.gueime.com.br/uploads/' + sendImg
-                }
-            },
-            template_id: '7ecc48d0c00a11e3a4a6730cb0abb3d1'
-        };
+            var params = {
+                steps: {
+                    ':original': {
+                        robot: '/http/import',
+                        url: 'http://www.gueime.com.br/uploads/' + sendImg
+                    }
+                },
+                template_id: '7ecc48d0c00a11e3a4a6730cb0abb3d1'
+            };
 
-        client.send(params, function(ok) {
-            // success callback [optional]
-            console.log('Success: ' + JSON.stringify(ok));
-            res.send('/uploads/' + sendImg);
-        }, function(err) {
-            // error callback [optional]
-            console.log('Error: ' + JSON.stringify(err));
-        });
+            client.send(params, function(ok) {
+                // success callback [optional]
+                console.log('Success: ' + JSON.stringify(ok));
+                res.send('/uploads/' + sendImg);
+            }, function(err) {
+                // error callback [optional]
+                console.log('Error: ' + JSON.stringify(err));
+            });
+        } 
+
+        
 
 
     });
@@ -363,6 +383,8 @@ module.exports = function (app, passport, mongoose) {
                 console.log('Error: ' + JSON.stringify(err));
             });
 
+        } else {
+            res.redirect('/parceiros');
         }
 
     });
