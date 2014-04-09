@@ -293,7 +293,7 @@ module.exports = function (app, passport, mongoose) {
                 // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
                 fs.unlink(tmp_path, function () {
                     if (err) throw err;
-                    res.send('/uploads/' + sendImg);
+                    
                 });
             });
         } else {
@@ -313,6 +313,7 @@ module.exports = function (app, passport, mongoose) {
         client.send(params, function(ok) {
             // success callback [optional]
             console.log('Success: ' + JSON.stringify(ok));
+            res.send('/uploads/' + sendImg);
         }, function(err) {
             // error callback [optional]
             console.log('Error: ' + JSON.stringify(err));
