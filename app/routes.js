@@ -280,7 +280,7 @@ module.exports = function (app, passport, mongoose) {
     // UPLOAD DE NOVA COVER NA CRIAÇÃO DE ARTIGOS
     app.post('/newCover', function (req, res, next) {
         var user = req.user;
-         var tmp_path = req.files.file.path;
+         var tmp_path = req.files.file.name;
       /*  if (user.status == 'admin' || user.status == 'parceiro') {
             // get the temporary location of the file
             var tmp_path = req.files.file.path;
