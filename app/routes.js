@@ -357,9 +357,7 @@ module.exports = function (app, passport, mongoose) {
             client.send(params, function(ok) {
                 // success callback [optional]
                 console.log('Success: ' + JSON.stringify(ok));
-                setInterval(function() {
-                    res.send({ "filelink": 'https://s3-sa-east-1.amazonaws.com/portalgueime/images/' + sendImg });
-                }, 5000);
+                res.send({ "filelink": 'https://s3-sa-east-1.amazonaws.com/portalgueime/images/' + sendImg });
             }, function(err) {
                 // error callback [optional]
                 console.log('Error: ' + JSON.stringify(err));
