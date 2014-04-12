@@ -20,7 +20,7 @@ $(function () {
                     $('#loadingAj').fadeOut();
                     imageCover = '/uploads/' + file.name;
                     $('.mainImage').delay(500).attr('style', 'background: url(/uploads/' + file.name + ') no-repeat center 0px;');
-                    window.setInterval(function () { $('.mainImage').delay(6000).attr('style', 'background: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images/userInput/' + file.name + ') no-repeat center 0px'); }, 6000);
+                    window.setTimeout(function () { $('.mainImage').delay(6000).attr('style', 'background: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images/userInput/' + file.name + ') no-repeat center 0px'); }, 6000);
                 }
             });
         }
@@ -37,7 +37,7 @@ $(function () {
         imageUploadCallback: function (image, json) {
             console.log(image);
             console.log(json.filelink);
-            window.setInterval(function () {
+            window.setTimeout(function () {
                 var oldUrl = json.filelink;
                 var fileName = json.filelink.replace('http://www.gueime.com.br/uploads/', '')
                 var newUrl = 'https://s3-sa-east-1.amazonaws.com/portalgueime/images/' + fileName;
@@ -62,7 +62,14 @@ $(function () {
         convertImageLinks: true,
         convertVideoLinks: true,
         imageUploadCallback: function (image, json) {
-
+            console.log(image);
+            console.log(json.filelink);
+            window.setTimeout(function () {
+                var oldUrl = json.filelink;
+                var fileName = json.filelink.replace('http://www.gueime.com.br/uploads/', '')
+                var newUrl = 'https://s3-sa-east-1.amazonaws.com/portalgueime/images/' + fileName;
+                $('img[src="' + oldUrl + '"]').attr('src', newUrl);
+            }, 6000);
         },
         autosave: '/editarArtigo',
         autosaveInterval: 10, // seconds
