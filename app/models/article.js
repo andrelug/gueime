@@ -51,8 +51,9 @@ var ArticleSchema = new mongoose.Schema({
         views: Number
     },
     highlight: {type: Boolean, default: false},
-    creating: {type: Boolean, default: false},
-    facet: {type: [String], index: true}
+    status: {type: String, default: 'rascunho'},
+    facet: {type: [String], index: true},
+    date: { type: Date, default: Date.now }
 });
 
 // create the model for users and expose it to app // Users var

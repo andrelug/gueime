@@ -26,34 +26,56 @@ module.exports = function (app, passport, mongoose) {
     // =====================================
     app.get('/', function (req, res, next) {
         var user = req.user;
+
+        var redirected = req.query.redirect;
+
+        var deleted = req.query.deletado;
+
         if (!user) {
-            Artigos.find({}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).exec(function (err, docs) {
+            Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).exec(function (err, docs) {
                 for (i = 0; i < docs.length; i++) {
                     docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                 }
-                res.render('index', { title: "Gueime - O melhor site de games do Brasil!", docs: docs });
+                res.render('index', { title: "Gueime - O melhor site de games do Brasil!", docs: docs, message: redirected, deletado: deleted });
             });
         } else {
 
             sessionReload(req, res, next);
-            Artigos.find({}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).exec(function (err, docs) {
+            Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).exec(function (err, docs) {
                 for (i = 0; i < docs.length; i++) {
                     docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                 }
-                res.render('index', { user: user, title: "Gueime - O melhor site de games do Brasil!", docs: docs });
+                res.render('index', { user: user, title: "Gueime - O melhor site de games do Brasil!", docs: docs, message: redirected, deletado: deleted });
             });
 
 
         }
     });
 
+
+    // TYPEAHEAD
+    app.get('/typeahead', function(req, res){
+        data = req.query.data;
+
+        Artigos.find({facet: new RegExp(data, 'i')}, {facet: 1, _id: 0}, function(err, docs){
+            var sendArray = [];
+            for(i=0; i < docs.length; i++){
+                sendArray.push(docs[i].facet);
+            }
+            sendArray = sendArray.toString().split(',');
+            res.end(JSON.stringify(sendArray));
+        });
+    });
+
+
+    // PAGINAÇÃO 
     app.get('/pagination', function(req, res){
         n = req.query.n;
 
         var searchStr = [];
 
         if (!req.query.str) {
-            Artigos.find({}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).skip(n).exec(function (err, docs) {
+            Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).skip(n).exec(function (err, docs) {
                 for (i = 0; i < docs.length; i++) {
                     docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                 }
@@ -68,7 +90,7 @@ module.exports = function (app, passport, mongoose) {
             }
             searchStr = searchStr.toString().split(',');
 
-            Artigos.find({ facet: { $all: searchStr} }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).limit(6).skip(n).exec(function (err, docs) {
+            Artigos.find({ facet: { $all: searchStr}, status: 'publicado' }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).limit(6).skip(n).exec(function (err, docs) {
                 for (i = 0; i < docs.length; i++) {
                     docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                 }
@@ -79,12 +101,11 @@ module.exports = function (app, passport, mongoose) {
 
 
     // BUSCA TAGS
-
     app.get('/tags', function (req, res) {
         var searchStr = [];
 
         if (!req.query.str) {
-            Artigos.find({}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).exec(function (err, docs) {
+            Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).exec(function (err, docs) {
                 for (i = 0; i < docs.length; i++) {
                     docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                 }
@@ -99,7 +120,7 @@ module.exports = function (app, passport, mongoose) {
             }
             searchStr = searchStr.toString().split(',');
 
-            Artigos.find({ facet: { $all: searchStr} }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).limit(6).exec(function (err, docs) {
+            Artigos.find({ facet: { $all: searchStr}, status: 'publicado' }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).limit(6).exec(function (err, docs) {
                 for (i = 0; i < docs.length; i++) {
                     docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                 }
@@ -110,6 +131,8 @@ module.exports = function (app, passport, mongoose) {
 
     });
 
+
+    
     // AJAX E FALLBACK PARA NOTICIAS
     app.get('/noticias/:noticia', function (req, res, next) {
         var user = req.user;
@@ -118,31 +141,44 @@ module.exports = function (app, passport, mongoose) {
         if (req.xhr === true) {
 
             Artigos.findOneAndUpdate({ slug: noticia }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                var title = decodeURIComponent(docs.title).replace('<p>', '').replace('</p>', ''),
-                    body = decodeURIComponent(docs.text);
-                Users.find({ _id: docs.authors.main }, function (err, author) {
-                    res.render('artigoAjax', { tipo: 'noticia', article: docs, title: title, body: body, author: author[0] });
-                });
+                if(docs.status == 'publicado'){
+                    var title = decodeURIComponent(docs.title).replace('<p>', '').replace('</p>', ''),
+                        body = decodeURIComponent(docs.text);
+                    Users.find({ _id: docs.authors.main }, function (err, author) {
+                        res.render('artigoAjax', { tipo: 'noticia', article: docs, title: title, body: body, author: author[0] });
+                    });
+                } else{
+                    res.redirect('/?redirect=true');
+                }
+                
             });
 
 
         } else {
             if (!user) {
                 Artigos.findOneAndUpdate({ slug: noticia }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                    var title = decodeURIComponent(docs.title).replace('<p>', '').replace('</p>', ''),
-                        body = decodeURIComponent(docs.text);
-                    Users.find({ _id: docs.authors.main }, function (err, author) {
-                        res.render('artigo', { tipo: 'noticia', article: docs, title: title, body: body, author: author[0] });
-                    });
+                    if(docs.status == 'publicado'){
+                        var title = decodeURIComponent(docs.title).replace('<p>', '').replace('</p>', ''),
+                            body = decodeURIComponent(docs.text);
+                        Users.find({ _id: docs.authors.main }, function (err, author) {
+                            res.render('artigo', { tipo: 'noticia', article: docs, title: title, body: body, author: author[0] });
+                        });
+                    } else{
+                        res.redirect('/?redirect=true');
+                    }
                 });
             } else {
                 sessionReload(req, res, next);
                 Artigos.findOneAndUpdate({ slug: noticia }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                    var title = decodeURIComponent(docs.title).replace('<p>', '').replace('</p>', ''),
-                        body = decodeURIComponent(docs.text);
-                    Users.find({ _id: docs.authors.main }, function (err, author) {
-                        res.render('artigo', { tipo: 'noticia', article: docs, title: title, body: body, user: user, author: author[0] });
-                    });
+                    if(docs.status == 'publicado'){
+                        var title = decodeURIComponent(docs .title).replace('<p>', '').replace('</p>', ''),
+                            body = decodeURIComponent(docs.text);
+                        Users.find({ _id: docs.authors.main }, function (err, author) {
+                            res.render('artigo', { tipo: 'noticia', article: docs, title: title, body: body, user: user, author: author[0] });
+                        });
+                    } else {
+                        res.redirect('/?redirect=true');
+                    }
                 });
             }
         }
@@ -155,32 +191,44 @@ module.exports = function (app, passport, mongoose) {
         if (req.xhr === true) {
 
             Artigos.findOneAndUpdate({ slug: artigo }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                var title = decodeURIComponent(docs.title),
-                    body = decodeURIComponent(docs.text);
+                if(docs.deleted == false){
+                    var title = decodeURIComponent(docs.title),
+                        body = decodeURIComponent(docs.text);
 
-                Users.find({ _id: docs.authors.main }, function (err, author) {
-                    res.render('artigoAjax', { tipo: 'artigo', article: docs, title: title, body: body, author: author[0] });
-                });
+                    Users.find({ _id: docs.authors.main }, function (err, author) {
+                        res.render('artigoAjax', { tipo: 'artigo', article: docs, title: title, body: body, author: author[0] });
+                    });
+                } else {
+                    res.redirect('/?redirect=true');
+                }
             });
 
         } else {
             if (!user) {
                 Artigos.findOneAndUpdate({ slug: artigo }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                    var title = decodeURIComponent(docs.title),
-                        body = decodeURIComponent(docs.text);
-                    Users.find({ _id: docs.authors.main }, function (err, author) {
-                        res.render('artigo', { tipo: 'artigo', article: docs, title: title, body: body, author: author[0] });
-                    });
+                    if(docs.deleted == false){
+                        var title = decodeURIComponent(docs.title),
+                            body = decodeURIComponent(docs.text);
+                        Users.find({ _id: docs.authors.main }, function (err, author) {
+                            res.render('artigo', { tipo: 'artigo', article: docs, title: title, body: body, author: author[0] });
+                        });
+                    } else {
+                        res.redirect('/?redirect=true');
+                    }
                 });
             } else {
                 sessionReload(req, res, next);
                 Artigos.findOneAndUpdate({ slug: artigo }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                    var title = decodeURIComponent(docs.title),
-                        body = decodeURIComponent(docs.text);
+                    if(docs.deleted == false){
+                        var title = decodeURIComponent(docs.title),
+                            body = decodeURIComponent(docs.text);
 
-                    Users.find({ _id: docs.authors.main }, function (err, author) {
-                        res.render('artigo', { tipo: 'artigo', article: docs, title: title, body: body, user: user, author: author[0] });
-                    });
+                        Users.find({ _id: docs.authors.main }, function (err, author) {
+                            res.render('artigo', { tipo: 'artigo', article: docs, title: title, body: body, user: user, author: author[0] });
+                        });
+                    } else {
+                        res.redirect('/?redirect=true');
+                    }
                 });
             }
         }
@@ -193,31 +241,43 @@ module.exports = function (app, passport, mongoose) {
         if (req.xhr === true) {
 
             Artigos.findOneAndUpdate({ slug: analise }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                var title = decodeURIComponent(docs.title),
-                    body = decodeURIComponent(docs.text);
-                Users.find({ _id: docs.authors.main }, function (err, author) {
-                    res.render('artigoAjax', { tipo: 'analise', article: docs, title: title, body: body, author: author[0] });
-                });
+                if(docs.deleted == false){
+                    var title = decodeURIComponent(docs.title),
+                        body = decodeURIComponent(docs.text);
+                    Users.find({ _id: docs.authors.main }, function (err, author) {
+                        res.render('artigoAjax', { tipo: 'analise', article: docs, title: title, body: body, author: author[0] });
+                    });
+                } else {
+                    res.redirect('/?redirect=true');
+                }
             });
 
         } else {
             if (!user) {
                 Artigos.findOneAndUpdate({ slug: analise }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                    var title = decodeURIComponent(docs.title),
-                        body = decodeURIComponent(docs.text);
-                    Users.find({ _id: docs.authors.main }, function (err, author) {
-                        res.render('artigo', { tipo: 'analise', article: docs, title: title, body: body, author: author[0] });
-                    });
+                    if(docs.deleted == false){
+                        var title = decodeURIComponent(docs.title),
+                            body = decodeURIComponent(docs.text);
+                        Users.find({ _id: docs.authors.main }, function (err, author) {
+                            res.render('artigo', { tipo: 'analise', article: docs, title: title, body: body, author: author[0] });
+                        });
+                    } else {
+                        res.redirect('/?redirect=true');
+                    }
                 });
             } else {
                 sessionReload(req, res, next);
                 Artigos.findOneAndUpdate({ slug: analise }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                    var title = decodeURIComponent(docs.title),
-                        body = decodeURIComponent(docs.text);
+                    if(docs.deleted == false){
+                        var title = decodeURIComponent(docs.title),
+                            body = decodeURIComponent(docs.text);
 
-                    Users.find({ _id: docs.authors.main }, function (err, author) {
-                        res.render('artigo', { tipo: 'analise', article: docs, title: title, body: body, user: user, author: author[0] });
-                    });
+                        Users.find({ _id: docs.authors.main }, function (err, author) {
+                            res.render('artigo', { tipo: 'analise', article: docs, title: title, body: body, user: user, author: author[0] });
+                        });
+                    } else {
+                        res.redirect('/?redirect=true');
+                    }
                 });
             }
         }
@@ -230,30 +290,42 @@ module.exports = function (app, passport, mongoose) {
         if (req.xhr === true) {
 
             Artigos.findOneAndUpdate({ slug: video }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                var title = decodeURIComponent(docs.title),
-                    body = decodeURIComponent(docs.text);
-                Users.find({ _id: docs.authors.main }, function (err, author) {
-                    res.render('artigoAjax', { tipo: 'video', article: docs, title: title, body: body, author: author[0] });
-                });
+                if(docs.deleted == false){
+                    var title = decodeURIComponent(docs.title),
+                        body = decodeURIComponent(docs.text);
+                    Users.find({ _id: docs.authors.main }, function (err, author) {
+                        res.render('artigoAjax', { tipo: 'video', article: docs, title: title, body: body, author: author[0] });
+                    });
+                } else {
+                    res.redirect('/?redirect=true');
+                }
             });
 
         } else {
             if (!user) {
                 Artigos.findOneAndUpdate({ slug: video }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                    var title = decodeURIComponent(docs.title),
-                        body = decodeURIComponent(docs.text);
-                    Users.find({ _id: docs.authors.main }, function (err, author) {
-                        res.render('artigo', { tipo: 'video', article: docs, title: title, body: body, author: author[0] });
-                    });
+                    if(docs.deleted == false){
+                        var title = decodeURIComponent(docs.title),
+                            body = decodeURIComponent(docs.text);
+                        Users.find({ _id: docs.authors.main }, function (err, author) {
+                            res.render('artigo', { tipo: 'video', article: docs, title: title, body: body, author: author[0] });
+                        });
+                    } else {
+                        res.redirect('/?redirect=true');
+                    }
                 });
             } else {
                 sessionReload(req, res, next);
                 Artigos.findOneAndUpdate({ slug: video }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                    var title = decodeURIComponent(docs.title),
-                        body = decodeURIComponent(docs.text);
-                    Users.find({ _id: docs.authors.main }, function (err, author) {
-                        res.render('artigo', { tipo: 'video', article: docs, title: title, body: body, user: user, author: author[0] });
-                    });
+                    if(docs.deleted == false){
+                        var title = decodeURIComponent(docs.title),
+                            body = decodeURIComponent(docs.text);
+                        Users.find({ _id: docs.authors.main }, function (err, author) {
+                            res.render('artigo', { tipo: 'video', article: docs, title: title, body: body, user: user, author: author[0] });
+                        });
+                    } else {
+                        res.redirect('/?redirect=true');
+                    }
                 });
             }
         }
@@ -280,20 +352,102 @@ module.exports = function (app, passport, mongoose) {
 
     // EDIÇÃO DE NOTICIAS
     app.get('/noticias/:noticia/editar', function(req, res){
-        noticia = req.params.noticia;
-        user = req.user;
+        var noticia = req.params.noticia;
+        var user = req.user;
 
-        Artigos.find({slug: noticia}, function(err, docs){
+        Artigos.findOneAndUpdate({slug: noticia}, {status: 'rascunho'}, {new: true}, function(err, docs){
             if (user.status == 'admin' || docs.authors.main == user.id) {
-                var title = decodeURIComponent(docs[0].title),
-                    body = decodeURIComponent(docs[0].text);
-                res.render('editar', {user: user, article: docs[0], title: title, body: body, tipo: 'noticia'});
+                var title = decodeURIComponent(docs.title),
+                    body = decodeURIComponent(docs.text);
+                res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'noticia', edit: true});
+            } else {
+                res.redirect('/');
             }
-        })
-
-        
+        });
     });
 
+    // EDIÇÃO DE ARTIGOS
+    app.get('/artigos/:artigo/editar', function(req, res){
+        var artigo = req.params.artigo;
+        var user = req.user;
+
+        Artigos.findOneAndUpdate({slug: artigo}, {status: 'rascunho'}, {new: true}, function(err, docs){
+            if (user.status == 'admin' || docs.authors.main == user.id) {
+                var title = decodeURIComponent(docs.title),
+                    body = decodeURIComponent(docs.text);
+                res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'artigo', edit: true});
+            } else {
+                res.redirect('/');
+            }
+        });
+    });
+
+
+    // EDIÇÃO DE ANALISES
+    app.get('/analises/:analise/editar', function(req, res){
+        var analise = req.params.analise;
+        var user = req.user;
+
+        Artigos.findOneAndUpdate({slug: analise}, {status: 'rascunho'}, {new: true}, function(err, docs){
+            if (user.status == 'admin' || docs.authors.main == user.id) {
+                var title = decodeURIComponent(docs.title),
+                    body = decodeURIComponent(docs.text);
+                res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'analise', edit: true});
+            } else {
+                res.redirect('/');
+            }
+        });
+    });
+
+
+    // EDIÇÃO DE VIDEOS
+    app.get('/videos/:video/editar', function(req, res){
+        var video = req.params.video;
+        var user = req.user;
+
+        Artigos.findOneAndUpdate({slug: noticia}, {status: 'rascunho'}, {new: true}, function(err, docs){
+            if (user.status == 'admin' || docs.authors.main == user.id) {
+                var title = decodeURIComponent(docs.title),
+                    body = decodeURIComponent(docs.text);
+                res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'video', edit: true});
+            } else {
+                res.redirect('/');
+            }
+        });
+    });
+
+
+    // DELETAR ARTIGOS
+    app.post('/deletar', function(req, res){
+        var user = req.user;
+        var slug = req.body.slug;
+        if (user.status == 'admin' || user.status == 'parceiro') {
+            Artigos.findOneAndUpdate({slug: slug}, {$set: {status: 'deletado'}},{new: true}, function(err, docs){
+                if (user.status == 'admin' || docs.authors.main == user.id) {
+                    Users.update({loginName: user.loginName}, {$set: {creating: false}}, function(err){
+                        res.redirect('/?deletado=true');
+                    });
+                } else {
+                    res.redirect('/');
+                }
+            });
+        } else {
+            res.redirect('/');
+        }
+    });
+
+
+    // SAIU SEM SALVAR
+    app.put('/exitNoSave', function(req, res){
+        var user = req.user;
+        var slug = req.query.slug;
+
+        if(req.query.exit == true){
+            Users.update({loginName: user.loginName}, {$set: {creating: false}}, function(err){
+                res.redirect('/');
+            });
+        }
+    });
 
 
 
@@ -404,7 +558,6 @@ module.exports = function (app, passport, mongoose) {
                     new Artigos({
                         'authors.main': user._id,
                         text: req.body.content,
-                        creating: true,
                         'authors.name': user.name.first + ' ' + user.name.last
                     }).save(function (err, docs) {
                         if (err)
@@ -413,7 +566,7 @@ module.exports = function (app, passport, mongoose) {
                     });
                 });
             } else {
-                Artigos.update({ $and: [{ creating: true }, { 'authors.main': user._id}] }, { $set: { text: req.body.content} }, function (err) {
+                Artigos.update({ $and: [{ status: 'rascunho' }, { 'authors.main': user._id}] }, { $set: { text: req.body.content} }, function (err) {
                     if (err)
                         throw err
                     res.send(JSON.stringify(req.body));
@@ -423,6 +576,36 @@ module.exports = function (app, passport, mongoose) {
             res.redirect('/parceiros');
         }
     });
+
+    // EDITAR ARTIGO
+    app.post('/editarArtigo', function (req, res) {
+        var user = req.user;
+
+
+        if (user.status == 'admin' || user.status == 'parceiro') {
+            if (user.creating == false) {
+                Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true} }, function (err) {
+                    if (err)
+                        throw err
+                        Artigos.update({ $and: [{ status: 'rascunho' }, { 'authors.main': user._id}] }, { $set: { text: req.body.content} }, function (err) {
+                        if (err)
+                            throw err
+
+                        res.send(JSON.stringify(req.body));
+                    });
+                });
+            } else {
+                Artigos.update({ $and: [{ status: 'rascunho' }, { 'authors.main': user._id}] }, { $set: { text: req.body.content} }, function (err) {
+                    if (err)
+                        throw err
+                    res.send(JSON.stringify(req.body));
+                });
+            }
+        } else {
+            res.redirect('/parceiros');
+        }
+    });
+
 
     // SALVAR NOVO TITULO
     app.post('/novoTitulo', function (req, res) {
@@ -436,7 +619,6 @@ module.exports = function (app, passport, mongoose) {
                     new Artigos({
                         'authors.main': user._id,
                         title: decodeURIComponent(req.body.content).replace('<p>', '').replace('</p>', ''),
-                        creating: true,
                         'authors.name': user.name.first + ' ' + user.name.last
                     }).save(function (err, docs) {
                         if (err)
@@ -445,7 +627,7 @@ module.exports = function (app, passport, mongoose) {
                     });
                 });
             } else {
-                Artigos.update({ $and: [{ creating: true }, { 'authors.main': user._id}] }, { $set: { title: decodeURIComponent(req.body.content).replace('<p>', '').replace('</p>', '')} }, function (err) {
+                Artigos.update({ $and: [{ status: 'rascunho' }, { 'authors.main': user._id}] }, { $set: { title: decodeURIComponent(req.body.content).replace('<p>', '').replace('</p>', '')} }, function (err) {
                     if (err)
                         throw err
                     res.send(JSON.stringify(req.body));
@@ -455,6 +637,34 @@ module.exports = function (app, passport, mongoose) {
             res.redirect('/parceiros');
         }
     });
+
+    // EDITAR TITULO ARTIGO
+    app.post('/editarTitulo', function (req, res) {
+        var user = req.user;
+
+        if (user.status == 'admin' || user.status == 'parceiro') {
+            if (user.creating == false) {
+                Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true} }, function (err) {
+                    if (err)
+                        throw err
+                    Artigos.update({ $and: [{ status: 'rascunho' }, { 'authors.main': user._id}] }, { $set: { title: decodeURIComponent(req.body.content).replace('<p>', '').replace('</p>', '')} }, function (err) {
+                        if (err)
+                            throw err
+                        res.send(JSON.stringify(req.body));
+                    });
+                });
+            } else {
+                Artigos.update({ $and: [{ status: 'rascunho' }, { 'authors.main': user._id}] }, { $set: { title: decodeURIComponent(req.body.content).replace('<p>', '').replace('</p>', '')} }, function (err) {
+                    if (err)
+                        throw err
+                    res.send(JSON.stringify(req.body));
+                });
+            }
+        } else {
+            res.redirect('/parceiros');
+        }
+    });
+
 
     // GRAPH NOVO ARTIGO
     app.post('/graph', function (req, res) {
@@ -496,15 +706,20 @@ module.exports = function (app, passport, mongoose) {
             facet.push(b.serieArtigo, b.tipoVideo, b.canalVideo);
             facet = func.cleanArray(facet);
             console.log(facet);
-
-
+            
+            var status;
+            if(user.status == 'admin'){
+                status = 'publicado';
+            } else {
+                status = 'pendente';
+            }
 
             if (b.tipo == 'noticia') {
-                Artigos.update({ $and: [{ creating: true }, { 'authors.main': user._id}] }, { $set: {
+                Artigos.update({ $and: [{ status: 'rascunho' }, { 'authors.main': user._id}] }, { $set: {
 
                     type: b.tipo,
                     description: b.descricao,
-                    creating: false,
+                    status: status,
                     'cover.image': b.coverUrl,
                     'cover.position': b.position,
                     tags: b.tags,
@@ -530,11 +745,11 @@ module.exports = function (app, passport, mongoose) {
 
                 });
             } else if (b.tipo == 'artigo') {
-                Artigos.update({ $and: [{ creating: true }, { 'authors.main': user._id}] }, { $set: {
+                Artigos.update({ $and: [{ status: 'rascunho' }, { 'authors.main': user._id}] }, { $set: {
 
                     type: b.tipo,
                     description: b.descricao,
-                    creating: false,
+                    status: status,
                     'cover.image': b.coverUrl,
                     'cover.position': b.position,
                     tags: b.tags,
@@ -560,11 +775,11 @@ module.exports = function (app, passport, mongoose) {
                     });
                 });
             } else if (b.tipo == 'analise') {
-                Artigos.update({ $and: [{ creating: true }, { 'authors.main': user._id}] }, { $set: {
+                Artigos.update({ $and: [{ status: 'rascunho' }, { 'authors.main': user._id}] }, { $set: {
 
                     type: b.tipo,
                     description: b.descricao,
-                    creating: false,
+                    status: status,
                     'cover.image': b.coverUrl,
                     'cover.position': b.position,
                     tags: b.tags,
@@ -589,11 +804,11 @@ module.exports = function (app, passport, mongoose) {
                     });
                 });
             } else {
-                Artigos.update({ $and: [{ creating: true }, { 'authors.main': user._id}] }, { $set: {
+                Artigos.update({ $and: [{ status: 'rascunho' }, { 'authors.main': user._id}] }, { $set: {
 
                     type: b.tipo,
                     description: b.descricao,
-                    creating: false,
+                    status: status,
                     'cover.image': b.coverUrl,
                     'cover.position': b.position,
                     tags: b.tags,

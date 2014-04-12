@@ -46,8 +46,19 @@ tagSearch = function (str) {
             } else {
                 ga('send', 'pageview', '/?t=' + searchStr.toString().replace(',', '-'));
             }
-
+            n = $('.item').length;
+            if (n < 7) {
+                $.ajax({
+                    type: "GET",
+                    url: "/pagination",
+                    data: {n: n, str: searchStr},
+                    dataType: 'html'
+                }).done(function (data) {
+                    container.isotope('insert', $(data));
+                });
+            }
         }, null, true);
+        
     });
 }
 
@@ -56,7 +67,6 @@ $('#mainInput').keypress(function (event) {
         $('#tagSelection').append('<span>' + $(this).val() + '<a class="tag" id="' + $(this).val() + '">x</a></span>');
         // execute search
         searchStr.push($(this).val());
-        console.log(searchStr);
         tagSearch(searchStr);
 
         $(this).val('');
@@ -77,7 +87,6 @@ $(document).on('click', '.tag', function () {
 // Opening Overlay
 $(document).on('click', 'a', function () {
     if ($(this).data("link") == "ajax") {
-        console.log("data link correto");
         var ajaxUrl = $(this).attr('href');
         ajaxPage(ajaxUrl);
         history.pushState(null, null, ajaxUrl);
@@ -128,21 +137,6 @@ var ajaxPage = function (url) {
     });
 }
 
-$(document).ready(function () {
-    n = $('.item').length;
-    if (n < 6) {
-        $.ajax({
-            type: "GET",
-            url: "/pagination",
-            data: {n: n},
-            dataType: 'html'
-        }).done(function (data) {
-            console.log(data);
-            container.isotope('insert', $(data));
-        });
-    }
-});
-
 $('#loadMore').on('click', function(){
     n = $('.item').length;
     $.ajax({
@@ -151,7 +145,6 @@ $('#loadMore').on('click', function(){
         data: {n: n, str: searchStr},
         dataType: 'html'
     }).done(function (data) {
-        console.log(data);
         container.isotope('insert', $(data));
     });
 })
@@ -168,53 +161,20 @@ $(document).on('click', '.exit', function () {
     $('.content').empty();
 });
 
-// Typeahead
 
-var substringMatcher = function(strs) {
-  return function findMatches(q, cb) {
-    var matches, substringRegex;
- 
-    // an array that will be populated with substring matches
-    matches = [];
- 
-    // regex used to determine if a string contains the substring `q`
-    substrRegex = new RegExp(q, 'i');
- 
-    // iterate through the pool of strings and for any string that
-    // contains the substring `q`, add it to the `matches` array
-    $.each(strs, function(i, str) {
-      if (substrRegex.test(str)) {
-        // the typeahead jQuery plugin expects suggestions to a
-        // JavaScript object, refer to typeahead docs for more info
-        matches.push({ value: str });
-      }
-    });
- 
-    cb(matches);
-  };
-};
-
-var states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
-  'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii',
-  'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
-  'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
-  'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
-  'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
-  'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
-  'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
-  'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
-];
-
-$('#suggestion .typeahead').typeahead({
-  hint: true,
-  highlight: true,
-  minLength: 1
-},
-{
-  name: 'states',
-  displayKey: 'value',
-  source: substringMatcher(states)
+/* Query funfionando */
+/*
+$.ajax({
+    url: '/typeahead',
+    type: 'GET',
+    data: { data: query }
+}).done(function (result) {
+    console.log(result);
+    overall = result;
 });
+*/
+
+
 
 // 100% videos
 $(function() {
@@ -258,9 +218,13 @@ $(function() {
 
 });
 
+$('#alertMessage').on('click', function () {
+    history.pushState(null, null, '/');
+});
+
 // Analytics specific
 /* Page Exit */
     window.onbeforeunload = sendView;
     function sendView(){
-        ga('send', 'event', 'time', 'exit', '/'+window.location.href.replace('http://www.gueime.com.br/'));
+        ga('send', 'event', 'time', 'exit', '/'+window.location.href.replace('http://www.gueime.com.br/', ''));
     }

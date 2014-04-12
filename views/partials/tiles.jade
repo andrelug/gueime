@@ -14,7 +14,8 @@ for doc in docs
             div.articleImage(style="background-image: url(#{doc.cover.image});")
             div.details
                 div.name
-                    h2.ref #{doc.title}
+                    span#newsText
+                        h2.ref #{doc.title}
 
     else if(doc.type == 'analise')
         a(href="/analises/#{doc.slug}", data-link="ajax").item.w4
@@ -62,5 +63,6 @@ for doc in docs
             div.articleImage(style="background-image: url(#{doc.cover.image});")
             div.details
                 div.video
-                    h2.ref #{doc.title}
+                    span#newsText
+                        h2.ref #{doc.title}
             

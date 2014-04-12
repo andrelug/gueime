@@ -27,10 +27,17 @@ div#nav-sticky
                     if(!article)
 
                     else
-                        if(article.authors.main == user.id || user.status == 'admin')
-                            if(tipo == 'noticia')
-                                a(href="/noticias/#{article.slug}/editar").editar <i class="fa fa-gears"></i> Editar
-                        
+                        if(!edit)
+                            if(article.authors.main == user.id || user.status == 'admin')
+                                if(tipo == 'noticia')
+                                    a(href="/noticias/#{article.slug}/editar").editar <i class="fa fa-gears"></i> Editar
+                        else
+                            if(edit == true)
+                                a.deletar <i class="fa fa-trash-o"></i> Deletar
+                                form#deletar(action="/deletar", method="post")
+                                    input(type="hidden", name="slug", value="#{article.slug}")
+                                    
+                                
             if (!user)
                 div.show-for-small.small-4.columns
             else if(user.status == 'admin' || user.status == 'parceiro')

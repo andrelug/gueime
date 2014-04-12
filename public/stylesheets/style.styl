@@ -32,12 +32,22 @@ body
     padding 14px
     display block
 
-.user, .logout, .create, .editar
+.user, .logout, .create, .editar, .deletar
     color white
     margin 0px
     padding 14px
     display block
     float left
+
+.user:hover, .logout:hover, .create:hover, .editar:hover, .deletar:hover
+    color white
+    background-color gDarkBlue
+
+.deletar
+    background-color gRed
+
+.deletar:hover
+    background-color darken(gRed, 10%)
 
 #nav-sticky
     background transparent
@@ -226,6 +236,14 @@ input[type="text"], textarea
         width 100%
         background-color gAsphalt
         height 65px
+
+#newsText
+    display table
+    height 52px
+    
+    h2
+        vertical-align middle
+        display table-cell
 
 @media only screen and (max-width: 64.063em)
     #gridArticles

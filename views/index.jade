@@ -1,6 +1,15 @@
 extends layouts/layout
 
 block content
+    if(message == 'true')
+        div.alert-box(data-alert, style="margin-bottom: 0; height: 60px")
+            p Aparentemente esse artigo que tentou acessar não existe mais...mas temos certeza que algo abaixo vai te agradar!
+            a#alertMessage(href="#", style="color: white; opacity: 1").close &times;
+    if(deletado == 'true')
+        div.alert-box(data-alert, style="margin-bottom: 0; height: 60px")
+            p Seu Artigo foi deletado, mas você ainda tem acesso a ele em sua página de peril.
+            a#alertMessage(href="#", style="color: white; opacity: 1").close &times;
+
     div.content-wrap
         div.content
             

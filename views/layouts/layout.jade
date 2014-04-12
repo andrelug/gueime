@@ -43,6 +43,18 @@ html.no-js(lang="pt_BR")
                     
                 });
 
+                n = $('.item').length;
+                if (n < 7) {
+                    $.ajax({
+                        type: "GET",
+                        url: "/pagination",
+                        data: {n: n},
+                        dataType: 'html'
+                    }).done(function (data) {
+                        container.isotope('insert', $(data));
+                    });
+                }
+
                 var nav = $('#nav-sticky');
                 nav_sticky = nav.offset().top; //get the Y-position of section
 

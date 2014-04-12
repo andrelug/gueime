@@ -12,7 +12,16 @@ html.no-js(lang="pt_BR")
         
         block content
 
-        include scripts
+        script(src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js")
+        script(src="/javascripts/vendor/fastclick.js")
+        script(src="/javascripts/vendor/placeholder.js")
+        script(src="/javascripts/foundation.min.js")
+        script(src="/javascripts/vendor/isotope.js")
+        script(src="/javascripts/vendor/wait.js")
+        scritp(src="//assets.transloadit.com/js/jquery.transloadit2-v2-latest.js")
+        script(src="/javascripts/vendor/typeahead.js")
+        script.
+            $(document).foundation();
 
         script(src="/javascripts/vendor/redactor.min.js")
         script(src="/javascripts/vendor/fontsize.js")

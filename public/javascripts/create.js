@@ -44,6 +44,25 @@ $(function () {
         }
     });
 
+    $('#editContent').redactor({
+        lang: 'pt_br',
+        plugins: ['fontcolor', 'awesome', 'fontsize', 'fontfamily'],
+        placeholder: 'Texto sensacional',
+        minHeight: 300,
+        imageUpload: '/artigoImage',
+        convertImageLinks: true,
+        convertVideoLinks: true,
+        imageUploadCallback: function (image, json) {
+
+        },
+        autosave: '/editarArtigo',
+        autosaveInterval: 10, // seconds
+        autosaveCallback: function (json) {
+            console.log(json);
+
+        }
+    });
+
     $('#createTitle').redactor({
         lang: 'pt_br',
         toolbar: false,
@@ -58,6 +77,31 @@ $(function () {
 
         }
     });
+
+    $('#editTitle').redactor({
+        lang: 'pt_br',
+        toolbar: false,
+        minHeight: 97,
+        autosave: '/editarTitulo',
+        autosaveInterval: 12, // seconds
+        autosaveCallback: function (json) {
+            console.log(json);
+            nJson = decodeURIComponent(json.content);
+            docTitle = decodeURIComponent(json.content);
+            $('.teste').html(nJson);
+
+        }
+    });
+});
+
+$('.gueimeWhite').css('display', 'block').css('left', 'auto').css('right', 30);
+
+$('.deletar').on('click', function () {
+    var result = confirm("Quer realmente deletar?");
+    if(result == true){
+        $('#deletar').submit();
+    }
+    
 });
 
 $(document).ready(function(){
@@ -224,3 +268,111 @@ $('#semSerie').find('a').on('click', function () {
     $('#semSerie').slideUp();
     $('#serieSimNao').slideDown();
 });
+
+
+// Typeahead
+
+var substringMatcher = function(strs) {
+  return function findMatches(q, cb) {
+    var matches, substringRegex;
+ 
+    // an array that will be populated with substring matches
+    matches = [];
+ 
+    // regex used to determine if a string contains the substring `q`
+    substrRegex = new RegExp(q, 'i');
+ 
+    // iterate through the pool of strings and for any string that
+    // contains the substring `q`, add it to the `matches` array
+    $.each(strs, function(i, str) {
+      if (substrRegex.test(str)) {
+        // the typeahead jQuery plugin expects suggestions to a
+        // JavaScript object, refer to typeahead docs for more info
+        matches.push({ value: str });
+      }
+    });
+ 
+    cb(matches);
+  };
+};
+
+var states = ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California',
+  'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii',
+  'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana',
+  'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota',
+  'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New Hampshire',
+  'New Jersey', 'New Mexico', 'New York', 'North Carolina', 'North Dakota',
+  'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode Island',
+  'South Carolina', 'South Dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont',
+  'Virginia', 'Washington', 'West Virginia', 'Wisconsin', 'Wyoming'
+];
+
+$('#suggestion .typeahead').typeahead({
+  hint: true,
+  highlight: true,
+  minLength: 1
+},
+{
+  name: 'states',
+  displayKey: 'value',
+  source: substringMatcher(states)
+});
+
+// 100% videos
+$(function() {
+
+	// Find all YouTube videos
+	var $allVideos = $("iframe[src^='//www.youtube.com']"),
+
+	    // The element that is fluid width
+	    $fluidEl = $("#mainText");
+
+	// Figure out and save aspect ratio for each video
+	$allVideos.each(function() {
+
+		$(this)
+			.data('aspectRatio', this.height / this.width)
+			
+			// and remove the hard coded width/height
+			.removeAttr('height')
+			.removeAttr('width');
+
+	});
+
+	// When the window is resized
+	// (You'll probably want to debounce this)
+	$(window).resize(function() {
+
+		var newWidth = $fluidEl.width();
+		
+		// Resize all videos according to their own aspect ratio
+		$allVideos.each(function() {
+
+			var $el = $(this);
+			$el
+				.width(newWidth)
+				.height(newWidth * $el.data('aspectRatio'));
+
+		});
+
+	// Kick off one resize to fix all videos on page load
+	}).resize();
+
+});
+
+// Analytics specific
+/* Page Exit */
+window.onbeforeunload = sendView;
+function sendView(){
+    ga('send', 'event', 'time', 'exit', '/'+window.location.href.replace('http://www.gueime.com.br/'));
+
+    if(exitNoSave == true){
+        $.ajax({
+            type: "put",
+            url: "/exitNoSave",
+            data: { exit: true, slug: window.location.href.replace('http://localhost:24279/', '') }
+        });
+    }
+}
+
+

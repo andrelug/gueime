@@ -33,12 +33,27 @@ body {
 .user,
 .logout,
 .create,
-.editar {
+.editar,
+.deletar {
   color: #fff;
   margin: 0px;
   padding: 14px;
   display: block;
   float: left;
+}
+.user:hover,
+.logout:hover,
+.create:hover,
+.editar:hover,
+.deletar:hover {
+  color: #fff;
+  background-color: #338ac3;
+}
+.deletar {
+  background-color: #e54c3c;
+}
+.deletar:hover {
+  background-color: #e23522;
 }
 #nav-sticky {
   background: transparent;
@@ -225,6 +240,14 @@ textarea {
   width: 100%;
   background-color: #34495e;
   height: 65px;
+}
+#newsText {
+  display: table;
+  height: 52px;
+}
+#newsText h2 {
+  vertical-align: middle;
+  display: table-cell;
 }
 @media only screen and (max-width: 64.063em) {
   #gridArticles {
