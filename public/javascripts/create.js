@@ -1,6 +1,6 @@
 var imageCover;
 var docTitle;
-var nJson
+var nJson;
 $(function () {
 
     Dropzone.options.dropzoneImage = {
@@ -19,7 +19,7 @@ $(function () {
                     $('#dropzoneImage').css('width', '20%');
                     $('#loadingAj').fadeOut();
                     imageCover = '/uploads/' + file.name;
-                    $('.mainImage').delay(500).attr('style', 'background: url(/uploads/' + file.name + ') no-repeat center 0px;');
+                    $('.mainImage').delay(500).attr('style', 'background: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images/userInput/' + file.name + ') no-repeat center 0px;');
                 }
             });
         }

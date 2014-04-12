@@ -1,7 +1,7 @@
 extends layouts/layout
 
 block content
-    if(message == 'true')
+    if(messages == 'true')
         div.alert-box(data-alert, style="margin-bottom: 0; height: 60px")
             p Aparentemente esse artigo que tentou acessar não existe mais...mas temos certeza que algo abaixo vai te agradar!
             a#alertMessage(href="#", style="color: white; opacity: 1").close &times;
