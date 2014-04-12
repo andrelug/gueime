@@ -287,6 +287,11 @@ textarea {
   z-index: 999999;
   box-shadow: 0px 0px 2px 1px #34495e;
   border-top: 5px solid #fff;
+  -webkit-transition: all 400ms ease;
+  -moz-transition: all 400ms ease;
+  -ms-transition: all 400ms ease;
+  -o-transition: all 400ms ease;
+  transition: all 400ms ease;
 }
 .content .exit {
   background-color: #e54c3c;
@@ -376,6 +381,9 @@ textarea {
   max-width: 1200px;
   margin: 0 auto;
   position: relative;
+}
+.backgroundPattern {
+  background: url("/images/pattern.png") repeat #34495e;
 }
 .bloco {
   padding-top: 10em;

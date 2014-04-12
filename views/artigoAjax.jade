@@ -4,11 +4,9 @@ div#loading
     div.exit: a X
     header.headerAjax.row
         div.large-4.columns
-            a(href="/"): img.articleLogo(src="/images/gueime.png")
-        
-    section.mainImageAjax(style="#{article.cover.position}")
-        div.wrapImage
-            article.bloco
+            a(href="/"): img.articleLogo(src="/images/gueime.png")  
+
+    section.mainImageAjax(style="#{article.cover.position} height: 320px")
 
     if(tipo == 'noticia')
         div.parallax(style="border-top:5px solid #27b899;")

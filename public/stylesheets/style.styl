@@ -247,7 +247,7 @@ input[type="text"], textarea
 
 @media only screen and (max-width: 64.063em)
     #gridArticles
-        padding-left 1%
+        margin-left 1%
 
     .item, .w4
         width 47%
@@ -280,7 +280,12 @@ input[type="text"], textarea
     background-color white
     z-index 999999
     box-shadow 0px 0px 2px 1px gAsphalt
-    border-top 5px solid white    
+    border-top 5px solid white
+    -webkit-transition: all 300ms ease;
+    -moz-transition: all 300ms ease;
+    -ms-transition: all 300ms ease;
+    -o-transition: all 300ms ease;
+    transition: all 300ms ease;
 
 
     .exit
@@ -372,6 +377,9 @@ input[type="text"], textarea
     max-width 1200px
     margin 0 auto
     position relative
+
+.backgroundPattern
+    background url(/images/pattern.png) repeat #34495e
 
 .bloco
     padding-top 10em
@@ -593,7 +601,7 @@ textarea
 
 .fb_iframe_widget
     margin-top 20px
-
+    display block
 
 .twitter-typeahead
     width 100%
