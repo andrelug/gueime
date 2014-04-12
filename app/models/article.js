@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var ArticleSchema = new mongoose.Schema({
 
     title: String,
-    slug: {type: String, unique: true},
+    slug: {type: String},
     description: String,
     cover: {
         image: String,

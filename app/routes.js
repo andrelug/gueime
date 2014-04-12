@@ -562,17 +562,22 @@ module.exports = function (app, passport, mongoose) {
                     }).save(function (err, docs) {
                         if (err)
                             throw err
+                        console.log("novo Artigo");
                         res.send(JSON.stringify(req.body));
                     });
                 });
+                
             } else {
                 Artigos.update({ "status": 'rascunho','authors.main': user._id }, { $set: { text: req.body.content} }, function (err) {
                     if (err)
                         throw err
+                    console.log("atualizando Artigo existente");
                     res.send(JSON.stringify(req.body));
                 });
+                
             }
         } else {
+            console.log("fora...era pra redirecionar");
             res.redirect('/parceiros');
         }
     });
@@ -623,6 +628,7 @@ module.exports = function (app, passport, mongoose) {
                     }).save(function (err, docs) {
                         if (err)
                             throw err
+                        console.log("Novo Artigo");
                         res.send(JSON.stringify(req.body));
                     });
                 });
@@ -630,10 +636,12 @@ module.exports = function (app, passport, mongoose) {
                 Artigos.update({ "status": 'rascunho','authors.main': user._id}, { $set: { title: decodeURIComponent(req.body.content).replace('<p>', '').replace('</p>', '')} }, function (err) {
                     if (err)
                         throw err
+                    console.log("atualizando Artigo existente");
                     res.send(JSON.stringify(req.body));
                 });
             }
         } else {
+            console.log("fora...era pra redirecionar");
             res.redirect('/parceiros');
         }
     });
