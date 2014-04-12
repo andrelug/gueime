@@ -566,7 +566,7 @@ module.exports = function (app, passport, mongoose) {
                     });
                 });
             } else {
-                Artigos.update({ $and: [{ status: 'rascunho' }, { 'authors.main': user._id}] }, { $set: { text: req.body.content} }, function (err) {
+                Artigos.update({ "status": 'rascunho','authors.main': user._id }, { $set: { text: req.body.content} }, function (err) {
                     if (err)
                         throw err
                     res.send(JSON.stringify(req.body));
@@ -587,7 +587,7 @@ module.exports = function (app, passport, mongoose) {
                 Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true} }, function (err) {
                     if (err)
                         throw err
-                        Artigos.update({ $and: [{ status: 'rascunho' }, { 'authors.main': user._id}] }, { $set: { text: req.body.content} }, function (err) {
+                        Artigos.update({ "status": 'rascunho','authors.main': user._id }, { $set: { text: req.body.content} }, function (err) {
                         if (err)
                             throw err
 
@@ -595,7 +595,7 @@ module.exports = function (app, passport, mongoose) {
                     });
                 });
             } else {
-                Artigos.update({ $and: [{ status: 'rascunho' }, { 'authors.main': user._id}] }, { $set: { text: req.body.content} }, function (err) {
+                Artigos.update({ "status": 'rascunho','authors.main': user._id}, { $set: { text: req.body.content} }, function (err) {
                     if (err)
                         throw err
                     res.send(JSON.stringify(req.body));
@@ -627,7 +627,7 @@ module.exports = function (app, passport, mongoose) {
                     });
                 });
             } else {
-                Artigos.update({ $and: [{ status: 'rascunho' }, { 'authors.main': user._id}] }, { $set: { title: decodeURIComponent(req.body.content).replace('<p>', '').replace('</p>', '')} }, function (err) {
+                Artigos.update({ "status": 'rascunho','authors.main': user._id}, { $set: { title: decodeURIComponent(req.body.content).replace('<p>', '').replace('</p>', '')} }, function (err) {
                     if (err)
                         throw err
                     res.send(JSON.stringify(req.body));
@@ -647,14 +647,14 @@ module.exports = function (app, passport, mongoose) {
                 Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true} }, function (err) {
                     if (err)
                         throw err
-                    Artigos.update({ $and: [{ status: 'rascunho' }, { 'authors.main': user._id}] }, { $set: { title: decodeURIComponent(req.body.content).replace('<p>', '').replace('</p>', '')} }, function (err) {
+                    Artigos.update({ "status": 'rascunho','authors.main': user._id }, { $set: { title: decodeURIComponent(req.body.content).replace('<p>', '').replace('</p>', '')} }, function (err) {
                         if (err)
                             throw err
                         res.send(JSON.stringify(req.body));
                     });
                 });
             } else {
-                Artigos.update({ $and: [{ status: 'rascunho' }, { 'authors.main': user._id}] }, { $set: { title: decodeURIComponent(req.body.content).replace('<p>', '').replace('</p>', '')} }, function (err) {
+                Artigos.update({ "status": 'rascunho','authors.main': user._id }, { $set: { title: decodeURIComponent(req.body.content).replace('<p>', '').replace('</p>', '')} }, function (err) {
                     if (err)
                         throw err
                     res.send(JSON.stringify(req.body));
@@ -720,7 +720,7 @@ module.exports = function (app, passport, mongoose) {
             });
 
             if (b.tipo == 'noticia') {
-                Artigos.update({ $and: [{ status: 'rascunho' }, { 'authors.main': user._id}] }, { $set: {
+                Artigos.update({ "status": 'rascunho','authors.main': user._id}, { $set: {
 
                     type: b.tipo,
                     description: b.descricao,
@@ -750,7 +750,7 @@ module.exports = function (app, passport, mongoose) {
 
                 });
             } else if (b.tipo == 'artigo') {
-                Artigos.update({ $and: [{ status: 'rascunho' }, { 'authors.main': user._id}] }, { $set: {
+                Artigos.update({ "status": 'rascunho','authors.main': user._id }, { $set: {
 
                     type: b.tipo,
                     description: b.descricao,
@@ -780,7 +780,7 @@ module.exports = function (app, passport, mongoose) {
                     });
                 });
             } else if (b.tipo == 'analise') {
-                Artigos.update({ $and: [{ status: 'rascunho' }, { 'authors.main': user._id}] }, { $set: {
+                Artigos.update({ "status": 'rascunho','authors.main': user._id }, { $set: {
 
                     type: b.tipo,
                     description: b.descricao,
@@ -809,7 +809,7 @@ module.exports = function (app, passport, mongoose) {
                     });
                 });
             } else {
-                Artigos.update({ $and: [{ status: 'rascunho' }, { 'authors.main': user._id}] }, { $set: {
+                Artigos.update({ "status": 'rascunho','authors.main': user._id }, { $set: {
 
                     type: b.tipo,
                     description: b.descricao,
