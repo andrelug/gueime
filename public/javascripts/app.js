@@ -16,6 +16,7 @@ tagSearch = function (str) {
             $('footer').hide();
             $('#load').hide();
             if ($('#check').html() == 'check') {
+                $('body').css('background', 'none').css('background-color', '#ecf0f1');
                 $('#wrapper').empty();
                 $('.editar').remove();
                 $('#searchBack').slideDown();
@@ -51,14 +52,14 @@ tagSearch = function (str) {
                 $.ajax({
                     type: "GET",
                     url: "/pagination",
-                    data: {n: n, str: searchStr},
+                    data: { n: n, str: searchStr },
                     dataType: 'html'
                 }).done(function (data) {
                     container.isotope('insert', $(data));
                 });
             }
         }, null, true);
-        
+
     });
 }
 
@@ -115,7 +116,7 @@ var ajaxPage = function (url) {
             $('#spinningContent').fadeOut(500);
             $('#loading').animate({ 'opacity': 1 }, function () {
 
-
+                $('.content').css('background', 'url(/images/pattern.png) repeat #34495e');
                 var facebookComments = $(".fb-comments");
                 var facebookLikes = $('.fb-like');
 
@@ -158,7 +159,7 @@ $(document).on('click', '.exit', function () {
     $('#darken').css('display', 'none');
     window.history.go(-1);
     ga('send', 'pageview', '/');
-    $('.content').empty();
+    $('.content').empty().css('background', 'white');
 });
 
 

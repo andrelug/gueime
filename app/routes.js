@@ -704,7 +704,6 @@ module.exports = function (app, passport, mongoose) {
             if (analiseRuim != undefined) { if (analiseRuim.indexOf(',') > -1) { analiseRuim = analiseRuim.split(','); } }
             console.log(facet);
             facet.push(b.serieArtigo, b.tipoVideo, b.canalVideo);
-            facet = func.cleanArray(facet);
             console.log(facet);
             
             var status;
@@ -714,6 +713,11 @@ module.exports = function (app, passport, mongoose) {
                 status = 'pendente';
             }
 
+            facet = func.cleanArray(facet);
+
+            sendFacet = facet.filter(function(elem, pos) {
+                return facet.indexOf(elem) == pos;
+            });
 
             if (b.tipo == 'noticia') {
                 Artigos.update({ $and: [{ status: 'rascunho' }, { 'authors.main': user._id}] }, { $set: {
@@ -733,7 +737,7 @@ module.exports = function (app, passport, mongoose) {
                     slug: slug
 
                 }, $addToSet: {
-                    facet: { $each: facet }
+                    facet: { $each: sendFacet }
                 }
                 }, function (err) {
                     if (err)
@@ -764,7 +768,7 @@ module.exports = function (app, passport, mongoose) {
                     slug: slug
 
                 }, $addToSet: {
-                    facet: { $each: facet }
+                    facet: { $each: sendFacet }
                 }
                 }, function (err) {
                     if (err)
@@ -793,7 +797,7 @@ module.exports = function (app, passport, mongoose) {
 
 
                 }, $addToSet: {
-                    facet: { $each: facet }
+                    facet: { $each: sendFacet }
                 }
                 }, function (err) {
                     if (err)
@@ -824,7 +828,7 @@ module.exports = function (app, passport, mongoose) {
                     slug: slug
 
                 }, $addToSet: {
-                    facet: { $each: facet }
+                    facet: { $each: sendFacet }
                 }
                 }, function (err) {
                     if (err)
