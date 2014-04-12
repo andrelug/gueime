@@ -485,7 +485,7 @@ module.exports = function (app, passport, mongoose) {
             client.send(params, function(ok) {
                 // success callback [optional]
                 console.log('Success: ' + JSON.stringify(ok));
-                res.send('/uploads/' + sendImg);
+                res.send('https://s3-sa-east-1.amazonaws.com/portalgueime/images/userInput' + sendImg );
             }, function(err) {
                 // error callback [optional]
                 console.log('Error: ' + JSON.stringify(err));
@@ -713,6 +713,7 @@ module.exports = function (app, passport, mongoose) {
             } else {
                 status = 'pendente';
             }
+
 
             if (b.tipo == 'noticia') {
                 Artigos.update({ $and: [{ status: 'rascunho' }, { 'authors.main': user._id}] }, { $set: {
