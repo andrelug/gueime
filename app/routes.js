@@ -36,7 +36,7 @@ module.exports = function (app, passport, mongoose) {
                 for (i = 0; i < docs.length; i++) {
                     docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                 }
-                res.render('index', { title: "Gueime - O melhor site de games do Brasil!", docs: docs, message: redirected, deletado: deleted });
+                res.render('index', { title: "Gueime - O melhor site de games do Brasil!", docs: docs, messages: redirected, deletado: deleted });
             });
         } else {
 
@@ -45,7 +45,7 @@ module.exports = function (app, passport, mongoose) {
                 for (i = 0; i < docs.length; i++) {
                     docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                 }
-                res.render('index', { user: user, title: "Gueime - O melhor site de games do Brasil!", docs: docs, message: redirected, deletado: deleted });
+                res.render('index', { user: user, title: "Gueime - O melhor site de games do Brasil!", docs: docs, messages: redirected, deletado: deleted });
             });
 
 
