@@ -191,7 +191,7 @@ module.exports = function (app, passport, mongoose) {
         if (req.xhr === true) {
 
             Artigos.findOneAndUpdate({ slug: artigo }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                if(docs.deleted == false){
+                if(docs.status == 'publicado'){
                     var title = decodeURIComponent(docs.title),
                         body = decodeURIComponent(docs.text);
 
@@ -206,7 +206,7 @@ module.exports = function (app, passport, mongoose) {
         } else {
             if (!user) {
                 Artigos.findOneAndUpdate({ slug: artigo }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                    if(docs.deleted == false){
+                    if(docs.statud == 'publicado'){
                         var title = decodeURIComponent(docs.title),
                             body = decodeURIComponent(docs.text);
                         Users.find({ _id: docs.authors.main }, function (err, author) {
@@ -219,7 +219,7 @@ module.exports = function (app, passport, mongoose) {
             } else {
                 sessionReload(req, res, next);
                 Artigos.findOneAndUpdate({ slug: artigo }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                    if(docs.deleted == false){
+                    if(docs.status == 'publicado'){
                         var title = decodeURIComponent(docs.title),
                             body = decodeURIComponent(docs.text);
 
@@ -241,7 +241,7 @@ module.exports = function (app, passport, mongoose) {
         if (req.xhr === true) {
 
             Artigos.findOneAndUpdate({ slug: analise }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                if(docs.deleted == false){
+                if(docs.status == 'publicado'){
                     var title = decodeURIComponent(docs.title),
                         body = decodeURIComponent(docs.text);
                     Users.find({ _id: docs.authors.main }, function (err, author) {
@@ -255,7 +255,7 @@ module.exports = function (app, passport, mongoose) {
         } else {
             if (!user) {
                 Artigos.findOneAndUpdate({ slug: analise }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                    if(docs.deleted == false){
+                    if(docs.status == 'publicado'){
                         var title = decodeURIComponent(docs.title),
                             body = decodeURIComponent(docs.text);
                         Users.find({ _id: docs.authors.main }, function (err, author) {
@@ -268,7 +268,7 @@ module.exports = function (app, passport, mongoose) {
             } else {
                 sessionReload(req, res, next);
                 Artigos.findOneAndUpdate({ slug: analise }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                    if(docs.deleted == false){
+                    if(docs.status == 'publicado'){
                         var title = decodeURIComponent(docs.title),
                             body = decodeURIComponent(docs.text);
 
@@ -290,7 +290,7 @@ module.exports = function (app, passport, mongoose) {
         if (req.xhr === true) {
 
             Artigos.findOneAndUpdate({ slug: video }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                if(docs.deleted == false){
+                if(docs.status == 'publicado'){
                     var title = decodeURIComponent(docs.title),
                         body = decodeURIComponent(docs.text);
                     Users.find({ _id: docs.authors.main }, function (err, author) {
@@ -304,7 +304,7 @@ module.exports = function (app, passport, mongoose) {
         } else {
             if (!user) {
                 Artigos.findOneAndUpdate({ slug: video }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                    if(docs.deleted == false){
+                    if(docs.status == 'publicado'){
                         var title = decodeURIComponent(docs.title),
                             body = decodeURIComponent(docs.text);
                         Users.find({ _id: docs.authors.main }, function (err, author) {
@@ -317,7 +317,7 @@ module.exports = function (app, passport, mongoose) {
             } else {
                 sessionReload(req, res, next);
                 Artigos.findOneAndUpdate({ slug: video }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                    if(docs.deleted == false){
+                    if(docs.status == 'publicado'){
                         var title = decodeURIComponent(docs.title),
                             body = decodeURIComponent(docs.text);
                         Users.find({ _id: docs.authors.main }, function (err, author) {
