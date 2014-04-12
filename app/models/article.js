@@ -14,8 +14,8 @@ var ArticleSchema = new mongoose.Schema({
     text: String,
     authors: {
         name: String,
-        main: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-        sub: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
+        main: String,
+        sub: [String]
     },
     update: [{
         _id: false,

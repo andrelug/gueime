@@ -20,7 +20,7 @@ $(function () {
                     $('#loadingAj').fadeOut();
                     imageCover = '/uploads/' + file.name;
                     $('.mainImage').delay(500).attr('style', 'background: url(/uploads/' + file.name + ') no-repeat center 0px;');
-                    window.setTimeout(function () { $('.mainImage').delay(6000).attr('style', 'background: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images/userInput/' + file.name + ') no-repeat center 0px'); }, 6000);
+                    window.setTimeout(function () { $('.mainImage').delay(6000).attr('style', 'background: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images/userInput/' + file.name + ') no-repeat center 0px;'); }, 6000);
                 }
             });
         }
