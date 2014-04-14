@@ -346,7 +346,7 @@ module.exports = function (app, passport, mongoose) {
                 res.redirect('/parceiros')
             } else if (user.status == 'admin' || user.status == 'parceiro') {
                 sessionReload(req, res, next);
-                res.render('create', { user: user, title: "Gueime - Hora de criar um artigo sensacional!", tipo: tipo });
+                res.render('create', { user: user, title: "Gueime - Hora de criar um artigo sensacional!", tipo: tipo, criar: true });
             } else {
                 sessionReload(req, res, next);
                 res.redirect('/parceiros');
@@ -486,7 +486,30 @@ module.exports = function (app, passport, mongoose) {
                         res.redirect('/?deletado=true');
                     });
                 } else {
-                    res.redirect('/');
+                    Artigos.findOneAndUpdate({slug: slug}, {$set: {status: 'publicado'}},{new: true}, function(err, docs){
+                        res.redirect('/');
+                    });
+                }
+            });
+        } else {
+            res.redirect('/');
+        }
+    });
+
+    // DELETAR CRIANDO
+    app.post('/deletarCriando', function(req, res){
+        var user = req.user;
+        
+        if (user.status == 'admin' || user.status == 'parceiro') {
+            Artigos.findOneAndUpdate({status: 'rascunho', 'authors.main': user._id}, {$set: {status: 'deletado'}},{new: true}, function(err, docs){
+                if (user.status == 'admin' || docs.authors.main == user.id) {
+                    Users.update({loginName: user.loginName}, {$set: {creating: false, creatingId: 0}}, function(err){
+                        res.redirect('/?deletado=true');
+                    });
+                } else {
+                    Artigos.findOneAndUpdate({status: 'rascunho', 'authors.main': user._id}, {$set: {status: 'publicado'}},{new: true}, function(err, docs){
+                        res.redirect('/');
+                    });
                 }
             });
         } else {

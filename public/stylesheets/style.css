@@ -23,11 +23,6 @@ body {
 .nav {
   height: 52px;
   background-color: #338ac3;
-  -webkit-transition: all 400ms ease;
-  -moz-transition: all 400ms ease;
-  -ms-transition: all 400ms ease;
-  -o-transition: all 400ms ease;
-  transition: all 400ms ease;
 }
 .facebook {
   color: #fff;

@@ -24,9 +24,11 @@ div#nav-sticky
                             a(href="/criar/analise") Análise
                         li
                             a(href="/criar/video") Vídeo
-                    if(!article)
-
-                    else
+                    if(criar == true)
+                        a.deletar <i class="fa fa-trash-o"></i> Deletar
+                        form#deletar(action="/deletarCriando", method="post")
+                            input(type="hidden", name="slug")
+                    if(article)
                         if(!edit)
                             if(article.authors.main == user.id || user.status == 'admin')
                                 if(tipo == 'noticia')
@@ -37,6 +39,7 @@ div#nav-sticky
                                     a(href="/artigos/#{article.slug}/editar").editar <i class="fa fa-gears"></i> Editar
                                 else
                                     a(href="/videos/#{article.slug}/editar").editar <i class="fa fa-gears"></i> Editar
+                            
                         else
                             if(edit == true)
                                 a.deletar <i class="fa fa-trash-o"></i> Deletar
