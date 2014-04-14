@@ -712,15 +712,16 @@ module.exports = function (app, passport, mongoose) {
             check = req.query.check,
             title = req.query.title;
             slug = func.string_to_slug(decodeURIComponent(title.replace('<p>', '').replace('</p>', '')));
+            console.log(check);
 
-        if(check == true){
+        if(check == 'true'){
             Artigos.find({ "status": 'editando', _id: user.creatingId}, function(err, docs){
                 if(docs[0].slug == slug){
                     console.log('mesmo titulo');
                     res.end('yes');
                 } else{
                     Artigos.find({slug: slug}, function(err, arts){
-                        if(docs.length > 0){
+                        if(arts.length > 0){
                             console.log('editando: slug repetido');
                             res.end('no');
                         } else{
@@ -792,13 +793,13 @@ module.exports = function (app, passport, mongoose) {
             }
 
             facet = func.cleanArray(facet);
-
+            console.log(slug);
             sendFacet = facet.filter(function(elem, pos) {
                 return facet.indexOf(elem) == pos;
             });
 
             if (b.tipo == 'noticia') {
-                Artigos.update({ "status": 'rascunho','authors.main': user._id}, { $set: {
+                Artigos.update({$or: [{ "status": 'rascunho'}, {"status": 'editando'}],'authors.main': user._id}, { $set: {
 
                     type: b.tipo,
                     description: b.descricao,
@@ -828,7 +829,7 @@ module.exports = function (app, passport, mongoose) {
 
                 });
             } else if (b.tipo == 'artigo') {
-                Artigos.update({ "status": 'rascunho','authors.main': user._id }, { $set: {
+                Artigos.update({ $or: [{ "status": 'rascunho'}, {"status": 'editando'}],'authors.main': user._id }, { $set: {
 
                     type: b.tipo,
                     description: b.descricao,
@@ -858,7 +859,7 @@ module.exports = function (app, passport, mongoose) {
                     });
                 });
             } else if (b.tipo == 'analise') {
-                Artigos.update({ "status": 'rascunho','authors.main': user._id }, { $set: {
+                Artigos.update({ $or: [{ "status": 'rascunho'}, {"status": 'editando'}],'authors.main': user._id }, { $set: {
 
                     type: b.tipo,
                     description: b.descricao,
@@ -887,7 +888,7 @@ module.exports = function (app, passport, mongoose) {
                     });
                 });
             } else {
-                Artigos.update({ "status": 'rascunho','authors.main': user._id }, { $set: {
+                Artigos.update({ $or: [{ "status": 'rascunho'}, {"status": 'editando'}],'authors.main': user._id }, { $set: {
 
                     type: b.tipo,
                     description: b.descricao,

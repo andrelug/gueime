@@ -199,10 +199,11 @@ $("#wizard").steps({
         form.submit();
     }
 });
+var editChecked;
 $('#sendButton').on('click', function () {
 
     var editCheck = $('#editCheck').html();
-    var editChecked;
+    editChecked;
     if (editCheck == 'check') {
         editChecked = true;
     } else {

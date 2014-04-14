@@ -31,11 +31,19 @@ div#nav-sticky
                             if(article.authors.main == user.id || user.status == 'admin')
                                 if(tipo == 'noticia')
                                     a(href="/noticias/#{article.slug}/editar").editar <i class="fa fa-gears"></i> Editar
+                                else if(tipo == 'analise')
+                                    a(href="/analises/#{article.slug}/editar").editar <i class="fa fa-gears"></i> Editar
+                                else if(tipo == 'artigo')
+                                    a(href="/artigos/#{article.slug}/editar").editar <i class="fa fa-gears"></i> Editar
+                                else
+                                    a(href="/videos/#{article.slug}/editar").editar <i class="fa fa-gears"></i> Editar
                         else
                             if(edit == true)
                                 a.deletar <i class="fa fa-trash-o"></i> Deletar
                                 form#deletar(action="/deletar", method="post")
                                     input(type="hidden", name="slug", value="#{article.slug}")
+                else
+                    a(href="/profile").user <i class="fa fa-user"></i> #{user.name.first}
                                     
                                 
             if (!user)
