@@ -31,12 +31,14 @@ module.exports = function (app, passport, mongoose) {
 
         var deleted = req.query.deletado;
 
+        var onlyOne = req.query.onlyOne;
+
         if (!user) {
             Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).exec(function (err, docs) {
                 for (i = 0; i < docs.length; i++) {
                     docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                 }
-                res.render('index', { title: "Gueime - O melhor site de games do Brasil!", docs: docs, messages: redirected, deletado: deleted });
+                res.render('index', { title: "Gueime - O melhor site de games do Brasil!", docs: docs, messages: redirected, deletado: deleted, onlyOne: onlyOne });
             });
         } else {
 
@@ -45,7 +47,7 @@ module.exports = function (app, passport, mongoose) {
                 for (i = 0; i < docs.length; i++) {
                     docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                 }
-                res.render('index', { user: user, title: "Gueime - O melhor site de games do Brasil!", docs: docs, messages: redirected, deletado: deleted });
+                res.render('index', { user: user, title: "Gueime - O melhor site de games do Brasil!", docs: docs, messages: redirected, deletado: deleted, onlyOne: onlyOne });
             });
 
 
@@ -337,16 +339,19 @@ module.exports = function (app, passport, mongoose) {
         var user = req.user;
         var tipo = req.params.tipo;
 
-        if (!user) {
-            res.redirect('/parceiros')
-        } else if (user.status == 'admin' || user.status == 'parceiro') {
-            sessionReload(req, res, next);
-            res.render('create', { user: user, title: "Gueime - Hora de criar um artigo sensacional!", tipo: tipo });
-        } else {
-            sessionReload(req, res, next);
-            res.redirect('/parceiros');
+        if(user.creatingId != 0){
+            res.redirect('/?onlyOne=true');
+        } else{
+            if (!user) {
+                res.redirect('/parceiros')
+            } else if (user.status == 'admin' || user.status == 'parceiro') {
+                sessionReload(req, res, next);
+                res.render('create', { user: user, title: "Gueime - Hora de criar um artigo sensacional!", tipo: tipo });
+            } else {
+                sessionReload(req, res, next);
+                res.redirect('/parceiros');
+            }
         }
-
     });
 
 
@@ -354,16 +359,28 @@ module.exports = function (app, passport, mongoose) {
     app.get('/noticias/:noticia/editar', function(req, res){
         var noticia = req.params.noticia;
         var user = req.user;
-
-        Artigos.findOneAndUpdate({slug: noticia}, {status: 'rascunho'}, {new: true}, function(err, docs){
-            if (user.status == 'admin' || docs.authors.main == user.id) {
-                var title = decodeURIComponent(docs.title),
-                    body = decodeURIComponent(docs.text);
-                res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'noticia', edit: true});
-            } else {
-                res.redirect('/');
-            }
-        });
+        if(!user){
+            res.redirect('/parceiros');
+        } else{
+            if(user.creatingId != 0){
+                res.redirect('/?onlyOne=true');
+            } else{
+                Artigos.findOneAndUpdate({slug: noticia}, {status: 'editando'}, {new: true}, function(err, docs){
+                    if (user.status == 'admin' || docs.authors.main == user.id) {
+                        var title = decodeURIComponent(docs.title),
+                            body = decodeURIComponent(docs.text);
+                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id} }, function (err) {
+                             res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'noticia', edit: true});
+                        });
+                    } else {
+                        Artigos.findOneAndUpdate({slug: noticia}, {status: 'publicado'}, {new: true}, function(err, docs){
+                            res.redirect('/');
+                        });
+                    }
+                });
+            }  
+        }
+        
     });
 
     // EDIÇÃO DE ARTIGOS
@@ -371,15 +388,29 @@ module.exports = function (app, passport, mongoose) {
         var artigo = req.params.artigo;
         var user = req.user;
 
-        Artigos.findOneAndUpdate({slug: artigo}, {status: 'rascunho'}, {new: true}, function(err, docs){
-            if (user.status == 'admin' || docs.authors.main == user.id) {
-                var title = decodeURIComponent(docs.title),
-                    body = decodeURIComponent(docs.text);
-                res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'artigo', edit: true});
-            } else {
-                res.redirect('/');
+
+        if(!user){
+            res.redirect('/parceiros');
+        } else{
+            if(user.creatingId != 0){
+                res.redirect('/?onlyOne=true');
+            } else{
+                Artigos.findOneAndUpdate({slug: artigo}, {status: 'editando'}, {new: true}, function(err, docs){
+                    if (user.status == 'admin' || docs.authors.main == user.id) {
+                        var title = decodeURIComponent(docs.title),
+                            body = decodeURIComponent(docs.text);
+                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id} }, function (err) {
+                            res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'artigo', edit: true});
+                        });
+                    } else {
+                        Artigos.findOneAndUpdate({slug: artigo}, {status: 'publicado'}, {new: true}, function(err, docs){
+                            res.redirect('/');
+                        });
+                    }
+                });
             }
-        });
+        }
+        
     });
 
 
@@ -388,15 +419,28 @@ module.exports = function (app, passport, mongoose) {
         var analise = req.params.analise;
         var user = req.user;
 
-        Artigos.findOneAndUpdate({slug: analise}, {status: 'rascunho'}, {new: true}, function(err, docs){
-            if (user.status == 'admin' || docs.authors.main == user.id) {
-                var title = decodeURIComponent(docs.title),
-                    body = decodeURIComponent(docs.text);
-                res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'analise', edit: true});
-            } else {
-                res.redirect('/');
+        if(!user){
+            res.redirect('/parceiros');
+        } else{
+            if(user.creatingId != 0){
+                res.redirect('/?onlyOne=true');
+            } else{
+                Artigos.findOneAndUpdate({slug: analise}, {status: 'editando'}, {new: true}, function(err, docs){
+                    if (user.status == 'admin' || docs.authors.main == user.id) {
+                        var title = decodeURIComponent(docs.title),
+                            body = decodeURIComponent(docs.text);
+                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id} }, function (err) {
+                            res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'analise', edit: true});
+                        });
+                    } else {
+                        Artigos.findOneAndUpdate({slug: analise}, {status: 'publicado'}, {new: true}, function(err, docs){
+                            res.redirect('/');
+                        });
+                    }
+                });
             }
-        });
+        }
+        
     });
 
 
@@ -405,15 +449,29 @@ module.exports = function (app, passport, mongoose) {
         var video = req.params.video;
         var user = req.user;
 
-        Artigos.findOneAndUpdate({slug: noticia}, {status: 'rascunho'}, {new: true}, function(err, docs){
-            if (user.status == 'admin' || docs.authors.main == user.id) {
-                var title = decodeURIComponent(docs.title),
-                    body = decodeURIComponent(docs.text);
-                res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'video', edit: true});
-            } else {
-                res.redirect('/');
+
+        if(!user){
+            res.redirect('/parceiros');
+        } else{
+            if(user.creatingId != 0){
+                res.redirect('/?onlyOne=true');
+            } else{
+                Artigos.findOneAndUpdate({slug: noticia}, {status: 'editando'}, {new: true}, function(err, docs){
+                    if (user.status == 'admin' || docs.authors.main == user.id) {
+                        var title = decodeURIComponent(docs.title),
+                            body = decodeURIComponent(docs.text);
+                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id} }, function (err) {
+                            res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'video', edit: true});
+                        });
+                    } else {
+                        Artigos.findOneAndUpdate({slug: video}, {status: 'publicado'}, {new: true}, function(err, docs){
+                            res.redirect('/');
+                        });
+                    }
+                });
             }
-        });
+        }   
+        
     });
 
 
@@ -424,7 +482,7 @@ module.exports = function (app, passport, mongoose) {
         if (user.status == 'admin' || user.status == 'parceiro') {
             Artigos.findOneAndUpdate({slug: slug}, {$set: {status: 'deletado'}},{new: true}, function(err, docs){
                 if (user.status == 'admin' || docs.authors.main == user.id) {
-                    Users.update({loginName: user.loginName}, {$set: {creating: false}}, function(err){
+                    Users.update({loginName: user.loginName}, {$set: {creating: false, creatingId: 0}}, function(err){
                         res.redirect('/?deletado=true');
                     });
                 } else {
@@ -442,11 +500,13 @@ module.exports = function (app, passport, mongoose) {
         var user = req.user;
         var slug = req.query.slug;
 
-        if(req.query.exit == true){
-            Users.update({loginName: user.loginName}, {$set: {creating: false}}, function(err){
-                res.redirect('/');
+        Users.update({loginName: user.loginName}, {$set: {creating: false, creatingId: 0}}, function(err){
+            Artigos.update({slug: slug}, {$set: {status: 'pendente'}}, function(err){
+                if(err)
+                    throw err
+                res.end();
             });
-        }
+        });
     });
 
 
@@ -484,7 +544,6 @@ module.exports = function (app, passport, mongoose) {
 
             client.send(params, function(ok) {
                 // success callback [optional]
-                console.log('Success: ' + JSON.stringify(ok));
                 res.send('http://www.gueime.com.br/uploads/' + sendImg );
             }, function(err) {
                 // error callback [optional]
@@ -529,8 +588,6 @@ module.exports = function (app, passport, mongoose) {
             };
 
             client.send(params, function(ok) {
-                // success callback [optional]
-                console.log('Success: ' + JSON.stringify(ok));
                 res.send({ "filelink": 'http://www.gueime.com.br/uploads/' + sendImg });
             }, function(err) {
                 // error callback [optional]
@@ -552,26 +609,23 @@ module.exports = function (app, passport, mongoose) {
 
         if (user.status == 'admin' || user.status == 'parceiro') {
             if (user.creating == false) {
-                Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true} }, function (err) {
+                new Artigos({
+                    'authors.main': user._id,
+                    text: req.body.content,
+                    'authors.name': user.name.first + ' ' + user.name.last
+                }).save(function (err, docs) {
                     if (err)
                         throw err
-                    new Artigos({
-                        'authors.main': user._id,
-                        text: req.body.content,
-                        'authors.name': user.name.first + ' ' + user.name.last
-                    }).save(function (err, docs) {
-                        if (err)
-                            throw err
-                        console.log("novo Artigo");
+                    Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id} }, function (err) {
                         res.send(JSON.stringify(req.body));
                     });
+                    
                 });
                 
             } else {
-                Artigos.update({ "status": 'rascunho','authors.main': user._id }, { $set: { text: req.body.content} }, function (err) {
+                Artigos.update({ "status": 'rascunho', _id: user.creatingId }, { $set: { text: req.body.content} }, function (err) {
                     if (err)
                         throw err
-                    console.log("atualizando Artigo existente");
                     res.send(JSON.stringify(req.body));
                 });
                 
@@ -588,24 +642,12 @@ module.exports = function (app, passport, mongoose) {
 
 
         if (user.status == 'admin' || user.status == 'parceiro') {
-            if (user.creating == false) {
-                Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true} }, function (err) {
-                    if (err)
-                        throw err
-                        Artigos.update({ "status": 'rascunho','authors.main': user._id }, { $set: { text: req.body.content} }, function (err) {
-                        if (err)
-                            throw err
 
-                        res.send(JSON.stringify(req.body));
-                    });
-                });
-            } else {
-                Artigos.update({ "status": 'rascunho','authors.main': user._id}, { $set: { text: req.body.content} }, function (err) {
-                    if (err)
-                        throw err
-                    res.send(JSON.stringify(req.body));
-                });
-            }
+            Artigos.update({ "status": 'editando', _id: user.creatingId }, { $set: { text: req.body.content} }, function (err) {
+                console.log('editando Artigo');
+                res.send(JSON.stringify(req.body));
+            });
+
         } else {
             res.redirect('/parceiros');
         }
@@ -618,22 +660,22 @@ module.exports = function (app, passport, mongoose) {
 
         if (user.status == 'admin' || user.status == 'parceiro') {
             if (user.creating == false) {
-                Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true} }, function (err) {
+
+                new Artigos({
+                    'authors.main': user._id,
+                    title: decodeURIComponent(req.body.content).replace('<p>', '').replace('</p>', ''),
+                    'authors.name': user.name.first + ' ' + user.name.last
+                }).save(function (err, docs) {
                     if (err)
                         throw err
-                    new Artigos({
-                        'authors.main': user._id,
-                        title: decodeURIComponent(req.body.content).replace('<p>', '').replace('</p>', ''),
-                        'authors.name': user.name.first + ' ' + user.name.last
-                    }).save(function (err, docs) {
-                        if (err)
-                            throw err
-                        console.log("Novo Artigo");
+                    Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id} }, function (err) {
                         res.send(JSON.stringify(req.body));
                     });
+                    
                 });
+
             } else {
-                Artigos.update({ "status": 'rascunho','authors.main': user._id}, { $set: { title: decodeURIComponent(req.body.content).replace('<p>', '').replace('</p>', '')} }, function (err) {
+                Artigos.update({ "status": 'rascunho', _id: user.creatingId}, { $set: { title: decodeURIComponent(req.body.content).replace('<p>', '').replace('</p>', '')} }, function (err) {
                     if (err)
                         throw err
                     console.log("atualizando Artigo existente");
@@ -651,25 +693,53 @@ module.exports = function (app, passport, mongoose) {
         var user = req.user;
 
         if (user.status == 'admin' || user.status == 'parceiro') {
-            if (user.creating == false) {
-                Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true} }, function (err) {
-                    if (err)
-                        throw err
-                    Artigos.update({ "status": 'rascunho','authors.main': user._id }, { $set: { title: decodeURIComponent(req.body.content).replace('<p>', '').replace('</p>', '')} }, function (err) {
-                        if (err)
-                            throw err
-                        res.send(JSON.stringify(req.body));
-                    });
-                });
-            } else {
-                Artigos.update({ "status": 'rascunho','authors.main': user._id }, { $set: { title: decodeURIComponent(req.body.content).replace('<p>', '').replace('</p>', '')} }, function (err) {
-                    if (err)
-                        throw err
-                    res.send(JSON.stringify(req.body));
-                });
-            }
+
+            Artigos.update({ "status": 'editando', _id: user.creatingId}, { $set: { title: decodeURIComponent(req.body.content).replace('<p>', '').replace('</p>', '')} }, function (err) {
+                if (err)
+                    throw err
+                console.log('editando titulo');
+                res.send(JSON.stringify(req.body));
+            });
+
         } else {
             res.redirect('/parceiros');
+        }
+    });
+
+    // SLUG CHECK
+    app.get('/titleCheck', function(req,res){
+        var user = req.user,
+            check = req.query.check,
+            title = req.query.title;
+            slug = func.string_to_slug(decodeURIComponent(title.replace('<p>', '').replace('</p>', '')));
+
+        if(check == true){
+            Artigos.find({ "status": 'editando', _id: user.creatingId}, function(err, docs){
+                if(docs[0].slug == slug){
+                    console.log('mesmo titulo');
+                    res.end('yes');
+                } else{
+                    Artigos.find({slug: slug}, function(err, arts){
+                        if(docs.length > 0){
+                            console.log('editando: slug repetido');
+                            res.end('no');
+                        } else{
+                            console.log('editando: slug valido');
+                            res.end('yes');
+                        }
+                    });
+                }
+            });
+        }else{
+            Artigos.find({slug: slug}, function(err, arts){
+                if(arts.length > 0){
+                    console.log('criando: slug repetido');
+                    res.end('no');
+                } else{
+                    console.log('criando: slug valido');
+                    res.end('yes');
+                }
+            });
         }
     });
 
@@ -718,7 +788,7 @@ module.exports = function (app, passport, mongoose) {
             if(user.status == 'admin'){
                 status = 'publicado';
             } else {
-                status = 'pendente';
+                status = 'revisao';
             }
 
             facet = func.cleanArray(facet);
@@ -750,7 +820,7 @@ module.exports = function (app, passport, mongoose) {
                 }, function (err) {
                     if (err)
                         throw err
-                    Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false} }, function (err) {
+                    Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0} }, function (err) {
                         if (err)
                             throw err
                         res.redirect('/' + b.tipo + 's/' + slug);
@@ -781,7 +851,7 @@ module.exports = function (app, passport, mongoose) {
                 }, function (err) {
                     if (err)
                         throw err
-                    Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false} }, function (err) {
+                    Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0} }, function (err) {
                         if (err)
                             throw err
                         res.redirect('/' + b.tipo + 's/' + slug);
@@ -810,7 +880,7 @@ module.exports = function (app, passport, mongoose) {
                 }, function (err) {
                     if (err)
                         throw err
-                    Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false} }, function (err) {
+                    Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0} }, function (err) {
                         if (err)
                             throw err
                         res.redirect('/' + b.tipo + 's/' + slug);
@@ -841,7 +911,7 @@ module.exports = function (app, passport, mongoose) {
                 }, function (err) {
                     if (err)
                         throw err
-                    Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false} }, function (err) {
+                    Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0} }, function (err) {
                         if (err)
                             throw err
                         res.redirect('/' + b.tipo + 's/' + slug);

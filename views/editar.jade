@@ -1,6 +1,7 @@
 extends layouts/createLayout
 
 block content
+    div#editCheck(style="display: hidden;") check
     header.header.row
         div.content-wrap
             div.content
@@ -31,6 +32,7 @@ block content
             div.row
                 div.large-8.large-centered.columns#enviarArtigo
                     button#sendButton ENVIAR
+                    h3#slugErr(style="display: none;") Aparentemente esse título que escolheu é repetido. Tente outro
 
             div.row
                 div.large-8.large-centered.columns
