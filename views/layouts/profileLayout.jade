@@ -1,0 +1,53 @@
+doctype html
+<!--[if IE 9]><html class="lt-ie10" lang="pt_BR" > <![endif]-->
+html.no-js(lang="pt_BR")
+    head
+        include head
+
+    body(style="overflow-y: auto; background: url('../images/pattern.png') repeat #34495e")
+        div#fb-root
+        script.
+            window.fbAsyncInit = function() {
+                FB.init({
+                    appId      : '{561543940541408}',
+                    status     : true,
+                    xfbml      : true
+                });
+            };
+            (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/pt_BR/all.js";
+            fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+
+        block content
+
+        include scripts
+
+        script.
+            $(window).on('popstate', function () {
+                $('.content-wrap').fadeOut();
+                $('body').css('overflow-y', 'auto');
+                $('#darken').css('display', 'none');
+                if($('#mainText').html() !== undefined){
+                    ga('send', 'pageview', '/'+window.location.href.replace('http://www.gueime.com.br/',''));
+                }
+                $('.content').empty();
+            });
+            var facebookComments = $(".fb-comments");
+            var facebookLikes = $('.fb-like');
+
+            facebookLikes.attr("data-href", window.location.href);
+            facebookComments.attr("data-href", window.location.href);
+
+            if($(window).width() < 760){
+                facebookComments.attr('data-width', 550)
+            }
+            if($(window).width() < 595){
+                facebookComments.attr('data-width', 380)
+            }
+            FB.XFBML.parse();
+
+            

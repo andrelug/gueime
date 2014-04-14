@@ -75,6 +75,10 @@ textarea {
   background-color: #479ecd;
   margin-bottom: 40px;
   box-shadow: 0px 3px 3px rgba(0,0,0,0.3);
+  -moz-box-shadow: 0px 3px 3px rgba(0,0,0,0.3);
+  -webkit-box-shadow: 0px 3px 3px rgba(0,0,0,0.3);
+  -ms-box-shadow: 0px 3px 3px rgba(0,0,0,0.3);
+  -o-box-shadow: 0px 3px 3px rgba(0,0,0,0.3);
 }
 .top-bar {
   background-color: #479ecd;
@@ -405,7 +409,8 @@ textarea {
   margin: 0 auto;
   padding-bottom: 20px;
 }
-#mainText #textTitle {
+#mainText #textTitle,
+#mainText #userTitle {
   padding-top: 20px;
   font-family: 'Nexa';
   font-weight: bold;
@@ -677,4 +682,56 @@ textarea {
 }
 #loadMore {
   width: 100%;
+}
+#profile #imageAndOpt {
+  background-color: #479ecd;
+  padding: 10px;
+  text-align: center;
+}
+#profile #imageAndOpt #userProfileImage {
+  min-width: 100px;
+  width: 100%;
+  max-width: 200px;
+  border: 1px solid #fff;
+}
+#profile #imageAndOpt #profileStats {
+  background-color: #e54c3c;
+  box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
+  -moz-box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
+  -webkit-box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
+  -ms-box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
+  -o-box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
+  font-size: 15pt;
+  margin-top: 10px;
+}
+#profile #imageAndOpt #profileStats h3 {
+  color: #fff;
+}
+#profile #imageAndOpt #profileStats .icons {
+  text-align: center;
+}
+#profile #imageAndOpt #profileStats #gueimePoints {
+  max-width: 38px;
+  margin-left: -5px;
+}
+#profile #profileMenu {
+  padding: 10px 0;
+}
+#profile #profileMenu div {
+  padding: 0 !important;
+}
+#profile #profileMenu a {
+  display: block;
+  color: #fff;
+  font-size: 1.6875rem;
+  width: 100%;
+  padding: 10px 0;
+}
+#profile #profileMenu a:hover {
+  background-color: #e54c3c;
+  box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
+  -moz-box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
+  -webkit-box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
+  -ms-box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
+  -o-box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
 }

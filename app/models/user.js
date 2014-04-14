@@ -49,6 +49,10 @@ var UserSchema = new mongoose.Schema({
             url: String
         }
     },
+    gamification: {
+        points: {type: Number, default: 0},
+        level: {type: Number, default: 1}
+    },
     creating: {type: Boolean, default: false},
     creatingId: String,
     follow: [{_id: false, type: mongoose.Schema.Types.ObjectId}],

@@ -945,9 +945,27 @@ module.exports = function (app, passport, mongoose) {
         } else {
             res.redirect('/parceiros');
         }
-
-
     });
+
+
+
+
+    // =====================================
+    // PROFILE =============================
+    // =====================================
+    app.get('/profile', function(req, res){
+        var user = req.user;
+
+        res.render('profile',{user: user});
+    });
+
+
+
+
+
+
+
+
 
     // =====================================
     // USER SIGNUP =========================

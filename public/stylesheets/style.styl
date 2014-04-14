@@ -68,6 +68,10 @@ input[type="text"], textarea
     background-color gBlue
     margin-bottom 40px
     box-shadow 0px 3px 3px rgba(0,0,0,0.3)
+    -moz-box-shadow 0px 3px 3px rgba(0,0,0,0.3)
+    -webkit-box-shadow 0px 3px 3px rgba(0,0,0,0.3)
+    -ms-box-shadow 0px 3px 3px rgba(0,0,0,0.3)
+    -o-box-shadow 0px 3px 3px rgba(0,0,0,0.3)
 
 .top-bar
     background-color gBlue
@@ -401,7 +405,7 @@ input[type="text"], textarea
     margin 0 auto
     padding-bottom 20px
 
-    #textTitle
+    #textTitle, #userTitle
         padding-top 20px
         font-family 'Nexa'
         font-weight bold
@@ -667,3 +671,55 @@ textarea
 
 #loadMore
     width 100%
+
+
+// PROFILE
+
+#profile
+    #imageAndOpt
+        background-color gBlue
+        padding 10px
+        text-align center
+
+        #userProfileImage
+            min-width 100px
+            width 100%
+            max-width 200px
+            border 1px solid white
+
+        #profileStats
+            background-color gRed
+            box-shadow 0px 0px 3px rgba(0,0,0,0.5)
+            -moz-box-shadow 0px 0px 3px rgba(0,0,0,0.5)
+            -webkit-box-shadow 0px 0px 3px rgba(0,0,0,0.5)
+            -ms-box-shadow 0px 0px 3px rgba(0,0,0,0.5)
+            -o-box-shadow 0px 0px 3px rgba(0,0,0,0.5)
+            font-size 15pt
+            margin-top 10px
+
+            h3
+                color white
+            .icons
+                text-align center
+            #gueimePoints
+                max-width 38px
+                margin-left -5px
+
+    #profileMenu
+        padding 10px 0
+        div
+            padding 0 !important
+        a
+            display block
+            color white
+            font-size 1.6875rem
+            width 100%
+            padding 10px 0
+        a:hover
+            background-color gRed
+            box-shadow 0px 0px 3px rgba(0,0,0,0.5)
+            -moz-box-shadow 0px 0px 3px rgba(0,0,0,0.5)
+            -webkit-box-shadow 0px 0px 3px rgba(0,0,0,0.5)
+            -ms-box-shadow 0px 0px 3px rgba(0,0,0,0.5)
+            -o-box-shadow 0px 0px 3px rgba(0,0,0,0.5)
+            

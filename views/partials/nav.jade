@@ -13,7 +13,7 @@ div#nav-sticky
                 if (!user)
                     a.facebook(href="/auth/facebook") <i class="fa fa-facebook"></i> Entrar com Facebook
                 else if(user.status == 'admin' || user.status == 'parceiro')
-                    a(href="/profile").user <i class="fa fa-user"></i> #{user.name.first}
+                    a(href="/profile").user <i class="fa fa-dashboard"></i> #{user.name.first}
                     a.create(href="#", data-dropdown="drop1") <i class="fa fa-pencil-square-o"></i> Criar
                     ul#drop1.f-dropdown(data-dropdown-content)
                         li
@@ -46,7 +46,7 @@ div#nav-sticky
                                 form#deletar(action="/deletar", method="post")
                                     input(type="hidden", name="slug", value="#{article.slug}")
                 else
-                    a(href="/profile").user <i class="fa fa-user"></i> #{user.name.first}
+                    a(href="/profile").user <i class="fa fa-dashboard"></i> #{user.name.first}
                                     
                                 
             if (!user)

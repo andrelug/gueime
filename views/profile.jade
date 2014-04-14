@@ -1,0 +1,70 @@
+extends layouts/profileLayout
+
+block content
+    div#check(style="display:none;") check
+    
+    header.header.row
+        div.content-wrap
+            div.content
+        div#darken
+        div.row#searchBack(style="background-color: white;display:none;")
+            div.large-4.medium-6.medium-centered.large-centered.columns(style="height:8rem;")
+                span.vertical-align-helper
+                a(href="/"): img(src="/images/gueime.png", alt="Gueime Logo")
+
+        div#specialLogo.gueimeWhite.show-for-large-up(style="display:block;right:30px;left:auto")
+            a(href="/"): img(src="/images/gueime-white.png", alt="white logo")
+
+        div#specialLogo.gueimeWhite.show-for-medium-down.smallLogo(style="display:block;left: auto; right:20px;position:absolute;")
+            a(href="/"): img(src="/images/gueime-white-small.png", alt="white logo")
+
+        include partials/nav
+
+    div#wrapper
+        section.mainImage(style="")
+            div.wrapImage
+                article.bloco
+        div.parallax(style="border-top:5px solid #E54C3C;")
+            article#mainText
+                div.row#profile
+                    div.large-3.medium-4.columns#imageAndOpt
+                        img#userProfileImage(src="#{user.photo}")
+                        div#profileStats.row
+                            div.small-2.columns
+                                h3 <i class="fa fa-user" title="Status"></i>
+                            div.small-10.columns
+                                if(user.status == 'admin')
+                                    h3 Admin
+                                else if(user.status == 'parceiro')
+                                    h3 Editor
+                                else
+                                    h3 Usuário
+                            div.small-2.columns
+                                h3 <i class="fa fa-gamepad" title="Level"></i>
+                            div.small-10.columns
+                                h3 Lv. #{user.gamification.level}
+                            div.small-2.columns
+                                img#gueimePoints(src="/images/gueime-white-small.png", alt="Gueime Points", title="Gueime Points")
+                            div.small-10.columns
+                                h3 #{user.gamification.points}
+
+                        div.row#profileMenu
+                            div.small-12.columns
+                                a Informações
+                            div.small-12.columns
+                                a Social
+                            div.small-12.columns
+                                a Preferências
+                            div.small-12.columns
+                                a Atividade
+                            div.small-12.columns
+                                a Deletar
+
+                    div.large-8.large-offset-1.medium-8.columns
+                        h1#userTitle #{user.name.first} #{user.name.last}
+                
+    div.row#load(style="display: none;")
+        div.medium-6.small-centered.columns
+            a#loadMore.button Mais artigos
+                     
+    include partials/footer
