@@ -1,0 +1,178 @@
+div#profileEditing.row.slides
+    div.medium-12.columns
+        form#infoSend(data-abide="ajax")
+            div.row
+                div.medium-6.columns.name-field
+                    label Primeiro Nome <small>obrigatório</small>
+                        input(type="text", placeholder="primeiro nome", required, pattern="[a-zA-Z]+", value="#{user.name.first}", name="firstName")
+                    small.error Precisamos de um nome válido
+                div.medium-6.columns
+                    label Último Nome
+                        if(user.name.last)
+                            input(type="text", placeholder="último nome", value="#{user.name.last}", name="lastName")
+                        else
+                            input(type="text", placeholder="último nome", name="lastName")
+            div.row
+                div.medium-6.columns
+                    label Apelido
+                        if(user.name.nickname)
+                            input(type="text", placeholder="apelido", value="#{user.name.nickname}", name="nickname")
+                        else
+                            input(type="text", placeholder="apelido", name="nickname")
+                div.medium-6.columns.date-field
+                    label Data de Nascimento
+                        if(user.birthDate)
+                            input(type="text", value="#{user.name.birthDate}", pattern="date", name="birthDate")
+                        else
+                            input(type="text", placeholder="dd/mm/aaaa" pattern="(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)", name="birthDate")
+                    small.error Precisamos de uma data válida (dd/mm/aaaa)
+            div.row
+                div.medium-6.columns
+                    label Gênero
+                        if(user.gender)
+                            input(type="text", name="gender", placeholder="gênero", value="#{user.gender}")
+                        else
+                            input(type="text", name="gender", placeholder="gênero")
+                div.medium-6.columns.date-url
+                    label WebSite
+                        if(user.site)
+                            input(type="text", name="site", placeholder="http://...", value="#{user.site}")
+                        else
+                            input(type="text", name="site", placeholder="http://...", pattern="url")
+                        small.error Precisamos de um URL válido
+            div.row
+                div.medium-6.columns
+                    label País
+                        if(user.localization.country)
+                            input(type="text", placeholder="país", value="#{user.localization.country}", name="country")
+                        else
+                            input(type="text", placeholder="país", name="country")
+                div.medium-6.columns
+                    label Cidade
+                        if(user.localization.city)
+                            input(type="text", placeholder="cidade", value="#{user.localization.city}", name="city")
+                        else
+                            input(type="text", placeholder="cidade", name="city")
+            div.row
+                div.small-12.columns
+                    label Bio
+                        if(user.bio)
+                            textarea(placeholder="algo sobre você", value="#{user.bio}", name="bio")
+                        else
+                            textarea(placeholder="algo sobre você", name="bio")
+
+            div.row
+                div.small-12.medium-5.medium-centered.columns
+                    a.button#enviarInfo Enviar
+
+                            
+div#profileSocialEditing.row.slides
+    div.medium-12.columns
+        form#socialSend(data-abide="ajax")
+            div.row
+                div.large-12.columns
+                    if(user.social.facebook.token)
+                        a.button#facebookBtn(href="/unlink/facebook") <i class="fa fa-facebook"></i> Desvincular
+                    else
+                        a.button#facebookBtn(href="/connect/facebook") <i class="fa fa-facebook"></i> Facebook
+
+                div.large-6.columns
+                    if(user.social.twitter.token)
+                        a.button#twitterBtn(href="/unlink/twitter") <i class="fa fa-twitter"></i> Desvincular
+                    else
+                        a.button#twitterBtn(href="/connect/twitter") <i class="fa fa-twitter"></i> Twitter
+
+                div.large-6.columns
+                    if(user.social.google.token)
+                        a.button#googleBtn(href="/unlink/google") <i class="fa fa-google-plus"></i> Desvincular
+                    else
+                        a.button#googleBtn(href="/connect/google") <i class="fa fa-google-plus"></i> Google+
+
+            div.row
+                div.large-6.columns
+                    label Xbox Live Id
+                        if(user.social.xboxLive.name)
+                            input(type="text", name="xboxLive", placeholder="Xbox Live Id", value="#{user.social.xboxLive.name}")
+                        else
+                            input(type="text", name="xboxLive", placeholder="XboxLive Id")
+
+                div.large-6.columns
+                    label PSN Id
+                        if(user.social.psn.name)
+                            input(type="text", name="psn", placeholder="PSN Id", value="#{user.soclai.psn.name}")
+                        else
+                            input(type="text", name="psn", placeholder="PSN Id")
+
+            div.row
+                div.large-6.columns
+                    label Steam Id
+                        if(user.social.steam.name)
+                            input(type="text", name="steam", placeholder="Steam Id", value="#{user.soclai.steam.name}")
+                        else
+                            input(type="text", name="steam", placeholder="Steam Id")
+
+                div.large-6.columns
+                    label Wii U Id
+                        if(user.social.nintendo)
+                            input(type="text", name="nintendo", placeholder="Wii U Id", value="#{user.soclai.nintendo}")
+                        else
+                            input(type="text", name="nintendo", placeholder="Wii U Id")
+
+            div.row
+                div.large-6.columns
+                    label Game Center Id
+                        if(user.social.gameCenter)
+                            input(type="text", name="gameCenter", placeholder="Game Center Id", value="#{user.soclai.gameCenter}")
+                        else
+                            input(type="text", name="gameCenter", placeholder="Game Center Id")
+                div.large-6.columns
+                    label Alvanista Id
+                        if(user.social.alvanista)
+                            input(type="text", name="alvanista", placeholder="Alvanista Id", value="#{user.soclai.alvanista}")
+                        else
+                            input(type="text", name="alvanista", placeholder="Alvanista Id")
+
+            div.row
+                div.small-12.medium-5.medium-centered.columns
+                    a.button#enviarSocial Enviar
+
+
+div#profilePrefEditing.row.slides
+    div.medium-12.columns
+        form#prefSend(data-abide="ajax")
+            div.row
+                div.large-6.columns.password-field
+                    if(user.password.main)
+                        label Mudar senha <small>obrigatório</small>
+                            input(type="password", id="password", required, value="#{user.password.main}", name="password")
+                        small.error Por favor digite uma senha válida
+                    else
+                        label Adicionar Senha <small>obrigatório</small>
+                            input(type="password", id="password", required, name="password")
+                        small.error Por favor digite uma senha válida
+                div.large-6.columns.password-confirmation-field
+                    label Repita a senha <small>obrigatório</small>
+                        if(user.password.main)
+                            input(type="password", data-equalto="password", required, value="#{user.password.main}", name="confirmation")
+                        else
+                            input(type="password", data-equalto="password", required, name="confirmation")
+
+                    small.error A senha não confere
+            div.row
+                div.small-12.medium-5.medium-centered.columns
+                    a.button#enviarPref Enviar
+                                                
+
+div#profileConqEditing.row.slides
+    div.medium-12.columns
+        if(user.gamification.achievements.length < 1)
+            h5 Continue utilizando o site e jogando nosso trivia para ganhar Conquistas!
+div#profileDeleEditing.row.slides
+    div.medium-12.columns
+        form(data-abide, method="POST", action="/users/delete")
+            input(type="hidden", name="_method", value="PUT")
+            div.row
+                div.large-12.columns
+                    label Digite seu nome (#{user.name.first} #{user.name.last})
+                        input#deleteCheck(type="text")
+                    button#deleteAccount.alert.disabled(type="submit", disabled) Delete Account

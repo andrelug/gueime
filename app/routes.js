@@ -49,7 +49,10 @@ module.exports = function (app, passport, mongoose) {
                     for (i = 0; i < docs.length; i++) {
                         docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                     }
-                    res.render('index', { user: user, title: "Gueime - O melhor site de games do Brasil!", docs: docs, messages: redirected, deletado: deletado, onlyOne: onlyOne });
+                    Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
+                        res.render('index', { user: user, title: "Gueime - O melhor site de games do Brasil!", docs: docs, messages: redirected, deletado: deletado, onlyOne: onlyOne });
+                    });
+                    
                 });
             }
         }
@@ -105,6 +108,7 @@ module.exports = function (app, passport, mongoose) {
 
     // BUSCA TAGS
     app.get('/tags', function (req, res) {
+        var user = req.user;
         var searchStr = [];
 
         if (!req.query.str) {
@@ -112,7 +116,9 @@ module.exports = function (app, passport, mongoose) {
                 for (i = 0; i < docs.length; i++) {
                     docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                 }
-                res.render('tags', { docs: docs });
+                Users.update({'_id': user._id}, {$inc: {'graph.searches': 1}}, function(err){
+                    res.render('tags', { docs: docs });
+                });
             });
         } else {
             for (i = 0; i < req.query.str.length; i++) {
@@ -127,8 +133,9 @@ module.exports = function (app, passport, mongoose) {
                 for (i = 0; i < docs.length; i++) {
                     docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                 }
-
-                res.render('tags', { docs: docs });
+                Users.update({'_id': user._id}, {$inc: {'graph.searches': 1}}, function(err){
+                    res.render('tags', { docs: docs });
+                });
             });
         }
 
@@ -148,7 +155,13 @@ module.exports = function (app, passport, mongoose) {
                     var title = decodeURIComponent(docs.title).replace('<p>', '').replace('</p>', ''),
                         body = decodeURIComponent(docs.text);
                     Users.find({ _id: docs.authors.main }, function (err, author) {
-                        res.render('artigoAjax', { tipo: 'noticia', article: docs, title: title, body: body, author: author[0] });
+                        if(!user){
+                            res.render('artigoAjax', { tipo: 'noticia', article: docs, title: title, body: body, author: author[0] });
+                        }else {
+                            Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
+                                res.render('artigoAjax', { tipo: 'noticia', article: docs, title: title, body: body, author: author[0], user: user });
+                            });
+                        }
                     });
                 } else{
                     res.redirect('/?redirect=true');
@@ -180,7 +193,9 @@ module.exports = function (app, passport, mongoose) {
                             var title = decodeURIComponent(docs .title).replace('<p>', '').replace('</p>', ''),
                                 body = decodeURIComponent(docs.text);
                             Users.find({ _id: docs.authors.main }, function (err, author) {
-                                res.render('artigo', { tipo: 'noticia', article: docs, title: title, body: body, user: user, author: author[0] });
+                                Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
+                                    res.render('artigo', { tipo: 'noticia', article: docs, title: title, body: body, user: user, author: author[0] });
+                                });
                             });
                         } else {
                             res.redirect('/?redirect=true');
@@ -204,7 +219,13 @@ module.exports = function (app, passport, mongoose) {
                         body = decodeURIComponent(docs.text);
 
                     Users.find({ _id: docs.authors.main }, function (err, author) {
-                        res.render('artigoAjax', { tipo: 'artigo', article: docs, title: title, body: body, author: author[0] });
+                        if(!user){
+                            res.render('artigoAjax', { tipo: 'artigo', article: docs, title: title, body: body, author: author[0] });
+                        } else {
+                            Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
+                                res.render('artigoAjax', { tipo: 'artigo', article: docs, title: title, body: body, author: author[0], user: user });
+                            });
+                        }
                     });
                 } else {
                     res.redirect('/?redirect=true');
@@ -235,7 +256,9 @@ module.exports = function (app, passport, mongoose) {
                                 body = decodeURIComponent(docs.text);
 
                             Users.find({ _id: docs.authors.main }, function (err, author) {
-                                res.render('artigo', { tipo: 'artigo', article: docs, title: title, body: body, user: user, author: author[0] });
+                                Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
+                                    res.render('artigo', { tipo: 'artigo', article: docs, title: title, body: body, user: user, author: author[0] });
+                                });
                             });
                         } else {
                             res.redirect('/?redirect=true');
@@ -257,7 +280,13 @@ module.exports = function (app, passport, mongoose) {
                     var title = decodeURIComponent(docs.title),
                         body = decodeURIComponent(docs.text);
                     Users.find({ _id: docs.authors.main }, function (err, author) {
-                        res.render('artigoAjax', { tipo: 'analise', article: docs, title: title, body: body, author: author[0] });
+                        if(!user){
+                            res.render('artigoAjax', { tipo: 'analise', article: docs, title: title, body: body, author: author[0] });
+                        } else {
+                            Users.find({ _id: docs.authors.main }, function (err, author) {
+                                res.render('artigoAjax', { tipo: 'analise', article: docs, title: title, body: body, author: author[0], user: user });
+                            });
+                        }
                     });
                 } else {
                     res.redirect('/?redirect=true');
@@ -288,7 +317,9 @@ module.exports = function (app, passport, mongoose) {
                                 body = decodeURIComponent(docs.text);
 
                             Users.find({ _id: docs.authors.main }, function (err, author) {
-                                res.render('artigo', { tipo: 'analise', article: docs, title: title, body: body, user: user, author: author[0] });
+                                Users.find({ _id: docs.authors.main }, function (err, author) {
+                                    res.render('artigo', { tipo: 'analise', article: docs, title: title, body: body, user: user, author: author[0] });
+                                });
                             });
                         } else {
                             res.redirect('/?redirect=true');
@@ -310,7 +341,13 @@ module.exports = function (app, passport, mongoose) {
                     var title = decodeURIComponent(docs.title),
                         body = decodeURIComponent(docs.text);
                     Users.find({ _id: docs.authors.main }, function (err, author) {
-                        res.render('artigoAjax', { tipo: 'video', article: docs, title: title, body: body, author: author[0] });
+                        if(!user){
+                            res.render('artigoAjax', { tipo: 'video', article: docs, title: title, body: body, author: author[0] });
+                        } else {
+                            Users.find({ _id: docs.authors.main }, function (err, author) {
+                                res.render('artigoAjax', { tipo: 'video', article: docs, title: title, body: body, author: author[0], user: user });
+                            });
+                        }
                     });
                 } else {
                     res.redirect('/?redirect=true');
@@ -367,7 +404,9 @@ module.exports = function (app, passport, mongoose) {
                     res.redirect('/users/restore');
                 } else{
                     sessionReload(req, res, next);
-                    res.render('create', { user: user, title: "Gueime - Hora de criar um artigo sensacional!", tipo: tipo, criar: true });
+                    Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
+                        res.render('create', { user: user, title: "Gueime - Hora de criar um artigo sensacional!", tipo: tipo, criar: true });
+                    });
                 }
             } else {
                 sessionReload(req, res, next);
@@ -394,7 +433,7 @@ module.exports = function (app, passport, mongoose) {
                         if (user.status == 'admin' || docs.authors.main == user.id) {
                             var title = decodeURIComponent(docs.title),
                                 body = decodeURIComponent(docs.text);
-                            Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id} }, function (err) {
+                            Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id}, $inc: {'graph.visits': 1} }, function (err) {
                                  res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'noticia', edit: true});
                             });
                         } else {
@@ -428,7 +467,7 @@ module.exports = function (app, passport, mongoose) {
                         if (user.status == 'admin' || docs.authors.main == user.id) {
                             var title = decodeURIComponent(docs.title),
                                 body = decodeURIComponent(docs.text);
-                            Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id} }, function (err) {
+                            Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id}, $inc: {'graph.visits': 1} }, function (err) {
                                 res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'artigo', edit: true});
                             });
                         } else {
@@ -462,7 +501,7 @@ module.exports = function (app, passport, mongoose) {
                         if (user.status == 'admin' || docs.authors.main == user.id) {
                             var title = decodeURIComponent(docs.title),
                                 body = decodeURIComponent(docs.text);
-                            Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id} }, function (err) {
+                            Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id}, $inc: {'graph.visits': 1} }, function (err) {
                                 res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'analise', edit: true});
                             });
                         } else {
@@ -497,7 +536,7 @@ module.exports = function (app, passport, mongoose) {
                         if (user.status == 'admin' || docs.authors.main == user.id) {
                             var title = decodeURIComponent(docs.title),
                                 body = decodeURIComponent(docs.text);
-                            Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id} }, function (err) {
+                            Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id}, $inc: {'graph.visits': 1} }, function (err) {
                                 res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'video', edit: true});
                             });
                         } else {
@@ -737,7 +776,10 @@ module.exports = function (app, passport, mongoose) {
                 }).save(function (err, docs) {
                     if (err)
                         throw err
+                    console.log('até aqui');
                     Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id} }, function (err) {
+                        console.log(err)
+                        console.log('devia ter salvo o user');
                         res.send(JSON.stringify(req.body));
                     });
                     
@@ -890,12 +932,19 @@ module.exports = function (app, passport, mongoose) {
                 }, function (err) {
                     if (err)
                         throw err
-                    Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0} }, function (err) {
-                        if (err)
-                            throw err
-                        res.redirect('/' + b.tipo + 's/' + slug);
-                    });
-
+                    if(user.status == 'admin'){
+                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0}, $inc: {'graph.publications': 1}}, function (err) {
+                            if (err)
+                                throw err
+                            res.redirect('/' + b.tipo + 's/' + slug);
+                        });
+                    } else{
+                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0} }, function (err) {
+                            if (err)
+                                throw err
+                            res.redirect('/' + b.tipo + 's/' + slug);
+                        });
+                    }
                 });
             } else if (b.tipo == 'artigo') {
                 Artigos.update({ $or: [{ "status": 'rascunho'}, {"status": 'editando'}],'authors.main': user._id }, { $set: {
@@ -921,11 +970,19 @@ module.exports = function (app, passport, mongoose) {
                 }, function (err) {
                     if (err)
                         throw err
-                    Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0} }, function (err) {
-                        if (err)
-                            throw err
-                        res.redirect('/' + b.tipo + 's/' + slug);
-                    });
+                    if(user.status == 'admin'){
+                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0}, $inc: {'graph.publications': 1}}, function (err) {
+                            if (err)
+                                throw err
+                            res.redirect('/' + b.tipo + 's/' + slug);
+                        });
+                    } else{
+                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0} }, function (err) {
+                            if (err)
+                                throw err
+                            res.redirect('/' + b.tipo + 's/' + slug);
+                        });
+                    }
                 });
             } else if (b.tipo == 'analise') {
                 Artigos.update({ $or: [{ "status": 'rascunho'}, {"status": 'editando'}],'authors.main': user._id }, { $set: {
@@ -950,11 +1007,19 @@ module.exports = function (app, passport, mongoose) {
                 }, function (err) {
                     if (err)
                         throw err
-                    Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0} }, function (err) {
-                        if (err)
-                            throw err
-                        res.redirect('/' + b.tipo + 's/' + slug);
-                    });
+                    if(user.status == 'admin'){
+                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0}, $inc: {'graph.publications': 1}}, function (err) {
+                            if (err)
+                                throw err
+                            res.redirect('/' + b.tipo + 's/' + slug);
+                        });
+                    } else{
+                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0} }, function (err) {
+                            if (err)
+                                throw err
+                            res.redirect('/' + b.tipo + 's/' + slug);
+                        });
+                    }
                 });
             } else {
                 Artigos.update({ $or: [{ "status": 'rascunho'}, {"status": 'editando'}],'authors.main': user._id }, { $set: {
@@ -981,11 +1046,19 @@ module.exports = function (app, passport, mongoose) {
                 }, function (err) {
                     if (err)
                         throw err
-                    Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0} }, function (err) {
-                        if (err)
-                            throw err
-                        res.redirect('/' + b.tipo + 's/' + slug);
-                    });
+                    if(user.status == 'admin'){
+                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0}, $inc: {'graph.publications': 1}}, function (err) {
+                            if (err)
+                                throw err
+                            res.redirect('/' + b.tipo + 's/' + slug);
+                        });
+                    } else{
+                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0} }, function (err) {
+                            if (err)
+                                throw err
+                            res.redirect('/' + b.tipo + 's/' + slug);
+                        });
+                    }
                 });
             }
         } else {
@@ -997,20 +1070,61 @@ module.exports = function (app, passport, mongoose) {
 
 
     // =====================================
-    // PROFILE =============================
+    // PROFILE PESSOAL =====================
     // =====================================
     app.get('/profile', function(req, res, next){
         var user = req.user;
+
         if(user.deleted == true){
-                    res.redirect('/users/restore');
-                } else{
-                    sessionReload(req, res, next);
-                    res.render('profile',{user: user, title: "Gueime - " + user.name.first + ' ' + user.name.last});
+            res.redirect('/users/restore');
+        } else{
+            sessionReload(req, res, next);
+            Artigos.find({status: 'publicado', 'authors.main': user._id}, {description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1}).sort({'_id': -1}).limit(6).exec(function(err, docs){
+                for (i = 0; i < docs.length; i++) {
+                    docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                 }
+                Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
+                    res.render('profile',{user: user, title: "Gueime - " + user.name.first + ' ' + user.name.last, docs: docs, profile: user});
+                });
+            });
+        }
     });
 
+    // ACESSO TODOS PROFILES
+    app.get('/profile/:user', function(req, res, next){
+        var profile = req.params.user;
+        var user = req.user;
+        if(user.deleted == true){
+            res.redirect('/users/restore');
+        } else{
+            sessionReload(req, res, next);
+            Users.findOne({'name.loginName': profile}, function(err, profileUser){
+                Artigos.find({status: 'publicado', 'authors.main': profileUser._id}, {description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1}).sort({'_id': -1}).limit(6).exec(function(err, docs){
+                    for (i = 0; i < docs.length; i++) {
+                        docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
+                    }
+                    Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
+                        res.render('profile',{user: user, title: "Gueime - " + profileUser.name.first + ' ' + profileUser.name.last, docs: docs, profile: profileUser});
+                    });
+                });
+            });
+            
+        }
+    });
 
+    // PAGINAÇÃO PROFILE
+    app.get('/paginationProfile', function(req, res){
+        var user = req.user;
+        var n = req.query.n;
 
+        Artigos.find({status: 'publicado', 'authors.main': user._id}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).skip(n).exec(function (err, docs) {
+            for (i = 0; i < docs.length; i++) {
+                docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
+            }
+            res.render('tags', { docs: docs });
+        });
+
+    });
 
 
 

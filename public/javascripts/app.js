@@ -20,6 +20,7 @@ tagSearch = function (str) {
                 $('#wrapper').empty();
                 $('.editar').remove();
                 $('#searchBack').slideDown();
+                $('#profileTiles').remove();
             }
             $('.scriptLoad').remove();
         }
@@ -139,17 +140,17 @@ var ajaxPage = function (url) {
     });
 }
 
-$('#loadMore').on('click', function(){
+$('#loadMore').on('click', function () {
     n = $('.item').length;
     $.ajax({
         type: "GET",
         url: "/pagination",
-        data: {n: n, str: searchStr},
+        data: { n: n, str: searchStr },
         dataType: 'html'
     }).done(function (data) {
         container.isotope('insert', $(data));
     });
-})
+});
 
 
 // Close overlay

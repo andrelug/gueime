@@ -187,7 +187,7 @@ input[type="text"], textarea
     height 100%
     background-position center center
 
-#gridArticles
+#gridArticles, #gridProfileArticles
     max-width 100%
     margin-left 12%
     opacity 0
@@ -254,7 +254,7 @@ input[type="text"], textarea
         display table-cell
 
 @media only screen and (max-width: 64.063em)
-    #gridArticles
+    #gridArticles, #gridProfileArticles
         margin-left 1%
 
     .item, .w4
@@ -369,6 +369,8 @@ input[type="text"], textarea
 
 .headerAjax
     position absolute
+    margin 0px !important
+    width 100% !important
 
 
 .mainImage, .mainImageAjax
@@ -663,7 +665,7 @@ textarea
     font-size 14px
 
 
-#loadMore
+#loadMore, #loadMoreProfile
     width 100%
 
 
@@ -771,7 +773,7 @@ textarea
         background-color darken(gGreen, 10%)
         color white
 
-#profileEditing, #profileSocialEditing, #profilePrefEditing, #profileAtivEditing, #profileDeleEditing
+#profileEditing, #profileSocialEditing, #profilePrefEditing, #profileConqEditing, #profileDeleEditing
     background-color #ecf0f1
     margin-top 20px
     padding-top 10px
@@ -802,3 +804,21 @@ textarea
         background-color darken(#00acee, 10%)
     #googleBtn:hover
         background-color darken(#d7554f, 10%)
+
+#activityDivision
+    background-color gGreen
+    
+    h2
+        color white
+        padding 10px 0
+
+#load
+    background-color white
+    position relative
+#profileTiles
+    position relative
+    z-index 98
+    background-color white
+
+#gridProfileArticles
+    margin-top 20px

@@ -21,57 +21,68 @@ block content
         include partials/nav
 
     div#wrapper
-        section.mainImage(style="#{user.cover}")
-            div.wrapImage
-                article.bloco
+        if(user == profile)
+            section.mainImage(style="#{profile.cover.main}")
+                div.wrapImage
+                    article.bloco
+        else
+            section.mainImage(style="#{profile.cover.other}")
+                div.wrapImage
+                    article.bloco
+
         div.parallax(style="border-top:5px solid #E54C3C;")
             article#mainText
                 div.row#profile
                     div.large-3.medium-4.columns#imageAndOpt
                         div.row.show-for-small
                             div.small-12.columns
-                                h1#userTitle(style="color: white") #{user.name.first} #{user.name.last}
-                        img#userProfileImage(src="#{user.photo}")
+                                h1#userTitle(style="color: white") #{profile.name.first} #{profile.name.last}
+                        img#userProfileImage(src="#{profile.photo}")
                         div#profileStats.row
                             div.small-2.columns
                                 h3 <i class="fa fa-user" title="Status"></i>
                             div.small-10.columns
-                                if(user.status == 'admin')
+                                if(profile.status == 'admin')
                                     h3 Admin
-                                else if(user.status == 'parceiro')
+                                else if(profile.status == 'parceiro')
                                     h3 Editor
                                 else
                                     h3 Usuário
                             div.small-2.columns
                                 h3 <i class="fa fa-gamepad" title="Level"></i>
                             div.small-10.columns
-                                h3 Lv. #{user.gamification.level}
+                                h3 Lv. #{profile.gamification.level}
                             div.small-2.columns
                                 img#gueimePoints(src="/images/gueime-white-small.png", alt="Gueime Points", title="Gueime Points")
                             div.small-10.columns
-                                h3 #{user.gamification.points}
-
-                        div.row#profileMenu
-                            div.small-12.columns
-                                a#pInfo Informações
-                            div.small-12.columns
-                                a#pSoci Social
-                            div.small-12.columns
-                                a#pPref Preferências
-                            div.small-12.columns
-                                a#pAtiv Atividade
-                            div.small-12.columns
-                                a#pDele Deletar
+                                h3 #{profile.gamification.points}
+                        if(profile == user)
+                            div.row#profileMenu
+                                div.small-12.columns
+                                    a Informações
+                                div.small-12.columns
+                                    a Social
+                                div.small-12.columns
+                                    a Preferências
+                                div.small-12.columns
+                                    a Conquistas
+                                div.small-12.columns
+                                    a Deletar
 
                     div.large-8.large-offset-1.medium-7.medium-offset-1.columns
-                        h1#userTitle.show-for-medium-up #{user.name.first} #{user.name.last}
+                        h1#userTitle.show-for-medium-up #{profile.name.first} #{profile.name.last}
 
                         div.row#userStats.show-for-medium-up
                             div.medium-6.columns
                                 ul
-                                    li 30 Artigos ublicados
+                                    if(profile.graph.publications == undefined)
+                                        li Nenhum artigo publicado
+                                    else if(profile.graph.publications == 1)
+                                        li #{profile.graph.publications} Artigo publicado
+                                    else
+                                        li #{profile.graph.publications} Artigos publicados
                                     li 10 Jogos na coleção
-                                    li Visitou 10 páginas
+                                    li Visitou #{profile.graph.visits} páginas
 
                             div.medium-6.columns
                                 ul
@@ -79,7 +90,7 @@ block content
                                     li PSN: Andrelug
                                     li Steam: pamasway
 
-                        if(user.status == 'admin')
+                        if(profile.status == 'admin' && user == profile) 
 
                             div.row#contentEditing
                                 a.create(href="#", data-dropdown="drop2") <i class="fa fa-pencil-square-o"></i> <span>Criar</span>
@@ -125,189 +136,39 @@ block content
                                         a(href="/conquistas/gerenciar") Gerenciar
                                     li
                                         a(href="/conquistas/stats") Stats
-
-                        div#profileEditing.row.slides
-                            div.medium-12.columns
-                                form#infoSend(data-abide="ajax")
-                                    div.row
-                                        div.medium-6.columns.name-field
-                                            label Primeiro Nome <small>obrigatório</small>
-                                                input(type="text", placeholder="primeiro nome", required, pattern="[a-zA-Z]+", value="#{user.name.first}", name="firstName")
-                                            small.error Precisamos de um nome válido
-                                        div.medium-6.columns
-                                            label Último Nome
-                                                if(user.name.last)
-                                                    input(type="text", placeholder="último nome", value="#{user.name.last}", name="lastName")
-                                                else
-                                                    input(type="text", placeholder="último nome", name="lastName")
-                                    div.row
-                                        div.medium-6.columns
-                                            label Apelido
-                                                if(user.name.nickname)
-                                                    input(type="text", placeholder="apelido", value="#{user.name.nickname}", name="nickname")
-                                                else
-                                                    input(type="text", placeholder="apelido", name="nickname")
-                                        div.medium-6.columns.date-field
-                                            label Data de Nascimento
-                                                if(user.birthDate)
-                                                    input(type="text", value="#{user.name.birthDate}", pattern="date", name="birthDate")
-                                                else
-                                                    input(type="text", placeholder="dd/mm/aaaa" pattern="(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)", name="birthDate")
-                                            small.error Precisamos de uma data válida (dd/mm/aaaa)
-                                    div.row
-                                        div.medium-6.columns
-                                            label Gênero
-                                                if(user.gender)
-                                                    input(type="text", name="gender", placeholder="gênero", value="#{user.gender}")
-                                                else
-                                                    input(type="text", name="gender", placeholder="gênero")
-                                        div.medium-6.columns.date-url
-                                            label WebSite
-                                                if(user.site)
-                                                    input(type="text", name="site", placeholder="http://...", value="#{user.site}")
-                                                else
-                                                    input(type="text", name="site", placeholder="http://...", pattern="url")
-                                             small.error Precisamos de um URL válido
-                                    div.row
-                                        div.medium-6.columns
-                                            label País
-                                                if(user.localization.country)
-                                                    input(type="text", placeholder="país", value="#{user.localization.country}", name="country")
-                                                else
-                                                    input(type="text", placeholder="país", name="country")
-                                        div.medium-6.columns
-                                            label Cidade
-                                                if(user.localization.city)
-                                                    input(type="text", placeholder="cidade", value="#{user.localization.city}", name="city")
-                                                else
-                                                    input(type="text", placeholder="cidade", name="city")
-                                    div.row
-                                        div.small-12.columns
-                                            label Bio
-                                                if(user.bio)
-                                                    textarea(placeholder="algo sobre você", value="#{user.bio}", name="bio")
-                                                else
-                                                    textarea(placeholder="algo sobre você", name="bio")
-
-                                    div.row
-                                        div.small-12.medium-5.medium-centered.columns
-                                            a.button#enviarInfo Enviar
-
+                        if(profile == user)
+                            include partials/profileForms
+        
                             
-                        div#profileSocialEditing.row.slides
-                            div.medium-12.columns
-                                form#socialSend(data-abide="ajax")
-                                    div.row
-                                        div.large-12.columns
-                                            if(user.social.facebook.token)
-                                                a.button#facebookBtn(href="/unlink/facebook") <i class="fa fa-facebook"></i> Desvincular
-                                            else
-                                                a.button#facebookBtn(href="/connect/facebook") <i class="fa fa-facebook"></i> Facebook
-
-                                        div.large-6.columns
-                                            if(user.social.twitter.token)
-                                                a.button#twitterBtn(href="/unlink/twitter") <i class="fa fa-twitter"></i> Desvincular
-                                            else
-                                                a.button#twitterBtn(href="/connect/twitter") <i class="fa fa-twitter"></i> Twitter
-
-                                        div.large-6.columns
-                                            if(user.social.google.token)
-                                                a.button#googleBtn(href="/unlink/google") <i class="fa fa-google-plus"></i> Desvincular
-                                            else
-                                                a.button#googleBtn(href="/connect/google") <i class="fa fa-google-plus"></i> Google+
-
-                                    div.row
-                                        div.large-6.columns
-                                            label Xbox Live Id
-                                                if(user.social.xboxLive.name)
-                                                    input(type="text", name="xboxLive", placeholder="Xbox Live Id", value="#{user.social.xboxLive.name}")
-                                                else
-                                                    input(type="text", name="xboxLive", placeholder="XboxLive Id")
-
-                                        div.large-6.columns
-                                            label PSN Id
-                                                if(user.social.psn.name)
-                                                    input(type="text", name="psn", placeholder="PSN Id", value="#{user.soclai.psn.name}")
-                                                else
-                                                    input(type="text", name="psn", placeholder="PSN Id")
-
-                                    div.row
-                                        div.large-6.columns
-                                            label Steam Id
-                                                if(user.social.steam.name)
-                                                    input(type="text", name="steam", placeholder="Steam Id", value="#{user.soclai.steam.name}")
-                                                else
-                                                    input(type="text", name="steam", placeholder="Steam Id")
-
-                                        div.large-6.columns
-                                            label Wii U Id
-                                                if(user.social.nintendo)
-                                                    input(type="text", name="nintendo", placeholder="Wii U Id", value="#{user.soclai.nintendo}")
-                                                else
-                                                    input(type="text", name="nintendo", placeholder="Wii U Id")
-
-                                    div.row
-                                        div.large-6.columns
-                                            label Game Center Id
-                                                if(user.social.gameCenter)
-                                                    input(type="text", name="gameCenter", placeholder="Game Center Id", value="#{user.soclai.gameCenter}")
-                                                else
-                                                    input(type="text", name="gameCenter", placeholder="Game Center Id")
-                                        div.large-6.columns
-                                            label Alvanista Id
-                                                if(user.social.alvanista)
-                                                    input(type="text", name="alvanista", placeholder="Alvanista Id", value="#{user.soclai.alvanista}")
-                                                else
-                                                    input(type="text", name="alvanista", placeholder="Alvanista Id")
-
-                                    div.row
-                                        div.small-12.medium-5.medium-centered.columns
-                                            a.button#enviarSocial Enviar
-
-
-                        div#profilePrefEditing.row.slides
-                            div.medium-12.columns
-                                form#prefSend(data-abide="ajax")
-                                    div.row
-                                        div.large-6.columns.password-field
-                                            if(user.password.main)
-                                                label Mudar senha <small>obrigatório</small>
-                                                    input(type="password", id="password", required, value="#{user.password.main}", name="password")
-                                                small.error Por favor digite uma senha válida
-                                            else
-                                                label Adicionar Senha <small>obrigatório</small>
-                                                    input(type="password", id="password", required, name="password")
-                                                small.error Por favor digite uma senha válida
-                                        div.large-6.columns.password-confirmation-field
-                                            label Repita a senha <small>obrigatório</small>
-                                                if(user.password.main)
-                                                    input(type="password", data-equalto="password", required, value="#{user.password.main}", name="confirmation")
-                                                else
-                                                    input(type="password", data-equalto="password", required, name="confirmation")
-
-                                            small.error A senha não confere
-                                    div.row
-                                        div.small-12.medium-5.medium-centered.columns
-                                            a.button#enviarPref Enviar
-                                                
-
-                        div#profileAtivEditing.row.slides
-                            div.medium-12.columns
-                                form(data-abide)
-                                    div.row
-
-                        div#profileDeleEditing.row.slides
-                            div.medium-12.columns
-                                form(data-abide, method="POST", action="/users/delete")
-                                    input(type="hidden", name="_method", value="PUT")
-                                    div.row
-                                        div.large-12.columns
-                                            label Digite seu nome (#{user.name.first} #{user.name.last})
-                                                input#deleteCheck(type="text")
-                                            button#deleteAccount.alert.disabled(type="submit", disabled) Delete Account
+            
                 
+            if(docs.length > 0)
+                div#profileTiles
+                    div.row#activityDivision
+                        div.medium-8.medium-centered.columns
+                            h2 Últimas Publicações
+                div#spinning
+                    img(src="/images/spinning.gif")
+                div.row#gridProfileArticles
+                    include partials/tiles
+                div.row#load
+                    div.medium-6.small-centered.columns
+                        a#loadMoreProfile.button Mais artigos
+            else
+                if(user == profile)
+                    div#profileTiles
+                        div.row#activityDivision
+                            div.medium-8.medium-centered.columns
+                                h2 Você ainda não publicou nenhum artigo
 
-    div.row#load
+                else
+                    div#profileTiles
+                        div.row#activityDivision
+                            div.medium-8.medium-centered.columns
+                                h2 #{profile.name.first} ainda não publicou nenhum artigo
+                                
+
+    div.row#load(style="display: none;")
         div.medium-6.small-centered.columns
             a#loadMore.button Mais artigos
                      

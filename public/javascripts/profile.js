@@ -1,3 +1,4 @@
+var profileContainer = $('#gridProfileArticles');
 $('#profileMenu').find('a').on('click', function () {
     var check = $(this).attr('class')
     $('#profileMenu').find('a').each(function () {
@@ -29,9 +30,9 @@ $('#profileMenu').find('a').on('click', function () {
             $('#profilePrefEditing').slideToggle();
             break
 
-        case 'Atividade':
-            $('.slides').not('#profileAtivEditing').slideUp();
-            $('#profileAtivEditing').slideToggle();
+        case 'Conquistas':
+            $('.slides').not('#profileConqEditing').slideUp();
+            $('#profileConqEditing').slideToggle();
             break
 
         case 'Deletar':
@@ -87,4 +88,18 @@ $('#deleteCheck').on('keyup', function (e) {
     if($(this).val() == $('#userTitle').text()){
         $('#deleteAccount').removeClass('disabled').removeAttr('disabled');
     }
+});
+
+
+// LOAD MORE ARTICLES
+$('#loadMoreProfile').on('click', function () {
+    n = $('.item').length;
+    $.ajax({
+        type: "GET",
+        url: "/pagination",
+        data: { n: n },
+        dataType: 'html'
+    }).done(function (data) {
+        container.isotope('insert', $(data));
+    });
 });

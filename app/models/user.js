@@ -17,7 +17,10 @@ var UserSchema = new mongoose.Schema({
     site: String,
     bio: String,
     photo: String,
-    cover: {type: String, default: "background: url(images/profileBg.jpg) no-repeat center 0px;"},
+    cover: {
+        main:{type: String, default: "background: url(images/profileBg.jpg) no-repeat center 0px;"},
+        other: {type: String, default: "background: url(../images/profileBg.jpg) no-repeat center 0px;"}
+    },
     password: {
         main: String
     },
@@ -65,19 +68,22 @@ var UserSchema = new mongoose.Schema({
         alvanista: String
     },
     graph: {
-        artigosPublicados: Number,
-        visitas: Number,
-        gamesCol: [String]
+        visits: Number,
+        gamesCol: [{ type:  mongoose.Schema.Types.ObjectId, ref: 'Game' }],
+        gamesLike: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Game' }],
+        publications: Number,
+        searches: Number
 
     },
     gamification: {
         points: {type: Number, default: 0},
-        level: {type: Number, default: 1}
+        level: {type: Number, default: 1},
+        achievements: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Achievement' }]
     },
     creating: {type: Boolean, default: false},
-    creatingId: String,
-    follow: [{_id: false, type: mongoose.Schema.Types.ObjectId}],
-    followedBy: [{_id: false, type: mongoose.Schema.Types.ObjectId}],
+    creatingId: {type: String, default: 0},
+    follow: [{_id: false, type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
+    followedBy: [{_id: false, type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     deleted: {type: Boolean, default: false}
 });
 

@@ -197,7 +197,8 @@ rgba(0,0,0,0.3)
   height: 100%;
   background-position: center center;
 }
-#gridArticles {
+#gridArticles,
+#gridProfileArticles {
   max-width: 100%;
   margin-left: 12%;
   opacity: 0;
@@ -264,7 +265,8 @@ rgba(0,0,0,0.3)
   display: table-cell;
 }
 @media only screen and (max-width: 64.063em) {
-  #gridArticles {
+  #gridArticles,
+  #gridProfileArticles {
     margin-left: 1%;
   }
   .item,
@@ -380,6 +382,8 @@ rgba(0,0,0,0.3)
 }
 .headerAjax {
   position: absolute;
+  margin: 0px !important;
+  width: 100% !important;
 }
 .mainImage,
 .mainImageAjax {
@@ -691,7 +695,8 @@ textarea {
 .gist {
   font-size: 14px;
 }
-#loadMore {
+#loadMore,
+#loadMoreProfile {
   width: 100%;
 }
 #profile #imageAndOpt {
@@ -801,7 +806,7 @@ rgba(0,0,0,0.3)
 #profileEditing,
 #profileSocialEditing,
 #profilePrefEditing,
-#profileAtivEditing,
+#profileConqEditing,
 #profileDeleEditing {
   background-color: #ecf0f1;
   margin-top: 20px;
@@ -837,4 +842,23 @@ rgba(0,0,0,0.3)
 }
 #profileSocialEditing #googleBtn:hover {
   background-color: #d23e37;
+}
+#activityDivision {
+  background-color: #27b899;
+}
+#activityDivision h2 {
+  color: #fff;
+  padding: 10px 0;
+}
+#load {
+  background-color: #fff;
+  position: relative;
+}
+#profileTiles {
+  position: relative;
+  z-index: 98;
+  background-color: #fff;
+}
+#gridProfileArticles {
+  margin-top: 20px;
 }
