@@ -6,7 +6,6 @@ var UserSchema = new mongoose.Schema({
     name: {
         first: String,
         parsed: String,
-        middle: String,
         last: String,
         nickName: String,
         loginName: {type: String, lowercase: true, trim: true, unique: true}
@@ -15,9 +14,10 @@ var UserSchema = new mongoose.Schema({
     birthDate: Date,
     email: {type: String, required: true, unique: true, index: true},
     gender: String,
-    sites: [String],
+    site: String,
     bio: String,
     photo: String,
+    cover: {type: String, default: "background: url(images/profileBg.jpg) no-repeat center 0px;"},
     password: {
         main: String
     },
@@ -47,7 +47,27 @@ var UserSchema = new mongoose.Schema({
             email: String,
             name: String,
             url: String
-        }
+        },
+        xboxLive: {
+            name: String,
+            points: Number
+        },
+        psn: {
+            name: String,
+            level: Number
+        },
+        steam: {
+            name: String,
+            level: Number
+        },
+        nintendo: String,
+        gameCenter: String
+    },
+    graph: {
+        artigosPublicados: Number,
+        visitas: Number,
+        gamesCol: [String]
+
     },
     gamification: {
         points: {type: Number, default: 0},

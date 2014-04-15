@@ -83,10 +83,16 @@ textarea {
 .top-bar {
   background-color: #479ecd;
 }
-#drop1 {
+#drop1,
+#drop2,
+#drop3,
+#drop4 {
   width: 150px;
 }
-#drop1 li {
+#drop1 li,
+#drop2 li,
+#drop3 li,
+#drop4 li {
   text-align: center;
 }
 #spinning,
@@ -124,6 +130,10 @@ textarea {
   width: 24.5%;
   background-color: #479ecd;
   box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+rgba(0,0,0,0.3)
+  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  -ms-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
   -webkit-transition: all 400ms ease;
   -moz-transition: all 400ms ease;
   -ms-transition: all 400ms ease;
@@ -299,17 +309,18 @@ textarea {
 }
 .content .exit {
   background-color: #e54c3c;
-  position: absolute;
-  right: 15px;
+  position: fixed;
+  right: 7.5%;
   top: 15px;
   padding: 3px 2px 0px 2px;
   border-radius: 30px;
   z-index: 4000;
+  border: 2px solid #fff;
 }
 .content .exit a {
   color: #fff;
-  font-size: 18pt;
-  padding: 0px 4px;
+  font-size: 20pt;
+  padding: 0px 6px 3px;
   display: block;
 }
 @media only screen and (max-width: 40em) {
@@ -685,8 +696,14 @@ textarea {
 }
 #profile #imageAndOpt {
   background-color: #479ecd;
-  padding: 10px;
+  padding: 20px 0;
   text-align: center;
+  margin-top: -140px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+rgba(0,0,0,0.3)
+  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  -ms-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 #profile #imageAndOpt #userProfileImage {
   min-width: 100px;
@@ -734,4 +751,63 @@ textarea {
   -webkit-box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
   -ms-box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
   -o-box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
+}
+#profile #profileMenu .selecionado {
+  background-color: #e54c3c;
+  box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
+  -moz-box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
+  -webkit-box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
+  -ms-box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
+  -o-box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
+}
+@media only screen and (max-width: 40em) {
+  #imageAndOpt {
+    margin-top: 0 !important;
+    padding-top: 0 !important;
+  }
+}
+@media only screen and (max-width: 64.063em) {
+  #contentEditing a span {
+    display: none !important;
+  }
+}
+#userStats {
+  background-color: #e54c3c;
+  color: #fff;
+  padding-top: 15px;
+  margin-top: 25px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+rgba(0,0,0,0.3)
+  -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  -ms-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+#contentEditing {
+  background-color: #27b899;
+  font-size: 16pt;
+  margin-top: 20px;
+  text-align: center;
+}
+#contentEditing >a {
+  width: 25%;
+}
+#contentEditing span {
+  display: inline-block !important;
+}
+#contentEditing a:hover {
+  background-color: #23a68a;
+  color: #fff;
+}
+#profileEditing {
+  background-color: #338ac3;
+  margin-top: 20px;
+  padding-top: 10px;
+  display: none;
+}
+#profileEditing label {
+  color: #fff;
+}
+#enviarInfo {
+  width: 100%;
+  background-color: #27b899;
 }

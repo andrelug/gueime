@@ -76,7 +76,7 @@ input[type="text"], textarea
 .top-bar
     background-color gBlue
 
-#drop1
+#drop1, #drop2, #drop3, #drop4
     width 150px
 
     li
@@ -117,12 +117,16 @@ input[type="text"], textarea
     overflow hidden
     width 24.5%
     background-color gBlue
-    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-    -webkit-transition: all 400ms ease;
-    -moz-transition: all 400ms ease;
-    -ms-transition: all 400ms ease;
-    -o-transition: all 400ms ease;
-    transition: all 400ms ease;
+    box-shadow 0 1px 3px rgba(0,0,0,0.3)
+    -0-box-shadow 0 1px 3px rgba(0,0,0,0.3)
+    -webkit-box-shadow 0 1px 3px rgba(0,0,0,0.3)
+    -ms-box-shadow 0 1px 3px rgba(0,0,0,0.3)
+    -moz-box-shadow 0 1px 3px rgba(0,0,0,0.3)
+    -webkit-transition all 400ms ease
+    -moz-transition all 400ms ease
+    -ms-transition all 400ms ease
+    -o-transition all 400ms ease
+    transition all 400ms ease
 
 .hidden
     position absolute
@@ -130,11 +134,11 @@ input[type="text"], textarea
     margin-left 0px !important
     height 100%
     opacity 0
-    -webkit-transition: all 400ms ease;
-    -moz-transition: all 400ms ease;
-    -ms-transition: all 400ms ease;
-    -o-transition: all 400ms ease;
-    transition: all 400ms ease;
+    -webkit-transition all 400ms ease
+    -moz-transition all 400ms ease
+    -ms-transition all 400ms ease
+    -o-transition all 400ms ease
+    transition all 400ms ease
 
     p, .by, .graph  
         color white
@@ -165,11 +169,11 @@ input[type="text"], textarea
     background-color gAsphalt
 
 .item:hover
-    -webkit-transition: all 400ms ease;
-    -moz-transition: all 400ms ease;
-    -ms-transition: all 400ms ease;
-    -o-transition: all 400ms ease;
-    transition: all 400ms ease;
+    -webkit-transition all 400ms ease
+    -moz-transition all 400ms ease
+    -ms-transition all 400ms ease
+    -o-transition all 400ms ease
+    transition all 400ms ease
 
 
 .w4
@@ -196,11 +200,11 @@ input[type="text"], textarea
     h2
         color white
         font-size 12pt
-        -webkit-transition: all 400ms ease;
-        -moz-transition: all 400ms ease;
-        -ms-transition: all 400ms ease;
-        -o-transition: all 400ms ease;
-        transition: all 400ms ease;
+        -webkit-transition all 400ms ease
+        -moz-transition all 400ms ease
+        -ms-transition all 400ms ease
+        -o-transition all 400ms ease
+        transition all 400ms ease
 
     p
         color gAsphalt
@@ -285,26 +289,27 @@ input[type="text"], textarea
     z-index 999999
     box-shadow 0px 0px 2px 1px gAsphalt
     border-top 5px solid white
-    -webkit-transition: all 300ms ease;
-    -moz-transition: all 300ms ease;
-    -ms-transition: all 300ms ease;
-    -o-transition: all 300ms ease;
-    transition: all 300ms ease;
+    -webkit-transition all 300ms ease
+    -moz-transition all 300ms ease
+    -ms-transition all 300ms ease
+    -o-transition all 300ms ease
+    transition all 300ms ease
 
 
     .exit
         background-color gRed
-        position absolute
-        right 15px
+        position fixed
+        right 7.5%
         top 15px
         padding 3px 2px 0px 2px
         border-radius 30px
         z-index 4000
+        border 2px solid white
 
         a
             color white
-            font-size 18pt
-            padding 0px 4px
+            font-size 20pt
+            padding 0px 6px 3px
             display block
 
 
@@ -356,7 +361,7 @@ input[type="text"], textarea
     z-index 200
     background-color white
     box-shadow 0 1px 3px rgba(0, 0, 0, 0.1)
-    -webkit-box-shadow 0 1px 3px rgba(0, 0, 0, 0.1);
+    -webkit-box-shadow 0 1px 3px rgba(0, 0, 0, 0.1)
 
     .articleLogo
         width 180px
@@ -476,16 +481,16 @@ textarea
     z-index 99
     height 100%
     padding-top 115px
-    -webkit-transition: all 400ms ease;
-    -moz-transition: all 400ms ease;
-    -ms-transition: all 400ms ease;
-    -o-transition: all 400ms ease;
-    transition: all 400ms ease;
+    -webkit-transition all 400ms ease
+    -moz-transition all 400ms ease
+    -ms-transition all 400ms ease
+    -o-transition all 400ms ease
+    transition all 400ms ease
     background-color darken(white, 5%)
 
 
 .dropzone .dz-default.dz-message
-    background url(/images/cloud.png) no-repeat center 0;
+    background url(/images/cloud.png) no-repeat center 0
     position absolute
     width 100%
     height 100%
@@ -508,11 +513,11 @@ textarea
 
 #dropzoneImage.dz-clickable.dz-drag-hover
     background-color lighten(gRed, 50%) !important
-    -webkit-transition: all 400ms ease;
-    -moz-transition: all 400ms ease;
-    -ms-transition: all 400ms ease;
-    -o-transition: all 400ms ease;
-    transition: all 400ms ease;
+    -webkit-transition all 400ms ease
+    -moz-transition all 400ms ease
+    -ms-transition all 400ms ease
+    -o-transition all 400ms ease
+    transition all 400ms ease
 
 #author
     width 100%
@@ -615,58 +620,47 @@ textarea
 .twitter-typeahead
     width 100%
 
-.typeahead {
-    background-color: #fff;
-}
+.typeahead
+    background-color #fff
 
-.typeahead:focus {
-    border: 2px solid #0097cf;
-}
+.typeahead:focus
+    border 2px solid #0097cf
 
-.tt-query {
-    -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-    -moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
-}
+.tt-query
+    -webkit-box-shadow inset 0 1px 1px rgba(0, 0, 0, 0.075)
+    -moz-box-shadow inset 0 1px 1px rgba(0, 0, 0, 0.075)
+    box-shadow inset 0 1px 1px rgba(0, 0, 0, 0.075)
 
-.tt-hint {
-    color: #999
-}
+.tt-hint
+    color #999
 
-.tt-dropdown-menu {
-    width: 422px;
-    padding: 8px 0;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    -webkit-border-radius: 8px;
-    -moz-border-radius: 8px;
-    border-radius: 8px;
-    -webkit-box-shadow: 0 5px 10px rgba(0,0,0,.2);
-    -moz-box-shadow: 0 5px 10px rgba(0,0,0,.2);
-    box-shadow: 0 5px 10px rgba(0,0,0,.2);
-}
+.tt-dropdown-menu
+    width 422px
+    padding 8px 0
+    background-color #fff
+    border 1px solid #ccc
+    border 1px solid rgba(0, 0, 0, 0.2)
+    -webkit-border-radius 8px
+    -moz-border-radius 8px
+    border-radius 8px
+    -webkit-box-shadow 0 5px 10px rgba(0,0,0,.2)
+    -moz-box-shadow 0 5px 10px rgba(0,0,0,.2)
+    box-shadow 0 5px 10px rgba(0,0,0,.2)
 
-.tt-suggestion {
-    padding: 3px 20px;
-    font-size: 18px;
-    line-height: 24px;
-}
+.tt-suggestion
+    padding 3px 20px
+    font-size 18px
+    line-height 24px
 
-.tt-suggestion.tt-cursor {
-    color: #fff;
-    background-color: #0097cf;
+.tt-suggestion.tt-cursor
+    color #fff
+    background-color #0097cf
 
-}
+.tt-suggestion p
+    margin 0
 
-.tt-suggestion p {
-    margin: 0;
-}
-
-.gist {
-    font-size: 14px;
-}
-
+.gist
+    font-size 14px
 
 
 #loadMore
@@ -676,10 +670,17 @@ textarea
 // PROFILE
 
 #profile
+
     #imageAndOpt
         background-color gBlue
-        padding 10px
+        padding 20px 0
         text-align center
+        margin-top -140px
+        box-shadow 0 1px 3px rgba(0,0,0,0.3)
+        -0-box-shadow 0 1px 3px rgba(0,0,0,0.3)
+        -webkit-box-shadow 0 1px 3px rgba(0,0,0,0.3)
+        -ms-box-shadow 0 1px 3px rgba(0,0,0,0.3)
+        -moz-box-shadow 0 1px 3px rgba(0,0,0,0.3)
 
         #userProfileImage
             min-width 100px
@@ -696,6 +697,7 @@ textarea
             -o-box-shadow 0px 0px 3px rgba(0,0,0,0.5)
             font-size 15pt
             margin-top 10px
+            
 
             h3
                 color white
@@ -715,6 +717,7 @@ textarea
             font-size 1.6875rem
             width 100%
             padding 10px 0
+
         a:hover
             background-color gRed
             box-shadow 0px 0px 3px rgba(0,0,0,0.5)
@@ -722,4 +725,61 @@ textarea
             -webkit-box-shadow 0px 0px 3px rgba(0,0,0,0.5)
             -ms-box-shadow 0px 0px 3px rgba(0,0,0,0.5)
             -o-box-shadow 0px 0px 3px rgba(0,0,0,0.5)
-            
+
+        .selecionado
+            background-color gRed
+            box-shadow 0px 0px 3px rgba(0,0,0,0.5)
+            -moz-box-shadow 0px 0px 3px rgba(0,0,0,0.5)
+            -webkit-box-shadow 0px 0px 3px rgba(0,0,0,0.5)
+            -ms-box-shadow 0px 0px 3px rgba(0,0,0,0.5)
+            -o-box-shadow 0px 0px 3px rgba(0,0,0,0.5)
+
+
+@media only screen and (max-width: 40em)
+    #imageAndOpt
+        margin-top 0 !important
+        padding-top 0 !important
+
+@media only screen and (max-width: 64.063em)
+    #contentEditing a span
+        display none !important
+
+#userStats
+    background-color gRed
+    color white
+    padding-top 15px
+    margin-top 25px
+    box-shadow 0 1px 3px rgba(0,0,0,0.3)
+    -0-box-shadow 0 1px 3px rgba(0,0,0,0.3)
+    -webkit-box-shadow 0 1px 3px rgba(0,0,0,0.3)
+    -ms-box-shadow 0 1px 3px rgba(0,0,0,0.3)
+    -moz-box-shadow 0 1px 3px rgba(0,0,0,0.3)
+
+#contentEditing
+    background-color gGreen
+    font-size 16pt
+    margin-top 20px
+    text-align center
+    
+    >a
+        width 25%
+
+    span
+        display inline-block !important
+
+    a:hover
+        background-color darken(gGreen, 10%)
+        color white
+
+#profileEditing
+    background-color gDarkBlue
+    margin-top 20px
+    padding-top 10px
+    display none
+
+    label
+        color white
+
+#enviarInfo
+    width 100%
+    background-color gGreen
