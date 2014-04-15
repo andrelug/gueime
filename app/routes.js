@@ -29,7 +29,7 @@ module.exports = function (app, passport, mongoose) {
 
         var redirected = req.query.redirect;
 
-        var deleted = req.query.deletado;
+        var deletado = req.query.deletado;
 
         var onlyOne = req.query.onlyOne;
 
@@ -38,19 +38,20 @@ module.exports = function (app, passport, mongoose) {
                 for (i = 0; i < docs.length; i++) {
                     docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                 }
-                res.render('index', { title: "Gueime - O melhor site de games do Brasil!", docs: docs, messages: redirected, deletado: deleted, onlyOne: onlyOne });
+                res.render('index', { title: "Gueime - O melhor site de games do Brasil!", docs: docs, messages: redirected, deletado: deletado, onlyOne: onlyOne });
             });
         } else {
-
-            sessionReload(req, res, next);
-            Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).exec(function (err, docs) {
-                for (i = 0; i < docs.length; i++) {
-                    docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
-                }
-                res.render('index', { user: user, title: "Gueime - O melhor site de games do Brasil!", docs: docs, messages: redirected, deletado: deleted, onlyOne: onlyOne });
-            });
-
-
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            } else {
+                sessionReload(req, res, next);
+                Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).exec(function (err, docs) {
+                    for (i = 0; i < docs.length; i++) {
+                        docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
+                    }
+                    res.render('index', { user: user, title: "Gueime - O melhor site de games do Brasil!", docs: docs, messages: redirected, deletado: deletado, onlyOne: onlyOne });
+                });
+            }
         }
     });
 
@@ -170,18 +171,23 @@ module.exports = function (app, passport, mongoose) {
                     }
                 });
             } else {
-                sessionReload(req, res, next);
-                Artigos.findOneAndUpdate({ slug: noticia }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                    if(docs.status == 'publicado'){
-                        var title = decodeURIComponent(docs .title).replace('<p>', '').replace('</p>', ''),
-                            body = decodeURIComponent(docs.text);
-                        Users.find({ _id: docs.authors.main }, function (err, author) {
-                            res.render('artigo', { tipo: 'noticia', article: docs, title: title, body: body, user: user, author: author[0] });
-                        });
-                    } else {
-                        res.redirect('/?redirect=true');
-                    }
-                });
+                if(user.deleted == true){
+                    res.redirect('/users/restore');
+                } else{
+                    sessionReload(req, res, next);
+                    Artigos.findOneAndUpdate({ slug: noticia }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
+                        if(docs.status == 'publicado'){
+                            var title = decodeURIComponent(docs .title).replace('<p>', '').replace('</p>', ''),
+                                body = decodeURIComponent(docs.text);
+                            Users.find({ _id: docs.authors.main }, function (err, author) {
+                                res.render('artigo', { tipo: 'noticia', article: docs, title: title, body: body, user: user, author: author[0] });
+                            });
+                        } else {
+                            res.redirect('/?redirect=true');
+                        }
+                    });
+                }
+                
             }
         }
     });
@@ -219,19 +225,23 @@ module.exports = function (app, passport, mongoose) {
                     }
                 });
             } else {
-                sessionReload(req, res, next);
-                Artigos.findOneAndUpdate({ slug: artigo }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                    if(docs.status == 'publicado'){
-                        var title = decodeURIComponent(docs.title),
-                            body = decodeURIComponent(docs.text);
+                if(user.deleted == true){
+                    res.redirect('/users/restore');
+                } else{
+                    sessionReload(req, res, next);
+                    Artigos.findOneAndUpdate({ slug: artigo }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
+                        if(docs.status == 'publicado'){
+                            var title = decodeURIComponent(docs.title),
+                                body = decodeURIComponent(docs.text);
 
-                        Users.find({ _id: docs.authors.main }, function (err, author) {
-                            res.render('artigo', { tipo: 'artigo', article: docs, title: title, body: body, user: user, author: author[0] });
-                        });
-                    } else {
-                        res.redirect('/?redirect=true');
-                    }
-                });
+                            Users.find({ _id: docs.authors.main }, function (err, author) {
+                                res.render('artigo', { tipo: 'artigo', article: docs, title: title, body: body, user: user, author: author[0] });
+                            });
+                        } else {
+                            res.redirect('/?redirect=true');
+                        }
+                    });
+                }
             }
         }
     });
@@ -268,19 +278,23 @@ module.exports = function (app, passport, mongoose) {
                     }
                 });
             } else {
-                sessionReload(req, res, next);
-                Artigos.findOneAndUpdate({ slug: analise }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                    if(docs.status == 'publicado'){
-                        var title = decodeURIComponent(docs.title),
-                            body = decodeURIComponent(docs.text);
+                if(user.deleted == true){
+                    res.redirect('/users/restore');
+                } else{
+                    sessionReload(req, res, next);
+                    Artigos.findOneAndUpdate({ slug: analise }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
+                        if(docs.status == 'publicado'){
+                            var title = decodeURIComponent(docs.title),
+                                body = decodeURIComponent(docs.text);
 
-                        Users.find({ _id: docs.authors.main }, function (err, author) {
-                            res.render('artigo', { tipo: 'analise', article: docs, title: title, body: body, user: user, author: author[0] });
-                        });
-                    } else {
-                        res.redirect('/?redirect=true');
-                    }
-                });
+                            Users.find({ _id: docs.authors.main }, function (err, author) {
+                                res.render('artigo', { tipo: 'analise', article: docs, title: title, body: body, user: user, author: author[0] });
+                            });
+                        } else {
+                            res.redirect('/?redirect=true');
+                        }
+                    });
+                }
             }
         }
     });
@@ -317,18 +331,22 @@ module.exports = function (app, passport, mongoose) {
                     }
                 });
             } else {
-                sessionReload(req, res, next);
-                Artigos.findOneAndUpdate({ slug: video }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                    if(docs.status == 'publicado'){
-                        var title = decodeURIComponent(docs.title),
-                            body = decodeURIComponent(docs.text);
-                        Users.find({ _id: docs.authors.main }, function (err, author) {
-                            res.render('artigo', { tipo: 'video', article: docs, title: title, body: body, user: user, author: author[0] });
-                        });
-                    } else {
-                        res.redirect('/?redirect=true');
-                    }
-                });
+                if(user.deleted == true){
+                    res.redirect('/users/restore');
+                } else{
+                    sessionReload(req, res, next);
+                    Artigos.findOneAndUpdate({ slug: video }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
+                        if(docs.status == 'publicado'){
+                            var title = decodeURIComponent(docs.title),
+                                body = decodeURIComponent(docs.text);
+                            Users.find({ _id: docs.authors.main }, function (err, author) {
+                                res.render('artigo', { tipo: 'video', article: docs, title: title, body: body, user: user, author: author[0] });
+                            });
+                        } else {
+                            res.redirect('/?redirect=true');
+                        }
+                    });
+                }
             }
         }
     });
@@ -345,8 +363,12 @@ module.exports = function (app, passport, mongoose) {
             if (!user) {
                 res.redirect('/parceiros')
             } else if (user.status == 'admin' || user.status == 'parceiro') {
-                sessionReload(req, res, next);
-                res.render('create', { user: user, title: "Gueime - Hora de criar um artigo sensacional!", tipo: tipo, criar: true });
+                if(user.deleted == true){
+                    res.redirect('/users/restore');
+                } else{
+                    sessionReload(req, res, next);
+                    res.render('create', { user: user, title: "Gueime - Hora de criar um artigo sensacional!", tipo: tipo, criar: true });
+                }
             } else {
                 sessionReload(req, res, next);
                 res.redirect('/parceiros');
@@ -365,19 +387,23 @@ module.exports = function (app, passport, mongoose) {
             if(user.creatingId != 0){
                 res.redirect('/?onlyOne=true');
             } else{
-                Artigos.findOneAndUpdate({slug: noticia}, {status: 'editando'}, {new: true}, function(err, docs){
-                    if (user.status == 'admin' || docs.authors.main == user.id) {
-                        var title = decodeURIComponent(docs.title),
-                            body = decodeURIComponent(docs.text);
-                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id} }, function (err) {
-                             res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'noticia', edit: true});
-                        });
-                    } else {
-                        Artigos.findOneAndUpdate({slug: noticia}, {status: 'publicado'}, {new: true}, function(err, docs){
-                            res.redirect('/');
-                        });
-                    }
-                });
+                if(user.deleted == true){
+                    res.redirect('/users/restore');
+                } else{
+                    Artigos.findOneAndUpdate({slug: noticia}, {status: 'editando'}, {new: true}, function(err, docs){
+                        if (user.status == 'admin' || docs.authors.main == user.id) {
+                            var title = decodeURIComponent(docs.title),
+                                body = decodeURIComponent(docs.text);
+                            Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id} }, function (err) {
+                                 res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'noticia', edit: true});
+                            });
+                        } else {
+                            Artigos.findOneAndUpdate({slug: noticia}, {status: 'publicado'}, {new: true}, function(err, docs){
+                                res.redirect('/');
+                            });
+                        }
+                    });
+                }
             }  
         }
         
@@ -395,19 +421,23 @@ module.exports = function (app, passport, mongoose) {
             if(user.creatingId != 0){
                 res.redirect('/?onlyOne=true');
             } else{
-                Artigos.findOneAndUpdate({slug: artigo}, {status: 'editando'}, {new: true}, function(err, docs){
-                    if (user.status == 'admin' || docs.authors.main == user.id) {
-                        var title = decodeURIComponent(docs.title),
-                            body = decodeURIComponent(docs.text);
-                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id} }, function (err) {
-                            res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'artigo', edit: true});
-                        });
-                    } else {
-                        Artigos.findOneAndUpdate({slug: artigo}, {status: 'publicado'}, {new: true}, function(err, docs){
-                            res.redirect('/');
-                        });
-                    }
-                });
+                if(user.deleted == true){
+                    res.redirect('/users/restore');
+                } else{
+                    Artigos.findOneAndUpdate({slug: artigo}, {status: 'editando'}, {new: true}, function(err, docs){
+                        if (user.status == 'admin' || docs.authors.main == user.id) {
+                            var title = decodeURIComponent(docs.title),
+                                body = decodeURIComponent(docs.text);
+                            Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id} }, function (err) {
+                                res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'artigo', edit: true});
+                            });
+                        } else {
+                            Artigos.findOneAndUpdate({slug: artigo}, {status: 'publicado'}, {new: true}, function(err, docs){
+                                res.redirect('/');
+                            });
+                        }
+                    });
+                }
             }
         }
         
@@ -425,19 +455,23 @@ module.exports = function (app, passport, mongoose) {
             if(user.creatingId != 0){
                 res.redirect('/?onlyOne=true');
             } else{
-                Artigos.findOneAndUpdate({slug: analise}, {status: 'editando'}, {new: true}, function(err, docs){
-                    if (user.status == 'admin' || docs.authors.main == user.id) {
-                        var title = decodeURIComponent(docs.title),
-                            body = decodeURIComponent(docs.text);
-                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id} }, function (err) {
-                            res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'analise', edit: true});
-                        });
-                    } else {
-                        Artigos.findOneAndUpdate({slug: analise}, {status: 'publicado'}, {new: true}, function(err, docs){
-                            res.redirect('/');
-                        });
-                    }
-                });
+                if(user.deleted == true){
+                    res.redirect('/users/restore');
+                } else{
+                    Artigos.findOneAndUpdate({slug: analise}, {status: 'editando'}, {new: true}, function(err, docs){
+                        if (user.status == 'admin' || docs.authors.main == user.id) {
+                            var title = decodeURIComponent(docs.title),
+                                body = decodeURIComponent(docs.text);
+                            Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id} }, function (err) {
+                                res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'analise', edit: true});
+                            });
+                        } else {
+                            Artigos.findOneAndUpdate({slug: analise}, {status: 'publicado'}, {new: true}, function(err, docs){
+                                res.redirect('/');
+                            });
+                        }
+                    });
+                }
             }
         }
         
@@ -456,19 +490,23 @@ module.exports = function (app, passport, mongoose) {
             if(user.creatingId != 0){
                 res.redirect('/?onlyOne=true');
             } else{
-                Artigos.findOneAndUpdate({slug: noticia}, {status: 'editando'}, {new: true}, function(err, docs){
-                    if (user.status == 'admin' || docs.authors.main == user.id) {
-                        var title = decodeURIComponent(docs.title),
-                            body = decodeURIComponent(docs.text);
-                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id} }, function (err) {
-                            res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'video', edit: true});
-                        });
-                    } else {
-                        Artigos.findOneAndUpdate({slug: video}, {status: 'publicado'}, {new: true}, function(err, docs){
-                            res.redirect('/');
-                        });
-                    }
-                });
+                if(user.deleted == true){
+                    res.redirect('/users/restore');
+                } else{
+                    Artigos.findOneAndUpdate({slug: noticia}, {status: 'editando'}, {new: true}, function(err, docs){
+                        if (user.status == 'admin' || docs.authors.main == user.id) {
+                            var title = decodeURIComponent(docs.title),
+                                body = decodeURIComponent(docs.text);
+                            Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id} }, function (err) {
+                                res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'video', edit: true});
+                            });
+                        } else {
+                            Artigos.findOneAndUpdate({slug: video}, {status: 'publicado'}, {new: true}, function(err, docs){
+                                res.redirect('/');
+                            });
+                        }
+                    });
+                }
             }
         }   
         
@@ -480,17 +518,21 @@ module.exports = function (app, passport, mongoose) {
         var user = req.user;
         var slug = req.body.slug;
         if (user.status == 'admin' || user.status == 'parceiro') {
-            Artigos.findOneAndUpdate({slug: slug}, {$set: {status: 'deletado'}},{new: true}, function(err, docs){
-                if (user.status == 'admin' || docs.authors.main == user.id) {
-                    Users.update({loginName: user.loginName}, {$set: {creating: false, creatingId: 0}}, function(err){
-                        res.redirect('/?deletado=true');
-                    });
-                } else {
-                    Artigos.findOneAndUpdate({slug: slug}, {$set: {status: 'publicado'}},{new: true}, function(err, docs){
-                        res.redirect('/');
-                    });
-                }
-            });
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            } else{
+                Artigos.findOneAndUpdate({slug: slug}, {$set: {status: 'deletado'}},{new: true}, function(err, docs){
+                    if (user.status == 'admin' || docs.authors.main == user.id) {
+                        Users.update({loginName: user.loginName}, {$set: {creating: false, creatingId: 0}}, function(err){
+                            res.redirect('/?deletado=true');
+                        });
+                    } else {
+                        Artigos.findOneAndUpdate({slug: slug}, {$set: {status: 'publicado'}},{new: true}, function(err, docs){
+                            res.redirect('/');
+                        });
+                    }
+                });
+            }
         } else {
             res.redirect('/');
         }
@@ -501,17 +543,21 @@ module.exports = function (app, passport, mongoose) {
         var user = req.user;
         
         if (user.status == 'admin' || user.status == 'parceiro') {
-            Artigos.findOneAndUpdate({status: 'rascunho', 'authors.main': user._id}, {$set: {status: 'deletado'}},{new: true}, function(err, docs){
-                if (user.status == 'admin' || docs.authors.main == user.id) {
-                    Users.update({loginName: user.loginName}, {$set: {creating: false, creatingId: 0}}, function(err){
-                        res.redirect('/?deletado=true');
-                    });
-                } else {
-                    Artigos.findOneAndUpdate({status: 'rascunho', 'authors.main': user._id}, {$set: {status: 'publicado'}},{new: true}, function(err, docs){
-                        res.redirect('/');
-                    });
-                }
-            });
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            } else{
+                Artigos.findOneAndUpdate({status: 'rascunho', 'authors.main': user._id}, {$set: {status: 'deletado'}},{new: true}, function(err, docs){
+                    if (user.status == 'admin' || docs.authors.main == user.id) {
+                        Users.update({loginName: user.loginName}, {$set: {creating: false, creatingId: 0}}, function(err){
+                            res.redirect('/?deletado=true');
+                        });
+                    } else {
+                        Artigos.findOneAndUpdate({status: 'rascunho', 'authors.main': user._id}, {$set: {status: 'publicado'}},{new: true}, function(err, docs){
+                            res.redirect('/');
+                        });
+                    }
+                });
+            }
         } else {
             res.redirect('/');
         }
@@ -953,10 +999,14 @@ module.exports = function (app, passport, mongoose) {
     // =====================================
     // PROFILE =============================
     // =====================================
-    app.get('/profile', function(req, res){
+    app.get('/profile', function(req, res, next){
         var user = req.user;
-
-        res.render('profile',{user: user});
+        if(user.deleted == true){
+                    res.redirect('/users/restore');
+                } else{
+                    sessionReload(req, res, next);
+                    res.render('profile',{user: user, title: "Gueime - " + user.name.first + ' ' + user.name.last});
+                }
     });
 
 
@@ -1152,6 +1202,42 @@ module.exports = function (app, passport, mongoose) {
         });
     });
 
+    // =====================================
+    // delete USER =========================
+    // =====================================
+    app.put('/users/delete', function (req, res) {
+        Users.update(
+            { 'name.loginName': req.user.name.loginName },
+            { $set: {
+                deleted: true
+            }
+            },
+            function (err) {
+                res.redirect('/logout')
+            }
+        );
+    });
+
+    // =====================================
+    // RESTORE USER ========================
+    // =====================================
+    app.get('/users/restore', function (req, res) {
+        user = req.user;
+        res.render('profile/restore', { user: user });
+    });
+
+    app.put('/users/restore', function (req, res) {
+        Users.update(
+            { 'name.loginName': req.user.name.loginName },
+            { $set: {
+                deleted: false
+            }
+            },
+            function (err) {
+                res.redirect('/profile')
+            }
+        );
+    });
 
     // =====================================
     // LOGOUT ==============================

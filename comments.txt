@@ -60,3 +60,20 @@ BUGS
 --> dar um trim() na array facet para tirar 'a', 'o', 'e' etc
 
 --> Quando busca, não está voltando devagar para o topo da página
+
+
+ACHIEVEMENTS AND CONSOLES
+
+--> XBOX LIVE
+    https://xboxapi.com/
+    https://www.npmjs.org/package/node-uxla
+    https://www.npmjs.org/package/xbox-live
+
+--> PSN
+    https://www.npmjs.org/package/psn-node
+    https://www.npmjs.org/package/PSNjs
+
+--> STEAM
+    https://www.npmjs.org/package/steam
+    https://www.npmjs.org/package/steam-web
+    https://www.npmjs.org/package/steam.js

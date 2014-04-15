@@ -771,15 +771,34 @@ textarea
         background-color darken(gGreen, 10%)
         color white
 
-#profileEditing
-    background-color gDarkBlue
+#profileEditing, #profileSocialEditing, #profilePrefEditing, #profileAtivEditing, #profileDeleEditing
+    background-color #ecf0f1
     margin-top 20px
     padding-top 10px
     display none
 
-    label
-        color white
-
-#enviarInfo
+#enviarInfo, #enviarSocial, #enviarPref
     width 100%
     background-color gGreen
+
+#deleteAccount
+    width 100%
+
+#profileSocialEditing
+    
+    .button
+        width 100%
+
+    #facebookBtn
+        background-color #4764b3
+    #twitterBtn
+        background-color #00acee
+    #googleBtn
+        background-color #d7554f
+
+    #facebookBtn:hover
+        background-color darken(#4764b3, 10%)
+    #twitterBtn:hover
+        background-color darken(#00acee, 10%)
+    #googleBtn:hover
+        background-color darken(#d7554f, 10%)

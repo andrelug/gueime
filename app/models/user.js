@@ -61,7 +61,8 @@ var UserSchema = new mongoose.Schema({
             level: Number
         },
         nintendo: String,
-        gameCenter: String
+        gameCenter: String,
+        alvanista: String
     },
     graph: {
         artigosPublicados: Number,

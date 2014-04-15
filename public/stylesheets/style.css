@@ -798,16 +798,43 @@ rgba(0,0,0,0.3)
   background-color: #23a68a;
   color: #fff;
 }
-#profileEditing {
-  background-color: #338ac3;
+#profileEditing,
+#profileSocialEditing,
+#profilePrefEditing,
+#profileAtivEditing,
+#profileDeleEditing {
+  background-color: #ecf0f1;
   margin-top: 20px;
   padding-top: 10px;
   display: none;
 }
-#profileEditing label {
-  color: #fff;
-}
-#enviarInfo {
+#enviarInfo,
+#enviarSocial,
+#enviarPref {
   width: 100%;
   background-color: #27b899;
+}
+#deleteAccount {
+  width: 100%;
+}
+#profileSocialEditing .button {
+  width: 100%;
+}
+#profileSocialEditing #facebookBtn {
+  background-color: #4764b3;
+}
+#profileSocialEditing #twitterBtn {
+  background-color: #00acee;
+}
+#profileSocialEditing #googleBtn {
+  background-color: #d7554f;
+}
+#profileSocialEditing #facebookBtn:hover {
+  background-color: #405aa1;
+}
+#profileSocialEditing #twitterBtn:hover {
+  background-color: #009bd6;
+}
+#profileSocialEditing #googleBtn:hover {
+  background-color: #d23e37;
 }

@@ -27,7 +27,7 @@ app.configure(function () {
     app.use(express.methodOverride());
     app.use(express.session({ store: new MongoStore({
         mongoose_connection: gueimesessions
-    }), secret: 'blablabladfkdaskldsfblkablafdsa34', cookie: { maxAge: 36000000 }
+    }), secret: 'blablabladfkdaskldsfblkablafdsa34', cookie: { maxAge: 172800000 }
     })); // session secret
     app.use(passport.initialize());
     app.use(passport.session()); // persistent login sessions
