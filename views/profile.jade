@@ -1,6 +1,11 @@
 extends layouts/profileLayout
 
 block content
+    if(message)
+        div.alert-box(data-alert, style="margin-bottom: 0; height: 60px")
+            #{message}
+            a#alertMessage(href="#", style="color: white; opacity: 1").close &times;
+
     div#check(style="display:none;") check
     
     header.header.row
@@ -21,7 +26,7 @@ block content
         include partials/nav
 
     div#wrapper
-        if(user == profile)
+        if(user && user.name.loginName == profile.name.loginName)
             section.mainImage(style="#{profile.cover.main}")
                 div.wrapImage
                     article.bloco
@@ -56,14 +61,14 @@ block content
                                 img#gueimePoints(src="/images/gueime-white-small.png", alt="Gueime Points", title="Gueime Points")
                             div.small-10.columns
                                 h3 #{profile.gamification.points}
-                        if(profile == user)
+                        if(user && user.name.loginName == profile.name.loginName)
                             div.row#profileMenu
                                 div.small-12.columns
                                     a Informações
                                 div.small-12.columns
                                     a Social
                                 div.small-12.columns
-                                    a Preferências
+                                    a Conta
                                 div.small-12.columns
                                     a Conquistas
                                 div.small-12.columns
@@ -90,7 +95,7 @@ block content
                                     li PSN: Andrelug
                                     li Steam: pamasway
 
-                        if(profile.status == 'admin' && user == profile) 
+                        if(user && profile.status == 'admin' && user.name.loginName == profile.name.loginName) 
 
                             div.row#contentEditing
                                 a.create(href="#", data-dropdown="drop2") <i class="fa fa-pencil-square-o"></i> <span>Criar</span>
@@ -136,7 +141,7 @@ block content
                                         a(href="/conquistas/gerenciar") Gerenciar
                                     li
                                         a(href="/conquistas/stats") Stats
-                        if(profile == user)
+                        if(user && user.name.loginName == profile.name.loginName)
                             include partials/profileForms
         
                             
@@ -155,7 +160,7 @@ block content
                     div.medium-6.small-centered.columns
                         a#loadMoreProfile.button Mais artigos
             else
-                if(user == profile)
+                if(user && user.name.loginName == profile.name.loginName)
                     div#profileTiles
                         div.row#activityDivision
                             div.medium-8.medium-centered.columns

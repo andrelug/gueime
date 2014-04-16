@@ -25,9 +25,9 @@ $('#profileMenu').find('a').on('click', function () {
             $('#profileSocialEditing').slideToggle();
             break
             
-        case 'Preferências':
-            $('.slides').not('#profilePrefEditing').slideUp();
-            $('#profilePrefEditing').slideToggle();
+        case 'Conta':
+            $('.slides').not('#profileContaEditing').slideUp();
+            $('#profileContaEditing').slideToggle();
             break
 
         case 'Conquistas':
@@ -49,28 +49,58 @@ $('#profileMenu').find('a').on('click', function () {
 //Send ajax Forms
 $('#infoSend')
     .on('invalid', function () {
-        var invalid_fields = $(this).find('[data-invalid]');
-        console.log(invalid_fields);
+        $('#infoError').show().delay(3000).hide();
     })
-        .on('valid', function () {
-        console.log('valid!');
+    .on('valid', function () {
+        $.ajax({
+            type: 'PUT',
+            url: '/infoSend',
+            data: $('#infoSend').serialize()
+        }).done(function (data) {
+            console.log(data);
+            $('#enviarInfo').fadeOut(300, function () {
+                $(this).text('Atualizado!').fadeIn().delay(2000).fadeOut(300, function () {
+                    $(this).text('Enviar').fadeIn();
+                });
+            });
+        });
     });
-    
+
 $('#socialSend')
     .on('invalid', function () {
-        var invalid_fields = $(this).find('[data-invalid]');
-        console.log(invalid_fields);
+
     })
-        .on('valid', function () {
-        console.log('valid!');
+    .on('valid', function () {
+        $.ajax({
+            type: 'PUT',
+            url: '/socialSend',
+            data: $('#socialSend').serialize()
+        }).done(function (data) {
+            console.log(data);
+            $('#enviarSocial').fadeOut(300, function () {
+                $(this).text('Atualizado!').fadeIn().delay(2000).fadeOut(300, function () {
+                    $(this).text('Enviar').fadeIn();
+                });
+            });
+        });
     });
-$('#prefSend')
+$('#contaSend')
     .on('invalid', function () {
-        var invalid_fields = $(this).find('[data-invalid]');
-        console.log(invalid_fields);
+        
     })
-        .on('valid', function () {
-        console.log('valid!');
+    .on('valid', function () {
+        $.ajax({
+            type: 'PUT',
+            url: '/contaSend',
+            data: $('#contaSend').serialize()
+        }).done(function (data) {
+            console.log(data);
+            $('#enviarConta').fadeOut(300, function () {
+                $(this).text('Atualizado!').fadeIn().delay(2000).fadeOut(300, function () {
+                    $(this).text('Enviar').fadeIn();
+                });
+            });
+        });
     });
 
 $('#enviarInfo').on('click', function () {
@@ -79,8 +109,8 @@ $('#enviarInfo').on('click', function () {
 $('#enviarSocial').on('click', function () {
     $('#socialSend').submit();
 });
-$('#enviarPref').on('click', function () {
-    $('#prefSend').submit();
+$('#enviarConta').on('click', function () {
+    $('#contaSend').submit();
 });
 
 // DELETE CHECK

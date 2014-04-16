@@ -12,7 +12,7 @@ var UserSchema = new mongoose.Schema({
     },
     status: {type: String, default: "user"},
     birthDate: Date,
-    email: {type: String, required: true, unique: true, index: true},
+    email: {type: String},
     gender: String,
     site: String,
     bio: String,
@@ -26,7 +26,6 @@ var UserSchema = new mongoose.Schema({
     },
     localization: {
         country: String,
-        state: String,
         city: String
     },
     social: {

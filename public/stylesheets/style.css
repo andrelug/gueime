@@ -540,6 +540,7 @@ textarea {
   width: 100%;
   position: relative;
   background-color: #fff;
+  margin: 0px;
 }
 #author #authorImage {
   display: inline-block;
@@ -741,6 +742,7 @@ rgba(0,0,0,0.3)
 }
 #profile #profileMenu div {
   padding: 0 !important;
+  margin-bottom: 5px;
 }
 #profile #profileMenu a {
   display: block;
@@ -805,7 +807,7 @@ rgba(0,0,0,0.3)
 }
 #profileEditing,
 #profileSocialEditing,
-#profilePrefEditing,
+#profileContaEditing,
 #profileConqEditing,
 #profileDeleEditing {
   background-color: #ecf0f1;
@@ -815,7 +817,7 @@ rgba(0,0,0,0.3)
 }
 #enviarInfo,
 #enviarSocial,
-#enviarPref {
+#enviarConta {
   width: 100%;
   background-color: #27b899;
 }

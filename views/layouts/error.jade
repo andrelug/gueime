@@ -3,11 +3,10 @@ doctype html
 html.no-js(lang="pt_BR")
     head
         include head
-        if(canonical == true)
-            link(rel="canonical", href="http://www.gueime.com.br/profile/#{profile.name.loginName}")
 
-    body(style="overflow-y: auto; background: url('../images/pattern.png') repeat #34495e")
+    body
         div#fb-root
+
         script.
             window.fbAsyncInit = function() {
                 FB.init({
@@ -22,43 +21,18 @@ html.no-js(lang="pt_BR")
             js = d.createElement(s); js.id = id;
             js.src = "//connect.facebook.net/pt_BR/all.js";
             fjs.parentNode.insertBefore(js, fjs);
-            }(document, 'script', 'facebook-jssdk'));
+            }(document, 'script', 'facebook-jssdk'));   
 
         block content
 
         include scripts
-        script(src="/javascripts/profile.js")
-
-        script.
-            $(window).on('popstate', function () {
-                $('.content-wrap').fadeOut();
-                $('body').css('overflow-y', 'auto');
-                $('#darken').css('display', 'none');
-                if($('#mainText').html() !== undefined){
-                    ga('send', 'pageview', '/'+window.location.href.replace('http://www.gueime.com.br/',''));
-                }
-                $('.content').empty();
-            });
-            var facebookComments = $(".fb-comments");
-            var facebookLikes = $('.fb-like');
-
-            facebookLikes.attr("data-href", window.location.href);
-            facebookComments.attr("data-href", window.location.href);
-
-            if($(window).width() < 760){
-                facebookComments.attr('data-width', 550)
-            }
-            if($(window).width() < 595){
-                facebookComments.attr('data-width', 380)
-            }
-            FB.XFBML.parse();
         script.scriptLoad.
-            profileContainer.waitForImages(function () {
+            container.waitForImages(function () {
                 $("#spinning").hide();
                 $('body').css('overflow-y', 'auto');
-                profileContainer.animate({ 'opacity': 1 });
+                container.animate({ 'opacity': 1 });
 
-                profileContainer.isotope({
+                container.isotope({
                     itemSelector: '.item',
                     layoutMode: 'masonry',
                     masonry:{
@@ -69,18 +43,40 @@ html.no-js(lang="pt_BR")
                     
                 });
 
-                var n = $('.item').length;
-                var b = "#{profile._id}";
+                n = $('.item').length;
                 if (n < 7) {
                     $.ajax({
                         type: "GET",
-                        url: "/paginationProfile",
-                        data: {n: n, b: b},
+                        url: "/pagination",
+                        data: {n: n},
                         dataType: 'html'
                     }).done(function (data) {
-                        profileContainer.isotope('insert', $(data));
+                        container.isotope('insert', $(data));
                     });
                 }
+
+                var nav = $('#nav-sticky');
+                nav_sticky = nav.offset().top; //get the Y-position of section
+
+                $(window).on({
+                    scroll: function () { // fires when user scrolls
+                        if ($(window).width() > 641) {
+                            var current_position = window.pageYOffset; // get the current window Y-Position
+                            if (current_position > nav_sticky) {
+                                nav.addClass('sticky');
+                                container.css('margin-top', 137); // add class to make the nav sticky using css
+                                if ($(window).width() > 1025){
+                                    $('.gueimeWhite').fadeIn();
+                                }
+                    
+                            } else {
+                                nav.removeClass('sticky');
+                                container.css('margin-top', 0); // remove sticky css class
+                                    $('.gueimeWhite').fadeOut();
+                            }
+                        }
+                    }
+                });
             }, null, true);
         script.
             $(window).on('popstate', function () {
@@ -92,5 +88,3 @@ html.no-js(lang="pt_BR")
                 }
                 $('.content').empty().css('background', 'white');
             });
-
-            

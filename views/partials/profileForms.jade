@@ -15,14 +15,14 @@ div#profileEditing.row.slides
             div.row
                 div.medium-6.columns
                     label Apelido
-                        if(user.name.nickname)
-                            input(type="text", placeholder="apelido", value="#{user.name.nickname}", name="nickname")
+                        if(user.name.nickName)
+                            input(type="text", placeholder="apelido", value="#{user.name.nickName}", name="nickname")
                         else
                             input(type="text", placeholder="apelido", name="nickname")
                 div.medium-6.columns.date-field
                     label Data de Nascimento
-                        if(user.birthDate)
-                            input(type="text", value="#{user.name.birthDate}", pattern="date", name="birthDate")
+                        if(date)
+                            input(type="text", placeholder="dd/mm/aaaa", value="#{date}", pattern="(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)", name="birthDate")
                         else
                             input(type="text", placeholder="dd/mm/aaaa" pattern="(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)", name="birthDate")
                     small.error Precisamos de uma data válida (dd/mm/aaaa)
@@ -57,7 +57,8 @@ div#profileEditing.row.slides
                 div.small-12.columns
                     label Bio
                         if(user.bio)
-                            textarea(placeholder="algo sobre você", value="#{user.bio}", name="bio")
+                            textarea(placeholder="algo sobre você", name="bio")
+                                !{user.bio}
                         else
                             textarea(placeholder="algo sobre você", name="bio")
 
@@ -89,78 +90,107 @@ div#profileSocialEditing.row.slides
                         a.button#googleBtn(href="/connect/google") <i class="fa fa-google-plus"></i> Google+
 
             div.row
+                div.large-4.columns
+                    label Facebook URL
+                        if(user.social.facebook.url)
+                            input(type="text", name="facebookUrl", placeholder="Facebook URL", value="#{user.social.facebook.url}")
+                        else
+                            input(type="text", name="facebookUrl", placeholder="Facebook URL")
+                div.large-4.columns
+                    label Twitter URL
+                        if(user.social.twitter.url)
+                            input(type="text", name="twitterUrl", placeholder="Twitter URL", value="#{user.social.twitter.url}")
+                        else
+                            input(type="text", name="twitterUrl", placeholder="Twitter URL")
+                div.large-4.columns
+                    label Google Plus URL
+                    if(user.social.google.url)
+                        input(type="text", name="googleUrl", placeholder="Google Plus URL", value="#{user.social.google.url}")
+                    else
+                        input(type="text", name="googleUrl", placeholder="Google Plus URL")
+
+            div.row
                 div.large-6.columns
-                    label Xbox Live Id
+                    label Xbox Live Username
                         if(user.social.xboxLive.name)
-                            input(type="text", name="xboxLive", placeholder="Xbox Live Id", value="#{user.social.xboxLive.name}")
+                            input(type="text", name="xboxLive", placeholder="Xbox Live Username", value="#{user.social.xboxLive.name}")
                         else
-                            input(type="text", name="xboxLive", placeholder="XboxLive Id")
+                            input(type="text", name="xboxLive", placeholder="XboxLive Username")
 
                 div.large-6.columns
-                    label PSN Id
+                    label PSN Username
                         if(user.social.psn.name)
-                            input(type="text", name="psn", placeholder="PSN Id", value="#{user.soclai.psn.name}")
+                            input(type="text", name="psn", placeholder="PSN Username", value="#{user.social.psn.name}")
                         else
-                            input(type="text", name="psn", placeholder="PSN Id")
+                            input(type="text", name="psn", placeholder="PSN Username")
 
             div.row
                 div.large-6.columns
-                    label Steam Id
+                    label Steam Username
                         if(user.social.steam.name)
-                            input(type="text", name="steam", placeholder="Steam Id", value="#{user.soclai.steam.name}")
+                            input(type="text", name="steam", placeholder="Steam Username", value="#{user.social.steam.name}")
                         else
-                            input(type="text", name="steam", placeholder="Steam Id")
+                            input(type="text", name="steam", placeholder="Steam Username")
 
                 div.large-6.columns
-                    label Wii U Id
+                    label Wii U Username
                         if(user.social.nintendo)
-                            input(type="text", name="nintendo", placeholder="Wii U Id", value="#{user.soclai.nintendo}")
+                            input(type="text", name="nintendo", placeholder="Wii U Username", value="#{user.social.nintendo}")
                         else
-                            input(type="text", name="nintendo", placeholder="Wii U Id")
+                            input(type="text", name="nintendo", placeholder="Wii U Username")
 
             div.row
                 div.large-6.columns
-                    label Game Center Id
+                    label Game Center Username
                         if(user.social.gameCenter)
-                            input(type="text", name="gameCenter", placeholder="Game Center Id", value="#{user.soclai.gameCenter}")
+                            input(type="text", name="gameCenter", placeholder="Game Center Username", value="#{user.social.gameCenter}")
                         else
-                            input(type="text", name="gameCenter", placeholder="Game Center Id")
+                            input(type="text", name="gameCenter", placeholder="Game Center Username")
                 div.large-6.columns
-                    label Alvanista Id
+                    label Alvanista Username
                         if(user.social.alvanista)
-                            input(type="text", name="alvanista", placeholder="Alvanista Id", value="#{user.soclai.alvanista}")
+                            input(type="text", name="alvanista", placeholder="Alvanista Username", value="#{user.social.alvanista}")
                         else
-                            input(type="text", name="alvanista", placeholder="Alvanista Id")
+                            input(type="text", name="alvanista", placeholder="Alvanista Username")
 
             div.row
                 div.small-12.medium-5.medium-centered.columns
                     a.button#enviarSocial Enviar
 
 
-div#profilePrefEditing.row.slides
+div#profileContaEditing.row.slides
     div.medium-12.columns
-        form#prefSend(data-abide="ajax")
+        form#contaSend(data-abide="ajax")
+            div.row
+                div.large-6.columns
+                    label Email <small>obrigatório</small>
+                        input(type="text", name="email", id="email", required, value="#{user.email}")
+                    small.error Por favor digite um email válido
+                div.large-6.columns
+                    label Repita o email <small>obrigatório</small>
+                        input(type="text", data-equalto="email", required, value="#{user.email}")
+                    small.error O email não confere
             div.row
                 div.large-6.columns.password-field
                     if(user.password.main)
                         label Mudar senha <small>obrigatório</small>
-                            input(type="password", id="password", required, value="#{user.password.main}", name="password")
+                            input(type="password", id="password", name="password")
                         small.error Por favor digite uma senha válida
                     else
                         label Adicionar Senha <small>obrigatório</small>
-                            input(type="password", id="password", required, name="password")
+                            input(type="password", id="password", name="password")
                         small.error Por favor digite uma senha válida
                 div.large-6.columns.password-confirmation-field
                     label Repita a senha <small>obrigatório</small>
                         if(user.password.main)
-                            input(type="password", data-equalto="password", required, value="#{user.password.main}", name="confirmation")
+                            input(type="password", data-equalto="password")
                         else
-                            input(type="password", data-equalto="password", required, name="confirmation")
+                            input(type="password", data-equalto="password")
 
                     small.error A senha não confere
             div.row
                 div.small-12.medium-5.medium-centered.columns
-                    a.button#enviarPref Enviar
+                    a.button#enviarConta Enviar
                                                 
 
 div#profileConqEditing.row.slides

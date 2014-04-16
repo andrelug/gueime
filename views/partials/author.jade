@@ -3,19 +3,21 @@ section#author.row
         div.row
             div.small-6.columns
                 span#authorImage
-                img(src="#{author.photo}")
+                a(href="/profile/#{author.name.loginName}"): img(src="#{author.photo}")
             div.small-6.columns
                 div#authorInfo
                     div.row
                         div.small-12.columns(style="margin-bottom: 20px;")
-                            a(href="#") #{author.name.first} #{author.name.last}
-
-                        div.small-4.columns
-                            a(href="#{author.social.facebook.url}", title="facebook") <i class="fa fa-facebook"></i>
-                        div.small-4.columns
-                            a(href="#", title="twitter") <i class="fa fa-twitter"></i>
-                        div.small-4.columns
-                            a(href="#", title="google plus") <i class="fa fa-google-plus"></i>
+                            a(href="/profile/#{author.name.loginName}") #{author.name.first} #{author.name.last}
+                        if(author.social.facebook.url)
+                            div.small-4.columns
+                                a(href="#{author.social.facebook.url}", title="facebook") <i class="fa fa-facebook"></i>
+                        if(author.social.twitter.url)
+                            div.small-4.columns
+                                a(href="#{author.social.twitter.url}", title="twitter") <i class="fa fa-twitter"></i>
+                        if(author.social.google.url)
+                            div.small-4.columns
+                                a(href="#{author.social.google.url}", title="google plus") <i class="fa fa-google-plus"></i>
 
     div.large-9.medium-6.columns.autShare
         if(tipo == 'noticia')

@@ -116,9 +116,13 @@ module.exports = function (app, passport, mongoose) {
                 for (i = 0; i < docs.length; i++) {
                     docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                 }
-                Users.update({'_id': user._id}, {$inc: {'graph.searches': 1}}, function(err){
+                if(!user){
                     res.render('tags', { docs: docs });
-                });
+                } else {
+                    Users.update({'_id': user._id}, {$inc: {'graph.searches': 1}}, function(err){
+                        res.render('tags', { docs: docs });
+                    });
+                }
             });
         } else {
             for (i = 0; i < req.query.str.length; i++) {
@@ -133,9 +137,13 @@ module.exports = function (app, passport, mongoose) {
                 for (i = 0; i < docs.length; i++) {
                     docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                 }
-                Users.update({'_id': user._id}, {$inc: {'graph.searches': 1}}, function(err){
+                if(!user){
                     res.render('tags', { docs: docs });
-                });
+                } else {
+                    Users.update({'_id': user._id}, {$inc: {'graph.searches': 1}}, function(err){
+                        res.render('tags', { docs: docs });
+                    });
+                }
             });
         }
 
@@ -1066,6 +1074,8 @@ module.exports = function (app, passport, mongoose) {
         }
     });
 
+    
+
 
 
 
@@ -1074,50 +1084,137 @@ module.exports = function (app, passport, mongoose) {
     // =====================================
     app.get('/profile', function(req, res, next){
         var user = req.user;
-
-        if(user.deleted == true){
-            res.redirect('/users/restore');
+        if(!user){
+            res.redirect('/');
         } else{
-            sessionReload(req, res, next);
-            Artigos.find({status: 'publicado', 'authors.main': user._id}, {description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1}).sort({'_id': -1}).limit(6).exec(function(err, docs){
-                for (i = 0; i < docs.length; i++) {
-                    docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
-                }
-                Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
-                    res.render('profile',{user: user, title: "Gueime - " + user.name.first + ' ' + user.name.last, docs: docs, profile: user});
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            } else{
+                sessionReload(req, res, next);
+                Artigos.find({status: 'publicado', 'authors.main': user._id}, {description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1}).sort({'_id': -1}).limit(6).exec(function(err, docs){
+                    for (i = 0; i < docs.length; i++) {
+                        docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
+                    }
+                    if(user.birthDate){
+                        var date = user.birthDate;
+                        date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                    }
+                    
+                    Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
+                        res.render('profile',{user: user, title: "Gueime - " + user.name.first + ' ' + user.name.last, message: req.flash('signupMessage'), docs: docs, profile: user, canonical: true, date: date});
+                    });
                 });
+            }
+        }
+    });
+
+    // =====================================
+    // PROFILE UPDATES =====================
+    // =====================================
+
+    // INFORMAÇÕES
+    app.put('/infoSend', function(req, res){
+        var user = req.user;
+        var b = req.body;
+        var date = b.birthDate.split('/');
+        var birthDate = new Date(date[2], date[1] - 1, date[0]);
+
+        if(!user){
+            res.redirect('/');
+        } else{
+            Users.update({'_id': user._id},{$set:{
+                'name.first': b.firstName,
+                'name.last': b.lastName,
+                'name.nickName': b.nickname,
+                'birthDate': birthDate,
+                'gender': b.gender,
+                'site': b.site,
+                'localization.country': b.country,
+                'localization.city': b.city,
+                'bio': b.bio
+            }}, function(err){
+                if(err)
+                    throw err
+                res.send('OK');
             });
         }
+    });
+
+    // SOCIAL
+    app.put('/socialSend', function(req, res){
+        var user = req.user;
+        var b = req.body;
+
+        if(!user){
+            res.redirect('/');
+        } else{
+            Users.update({'_id': user._id},{$set:{
+                'social.facebook.url': b.facebookUrl,
+                'social.twitter.url': b.twitterUrl,
+                'social.google.url': b.googleUrl,
+                'social.xboxLive.name': b.xboxLive,
+                'social.psn.name': b.psn,
+                'social.steam.name': b.steam,
+                'social.nintendo': b.nintendo,
+                'social.gameCenter': b.gameCenter,
+                'social.alvanista': b.alvanista
+            }}, function(err){
+                if(err)
+                    throw err
+                res.send('OK');
+            });
+        }
+    });
+
+    // CONTA
+    app.put('/contaSend', function(req, res, next){
+        passport.authenticate('local-signup', function(err, user, info){
+            if(err) { 
+                return res.send('err' + err);
+            } else {
+                return res.send('OK');
+            }
+        })(req,res,next);
     });
 
     // ACESSO TODOS PROFILES
     app.get('/profile/:user', function(req, res, next){
         var profile = req.params.user;
         var user = req.user;
-        if(user.deleted == true){
-            res.redirect('/users/restore');
-        } else{
-            sessionReload(req, res, next);
+        if(!user){
             Users.findOne({'name.loginName': profile}, function(err, profileUser){
                 Artigos.find({status: 'publicado', 'authors.main': profileUser._id}, {description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1}).sort({'_id': -1}).limit(6).exec(function(err, docs){
                     for (i = 0; i < docs.length; i++) {
                         docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                     }
-                    Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
-                        res.render('profile',{user: user, title: "Gueime - " + profileUser.name.first + ' ' + profileUser.name.last, docs: docs, profile: profileUser});
-                    });
+                    res.render('profile',{title: "Gueime - " + profileUser.name.first + ' ' + profileUser.name.last, docs: docs, profile: profileUser});
                 });
             });
-            
+        } else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            } else{
+                sessionReload(req, res, next);
+                Users.findOne({'name.loginName': profile}, function(err, profileUser){
+                    Artigos.find({status: 'publicado', 'authors.main': profileUser._id}, {description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1}).sort({'_id': -1}).limit(6).exec(function(err, docs){
+                        for (i = 0; i < docs.length; i++) {
+                            docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
+                        }
+                        Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
+                            res.render('profile',{user: user, title: "Gueime - " + profileUser.name.first + ' ' + profileUser.name.last, docs: docs, profile: profileUser});
+                        });
+                    });
+                });
+            }
         }
     });
 
     // PAGINAÇÃO PROFILE
     app.get('/paginationProfile', function(req, res){
-        var user = req.user;
+        var userId = req.query.b;
         var n = req.query.n;
 
-        Artigos.find({status: 'publicado', 'authors.main': user._id}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).skip(n).exec(function (err, docs) {
+        Artigos.find({status: 'publicado', 'authors.main': userId}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).skip(n).exec(function (err, docs) {
             for (i = 0; i < docs.length; i++) {
                 docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
             }
@@ -1221,17 +1318,6 @@ module.exports = function (app, passport, mongoose) {
     // =============================================================================
     // AUTHORIZE (ALREADY LOGGED IN / CONNECTING OTHER SOCIAL ACCOUNT) =============
     // =============================================================================
-
-    // locally --------------------------------
-    app.get('/profile/edit', isLoggedIn, function (req, res) {
-        var user = req.user;
-        res.render('profile/edit', { message: req.flash('loginMessage'), user: user });
-    });
-    app.post('/profile/edit', passport.authenticate('local-signup', {
-        successRedirect: '/', // redirect to the secure profile section
-        failureRedirect: '/profile/edit', // redirect back to the signup page if there is an error
-        failureFlash: true // allow flash messages
-    }));
 
     // facebook -------------------------------
 
