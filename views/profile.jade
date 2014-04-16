@@ -1,10 +1,6 @@
 extends layouts/profileLayout
 
 block content
-    if(message)
-        div.alert-box(data-alert, style="margin-bottom: 0; height: 60px")
-            #{message}
-            a#alertMessage(href="#", style="color: white; opacity: 1").close &times;
 
     div#check(style="display:none;") check
     
@@ -26,7 +22,7 @@ block content
         include partials/nav
 
     div#wrapper
-        if(user && user.name.loginName == profile.name.loginName)
+        if(img == false)
             section.mainImage(style="#{profile.cover.main}")
                 div.wrapImage
                     article.bloco

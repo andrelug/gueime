@@ -1101,7 +1101,7 @@ module.exports = function (app, passport, mongoose) {
                     }
                     
                     Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
-                        res.render('profile',{user: user, title: "Gueime - " + user.name.first + ' ' + user.name.last, message: req.flash('signupMessage'), docs: docs, profile: user, canonical: true, date: date});
+                        res.render('profile',{user: user, title: "Gueime - " + user.name.first + ' ' + user.name.last, docs: docs, profile: user, canonical: true, date: date});
                     });
                 });
             }
@@ -1187,7 +1187,7 @@ module.exports = function (app, passport, mongoose) {
                     for (i = 0; i < docs.length; i++) {
                         docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                     }
-                    res.render('profile',{title: "Gueime - " + profileUser.name.first + ' ' + profileUser.name.last, docs: docs, profile: profileUser});
+                    res.render('profile',{title: "Gueime - " + profileUser.name.first + ' ' + profileUser.name.last, docs: docs, profile: profileUser, img: true});
                 });
             });
         } else{
@@ -1201,7 +1201,7 @@ module.exports = function (app, passport, mongoose) {
                             docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                         }
                         Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
-                            res.render('profile',{user: user, title: "Gueime - " + profileUser.name.first + ' ' + profileUser.name.last, docs: docs, profile: profileUser});
+                            res.render('profile',{user: user, title: "Gueime - " + profileUser.name.first + ' ' + profileUser.name.last, docs: docs, profile: profileUser, img: true});
                         });
                     });
                 });
