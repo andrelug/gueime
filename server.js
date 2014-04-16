@@ -35,6 +35,28 @@ app.configure(function () {
     app.use(app.router);
     app.use(require('stylus').middleware(path.join(__dirname, 'public')));
     app.use(express.static(path.join(__dirname, 'public')));
+    app.use(function(error, req, res, next) {
+            res.status(500);
+            res.render('500.jade', {title:'500: Internal Server Error', error: error});
+        });
+        app.use(function(req, res, next){
+      res.status(404);
+
+      // respond with html page
+      if (req.accepts('html')) {
+        res.render('404', { url: req.url });
+        return;
+      }
+
+      // respond with json
+      if (req.accepts('json')) {
+        res.send({ error: 'Not found' });
+        return;
+      }
+
+      // default to plain-text. send()
+      res.type('txt').send('Not found');
+    });
     app.enable('trust proxy');
 });
 
@@ -70,24 +92,7 @@ app.get('/500', function(req, res, next){
   next(new Error('keyboard cat!'));
 });
 
-app.use(function(req, res, next){
-  res.status(404);
 
-  // respond with html page
-  if (req.accepts('html')) {
-    res.render('404', { url: req.url });
-    return;
-  }
-
-  // respond with json
-  if (req.accepts('json')) {
-    res.send({ error: 'Not found' });
-    return;
-  }
-
-  // default to plain-text. send()
-  res.type('txt').send('Not found');
-});
 
 app.use(function(error, req, res, next) {
     res.status(500);

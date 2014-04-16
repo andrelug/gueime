@@ -713,8 +713,11 @@ rgba(0,0,0,0.3)
 }
 #profile #imageAndOpt #userProfileImage {
   min-width: 100px;
+  min-height: 100px;
   width: 100%;
+  height: 100%;
   max-width: 200px;
+  max-height: 200px;
   border: 1px solid #fff;
 }
 #profile #imageAndOpt #profileStats {
