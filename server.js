@@ -35,27 +35,13 @@ app.configure(function () {
     app.use(app.router);
     app.use(require('stylus').middleware(path.join(__dirname, 'public')));
     app.use(express.static(path.join(__dirname, 'public')));
+    app.use(function(req, res) {
+      res.status(400);
+      res.render('404', {title: '404: File Not Found'});
+    });
     app.use(function(error, req, res, next) {
-            res.status(500);
-            res.render('500.jade', {title:'500: Internal Server Error', error: error});
-        });
-        app.use(function(req, res, next){
-      res.status(404);
-
-      // respond with html page
-      if (req.accepts('html')) {
-        res.render('404', { url: req.url });
-        return;
-      }
-
-      // respond with json
-      if (req.accepts('json')) {
-        res.send({ error: 'Not found' });
-        return;
-      }
-
-      // default to plain-text. send()
-      res.type('txt').send('Not found');
+      res.status(500);
+      res.render('500', {title:'500: Internal Server Error', error: error});
     });
     app.enable('trust proxy');
 });
@@ -70,27 +56,6 @@ app.locals.newrelic = newrelic;
 
 // routes ======================================================================
 require('./app/routes.js')(app, passport, mongoose); // load our routes and pass in our app and fully configured passport
-
-
-// ERRORS ROUTES
-app.get('/404', function(req, res, next){
-  // trigger a 404 since no other middleware
-  // will match /404 after this one, and we're not
-  // responding here
-  next();
-});
-
-app.get('/403', function(req, res, next){
-  // trigger a 403 error
-  var err = new Error('not allowed!');
-  err.status = 403;
-  next(err);
-});
-
-app.get('/500', function(req, res, next){
-  // trigger a generic (500) error
-  next(new Error('keyboard cat!'));
-});
 
 
 
