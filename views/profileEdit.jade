@@ -1,4 +1,4 @@
-extends layouts/profileLayout
+extends layouts/profileEditLayout
 
 block content
 
@@ -22,16 +22,15 @@ block content
         include partials/nav
 
     div#wrapper
-        if(public == false)
-            section.mainImage#mainImageChange(style="#{profile.cover}")
-                div.wrapImage
-                    a.button#editImageButton(href="/profile/editar") Trocar Imagem
-                    article.bloco
-        else
-            section.mainImage(style="#{profile.cover}")
-                div.wrapImage
-                    a.button#editImageButton(href="/profile/editar") Trocar Imagem
-                    article.bloco
+        section.mainImage
+            div#loadingAj(style="display:none;")
+                img(src="/images/spinning.gif")
+            div.dropzone-previews
+            form#dropzoneProfileImage(action="/newProfileCover", class="dropzone", enctype="multipart/form-data")
+                input(type="file", name="file")
+            div.wrapImage
+                article.bloco
+                    
 
         div.parallax(style="border-top:5px solid #E54C3C;")
             article#mainText
@@ -40,12 +39,7 @@ block content
                         div.row.show-for-small
                             div.small-12.columns
                                 h1#userTitle(style="color: white") #{profile.name.first} #{profile.name.last}
-                        div.editingProf
-                            img#userProfileImage(src="#{profile.photo}")
-                            if(user && user.name.loginName == profile.name.loginName && public == true)
-                                a.hide-for-small.button.tiny#editButtonHover(href="/profile") Editar
-                            else if(user && user.name.loginName == profile.name.loginName)
-                                a.hide-for-small.button.tiny#editButtonHover(href="/profile/#{user.name.loginName}") Perfil público
+                        img#userProfileImage(src="#{profile.photo}")
                         div#profileStats.row
                             div.small-2.columns
                                 h3 <i class="fa fa-user" title="Status"></i>
@@ -87,33 +81,28 @@ block content
                                     a Conquistas
 
                     div.large-8.large-offset-1.medium-7.medium-offset-1.columns
+                        form(action="/profileImage", method="POST")
+                            input(type="hidden", name="position")
+                            input.button#profileImageSubmit(type="submit", value="Enviar", style="width: 100%")
                         h1#userTitle.show-for-medium-up #{profile.name.first} #{profile.name.last}
+
                         div.row#userStats.show-for-medium-up
                             div.medium-6.columns
-                                ul.gameLogo
+                                ul
                                     if(profile.graph.publications == undefined)
-                                        li.gameLogoStats <i class="fa fa-pencil"></i> Nenhum artigo publicado
+                                        li Nenhum artigo publicado
                                     else if(profile.graph.publications == 1)
-                                        li.gameLogoStats <i class="fa fa-pencil"></i> #{profile.graph.publications} Artigo publicado
+                                        li #{profile.graph.publications} Artigo publicado
                                     else
-                                        li.gameLogoStats <i class="fa fa-pencil"></i> #{profile.graph.publications} Artigos publicados
-                                    li.gameLogoStats <i class="fa fa-gamepad"></i> 10 Jogos na coleção
-                                    li.gameLogoStats <i class="fa fa-eye"></i> Visitou #{profile.graph.visits} páginas
+                                        li #{profile.graph.publications} Artigos publicados
+                                    li 10 Jogos na coleção
+                                    li Visitou #{profile.graph.visits} páginas
 
                             div.medium-6.columns
-                                ul.gameLogo
-                                    if(profile.social.xboxLive.name)
-                                        li
-                                            img.gameLogos(src="/images/xbox_icon@2x.png") 
-                                            span  #{profile.social.xboxLive.name}
-                                    if(profile.social.steam.name)
-                                        li
-                                            img.gameLogos(src="/images/steam-icon@2x.png") 
-                                            span  #{profile.social.steam.name}
-                                    if(profile.social.psn.name)
-                                        li
-                                            img.gameLogos(src="/images/psn-logo@2x.png") 
-                                            span  #{profile.social.psn.name}
+                                ul
+                                    li live: AndreLucas
+                                    li PSN: Andrelug
+                                    li Steam: pamasway
 
                         if(user && profile.status == 'admin' && public == false) 
 

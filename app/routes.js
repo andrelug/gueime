@@ -632,7 +632,6 @@ module.exports = function (app, passport, mongoose) {
     app.post('/newCover', function (req, res, next) {
         var user = req.user;
         var sendImg = req.files.file.name;
-
         if (user.status == 'admin' || user.status == 'parceiro') {
             // get the temporary location of the file
             var tmp_path = req.files.file.path;
@@ -647,7 +646,6 @@ module.exports = function (app, passport, mongoose) {
                     
                 });
             });
-
             var params = {
                 steps: {
                     ':original': {
@@ -657,7 +655,6 @@ module.exports = function (app, passport, mongoose) {
                 },
                 template_id: '7ecc48d0c00a11e3a4a6730cb0abb3d1'
             };
-
             client.send(params, function(ok) {
                 // success callback [optional]
                 res.send('http://www.gueime.com.br/uploads/' + sendImg );
@@ -666,10 +663,6 @@ module.exports = function (app, passport, mongoose) {
                 console.log('Error: ' + JSON.stringify(err));
             });
         } 
-
-        
-
-
     });
 
 
@@ -1101,8 +1094,91 @@ module.exports = function (app, passport, mongoose) {
                     }
                     
                     Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
-                        res.render('profile',{user: user, title: "Gueime - " + user.name.first + ' ' + user.name.last, docs: docs, profile: user, canonical: true, date: date});
+                        res.render('profile',{user: user, title: "Gueime - " + user.name.first + ' ' + user.name.last, docs: docs, profile: user, canonical: true, date: date, public: false});
                     });
+                });
+            }
+        }
+    });
+
+
+    // PROFILE PHOTOS EDIT
+    app.get('/profile/editar', function(req, res, next){
+        var user = req.user;
+        if(!user){
+            res.redirect('/');
+        } else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            } else{
+                sessionReload(req, res, next);
+                Artigos.find({status: 'publicado', 'authors.main': user._id}, {description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1}).sort({'_id': -1}).limit(6).exec(function(err, docs){
+                    for (i = 0; i < docs.length; i++) {
+                        docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
+                    }
+                    if(user.birthDate){
+                        var date = user.birthDate;
+                        date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                    }
+                    
+                    Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
+                        res.render('profileEdit',{user: user, title: "Gueime - " + user.name.first + ' ' + user.name.last, docs: docs, profile: user, canonical: true, date: date, public: false});
+                    });
+                });
+            }
+        }
+    });
+
+    // UPLOAD DE NOVA COVER NA CRIAÇÃO DE PERFIL
+    app.post('/newProfileCover', function (req, res, next) {
+        var user = req.user;
+        var sendImg = req.files.file.name;
+        if (user.status == 'admin' || user.status == 'parceiro') {
+            // get the temporary location of the file
+            var tmp_path = req.files.file.path;
+            // set where the file should actually exists - in this case it is in the "images" directory
+            var target_path = './public/uploads/' + sendImg;
+            // move the file from the temporary location to the intended location
+            fs.rename(tmp_path, target_path, function (err) {
+                if (err) throw err;
+                // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
+                fs.unlink(tmp_path, function () {
+                    if (err) throw err;
+                    
+                });
+            });
+            var params = {
+                steps: {
+                    ':original': {
+                        robot: '/http/import',
+                        url: 'http://www.gueime.com.br/uploads/' + sendImg
+                    }
+                },
+                template_id: '7ecc48d0c00a11e3a4a6730cb0abb3d1'
+            };
+            client.send(params, function(ok) {
+                // success callback [optional]
+                res.send('http://www.gueime.com.br/uploads/' + sendImg );
+            }, function(err) {
+                // error callback [optional]
+                console.log('Error: ' + JSON.stringify(err));
+            });
+        } 
+    });
+
+    // UPDATE DA IMAGEM
+    app.post('/profileImage', function(req, res){
+        var user = req.user;
+        var position = req.body.position;
+
+        if(!user){
+            res.redirect('/');
+        }else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            } else {
+                Users.update({_id: user._id}, {$set: {cover: position}}, function(err){
+                    res.redirect('/profile');
                 });
             }
         }
@@ -1187,7 +1263,11 @@ module.exports = function (app, passport, mongoose) {
                     for (i = 0; i < docs.length; i++) {
                         docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                     }
-                    res.render('profile',{title: "Gueime - " + profileUser.name.first + ' ' + profileUser.name.last, docs: docs, profile: profileUser, img: true});
+                    if(profileUser.birthDate){
+                        var date = profileUser.birthDate;
+                        date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                    }
+                    res.render('profile',{title: "Gueime - " + profileUser.name.first + ' ' + profileUser.name.last, docs: docs, profile: profileUser, public: true, date: date});
                 });
             });
         } else{
@@ -1200,8 +1280,12 @@ module.exports = function (app, passport, mongoose) {
                         for (i = 0; i < docs.length; i++) {
                             docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                         }
+                        if(profileUser.birthDate){
+                            var date = profileUser.birthDate;
+                            date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                        }
                         Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
-                            res.render('profile',{user: user, title: "Gueime - " + profileUser.name.first + ' ' + profileUser.name.last, docs: docs, profile: profileUser, img: true});
+                            res.render('profile',{user: user, title: "Gueime - " + profileUser.name.first + ' ' + profileUser.name.last, docs: docs, profile: profileUser, public: true, date: date});
                         });
                     });
                 });

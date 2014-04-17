@@ -12,6 +12,12 @@ SEARCH
 --> Fazer paginação com botão para carregar mais por ajax
 
 
+WIKI
+
+--> https://github.com/nhoss2/nodewiki
+
+--> https://github.com/claudioc/jingo
+
 SAVE
 
 --> Transformar nomes em slugs

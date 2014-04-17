@@ -17,10 +17,7 @@ var UserSchema = new mongoose.Schema({
     site: String,
     bio: String,
     photo: String,
-    cover: {
-        main:{type: String, default: "background: url(images/profileBg.jpg) no-repeat center 0px;"},
-        other: {type: String, default: "background: url(../images/profileBg.jpg) no-repeat center 0px;"}
-    },
+    cover: {type: String, default: "background: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images/profileBg.jpg) no-repeat center 0px;"},
     password: {
         main: String
     },

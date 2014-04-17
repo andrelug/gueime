@@ -92,7 +92,7 @@ $(document).on('click', 'a', function () {
         var ajaxUrl = $(this).attr('href');
         ajaxPage(ajaxUrl);
         history.pushState(null, null, ajaxUrl);
-        ga('send', 'pageview', ajaxUrl);
+        ga('send', 'pageview', ajaxUrl + '/ajax');
         return false;
     }
 });

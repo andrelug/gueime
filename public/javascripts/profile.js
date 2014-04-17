@@ -133,3 +133,22 @@ $('#loadMoreProfile').on('click', function () {
         container.isotope('insert', $(data));
     });
 });
+
+// EDITION
+$('#mainImageChange').hover(function () {
+    $(this).find('a').show();
+});
+$('#mainImageChange').on('mouseleave', function () {
+    $(this).find('a').hide();
+});
+$('#profileImageSubmit').on('click', function () {
+    var image = $('.mainImage').attr('style');
+    $('input[name=position]').attr('value', image);
+});
+
+$('.editingProf').hover(function () {
+    $('#editButtonHover').addClass('mostra');
+});
+$('.editingProf').on('mouseleave', function () {
+    $('#editButtonHover').removeClass('mostra');
+});

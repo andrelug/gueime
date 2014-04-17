@@ -447,7 +447,7 @@ textarea
     position absolute
     z-index 1
 
-#dropzoneImage
+#dropzoneImage, #dropzoneProfileImage
     position relative
     z-index 2
     width 100%
@@ -513,7 +513,7 @@ textarea
     .dz-message:hover
         opacity 0
 
-#dropzoneImage.dz-clickable.dz-drag-hover
+#dropzoneImage.dz-clickable.dz-drag-hover, #dropzoneProfileImage.dz-clickable.dz-drag-hover
     background-color lighten(gRed, 50%) !important
     -webkit-transition all 400ms ease
     -moz-transition all 400ms ease
@@ -755,7 +755,6 @@ textarea
     background-color gRed
     color white
     padding-top 15px
-    margin-top 25px
     box-shadow 0 1px 3px rgba(0,0,0,0.3)
     -0-box-shadow 0 1px 3px rgba(0,0,0,0.3)
     -webkit-box-shadow 0 1px 3px rgba(0,0,0,0.3)
@@ -827,3 +826,37 @@ textarea
 
 #gridProfileArticles
     margin-top 20px
+
+#profileEditing h5, #profileSocialEditing h5
+    font-weight bold
+    font-family 'nexa', sans-serif
+
+.viewInfos
+    font-weight normal
+
+#editImageButton
+    display none
+    position absolute
+    right 30px
+    bottom 10px
+
+#mainText #profile #editButtonHover
+    display none !important
+    margin-top 5px
+.parallax #mainText #profile #editButtonHover.mostra
+    display block !important
+
+.gameLogo li
+    list-style none
+    padding 5px
+    
+.gameLogos
+    width 25px
+    margin-right 5px
+    margin-bottom 3px
+.gameLogoStats
+    margin-bottom 3px
+
+    i
+        font-size 16pt
+        margin-right 5px

@@ -1,0 +1,91 @@
+div#profileEditing.row.slides
+    div.medium-12.columns
+        div.row
+            div.medium-6.columns.name-field
+                h5 Nome: 
+                    span.viewInfos #{profile.name.first} #{profile.name.last}
+            div.medium-6.columns
+                h5 Apelido: 
+                    span.viewInfos #{profile.name.nickName}
+
+        div.row
+            div.medium-6.columns
+                h5 Data de Nascimento: 
+                    span.viewInfos #{date}
+            div.medium-6.columns.date-field
+                if(profile.gender == 'male')
+                    h5 Gênero: 
+                        span.viewInfos Masculino
+                else if(profile.gender == 'female')
+                    h5 Gênero: 
+                        span.viewInfos Feminino
+                else
+                    h5 Gênero: 
+                        span.viewInfos #{profile.gender}
+        div.row
+            div.medium-6.columns
+                h5 Website: 
+                    span.viewInfos #{profile.website}
+            div.medium-6.columns.date-url
+                h5 País: 
+                    span.viewInfos #{profile.localization.country}
+        div.row
+            div.medium-6.columns
+                h5 Cidade: 
+                    span.viewInfos #{profile.localization.city}
+            div.medium-6.columns
+                
+        div.row
+            div.small-12.columns
+                h5 Bio
+                h6 
+                    span.viewInfos #{profile.bio}
+
+                            
+div#profileSocialEditing.row.slides
+    div.medium-12.columns
+        div.row
+            div.large-12.columns
+                if(profile.social.facebook.url)
+                    a.button#facebookBtn(href="#{profile.social.facebook.url}", target="_blank") <i class="fa fa-facebook"></i> Facebook
+
+            div.large-6.columns
+                if(profile.social.twitter.url)
+                    a.button#twitterBtn(href="#{profile.social.twitter.url}", target="_blank") <i class="fa fa-twitter"></i> Twitter
+
+            div.large-6.columns
+                if(profile.social.google.url)
+                    a.button#googleBtn(href="#{profile.social.google.url}e", target="_blank") <i class="fa fa-google-plus"></i> Google+
+
+        div.row
+            div.large-6.columns
+                h5 XboxLive: 
+                    span.viewInfos #{user.social.xboxLive.name}
+
+            div.large-6.columns
+                h5 PSN: 
+                    span.viewInfos #{user.social.psn.name}
+
+        div.row
+            div.large-6.columns
+                h5 Steam:
+                    span.viewInfos #{user.social.steam.name}
+
+            div.large-6.columns
+                h5 Wii U:
+                    span.viewInfos #{user.social.nintendo}
+
+        div.row
+            div.large-6.columns
+                h5 Wii U:
+                    span.viewInfos #{user.social.gameCenter}
+
+            div.large-6.columns
+                h5 Alvanista:
+                    span.viewInfos #{user.social.alvanista}
+
+div#profileConqEditing.row.slides
+    div.medium-12.columns
+        if(user.gamification.achievements.length < 1)
+            h5 #{profile.name.first} não tem nenhuma conquista ainda
+        else
