@@ -13,5 +13,5 @@ var DevPubSchema = new mongoose.Schema({
 
 });
 
-// create the model for users and expose it to app // Users var
+// create the model for users and expose it to app // DevPub var
 module.exports = mongoose.model('DevPub', DevPubSchema);

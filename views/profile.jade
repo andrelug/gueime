@@ -30,7 +30,6 @@ block content
         else
             section.mainImage(style="#{profile.cover}")
                 div.wrapImage
-                    a.button#editImageButton(href="/profile/editar") Trocar Imagem
                     article.bloco
 
         div.parallax(style="border-top:5px solid #E54C3C;")
@@ -104,7 +103,7 @@ block content
                                 ul.gameLogo
                                     if(profile.social.xboxLive.name)
                                         li
-                                            img.gameLogos(src="/images/xbox_icon@2x.png") 
+                                            img.gameLogos(src="/images/logo.png") 
                                             span  #{profile.social.xboxLive.name}
                                     if(profile.social.steam.name)
                                         li
@@ -121,18 +120,18 @@ block content
                                 a.create(href="#", data-dropdown="drop2") <i class="fa fa-pencil-square-o"></i> <span>Criar</span>
                                 ul#drop2.f-dropdown(data-dropdown-content)
                                     li
-                                        a(href="/criar/jogo") Jogo
+                                        a(href="/criar/novo/jogo") Jogo
                                     li
-                                        a(href="/criar/publicadora") Publicadora
+                                        a(href="/criar/novo/publicadora") Publicadora
                                     li
-                                        a(href="/criar/desenvolvedor") Desenvolvedor
+                                        a(href="/criar/novo/desenvolvedor") Desenvolvedor
                                     li
-                                        a(href="/criar/genero") Gênero
+                                        a(href="/criar/novo/genero") Gênero
                                     li
-                                        a(href="/criar/usuario") Usuário
+                                        a(href="/criar/novo/usuario") Usuário
 
-                                a.create(href="#", data-dropdown="drop2") <i class="fa fa-coffee"></i> <span>Gerenciar</span>
-                                ul#drop2.f-dropdown(data-dropdown-content)
+                                a.create(href="#", data-dropdown="drop3") <i class="fa fa-coffee"></i> <span>Gerenciar</span>
+                                ul#drop3.f-dropdown(data-dropdown-content)
                                     li
                                         a(href="/gerenciar/jogos") Jogos
                                     li
@@ -144,8 +143,8 @@ block content
                                     li
                                         a(href="/gerenciar/usuarios") Usuários
 
-                                a.create(href="#", data-dropdown="drop3") <i class="fa fa-question"></i> <span>Trivia</span>
-                                ul#drop3.f-dropdown(data-dropdown-content)
+                                a.create(href="#", data-dropdown="drop4") <i class="fa fa-question"></i> <span>Trivia</span>
+                                ul#drop4.f-dropdown(data-dropdown-content)
                                     li
                                         a(href="/trivia/novo") Novo
                                     li
@@ -153,8 +152,8 @@ block content
                                     li
                                         a(href="/trivia/stats") Stats
 
-                                a.create(href="#", data-dropdown="drop4") <i class="fa fa-trophy"></i> <span>Conquistas</span>
-                                ul#drop4.f-dropdown(data-dropdown-content)
+                                a.create(href="#", data-dropdown="drop5") <i class="fa fa-trophy"></i> <span>Conquistas</span>
+                                ul#drop5.f-dropdown(data-dropdown-content)
                                     li
                                         a(href="/conquistas/nova") Nova
                                     li

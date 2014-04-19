@@ -1,3 +1,24 @@
+div.row
+    div.medium-12.medium-centered.columns(style="padding:0")
+        div.row.reviewScore
+            div.large-3.medium-5.columns
+                div.smallScore
+                    img(src="/images/nota_layout2.png")
+                    h4 #{score}<span>.#{decimal}</span>
+            div.large-9.medium-7.columns
+                h5 #{article.review.punchLine}
+                div.row
+                    div.medium-6.columns
+                        if(good)
+                            ul.good
+                                for bom in good
+                                    li <span>+</span> #{bom}
+
+                    div.medium-6.columns
+                        if(bad)
+                            ul
+                                for ruim in bad
+                                    li <span>-</span> #{ruim}
 section#author.row
     div.large-3.medium-6.columns.autImage
         div.row

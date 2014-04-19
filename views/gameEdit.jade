@@ -1,0 +1,74 @@
+extends layouts/gameEditLayout
+
+block content
+
+    div#check(style="display:none;") check
+    
+    header.header.row
+        div.content-wrap
+            div.content
+        div#darken
+        div.row#searchBack(style="background-color: white;display:none;")
+            div.large-4.medium-6.medium-centered.large-centered.columns(style="height:8rem;")
+                span.vertical-align-helper
+                a(href="/"): img(src="/images/gueime.png", alt="Gueime Logo")
+
+        div#specialLogo.gueimeWhite.show-for-large-up(style="display:block;right:30px;left:auto")
+            a(href="/"): img(src="/images/gueime-white.png", alt="white logo")
+
+        div#specialLogo.gueimeWhite.show-for-medium-down.smallLogo(style="display:block;left: auto; right:20px;position:absolute;")
+            a(href="/"): img(src="/images/gueime-white-small.png", alt="white logo")
+
+        include partials/nav
+
+    div#wrapper
+        section.mainImage
+            div#loadingAj(style="display:none;")
+                img(src="/images/spinning.gif")
+            div.dropzone-previews
+            form#dropzoneGameImage(action="/newGameCapa", class="dropzone", enctype="multipart/form-data")
+                input(type="file", name="file")
+            div.wrapImage
+                article.bloco
+
+        div.parallax(style="border-top:5px solid #479ECD;")
+            article#mainText
+                div.row#game
+                    div.large-3.medium-4.columns#imageAndOptGame
+                        div.editingProf(style="height: 300px;background-color: white")
+                            form#dropzoneGameCover(action="/newGameCover", class="dropzone", enctype="multipart/form-data", style="border:none")
+                                input(type="file", name="file", style="display: none")
+
+
+                    div.large-8.large-offset-1.medium-7.medium-offset-1.columns
+                        form(action="/newGame", method="POST")
+                            input(type="hidden", name="gameCover")
+                            input(type="hidden", name="position")
+                            input.gameEditTitle(type="text", placeholder="Nome do Jogo", name="nomeJogo")
+                            div.row#gamerStats
+                                div.large-6.columns
+                                    ul.gameLogo
+                                        li.gameLogoStats <i class="fa fa-calendar"></i> 
+                                            input(type="text", placeholder="Data de Lançamento (dd/mm/aaaa)", name="date")
+                                        li.gameLogoStats <i class="fa fa-gamepad"></i> 
+                                            input(type="text", placeholder="Plataformas", name="plataformas")
+                                        li.gameLogoStats <i class="fa fa-gavel"></i> 
+                                            input(type="text", placeholder="ESRB", name="esrb")
+
+                                div.large-6.columns
+                                    ul.gameLogo
+                                        li.gameLogoStats Gênero: 
+                                            input(type="text", placeholder="Gênero", name="genero")
+                                        li.gameLogoStats Desenvolvedor: 
+                                            input(type="text", placeholder="Desenvolvedor", name="desenvolvedor")
+                                        li.gameLogoStats Distribuidora: 
+                                            input(type="text", placeholder="Distribuidora", name="distribuidora")
+
+                                div.large-12.columns
+                                    textarea(name="sobre", placeholder="Sobre o jogo")
+
+                                div.row
+                                    div.medium-6.medium-offset-3.columns
+                                        input.button#submitNewGame(type="submit")
+                     
+    include partials/footer

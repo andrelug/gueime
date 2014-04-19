@@ -4,14 +4,10 @@ $('#profileMenu').find('a').on('click', function () {
     $('#profileMenu').find('a').each(function () {
         $(this).removeClass('selecionado');
     });
-
-    
+  
     if(check != 'selecionado'){
         $(this).addClass('selecionado');
     }
-
-    
-
 
     var thisHmtl = $(this).html();
     switch (thisHmtl) {
@@ -38,6 +34,34 @@ $('#profileMenu').find('a').on('click', function () {
         case 'Deletar':
             $('.slides').not('#profileDeleEditing').slideUp();
             $('#profileDeleEditing').slideToggle();
+            break
+
+        case 'Sobre':
+            $('.slides').not('#gameSobre').slideUp();
+            $('#gameSobre').slideToggle();
+            break
+
+        default:
+            break
+    }
+});
+
+$('#gameMenu').find('a').on('click', function () {
+    var check = $(this).attr('class')
+    $('#gameMenu').find('a').each(function () {
+        $(this).removeClass('selecionadoJogo');
+    });
+
+    
+    if(check != 'selecionadoJogo'){
+        $(this).addClass('selecionadoJogo');
+    }
+
+    var thisHmtl = $(this).html();
+    switch (thisHmtl) {
+        case 'Sobre':
+            $('.slides').not('#gameSobre').slideUp();
+            $('#gameSobre').slideToggle();
             break
 
         default:
@@ -146,9 +170,83 @@ $('#profileImageSubmit').on('click', function () {
     $('input[name=position]').attr('value', image);
 });
 
+
+
 $('.editingProf').hover(function () {
     $('#editButtonHover').addClass('mostra');
+    $('#userGameImage').addClass('mostra');
 });
 $('.editingProf').on('mouseleave', function () {
     $('#editButtonHover').removeClass('mostra');
+    $('#userGameImage').removeClass('mostra');
+});
+
+
+// GAME CREATE
+
+$('#submitNewGame').on('click', function () {
+    gameImageCover = $('.mainImage').attr('style');
+    $('input[name=position]').attr('value', gameImageCover);
+    $('input[name=gameCover]').attr('value', gameCover);
+});
+
+
+
+// JOGADO, FAVORITO
+var url = $('#userTitle').text();
+$('#favorito').on('click', function () {
+    if ($(this).attr('class') == 'button jogado') {
+        $.ajax({
+            type: 'PUT',
+            url: '/addToFavorites',
+            data: {game: url, add: false}
+        }).done(function (data) {
+            $('#favorito').fadeOut(300, function () {
+                $(this).removeClass('jogado').html('<i class="fa fa-times"></i>').fadeIn().delay(300).fadeOut(300, function () {
+                    $(this).html('Favorito').fadeIn();
+                });
+            });
+        });  
+    } else {
+        $.ajax({
+            type: 'PUT',
+            url: '/addToFavorites',
+            data: {game: url, add: true}
+        }).done(function (data) {
+            $('#favorito').fadeOut(300, function () {
+                $(this).addClass('jogado').html('<i class="fa fa-check"></i>').fadeIn().delay(300).fadeOut(300, function () {
+                    $(this).html('<i class="fa fa-check"></i> Gosto').fadeIn();
+                });
+            });
+        });
+    }
+    
+});
+
+$('#joguei').on('click', function () {
+    if ($(this).attr('class') == 'button jogado') {
+        $.ajax({
+            type: 'PUT',
+            url: '/addToCollection',
+            data: {game: url, add: false}
+        }).done(function (data) {
+            $('#joguei').fadeOut(300, function () {
+                $(this).removeClass('jogado').html('<i class="fa fa-times"></i>').fadeIn().delay(300).fadeOut(300, function () {
+                    $(this).html('Tenho').fadeIn();
+                });
+            });
+        });  
+    } else {
+        $.ajax({
+            type: 'PUT',
+            url: '/addToCollection',
+            data: {game: url, add: true}
+        }).done(function (data) {
+            $('#joguei').fadeOut(300, function () {
+                $(this).addClass('jogado').html('<i class="fa fa-check"></i>').fadeIn().delay(300).fadeOut(300, function () {
+                    $(this).html('<i class="fa fa-check"></i> Joguei').fadeIn();
+                });
+            });
+        });
+    }
 });

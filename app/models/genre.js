@@ -9,5 +9,5 @@ var GenreSchema = new mongoose.Schema({
     text: String,
 });
 
-// create the model for users and expose it to app // Users var
+// create the model for users and expose it to app // Genre var
 module.exports = mongoose.model('Genre', GenreSchema);

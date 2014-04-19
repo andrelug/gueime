@@ -56,5 +56,5 @@ var ArticleSchema = new mongoose.Schema({
     date: { type: Date, default: Date.now }
 });
 
-// create the model for users and expose it to app // Users var
+// create the model for users and expose it to app // Artigo var
 module.exports = mongoose.model('Article', ArticleSchema);

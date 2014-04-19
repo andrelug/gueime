@@ -48,14 +48,19 @@ div#profileSocialEditing.row.slides
             div.large-12.columns
                 if(profile.social.facebook.url)
                     a.button#facebookBtn(href="#{profile.social.facebook.url}", target="_blank") <i class="fa fa-facebook"></i> Facebook
+                else if(profile.social.facebook.id)
+                    a.button#facebookBtn(href="http://www.facebook.com/#{profile.social.facebook.id}", target="_blank") <i class="fa fa-facebook"></i> Facebook
 
             div.large-6.columns
-                if(profile.social.twitter.url)
+                if(profile.social.twitter.username)
+                    a.button#twitterBtn(href="http://www.twitter.com/#{profile.social.twitter.username}", target="_blank") <i class="fa fa-twitter"></i> Twitter
+                else if(profile.social.twitter.url)
                     a.button#twitterBtn(href="#{profile.social.twitter.url}", target="_blank") <i class="fa fa-twitter"></i> Twitter
-
             div.large-6.columns
-                if(profile.social.google.url)
-                    a.button#googleBtn(href="#{profile.social.google.url}e", target="_blank") <i class="fa fa-google-plus"></i> Google+
+                if(profile.social.google.id)
+                    a.button#googleBtn(href="https://plus.google.com/#{profile.social.google.id}", target="_blank") <i class="fa fa-google-plus"></i> Google+
+                else if(profile.social.google.id)
+                    a.button#googleBtn(href="#{profile.social.google.url}", target="_blank") <i class="fa fa-google-plus"></i> Google+
 
         div.row
             div.large-6.columns

@@ -83,3 +83,22 @@ ACHIEVEMENTS AND CONSOLES
     https://www.npmjs.org/package/steam
     https://www.npmjs.org/package/steam-web
     https://www.npmjs.org/package/steam.js
+
+
+ANALYTICS
+
+--> https://segment.io/pricing
+
+--> http://nodetime.com/
+
+--> http://www.slideshare.net/innotech_conference/real-time-analytics-with-nodejs-and-azure
+
+
+
+NOTIFICATIONS
+
+--> Socket.io
+
+--> http://www.ibm.com/developerworks/library/wa-notify-app/
+
+--> http://wavded.github.io/humane-js/

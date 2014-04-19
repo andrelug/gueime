@@ -38,7 +38,8 @@ var UserSchema = new mongoose.Schema({
             id: String,
             token: String,
             displayName: String,
-            username: String
+            username: String,
+            url: String
         },
         google: {
             id: String,
@@ -65,8 +66,8 @@ var UserSchema = new mongoose.Schema({
     },
     graph: {
         visits: Number,
-        gamesCol: [{ type:  mongoose.Schema.Types.ObjectId, ref: 'Game' }],
-        gamesLike: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Game' }],
+        gamesCol: [String],
+        gamesLike: [String],
         publications: Number,
         searches: Number
 
