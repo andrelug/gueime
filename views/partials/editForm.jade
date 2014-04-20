@@ -1,7 +1,7 @@
 div#perguntas
     form#wizard(action="/graph", method="post")
         input(type="hidden", name="position")
-        input(type="hidden", name="coverUrl")
+        input(type="hidden", name="coverUrl", value="#{article.cover.image}")
         input(type="hidden", name="docTitle")
         input(type="hidden", name="tipo", value="#{tipo}")
         h1 Tutorial

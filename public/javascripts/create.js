@@ -192,7 +192,9 @@ $("#wizard").steps({
 
         var image = $('.mainImage').attr('style');
         $('input[name=position]').attr('value', image);
-        $('input[name=coverUrl]').attr('value', imageCover);
+        if($('input[name=coverUrl]').attr('value') == undefined){
+            $('input[name=coverUrl]').attr('value', imageCover);
+        }        
         $('input[name=docTitle]').attr('value', docTitle);
         exitNoSave = false;
 
