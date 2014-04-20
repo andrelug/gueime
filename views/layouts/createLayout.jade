@@ -31,3 +31,6 @@ html.no-js(lang="pt_BR")
         script(src="/javascripts/vendor/dropzone.js")
         script(src="/javascripts/vendor/steps.js")
         script(src="/javascripts/create.js")
+        if(edit == true)
+            script.
+                var imageUrl = #{article.cover.image}

@@ -431,6 +431,7 @@ rgba(0,0,0,0.3)
   font-weight: bold;
   color: #2c3e50;
   font-size: 2.75em;
+  display: inline-block;
 }
 .gameEditTitle {
   margint-top: 20px !important;
