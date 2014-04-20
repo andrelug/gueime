@@ -1,9 +1,29 @@
 div.row#gridArticles
+    if(game != undefined && game.length > 0)
+        for doc in game
+            a(href="/noticias/#{doc.slug}", data-link="ajax").item
+                div.hidden.infoNews.row
+                    div.small-12.small-centered.columns.headline
+                        p #{doc.description}
+                    div.small-12.small-centered.columns
+                        div.row.graph
+                            div.large-6.medium-6.small-6.columns
+                                span 
+                            div.large-6.medium-6.small-6.columns
+                                span.toRight <i class="fa fa-eye"></i> #{doc.graph.views}<i class="fa fa-comment", style="margin-left:10px;"></i> <fb:comments-count href=http://www.gueime.com.br/noticias/#{doc.slug} ></fb:comments-count>
+                div.articleImage(style="background-image: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images#{doc.cover.image});")
+                div.details
+                    div.name
+                        span#newsText
+                            h2.ref #{doc.title}
+
     include partials/tiles
 
 
 script.scriptLoad.
     var container = $('#gridArticles');
+    var containerGames = $('#gridGames');
+           
     container.waitForImages(function () {
         $("#spinning").hide();
         $('body').css('overflow-y', 'auto');
@@ -44,7 +64,4 @@ script.scriptLoad.
                 }
             }
         });
-
-
-
     }, null, true);

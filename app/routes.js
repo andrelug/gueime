@@ -118,10 +118,26 @@ module.exports = function (app, passport, mongoose) {
                     docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                 }
                 if(!user){
-                    res.render('tags', { docs: docs });
+                    var gameStr;
+                    if(req.query.str != undefined){
+                        gameStr = req.query.str.toString();
+                    } else{
+                        gameStr = 0
+                    }
+                    Games.find({status: 'publicado', title: new RegExp(gameStr, 'i') }, function(err, game){
+                        res.render('tags', { docs: docs, game: game  });
+                    });
                 } else {
                     Users.update({'_id': user._id}, {$inc: {'graph.searches': 1}}, function(err){
-                        res.render('tags', { docs: docs });
+                        var gameStr;
+                        if(req.query.str != undefined){
+                            gameStr = req.query.str.toString();
+                        } else{
+                            gameStr = 0
+                        }
+                        Games.find({status: 'publicado', title: new RegExp(gameStr, 'i') }, function(err, game){
+                            res.render('tags', { docs: docs, game: game  });
+                        });
                     });
                 }
             });
@@ -139,10 +155,26 @@ module.exports = function (app, passport, mongoose) {
                     docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                 }
                 if(!user){
-                    res.render('tags', { docs: docs });
+                    var gameStr;
+                    if(req.query.str != undefined){
+                        gameStr = req.query.str.toString();
+                    } else{
+                        gameStr = 0
+                    }
+                    Games.find({status: 'publicado', title: new RegExp(gameStr, 'i') }, function(err, game){
+                        res.render('tags', { docs: docs, game: game  });
+                    });
                 } else {
                     Users.update({'_id': user._id}, {$inc: {'graph.searches': 1}}, function(err){
-                        res.render('tags', { docs: docs });
+                        var gameStr;
+                        if(req.query.str != undefined){
+                            gameStr = req.query.str.toString();
+                        } else{
+                            gameStr = 0
+                        }
+                        Games.find({status: 'publicado', title: new RegExp(gameStr, 'i') }, function(err, game){
+                            res.render('tags', { docs: docs, game: game });
+                        });
                     });
                 }
             });

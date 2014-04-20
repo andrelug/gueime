@@ -26,8 +26,7 @@ tagSearch = function (str) {
         }
     }).done(function (data) {
         $('#load').before(data);
-
-        history.pushState(null, null, '/?t=' + searchStr.toString().replace(',', '-'));
+        history.pushState(null, null, '/?t=' + searchStr.toString().split(' ').join('-'));
 
         $('#gridArticles').waitForImages(function () {
             $('#load').show();
@@ -46,7 +45,7 @@ tagSearch = function (str) {
                 history.pushState(null, null, '/');
                 ga('send', 'pageview', '/');
             } else {
-                ga('send', 'pageview', '/?t=' + searchStr.toString().replace(',', '-'));
+                ga('send', 'pageview', '/?t=' + searchStr.toString().split(' ').join('-'));
             }
             n = $('.item').length;
             if (n < 7) {
@@ -66,12 +65,14 @@ tagSearch = function (str) {
 
 $('#mainInput').keypress(function (event) {
     if (event.keyCode == 13) {
-        $('#tagSelection').append('<span>' + $(this).val() + '<a class="tag" id="' + $(this).val() + '">x</a></span>');
-        // execute search
-        searchStr.push($(this).val());
-        tagSearch(searchStr);
+        if($(this).val() != ''){
+            $('#tagSelection').append('<span>' + $(this).val() + '<a class="tag" id="' + $(this).val().split(' ').join('-') + '">x</a></span>');
+            // execute search
+            searchStr.push($(this).val());
+            tagSearch(searchStr);
 
-        $(this).val('');
+            $(this).val('');
+        }
     }
 
 });

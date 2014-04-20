@@ -1,24 +1,25 @@
-div.row
-    div.medium-12.medium-centered.columns(style="padding:0")
-        div.row.reviewScore
-            div.large-3.medium-5.columns
-                div.smallScore
-                    img(src="/images/nota_layout2.png")
-                    h4 #{score}<span>.#{decimal}</span>
-            div.large-9.medium-7.columns
-                h5 #{article.review.punchLine}
-                div.row
-                    div.medium-6.columns
-                        if(good)
-                            ul.good
-                                for bom in good
-                                    li <span>+</span> #{bom}
+if(tipo == 'analise')
+    div.row
+        div.medium-12.medium-centered.columns(style="padding:0")
+            div.row.reviewScore
+                div.large-3.medium-5.columns
+                    div.smallScore
+                        img(src="/images/nota_layout2.png")
+                        h4 #{score}<span>.#{decimal}</span>
+                div.large-9.medium-7.columns
+                    h5 #{article.review.punchLine}
+                    div.row
+                        div.medium-6.columns
+                            if(good)
+                                ul.good
+                                    for bom in good
+                                        li <span>+</span> #{bom}
 
-                    div.medium-6.columns
-                        if(bad)
-                            ul
-                                for ruim in bad
-                                    li <span>-</span> #{ruim}
+                        div.medium-6.columns
+                            if(bad)
+                                ul
+                                    for ruim in bad
+                                        li <span>-</span> #{ruim}
 section#author.row
     div.large-3.medium-6.columns.autImage
         div.row
@@ -33,12 +34,21 @@ section#author.row
                         if(author.social.facebook.url)
                             div.small-4.columns
                                 a(href="#{author.social.facebook.url}", title="facebook") <i class="fa fa-facebook"></i>
+                        else if(author.social.facebook.id)
+                            div.small-4.columns
+                                a(href="http://www.facebook.com/#{author.social.facebook.id}", title="facebook") <i class="fa fa-facebook"></i>
                         if(author.social.twitter.url)
                             div.small-4.columns
                                 a(href="#{author.social.twitter.url}", title="twitter") <i class="fa fa-twitter"></i>
+                        else if(author.social.twitter.username)
+                            div.small-4.columns
+                                a(href="http://www.twitter.com/#{author.social.twitter.username}", title="twitter") <i class="fa fa-twitter"></i>
                         if(author.social.google.url)
                             div.small-4.columns
                                 a(href="#{author.social.google.url}", title="google plus") <i class="fa fa-google-plus"></i>
+                        else if(author.social.google.id)
+                            div.small-4.columns
+                                a(href="https://plus.google.com/#{author.social.google.id}", title="google plus") <i class="fa fa-google-plus"></i>
 
     div.large-9.medium-6.columns.autShare
         if(tipo == 'noticia')

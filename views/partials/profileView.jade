@@ -59,7 +59,7 @@ div#profileSocialEditing.row.slides
             div.large-6.columns
                 if(profile.social.google.id)
                     a.button#googleBtn(href="https://plus.google.com/#{profile.social.google.id}", target="_blank") <i class="fa fa-google-plus"></i> Google+
-                else if(profile.social.google.id)
+                else if(profile.social.google.url)
                     a.button#googleBtn(href="#{profile.social.google.url}", target="_blank") <i class="fa fa-google-plus"></i> Google+
 
         div.row

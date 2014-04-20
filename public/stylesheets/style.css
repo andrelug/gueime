@@ -430,6 +430,7 @@ rgba(0,0,0,0.3)
   font-family: 'Nexa';
   font-weight: bold;
   color: #2c3e50;
+  font-size: 2.75em;
 }
 .gameEditTitle {
   margint-top: 20px !important;
@@ -1040,7 +1041,7 @@ rgba(0,0,0,0.3)
   -ms-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
   -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
   padding: 30px;
-  margin-bottom: 20px;
+  margin: 0 0 20px 0;
   background-color: #34495e;
 }
 .row .reviewScore h4 {
@@ -1058,9 +1059,7 @@ rgba(0,0,0,0.3)
 }
 .row .reviewScore h5 {
   font-family: 'nexa', sans-serif;
-  font-weight: bold;
   font-size: 16pt;
-  font-style: italic;
   color: #fff;
 }
 .row .reviewScore ul li {
@@ -1162,4 +1161,8 @@ rgba(0,0,0,0.3)
 }
 .jogado:hover {
   background-color: #23a68a !important;
+}
+#gameSearch,
+#newsSearch {
+  background-color: #e54c3c;
 }
