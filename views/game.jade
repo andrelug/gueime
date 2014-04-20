@@ -22,7 +22,7 @@ block content
         include partials/nav
 
     div#wrapper
-        section.mainImage#mainImageChange(style="background: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images/gameBg.jpg) no-repeat center -65px")
+        section.mainImage#mainImageChange(style="#{game.cover}")
             div.wrapImage
                 article.bloco
 
@@ -34,7 +34,7 @@ block content
                             div.small-12.columns
                                 h1#userTitle(style="color: white") #{game.title}
                         div.editingProf
-                            img#userGameImage(src="/images/mass-cover.jpg")
+                            img#userGameImage(src="#{game.gameCover}")
                             if(user && user.status == 'admin' || user && user.status == 'editor')
                                 a.hide-for-small.button.tiny#editButtonHover(href="/jogos/#{game.slug}/editar") Editar
                         div#gameStats.row
@@ -49,18 +49,18 @@ block content
                                 h3 <i class="fa fa-eye" title="Visualizações"></i>
                             div.small-10.columns
                                 h3 #{game.graph.views}
-
-                            div.medium-6.columns(style="padding:0px;")
-                                - var gameIndex = game.title
-                                if(user.graph.gamesCol.indexOf(gameIndex) > -1)
-                                    a.button#joguei.jogado <i class="fa fa-check"></i> Joguei
-                                else
-                                    a.button#joguei Joguei
-                            div.medium-6.columns(style="padding:0px;")
-                                if(user.graph.gamesLike.indexOf(gameIndex) > -1)
-                                    a.button#favorito.jogado <i class="fa fa-check"></i> Favorito
-                                else
-                                    a.button#favorito Favorito
+                            if(user)
+                                div.medium-6.columns(style="padding:0px;")
+                                    - var gameIndex = game.title
+                                    if(user.graph.gamesCol.indexOf(gameIndex) > -1)
+                                        a.button#joguei.jogado <i class="fa fa-check"></i> Joguei
+                                    else
+                                        a.button#joguei Joguei
+                                div.medium-6.columns(style="padding:0px;")
+                                    if(user.graph.gamesLike.indexOf(gameIndex) > -1)
+                                        a.button#favorito.jogado <i class="fa fa-check"></i> Favorito
+                                    else
+                                        a.button#favorito Favorito
 
                         div.row#gameMenu
                             div.small-12.columns
@@ -92,14 +92,13 @@ block content
 
                         include partials/gameView
         
+            if(analise != undefined)
+                div.row#gameReview
+                    div.medium-8.medium-centered.columns
+                        h2 Análise
 
-            div.row#gameReview
-                div.medium-8.medium-centered.columns
-                    h2 Análise
-
-            div.row
-                div.medium-8.medium-centered.columns
-                    if(analise != undefined)
+                div.row
+                    div.medium-8.medium-centered.columns
                         a(href="/analises/#{analise[0].slug}")
                             div.gameAnalise(style="background-image: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images/uploads/dantes-inferno-analise.jpg);")
                                 div.analisePattern

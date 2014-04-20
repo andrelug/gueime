@@ -1355,34 +1355,36 @@ module.exports = function (app, passport, mongoose) {
         if(!user){
             Games.findOneAndUpdate({slug: jogo}, {$inc: { 'graph.views': 1}}, function(err, game){
                 Artigos.find({status: 'publicado', $or: [{slug: jogo, type: 'analise'}, {'graph.games': game.title}]}).sort({_id: -1}).limit(6).exec(function(err, articles){
-                    for (i = 0; i < articles.length; i++) {
-                        articles[i].title = decodeURIComponent(articles[i].title).replace('<p>', '').replace('</p>', '')
-                    }
-                    if(game.release){
-                        var date = game.release;
-                        date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
-                    }
-
                     var analise = [];
                         var artigo = [];
+                        var decimal, score;
+                        
                         for (i = 0; i < articles.length; i++) {
                             articles[i].title = decodeURIComponent(articles[i].title).replace('<p>', '').replace('</p>', '');
                             if(articles[i].type == 'analise'){
                                 analise.push(articles[i]);
+                                    
                             } else{
                                 artigo.push(articles[i]);
                             }
                         }
+                        if(analise.length > 0) {
+                            scores = analise[0].review.score.toString().split('.');
+                            score = scores[0];
 
-                    var scores = analise[0].review.score.toString().split('.'),
-                        score = scores[0],
-                        decimal;
-
-                    if(scores.length < 2){
-                        decimal = 0;
-                    } else{
-                        decimal = scores[1];
-                    }
+                            if(scores.length < 2){
+                                decimal = 0;
+                            } else{
+                                decimal = scores[1];
+                            }
+                        } else{
+                            analise = undefined;
+                        }
+                        
+                        if(game.release){
+                            var date = game.release;
+                            date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                        }
 
                     res.render('game', {title: "Gueime - " + game.title, game: game, docs: artigo, analise: analise, date: date, score: score, decimal: decimal })
                 });
@@ -1397,6 +1399,7 @@ module.exports = function (app, passport, mongoose) {
                         
                         var analise = [];
                         var artigo = [];
+                        var decimal, score;
                         
                         for (i = 0; i < articles.length; i++) {
                             articles[i].title = decodeURIComponent(articles[i].title).replace('<p>', '').replace('</p>', '');
@@ -1407,14 +1410,19 @@ module.exports = function (app, passport, mongoose) {
                                 artigo.push(articles[i]);
                             }
                         }
-                        scores = analise[0].review.score.toString().split('.');
-                        score = scores[0];
+                        if(analise.length > 0) {
+                            scores = analise[0].review.score.toString().split('.');
+                            score = scores[0];
 
-                        if(scores.length < 2){
-                            decimal = 0;
+                            if(scores.length < 2){
+                                decimal = 0;
+                            } else{
+                                decimal = scores[1];
+                            }
                         } else{
-                            decimal = scores[1];
+                            analise = undefined;
                         }
+                        
                         if(game.release){
                             var date = game.release;
                             date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
@@ -1486,7 +1494,12 @@ module.exports = function (app, passport, mongoose) {
             } else{
                 sessionReload(req, res, next);
                 Games.findOne({status: 'publicado', slug: jogo}).exec(function(err, docs){
-                    res.render('gameEdit',{user: user, title: "Gueime - " + docs.title, game: docs, public: false});
+                    var date;
+                    if(docs.release){
+                        date = docs.release;
+                        date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                    }
+                    res.render('gameEdit',{user: user, title: "Gueime - " + docs.title, game: docs, edit: true, date: date});
                 });
             }
         }
@@ -1502,7 +1515,7 @@ module.exports = function (app, passport, mongoose) {
                 res.redirect('/users/restore');
             } else if(user.status == 'admin' || user.status == 'editor'){
                 sessionReload(req, res, next);
-                res.render('gameEdit',{user: user, title: "Gueime - Novo Jogo", public: false});
+                res.render('gameEdit',{user: user, title: "Gueime - Novo Jogo", edit: false});
             } else{
                 res.redirect('/parceiros');
             }
@@ -1586,7 +1599,7 @@ module.exports = function (app, passport, mongoose) {
 
     // CRIAÇÃO GAME
     app.post('/newGame', function(req, res){
-        var user = req.user;
+        var user = req.user,
             b = req.body,
             plataformas = b.plataformas,
             sendPlataformas,
@@ -1606,15 +1619,19 @@ module.exports = function (app, passport, mongoose) {
 
             var facet = [];
 
-            if (plataformas != undefined) { plataformas = func.string_to_slug(b.plataformas); if (plataformas.indexOf('-') > -1) { plataformas = plataformas.split(/[\s,-]+/); sendPlataformas = plataformas.split(/[\s,-]+/); facet = facet.concat(plataformas); } else { facet.push(plataformas.split(' ')) } }
+            if (plataformas != undefined) { plataformas = func.string_to_slug(b.plataformas); if (plataformas.indexOf('-') > -1) { plataformas = plataformas.split(/[\s,-]+/); sendPlataformas = b.plataformas.toString().split(','); facet = facet.concat(plataformas); } else { facet.push(plataformas.split(' ')); sendPlataformas = b.plataformas}}
 
-            if (esrb != undefined) { esrb = func.string_to_slug(b.esrb); if (esrb.indexOf('-') > -1) { esrb = esrb.split(/[\s,-]+/); sendEsrb = esrb.split(/[\s,-]+/); facet = facet.concat(esrb); } else { facet.push(esrb.split(' ')) } }
+            if (esrb != undefined) { esrb = func.string_to_slug(b.esrb); if (esrb.indexOf('-') > -1) { esrb = esrb.split(/[\s,-]+/); sendEsrb = b.esrb.toString().split(','); facet = facet.concat(esrb); } else { facet.push(esrb.split(' ')); sendEsrb = b.esrb } }
 
-            if (genero != undefined) { genero = func.string_to_slug(b.genero); if (genero.indexOf('-') > -1) { genero = genero.split(/[\s,-]+/); sendGenero = genero.split(/[\s,-]+/); facet = facet.concat(genero); } else { facet.push(genero.split(' ')) } }
+            if (genero != undefined) { genero = func.string_to_slug(b.genero); if (genero.indexOf('-') > -1) { genero = genero.split(/[\s,-]+/); sendGenero = b.genero.toString().split(','); facet = facet.concat(genero); } else { facet.push(genero.split(' ')); sendGenero = b.genero } }
 
-            if (desenvolvedor != undefined) { desenvolvedor = func.string_to_slug(b.desenvolvedor); if (desenvolvedor.indexOf('-') > -1) { desenvolvedor = desenvolvedor.split(/[\s,-]+/); sendDesenvolvedor = desenvolvedor.split(/[\s,-]+/); facet = facet.concat(desenvolvedor); } else { facet.push(desenvolvedor.split(' ')) } }
+            if (desenvolvedor != undefined) { desenvolvedor = func.string_to_slug(b.desenvolvedor); if (desenvolvedor.indexOf('-') > -1) { desenvolvedor = desenvolvedor.split(/[\s,-]+/); sendDesenvolvedor = b.desenvolvedor.toString().split(','); facet = facet.concat(desenvolvedor); } else { facet.push(desenvolvedor.split(' ')); sendDesenvolvedor = b.desenvolvedor } }
 
-            if (distribuidora != undefined) { distribuidora = func.string_to_slug(b.distribuidora); if (distribuidora.indexOf('-') > -1) { distribuidora = distribuidora.split(/[\s,-]+/); sendDistribuidora = distribuidora.split(/[\s,-]+/); facet = facet.concat(distribuidora); } else { facet.push(distribuidora.split(' ')) } }
+            if (distribuidora != undefined) { distribuidora = func.string_to_slug(b.distribuidora); if (distribuidora.indexOf('-') > -1) { distribuidora = distribuidora.split(/[\s,-]+/); sendDistribuidora = b.distribuidora.toString().split(','); facet = facet.concat(distribuidora); } else { facet.push(distribuidora.split(' ')); sendDistribuidora = b.distribuidora }}
+
+            if(!b.position){
+                b.position = "background: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images/gameBg.jpg) no-repeat center -65px;";
+            }
 
             facet = func.cleanArray(facet);
 
@@ -1629,25 +1646,45 @@ module.exports = function (app, passport, mongoose) {
                 res.redirect('/users/restore');
             } else if(user.status == 'admin' || user.status == 'editor'){
 
-                new Games({
-                    title: b.nomeJogo,
-                    about: b.sobre,
-                    slug: slug,
-                    gameCover: b.gameCover,
-                    cover: b.position,
-                    release: lauchDate,
-                    'graph.esrb': sendEsrb,
-                    facet: sendFacet,
-                    'graph.console': sendPlataformas,
-                    'graph.genre': sendGenero,
-                    'graph.developer': sendDesenvolvedor,
-                    'graph.publisher': sendDistribuidora,
-                    status: 'publicado'
+                if(b.editing == 'yes'){
+                    Games.update({slug: slug}, {$set:{
+                        title: b.nomeJogo,
+                        about: b.sobre,
+                        slug: slug,
+                        gameCover: b.gameCover,
+                        cover: b.position,
+                        release: lauchDate,
+                        'graph.esrb': sendEsrb,
+                        facet: sendFacet,
+                        'graph.console': sendPlataformas,
+                        'graph.genre': sendGenero,
+                        'graph.developer': sendDesenvolvedor,
+                        'graph.publisher': sendDistribuidora,
+                        status: 'publicado'
+                    }}, function(err){
+                        res.redirect('/jogos/' + slug);
+                    });
+                } else {
+                    new Games({
+                        title: b.nomeJogo,
+                        about: b.sobre,
+                        slug: slug,
+                        gameCover: b.gameCover,
+                        cover: b.position,
+                        release: lauchDate,
+                        'graph.esrb': sendEsrb,
+                        facet: sendFacet,
+                        'graph.console': sendPlataformas,
+                        'graph.genre': sendGenero,
+                        'graph.developer': sendDesenvolvedor,
+                        'graph.publisher': sendDistribuidora,
+                        status: 'publicado'
 
-                }).save(function(err, docs){
-                    console.log(docs);
-                    res.redirect('/jogos/' + docs.slug);
-                });
+                    }).save(function(err, docs){
+                        console.log(docs);
+                        res.redirect('/jogos/' + docs.slug);
+                    });
+                }                
             }
         }
     });

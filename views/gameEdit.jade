@@ -22,50 +22,97 @@ block content
         include partials/nav
 
     div#wrapper
-        section.mainImage
-            div#loadingAj(style="display:none;")
-                img(src="/images/spinning.gif")
-            div.dropzone-previews
-            form#dropzoneGameImage(action="/newGameCapa", class="dropzone", enctype="multipart/form-data")
-                input(type="file", name="file")
-            div.wrapImage
-                article.bloco
+        if(edit == true)
+            section.mainImage(style="#{game.cover}")
+                div#loadingAj(style="display:none;")
+                    img(src="/images/spinning.gif")
+                div.dropzone-previews
+                form#dropzoneGameImage(action="/newGameCapa", class="dropzone", enctype="multipart/form-data", style="width:20%")
+                    input(type="file", name="file")
+                div.wrapImage
+                    article.bloco
+
+        else
+            section.mainImage
+                div#loadingAj(style="display:none;")
+                    img(src="/images/spinning.gif")
+                div.dropzone-previews
+                form#dropzoneGameImage(action="/newGameCapa", class="dropzone", enctype="multipart/form-data")
+                    input(type="file", name="file")
+                div.wrapImage
+                    article.bloco
 
         div.parallax(style="border-top:5px solid #479ECD;")
             article#mainText
                 div.row#game
                     div.large-3.medium-4.columns#imageAndOptGame
-                        div.editingProf(style="height: 300px;background-color: white")
-                            form#dropzoneGameCover(action="/newGameCover", class="dropzone", enctype="multipart/form-data", style="border:none")
-                                input(type="file", name="file", style="display: none")
+                        if(edit == true)
+                            img#userGameImage(src="#{game.gameCover}")
+                            div.editingProf
+                                form#dropzoneGameCover(action="/newGameCover", class="dropzone", enctype="multipart/form-data", style="border:none;")
+                                    input(type="file", name="file", style="display: none;")
+                        else
+                            div.editingProf(style="height: 300px;background-color: white")
+                                form#dropzoneGameCover(action="/newGameCover", class="dropzone", enctype="multipart/form-data", style="border:none;")
+                                    input(type="file", name="file", style="display: none;")
 
 
                     div.large-8.large-offset-1.medium-7.medium-offset-1.columns
                         form(action="/newGame", method="POST")
                             input(type="hidden", name="gameCover")
                             input(type="hidden", name="position")
-                            input.gameEditTitle(type="text", placeholder="Nome do Jogo", name="nomeJogo")
+                            if(edit == true)
+                                input(type="hidden", name="editing", value="yes")
+                            else
+                                input(type="hidden", name="editing", value="no")
+                            
+                            if(edit == true)
+                                input.gameEditTitle(type="text", placeholder="Nome do Jogo", name="nomeJogo", value="#{game.title}")
+                            else
+                                input.gameEditTitle(type="text", placeholder="Nome do Jogo", name="nomeJogo")
                             div.row#gamerStats
                                 div.large-6.columns
                                     ul.gameLogo
                                         li.gameLogoStats <i class="fa fa-calendar"></i> 
-                                            input(type="text", placeholder="Data de Lançamento (dd/mm/aaaa)", name="date")
+                                            if(edit == true)
+                                                input(type="text", placeholder="Data de Lançamento (dd/mm/aaaa)", name="date", value="#{date}")
+                                            else
+                                                input(type="text", placeholder="Data de Lançamento (dd/mm/aaaa)", name="date")
                                         li.gameLogoStats <i class="fa fa-gamepad"></i> 
-                                            input(type="text", placeholder="Plataformas", name="plataformas")
+                                            if(edit == true)
+                                                input(type="text", placeholder="Plataformas", name="plataformas", value="#{game.graph.console}")
+                                            else
+                                                input(type="text", placeholder="Plataformas", name="plataformas")
                                         li.gameLogoStats <i class="fa fa-gavel"></i> 
-                                            input(type="text", placeholder="ESRB", name="esrb")
+                                            if(edit == true)
+                                                input(type="text", placeholder="ESRB", name="esrb", value="#{game.graph.esrb}")
+                                            else
+                                                input(type="text", placeholder="ESRB", name="esrb")
 
                                 div.large-6.columns
                                     ul.gameLogo
                                         li.gameLogoStats Gênero: 
-                                            input(type="text", placeholder="Gênero", name="genero")
+                                            if(edit == true)
+                                                input(type="text", placeholder="Gênero", name="genero", value="#{game.graph.genre}")
+                                            else
+                                                input(type="text", placeholder="Gênero", name="genero")
                                         li.gameLogoStats Desenvolvedor: 
-                                            input(type="text", placeholder="Desenvolvedor", name="desenvolvedor")
+                                            if(edit == true)
+                                                input(type="text", placeholder="Desenvolvedor", name="desenvolvedor", value="#{game.graph.developer}")
+                                            else
+                                                input(type="text", placeholder="Desenvolvedor", name="desenvolvedor")
                                         li.gameLogoStats Distribuidora: 
-                                            input(type="text", placeholder="Distribuidora", name="distribuidora")
+                                            if(edit == true)
+                                                input(type="text", placeholder="Distribuidora", name="distribuidora", value="#{game.graph.publisher}")
+                                            else
+                                                input(type="text", placeholder="Distribuidora", name="distribuidora")
 
                                 div.large-12.columns
-                                    textarea(name="sobre", placeholder="Sobre o jogo")
+                                    if(edit == true)
+                                        textarea(name="sobre", placeholder="Sobre o jogo")
+                                            !{game.about}
+                                    else
+                                        textarea(name="sobre", placeholder="Sobre o jogo")
 
                                 div.row
                                     div.medium-6.medium-offset-3.columns
