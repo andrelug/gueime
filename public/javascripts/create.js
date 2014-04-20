@@ -1,3 +1,4 @@
+var imageCover;
 var docTitle;
 var nJson;
 var exitNoSave = true;
