@@ -63,6 +63,7 @@ block content
                             input(type="hidden", name="position")
                             if(edit == true)
                                 input(type="hidden", name="editing", value="yes")
+                                input(type="hidden", name="lastSlug", value="#{game.slug}")
                             else
                                 input(type="hidden", name="editing", value="no")
                             

@@ -1383,7 +1383,7 @@ module.exports = function (app, passport, mongoose) {
         var dev = req.params.dev;
 
         if(!user){
-            DevPub.findOneAndUpdate({slug: dev}, {$inc: { 'graph.views': 1}}, function(err, dev){
+            DevPub.findOneAndUpdate({slug: dev, type: 'developer'}, {$inc: { 'graph.views': 1}}, function(err, dev){
                 Artigos.find({status: 'publicado', 'graph.developers': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
                     Games.find({status: 'publicado', 'graph.developer': new RegExp(dev.title, 'i')}).sort({_id:-1}).limit(6).exec(function(err, games){
                         var artigo = [];
@@ -1412,7 +1412,7 @@ module.exports = function (app, passport, mongoose) {
                 res.redirect('/users/restore');
             } else{
                 sessionReload(req, res, next);
-                DevPub.findOneAndUpdate({slug: dev}, {$inc: { 'graph.views': 1}}, function(err, dev){
+                DevPub.findOneAndUpdate({slug: dev, type: 'developer'}, {$inc: { 'graph.views': 1}}, function(err, dev){
                     Artigos.find({status: 'publicado', 'graph.developers': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
                         Games.find({status: 'publicado', 'graph.developer': new RegExp(dev.title, 'i')}).sort({_id:-1}).limit(6).exec(function(err, games){
                             var artigo = [];
@@ -1443,9 +1443,9 @@ module.exports = function (app, passport, mongoose) {
     });
 
     // EDIT DESENVOLVEDOR
-    app.get('/desenvolvedor/:jogo/editar', function(req, res, next){
+    app.get('/desenvolvedor/:dev/editar', function(req, res, next){
         var user = req.user;
-        var jogo = req.params.jogo;
+        var dev = req.params.dev;
         if(!user){
             res.redirect('/');
         } else{
@@ -1453,13 +1453,13 @@ module.exports = function (app, passport, mongoose) {
                 res.redirect('/users/restore');
             } else{
                 sessionReload(req, res, next);
-                Games.findOne({status: 'publicado', slug: jogo}).exec(function(err, docs){
+                DevPub.findOne({status: 'publicado', type: 'developer', slug: dev}).exec(function(err, docs){
                     var date;
-                    if(docs.release){
-                        date = docs.release;
+                    if(docs.startDate){
+                        date = docs.startDate;
                         date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                     }
-                    res.render('devPubEdit',{user: user, title: "Gueime - " + docs.title, game: docs, edit: true, date: date, dev: true});
+                    res.render('devPubEdit',{user: user, title: "Gueime - " + docs.title, developer: docs, edit: true, date: date, dev: true});
                 });
             }
         }
@@ -1524,10 +1524,14 @@ module.exports = function (app, passport, mongoose) {
             } else if(user.status == 'admin' || user.status == 'editor'){
                 
                 if(type == 'dev'){
+                    console.log('dev');
                     if(b.editing == 'yes'){
-                        DevPub.update({slug: slug}, {$set:{
+                        console.log('editing');
+                        console.log(slug);
+                        console.log(b.lastSlug);
+                        DevPub.update({slug: b.lastSlug, type: 'developer'}, {$set:{
                             type: 'developer',
-                            title: b.nomeJogo,
+                            title: b.nomeDevPub,
                             about: b.sobre,
                             slug: slug,
                             devCover: b.gameCover,
@@ -1541,7 +1545,7 @@ module.exports = function (app, passport, mongoose) {
                     } else {
                         new DevPub({
                             type: 'developer',
-                            title: b.nomeJogo,
+                            title: b.nomeDevPub,
                             about: b.sobre,
                             slug: slug,
                             devCover: b.gameCover,
@@ -1556,9 +1560,9 @@ module.exports = function (app, passport, mongoose) {
                     }
                 } else if(type == 'pub'){
                     if(b.editing == 'yes'){
-                        DevPub.update({slug: slug}, {$set:{
+                        DevPub.update({slug: b.lastSlug, type: 'publisher'}, {$set:{
                             type: 'publisher',
-                            title: b.nomeJogo,
+                            title: b.nomeDevPub,
                             about: b.sobre,
                             slug: slug,
                             devCover: b.gameCover,
@@ -1572,7 +1576,7 @@ module.exports = function (app, passport, mongoose) {
                     } else {
                         new DevPub({
                             type: 'publisher',
-                            title: b.nomeJogo,
+                            title: b.nomeDevPub,
                             about: b.sobre,
                             slug: slug,
                             devCover: b.gameCover,
@@ -1906,7 +1910,7 @@ module.exports = function (app, passport, mongoose) {
             } else if(user.status == 'admin' || user.status == 'editor'){
 
                 if(b.editing == 'yes'){
-                    Games.update({slug: slug}, {$set:{
+                    Games.update({slug: b.lastSlug}, {$set:{
                         title: b.nomeJogo,
                         about: b.sobre,
                         slug: slug,

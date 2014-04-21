@@ -23,7 +23,7 @@ block content
 
     div#wrapper
         if(edit == true)
-            section.mainImage(style="#{dev.cover}")
+            section.mainImage(style="#{developer.cover}")
                 div#loadingAj(style="display:none;")
                     img(src="/images/spinning.gif")
                 div.dropzone-previews
@@ -47,7 +47,7 @@ block content
                 div.row#game
                     div.large-3.medium-4.columns#imageAndOptGame
                         if(edit == true)
-                            img#userGameImage(src="#{dev.devCover}")
+                            img#userGameImage(src="#{developer.devCover}")
                             div.editingProf
                                 form#dropzoneGameCover(action="/newGameCover", class="dropzone", enctype="multipart/form-data", style="border:none;")
                                     input(type="file", name="file", style="display: none;")
@@ -61,6 +61,7 @@ block content
                         form(action="/newDevPub", method="POST")
                             input(type="hidden", name="gameCover")
                             input(type="hidden", name="position")
+                            
                             if(dev == true)
                                 input(type="hidden", name="type", value="dev")
                             else if(pub == true)
@@ -68,11 +69,12 @@ block content
 
                             if(edit == true)
                                 input(type="hidden", name="editing", value="yes")
+                                input(type="hidden", name="lastSlug", value="#{developer.slug}")
                             else
                                 input(type="hidden", name="editing", value="no")
                             
                             if(edit == true)
-                                input.gameEditTitle(type="text", placeholder="Nome do Desenvolvedor", name="nomeDevPub", value="#{dev.title}")
+                                input.gameEditTitle(type="text", placeholder="Nome do Desenvolvedor", name="nomeDevPub", value="#{developer.title}")
                             else
                                 input.gameEditTitle(type="text", placeholder="Nome do Desenvolvedor", name="nomeDevPub")
                             div.row#gamerStats
@@ -88,14 +90,14 @@ block content
                                     ul.gameLogo
                                         li.gameLogoStats Website: 
                                             if(edit == true)
-                                                input(type="text", placeholder="WebSite", name="website", value="#{dev.website}")
+                                                input(type="text", placeholder="WebSite", name="website", value="#{developer.website}")
                                             else
                                                 input(type="text", placeholder="WebSite", name="website")
 
                                 div.large-12.columns
                                     if(edit == true)
                                         textarea(name="sobre", placeholder="Sobre o desenvolvedor")
-                                            !{dev.about}
+                                            !{developer.about}
                                     else
                                         textarea(name="sobre", placeholder="Sobre o desenvolvedor")
 
