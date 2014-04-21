@@ -4,12 +4,17 @@ var mongoose = require('mongoose');
 var DevPubSchema = new mongoose.Schema({
 
     type: String,
-    name: {type: String, unique: true},
+    title: {type: String, unique: true},
     slug: {type: String, unique: true, index: true},
-    description: String,
-    text: String,
-    logo: Buffer,
-    startDate: Date
+    about: String,
+    website: String,
+    devCover: String,
+    cover: String,
+    startDate: Date,
+    status: String,
+    graph:{
+        views: Number
+    }
 
 });
 

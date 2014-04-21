@@ -70,11 +70,11 @@ html.no-js(lang="pt_BR")
                 });
 
                 var n = $('.item').length;
-                var b = "#{game.title}";  // TROCAR ISSO
+                var b = "#{dev.title}";  // TROCAR ISSO
                 if (n < 7) {
                     $.ajax({
                         type: "GET",
-                        url: "/paginationGame",
+                        url: "/paginationDev",
                         data: {n: n, b: b},
                         dataType: 'html'
                     }).done(function (data) {

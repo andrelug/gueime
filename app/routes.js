@@ -1,6 +1,7 @@
 var Users = require('./models/user');
 var Artigos = require('./models/article');
 var Games = require('./models/game');
+var DevPub = require('./models/devPub');
 var func = require('../config/functions');
 var facebook = require('../config/facebook.js');
 var ip = require('ip');
@@ -1374,8 +1375,222 @@ module.exports = function (app, passport, mongoose) {
         });
     });
 
+    // =====================================
+    // DESENVOLVEDOR PAGE ==================
+    // =====================================
+    app.get('/desenvolvedor/:dev', function(req, res, next){
+        var user = req.user;
+        var dev = req.params.dev;
+
+        if(!user){
+            DevPub.findOneAndUpdate({slug: dev}, {$inc: { 'graph.views': 1}}, function(err, dev){
+                Artigos.find({status: 'publicado', 'graph.developers': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
+                    Games.find({status: 'publicado', 'graph.developer': new RegExp(dev.title, 'i')}).sort({_id:-1}).limit(6).exec(function(err, games){
+                        var artigo = [];
+                        
+                        for (i = 0; i < articles.length; i++) {
+                            articles[i].title = decodeURIComponent(articles[i].title).replace('<p>', '').replace('</p>', '');
+                            artigo.push(articles[i]);
+                        }
+                        if(games.length > 0) {
+
+                        } else{
+                            games = undefined;
+                        }
+                        
+                        if(dev.startDate){
+                            var date = dev.startDate;
+                            date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                        }
+
+                        res.render('devPub', {user: user, title: "Gueime - " + dev.title, dev: dev, docs: artigo, games: games, date: date })
+                    });
+                });
+            });
+        } else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            } else{
+                sessionReload(req, res, next);
+                DevPub.findOneAndUpdate({slug: dev}, {$inc: { 'graph.views': 1}}, function(err, dev){
+                    Artigos.find({status: 'publicado', 'graph.developers': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
+                        Games.find({status: 'publicado', 'graph.developer': new RegExp(dev.title, 'i')}).sort({_id:-1}).limit(6).exec(function(err, games){
+                            var artigo = [];
+                        
+                            for (i = 0; i < articles.length; i++) {
+                                articles[i].title = decodeURIComponent(articles[i].title).replace('<p>', '').replace('</p>', '');
+                                artigo.push(articles[i]);
+                            }
+                            if(games.length > 0) {
+
+                            } else{
+                                games = undefined;
+                            }
+                        
+                            if(dev.startDate){
+                                var date = dev.startDate;
+                                date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                            }
+
+                            Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
+                                res.render('devPub', {user: user, title: "Gueime - " + dev.title, dev: dev, docs: artigo, games: games, date: date })
+                            }); 
+                        });
+                    });
+                });
+            }
+        }
+    });
+
+    // EDIT DESENVOLVEDOR
+    app.get('/desenvolvedor/:jogo/editar', function(req, res, next){
+        var user = req.user;
+        var jogo = req.params.jogo;
+        if(!user){
+            res.redirect('/');
+        } else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            } else{
+                sessionReload(req, res, next);
+                Games.findOne({status: 'publicado', slug: jogo}).exec(function(err, docs){
+                    var date;
+                    if(docs.release){
+                        date = docs.release;
+                        date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                    }
+                    res.render('devPubEdit',{user: user, title: "Gueime - " + docs.title, game: docs, edit: true, date: date, dev: true});
+                });
+            }
+        }
+    });
+
+    // PAGINAÇÃO DEVELOPER
+    app.get('/paginationDev', function(req, res){
+        var devTitle = req.query.b.toString();
+        var n = req.query.n;
+
+        Artigos.find({status: 'publicado', 'graph.developers': new RegExp(devTitle, 'i'), type: {$ne: 'analise'}}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).skip(n).exec(function (err, docs) {
+            for (i = 0; i < docs.length; i++) {
+                docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
+            }
+            res.render('tags', { docs: docs });
+        });
+    });
+
+    // NOVO DESENVOLVEDOR
+    app.get('/criar/novo/desenvolvedor', function(req, res, next){
+        var user = req.user;
+        if(!user){
+            res.redirect('/');
+        } else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            } else if(user.status == 'admin' || user.status == 'editor'){
+                sessionReload(req, res, next);
+                res.render('devPubEdit',{user: user, title: "Gueime - Novo Jogo", edit: false, dev: true});
+            } else{
+                res.redirect('/parceiros');
+            }
+        }
+    });
+
+    // CRIAÇÃO DESENVOLVEDOR
+    app.post('/newDevPub', function(req, res){
+        var user = req.user,
+            b = req.body,
+            website = b.website,
+            sendWebsite,
+            type = b.type;
+
+        var slug = func.string_to_slug(b.nomeDevPub);
+
+        var date = b.date.split('/');
+        var lauchDate = new Date(date[2], date[1] - 1, date[0]);
+
+            if (website != undefined) { website = func.string_to_slug(b.website); if (website.indexOf('-') > -1) { website = website.split(/[\s,-]+/); sendWebsite = b.website.toString().split(',');; } else { sendWebsite = b.website } }
 
 
+            if(!b.position){
+                b.position = "background: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images/gameBg.jpg) no-repeat center -65px;";
+            }
+
+
+        if(!user){
+            res.redirect('/');
+        }else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            } else if(user.status == 'admin' || user.status == 'editor'){
+                
+                if(type == 'dev'){
+                    if(b.editing == 'yes'){
+                        DevPub.update({slug: slug}, {$set:{
+                            type: 'developer',
+                            title: b.nomeJogo,
+                            about: b.sobre,
+                            slug: slug,
+                            devCover: b.gameCover,
+                            cover: b.position,
+                            startDate: lauchDate,
+                            website: sendWebsite,
+                            status: 'publicado'
+                        }}, function(err){
+                            res.redirect('/desenvolvedor/' + slug);
+                        });
+                    } else {
+                        new DevPub({
+                            type: 'developer',
+                            title: b.nomeJogo,
+                            about: b.sobre,
+                            slug: slug,
+                            devCover: b.gameCover,
+                            cover: b.position,
+                            startDate: lauchDate,
+                            website: sendWebsite,
+                            status: 'publicado'
+                        }).save(function(err, docs){
+                            console.log(docs);
+                            res.redirect('/desenvolvedor/' + docs.slug);
+                        });
+                    }
+                } else if(type == 'pub'){
+                    if(b.editing == 'yes'){
+                        DevPub.update({slug: slug}, {$set:{
+                            type: 'publisher',
+                            title: b.nomeJogo,
+                            about: b.sobre,
+                            slug: slug,
+                            devCover: b.gameCover,
+                            cover: b.position,
+                            startDate: lauchDate,
+                            website: sendWebsite,
+                            status: 'publicado'
+                        }}, function(err){
+                            res.redirect('/desenvolvedor/' + slug);
+                        });
+                    } else {
+                        new DevPub({
+                            type: 'publisher',
+                            title: b.nomeJogo,
+                            about: b.sobre,
+                            slug: slug,
+                            devCover: b.gameCover,
+                            cover: b.position,
+                            startDate: lauchDate,
+                            website: sendWebsite,
+                            status: 'publicado'
+                        }).save(function(err, docs){
+                            console.log(docs);
+                            res.redirect('/desenvolvedor/' + docs.slug);
+                        });
+                    }
+                }
+
+                               
+            }
+        }
+    });
 
     // =====================================
     // GAMES PAGE ==========================
@@ -1386,7 +1601,7 @@ module.exports = function (app, passport, mongoose) {
 
         if(!user){
             Games.findOneAndUpdate({slug: jogo}, {$inc: { 'graph.views': 1}}, function(err, game){
-                Artigos.find({status: 'publicado', $or: [{slug: jogo, type: 'analise'}, {'graph.games': game.title}]}).sort({_id: -1}).limit(6).exec(function(err, articles){
+                Artigos.find({status: 'publicado', $or: [{slug: jogo, type: 'analise'}, {'graph.games': new RegExp(game.title, 'i')}]}).sort({_id: -1}).limit(6).exec(function(err, articles){
                     var analise = [];
                         var artigo = [];
                         var decimal, score;
@@ -1427,7 +1642,7 @@ module.exports = function (app, passport, mongoose) {
             } else{
                 sessionReload(req, res, next);
                 Games.findOneAndUpdate({slug: jogo}, {$inc: { 'graph.views': 1}}, function(err, game){
-                    Artigos.find({status: 'publicado', $or: [{slug: jogo, type: 'analise'}, {'graph.games': game.title}] }).sort({_id: -1}).limit(6).exec(function(err, articles){
+                    Artigos.find({status: 'publicado', $or: [{slug: jogo, type: 'analise'}, {'graph.games': new RegExp(game.title, 'i')}] }).sort({_id: -1}).limit(6).exec(function(err, articles){
                         
                         var analise = [];
                         var artigo = [];
@@ -1513,6 +1728,18 @@ module.exports = function (app, passport, mongoose) {
         }
     });
 
+    // PAGINAÇÃO GAME
+    app.get('/paginationGame', function(req, res){
+        var gameTitle = req.query.b.toString();
+        var n = req.query.n;
+
+        Artigos.find({status: 'publicado', 'graph.games': new RegExp(gameTitle, 'i'), type: {$ne: 'analise'}}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).skip(n).exec(function (err, docs) {
+            for (i = 0; i < docs.length; i++) {
+                docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
+            }
+            res.render('tags', { docs: docs });
+        });
+    });
 
     // EDIT GAME
     app.get('/jogos/:jogo/editar', function(req, res, next){
@@ -1723,8 +1950,15 @@ module.exports = function (app, passport, mongoose) {
 
 
 
+    // =====================================
+    // PÁGINAS ESPECIAIS ===================
+    // ===================================== 
 
-
+    // PARCEIROS
+    app.get('/parceiros', function(req, res){
+        var user = req.user
+        res.render('parceiros', {title: "Gueime - Parceiros", user: user})
+    });
     // =====================================
     // USER SIGNUP =========================
     // ===================================== I should later find a way to pass params to the jade file here and put values on the inputs

@@ -44,7 +44,7 @@ var ArticleSchema = new mongoose.Schema({
     },
     graph: {
         games: String,
-        consoles: String,
+        consoles:String,
         genres: String,
         developers: String,
         publishers: String,

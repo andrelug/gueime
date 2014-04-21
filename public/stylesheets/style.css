@@ -351,6 +351,10 @@ rgba(0,0,0,0.3)
     position: absolute !important;
     top: -295px !important;
   }
+  .articleImage {
+    background: 0 0;
+    background-size: 100%;
+  }
 }
 #darken {
   position: fixed;

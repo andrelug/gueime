@@ -1,0 +1,38 @@
+extends layouts/articleLayout
+
+block content
+    div#check(style="display:none;") check
+    
+    header.header.row
+        div.content-wrap
+            div.content
+        div#darken
+        div.row#searchBack(style="background-color: white;display:none;")
+            div.large-4.medium-6.medium-centered.large-centered.columns(style="height:8rem;")
+                span.vertical-align-helper
+                a(href="/"): img(src="/images/gueime.png", alt="Gueime Logo")
+
+        div#specialLogo.gueimeWhite.show-for-large-up(style="display:block;right:30px;left:auto")
+            a(href="/"): img(src="/images/gueime-white.png", alt="white logo")
+
+        div#specialLogo.gueimeWhite.show-for-medium-down.smallLogo(style="display:block;left: auto; right:20px;position:absolute;")
+            a(href="/"): img(src="/images/gueime-white-small.png", alt="white logo")
+
+        include partials/nav
+
+    div#wrapper
+        section.mainImage(style="background: url(/images/parceiros.jpg) no-repeat center -30px")
+            div.wrapImage
+                article.bloco
+
+        div.parallax(style="border-top:5px solid #27b899;")
+            article#mainText
+                include partials/parceiros
+                div.fb-like(data-href="", data-layout="button_count", data-action="like", data-show-faces="true", data-share="true")
+                
+                
+    div.row#load(style="display: none;")
+        div.medium-6.small-centered.columns
+            a#loadMore.button Mais artigos
+                     
+    include partials/footer
