@@ -1385,9 +1385,9 @@ module.exports = function (app, passport, mongoose) {
         var dev = req.params.gen;
 
         if(!user){
-            DevPub.findOneAndUpdate({slug: dev, type: 'publisher'}, {$inc: { 'graph.views': 1}}, function(err, dev){
-                Artigos.find({status: 'publicado', 'graph.publisher': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
-                    Games.find({status: 'publicado', 'graph.publisher': new RegExp(dev.title, 'i')}).sort({release:1}).limit(6).exec(function(err, games){
+            Genre.findOneAndUpdate({slug: dev}, {$inc: { 'graph.views': 1}}, function(err, dev){
+                Artigos.find({status: 'publicado', 'graph.genres': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
+                    Games.find({status: 'publicado', 'graph.genre': new RegExp(dev.title, 'i')}).sort({release:1}).limit(6).exec(function(err, games){
                         var artigo = [];
                         
                         for (i = 0; i < articles.length; i++) {
@@ -1399,13 +1399,8 @@ module.exports = function (app, passport, mongoose) {
                         } else{
                             games = undefined;
                         }
-                        
-                        if(dev.startDate){
-                            var date = dev.startDate;
-                            date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
-                        }
 
-                        res.render('genre', {user: user, title: "Gueime - " + dev.title, dev: dev, docs: artigo, games: games, date: date, pub: true })
+                        res.render('genre', {user: user, title: "Gueime - " + dev.title, dev: dev, docs: artigo, games: games, pub: true })
                     });
                 });
             });

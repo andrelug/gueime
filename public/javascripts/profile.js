@@ -1,4 +1,22 @@
 var profileContainer = $('#gridProfileArticles');
+
+function string_to_slug(str) {
+    str = str.replace(/^\s+|\s+$/g, ''); // trim
+    str = str.toLowerCase();
+
+    // remove accents, swap ñ for n, etc
+    var from = "àãáäâèéëêìíïîòóõöôùúüûñç·/_,:;";
+    var to = "aaaaaeeeeiiiiooooouuuunc------";
+    for (var i = 0, l = from.length; i < l; i++) {
+        str = str.replace(new RegExp(from.charAt(i), 'g'), to.charAt(i));
+    }
+
+    str = str.replace(/[^a-z0-9 -]/g, '') // remove invalid chars
+    .replace(/\s+/g, '-') // collapse whitespace and replace by -
+    .replace(/-+/g, '-'); // collapse dashes
+
+    return str;
+}
 $('#profileMenu').find('a').on('click', function () {
     var check = $(this).attr('class')
     $('#profileMenu').find('a').each(function () {
@@ -235,4 +253,18 @@ $('#joguei').on('click', function () {
             });
         });
     }
+});
+
+$('.gameLogoStats a').each(function (index, value) {
+    var ihref = $(this).attr('href');
+    if(ihref.indexOf('/consoles/') > -1){
+        $(this).attr('href', string_to_slug(ihref).replace('-consoles-', '/consoles/'));
+    } else if(ihref.indexOf('/generos/') > -1){
+        $(this).attr('href', string_to_slug(ihref).replace('-generos-', '/generos/'));
+    } else if(ihref.indexOf('/desenvolvedores/') > -1){
+        $(this).attr('href', string_to_slug(ihref).replace('-desenvolvedores-', '/desenvolvedores/'));
+    } else if(ihref.indexOf('/distribuidoras') > -1) {
+        $(this).attr('href', string_to_slug(ihref).replace('-distribuidoras-', '/distribuidoras/'));
+    }
+    
 });
