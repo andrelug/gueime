@@ -74,9 +74,16 @@ block content
                                 input(type="hidden", name="editing", value="no")
                             
                             if(edit == true)
-                                input.gameEditTitle(type="text", placeholder="Nome do Desenvolvedor", name="nomeDevPub", value="#{developer.title}")
+                                if(dev == true)
+                                    input.gameEditTitle(type="text", placeholder="Nome do Desenvolvedor", name="nomeDevPub", value="#{developer.title}")
+                                else
+                                    input.gameEditTitle(type="text", placeholder="Nome da Distribuidora", name="nomeDevPub", value="#{developer.title}")
                             else
-                                input.gameEditTitle(type="text", placeholder="Nome do Desenvolvedor", name="nomeDevPub")
+                                if(dev == true)
+                                    input.gameEditTitle(type="text", placeholder="Nome do Desenvolvedor", name="nomeDevPub")
+                                else
+                                    input.gameEditTitle(type="text", placeholder="Nome da Distribuidora", name="nomeDevPub")
+
                             div.row#gamerStats
                                 div.large-6.columns
                                     ul.gameLogo
@@ -96,10 +103,17 @@ block content
 
                                 div.large-12.columns
                                     if(edit == true)
-                                        textarea(name="sobre", placeholder="Sobre o desenvolvedor")
-                                            !{developer.about}
+                                        if(dev == true)
+                                            textarea(name="sobre", placeholder="Sobre o desenvolvedor")
+                                                !{developer.about}
+                                        else
+                                            textarea(name="sobre", placeholder="Sobre a distribuidora")
+                                                !{developer.about}
                                     else
-                                        textarea(name="sobre", placeholder="Sobre o desenvolvedor")
+                                        if(dev == true)
+                                            textarea(name="sobre", placeholder="Sobre o desenvolvedor")
+                                        else
+                                            textarea(name="sobre", placeholder="Sobre a distribuidora")
 
                                 div.row
                                     div.medium-6.medium-offset-3.columns

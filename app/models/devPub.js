@@ -4,8 +4,8 @@ var mongoose = require('mongoose');
 var DevPubSchema = new mongoose.Schema({
 
     type: String,
-    title: {type: String, unique: true},
-    slug: {type: String, unique: true, index: true},
+    title: String,
+    slug: {type: String, index: true},
     about: String,
     website: String,
     devCover: String,

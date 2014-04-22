@@ -321,7 +321,7 @@ module.exports = function (app, passport, mongoose) {
                 if(docs.status == 'publicado'){
                     var title = decodeURIComponent(docs.title),
                         body = decodeURIComponent(docs.text);
-
+                    
                     var scores = docs.review.score.toString().split('.'),
                         score = scores[0],
                         decimal;
@@ -1376,6 +1376,126 @@ module.exports = function (app, passport, mongoose) {
     });
 
     // =====================================
+    // DISTRIBUIDORA PAGE ==================
+    // =====================================
+    app.get('/distribuidora/:dev', function(req, res, next){
+        var user = req.user;
+        var dev = req.params.dev;
+
+        if(!user){
+            DevPub.findOneAndUpdate({slug: dev, type: 'publisher'}, {$inc: { 'graph.views': 1}}, function(err, dev){
+                Artigos.find({status: 'publicado', 'graph.publisher': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
+                    Games.find({status: 'publicado', 'graph.publisher': new RegExp(dev.title, 'i')}).sort({_id:-1}).limit(6).exec(function(err, games){
+                        var artigo = [];
+                        
+                        for (i = 0; i < articles.length; i++) {
+                            articles[i].title = decodeURIComponent(articles[i].title).replace('<p>', '').replace('</p>', '');
+                            artigo.push(articles[i]);
+                        }
+                        if(games.length > 0) {
+
+                        } else{
+                            games = undefined;
+                        }
+                        
+                        if(dev.startDate){
+                            var date = dev.startDate;
+                            date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                        }
+
+                        res.render('devPub', {user: user, title: "Gueime - " + dev.title, dev: dev, docs: artigo, games: games, date: date, pub: true })
+                    });
+                });
+            });
+        } else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            } else{
+                sessionReload(req, res, next);
+                DevPub.findOneAndUpdate({slug: dev, type: 'publisher'}, {$inc: { 'graph.views': 1}}, function(err, dev){
+                    Artigos.find({status: 'publicado', 'graph.publisher': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
+                        Games.find({status: 'publicado', 'graph.publisher': new RegExp(dev.title, 'i')}).sort({_id:-1}).limit(6).exec(function(err, games){
+                            var artigo = [];
+                        
+                            for (i = 0; i < articles.length; i++) {
+                                articles[i].title = decodeURIComponent(articles[i].title).replace('<p>', '').replace('</p>', '');
+                                artigo.push(articles[i]);
+                            }
+                            if(games.length > 0) {
+
+                            } else{
+                                games = undefined;
+                            }
+                        
+                            if(dev.startDate){
+                                var date = dev.startDate;
+                                date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                            }
+
+                            Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
+                                res.render('devPub', {user: user, title: "Gueime - " + dev.title, dev: dev, docs: artigo, games: games, date: date, pub: true })
+                            }); 
+                        });
+                    });
+                });
+            }
+        }
+    });
+
+    // EDIT DISTRIBUIDORA
+    app.get('/distribuidora/:dev/editar', function(req, res, next){
+        var user = req.user;
+        var dev = req.params.dev;
+        if(!user){
+            res.redirect('/');
+        } else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            } else{
+                sessionReload(req, res, next);
+                DevPub.findOne({status: 'publicado', type: 'publisher', slug: dev}).exec(function(err, docs){
+                    var date;
+                    if(docs.startDate){
+                        date = docs.startDate;
+                        date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                    }
+                    res.render('devPubEdit',{user: user, title: "Gueime - " + docs.title, developer: docs, edit: true, date: date, pub: true});
+                });
+            }
+        }
+    });
+
+    // PAGINAÇÃO DISTRIBUIDORA
+    app.get('/paginationDev', function(req, res){
+        var devTitle = req.query.b.toString();
+        var n = req.query.n;
+
+        Artigos.find({status: 'publicado', 'graph.developers': new RegExp(devTitle, 'i'), type: {$ne: 'analise'}}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).skip(n).exec(function (err, docs) {
+            for (i = 0; i < docs.length; i++) {
+                docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
+            }
+            res.render('tags', { docs: docs });
+        });
+    });
+
+    // NOVO DISTRIBUIDORA
+    app.get('/criar/novo/distribuidora', function(req, res, next){
+        var user = req.user;
+        if(!user){
+            res.redirect('/');
+        } else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            } else if(user.status == 'admin' || user.status == 'editor'){
+                sessionReload(req, res, next);
+                res.render('devPubEdit',{user: user, title: "Gueime - Novo Jogo", edit: false, pub: true});
+            } else{
+                res.redirect('/parceiros');
+            }
+        }
+    });
+
+    // =====================================
     // DESENVOLVEDOR PAGE ==================
     // =====================================
     app.get('/desenvolvedor/:dev', function(req, res, next){
@@ -1403,7 +1523,7 @@ module.exports = function (app, passport, mongoose) {
                             date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                         }
 
-                        res.render('devPub', {user: user, title: "Gueime - " + dev.title, dev: dev, docs: artigo, games: games, date: date })
+                        res.render('devPub', {user: user, title: "Gueime - " + dev.title, dev: dev, docs: artigo, games: games, date: date, pub: false })
                     });
                 });
             });
@@ -1433,7 +1553,7 @@ module.exports = function (app, passport, mongoose) {
                             }
 
                             Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
-                                res.render('devPub', {user: user, title: "Gueime - " + dev.title, dev: dev, docs: artigo, games: games, date: date })
+                                res.render('devPub', {user: user, title: "Gueime - " + dev.title, dev: dev, docs: artigo, games: games, date: date, pub: false })
                             }); 
                         });
                     });
@@ -1495,7 +1615,7 @@ module.exports = function (app, passport, mongoose) {
         }
     });
 
-    // CRIAÇÃO DESENVOLVEDOR
+    // CRIAÇÃO DESENVOLVEDOR E DISTRIBUIDORA
     app.post('/newDevPub', function(req, res){
         var user = req.user,
             b = req.body,
@@ -1524,11 +1644,7 @@ module.exports = function (app, passport, mongoose) {
             } else if(user.status == 'admin' || user.status == 'editor'){
                 
                 if(type == 'dev'){
-                    console.log('dev');
                     if(b.editing == 'yes'){
-                        console.log('editing');
-                        console.log(slug);
-                        console.log(b.lastSlug);
                         DevPub.update({slug: b.lastSlug, type: 'developer'}, {$set:{
                             type: 'developer',
                             title: b.nomeDevPub,
@@ -1554,7 +1670,6 @@ module.exports = function (app, passport, mongoose) {
                             website: sendWebsite,
                             status: 'publicado'
                         }).save(function(err, docs){
-                            console.log(docs);
                             res.redirect('/desenvolvedor/' + docs.slug);
                         });
                     }
@@ -1571,7 +1686,7 @@ module.exports = function (app, passport, mongoose) {
                             website: sendWebsite,
                             status: 'publicado'
                         }}, function(err){
-                            res.redirect('/desenvolvedor/' + slug);
+                            res.redirect('/distribuidora/' + slug);
                         });
                     } else {
                         new DevPub({
@@ -1586,12 +1701,10 @@ module.exports = function (app, passport, mongoose) {
                             status: 'publicado'
                         }).save(function(err, docs){
                             console.log(docs);
-                            res.redirect('/desenvolvedor/' + docs.slug);
+                            res.redirect('/distribuidora/' + docs.slug);
                         });
                     }
-                }
-
-                               
+                }            
             }
         }
     });

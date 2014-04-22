@@ -36,7 +36,10 @@ block content
                         div.editingProf
                             img#userGameImage(src="#{dev.devCover}")
                             if(user && user.status == 'admin' || user && user.status == 'editor')
-                                a.hide-for-small.button.tiny#editButtonHover(href="/desenvolvedor/#{dev.slug}/editar") Editar
+                                if(pub == true)
+                                    a.hide-for-small.button.tiny#editButtonHover(href="/distribuidora/#{dev.slug}/editar") Editar
+                                else
+                                    a.hide-for-small.button.tiny#editButtonHover(href="/desenvolvedor/#{dev.slug}/editar") Editar
                         div#gameStats.row
                             div.small-2.columns
                                 h3 <i class="fa fa-user" title="Gamers"></i>
@@ -78,7 +81,7 @@ block content
                         div.medium-3.columns.end
                             a(href="/jogos/#{game.slug}")
                                 div.gameAnalise(style="#{game.cover}")
-                                    div.analisePattern(style="height:auto;background-color:#34495E;opacity:0.9")
+                                    div.analisePattern(style="background-color:#34495E;opacity:0.8")
                                         h3(style="color:white;") #{game.title}
             
             if(docs.length > 0)
