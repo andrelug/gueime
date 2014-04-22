@@ -144,20 +144,6 @@ $('#deleteCheck').on('keyup', function (e) {
     }
 });
 
-
-// LOAD MORE ARTICLES
-$('#loadMoreProfile').on('click', function () {
-    n = $('.item').length;
-    $.ajax({
-        type: "GET",
-        url: "/pagination",
-        data: { n: n },
-        dataType: 'html'
-    }).done(function (data) {
-        container.isotope('insert', $(data));
-    });
-});
-
 // EDITION
 $('#mainImageChange').hover(function () {
     $(this).find('a').show();

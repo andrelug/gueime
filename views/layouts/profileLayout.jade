@@ -53,6 +53,7 @@ html.no-js(lang="pt_BR")
             }
             FB.XFBML.parse();
         script.scriptLoad.
+            var b = "#{profile._id}";
             profileContainer.waitForImages(function () {
                 $("#spinning").hide();
                 $('body').css('overflow-y', 'auto');
@@ -70,7 +71,7 @@ html.no-js(lang="pt_BR")
                 });
 
                 var n = $('.item').length;
-                var b = "#{profile._id}";
+                
                 if (n < 7) {
                     $.ajax({
                         type: "GET",
@@ -83,6 +84,19 @@ html.no-js(lang="pt_BR")
                 }
             }, null, true);
         script.
+            // LOAD MORE ARTICLES
+            $('#loadMoreProfile').on('click', function () {
+                n = $('.item').length;
+                $.ajax({
+                    type: "GET",
+                    url: "/paginationProfile",
+                    data: { n: n, b: b },
+                    dataType: 'html'
+                }).done(function (data) {
+                    container.isotope('insert', $(data));
+                });
+            });
+
             $(window).on('popstate', function () {
                 $('.content-wrap').fadeOut();
                 $('body').css('overflow-y', 'auto');

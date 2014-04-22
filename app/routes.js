@@ -2,6 +2,7 @@ var Users = require('./models/user');
 var Artigos = require('./models/article');
 var Games = require('./models/game');
 var DevPub = require('./models/devPub');
+var Genre = require('./models/genre');
 var func = require('../config/functions');
 var facebook = require('../config/facebook.js');
 var ip = require('ip');
@@ -1375,17 +1376,164 @@ module.exports = function (app, passport, mongoose) {
         });
     });
 
+
+    // =====================================
+    // GENERO PAGE =========================
+    // =====================================
+    app.get('/generos/:gen', function(req, res, next){
+        var user = req.user;
+        var dev = req.params.gen;
+
+        if(!user){
+            DevPub.findOneAndUpdate({slug: dev, type: 'publisher'}, {$inc: { 'graph.views': 1}}, function(err, dev){
+                Artigos.find({status: 'publicado', 'graph.publisher': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
+                    Games.find({status: 'publicado', 'graph.publisher': new RegExp(dev.title, 'i')}).sort({release:1}).limit(6).exec(function(err, games){
+                        var artigo = [];
+                        
+                        for (i = 0; i < articles.length; i++) {
+                            articles[i].title = decodeURIComponent(articles[i].title).replace('<p>', '').replace('</p>', '');
+                            artigo.push(articles[i]);
+                        }
+                        if(games.length > 0) {
+
+                        } else{
+                            games = undefined;
+                        }
+                        
+                        if(dev.startDate){
+                            var date = dev.startDate;
+                            date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                        }
+
+                        res.render('genre', {user: user, title: "Gueime - " + dev.title, dev: dev, docs: artigo, games: games, date: date, pub: true })
+                    });
+                });
+            });
+        } else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            } else{
+                sessionReload(req, res, next);
+                Genre.findOneAndUpdate({slug: dev}, {$inc: { 'graph.views': 1}}, function(err, dev){
+                    Artigos.find({status: 'publicado', 'graph.genres': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
+                        Games.find({status: 'publicado', 'graph.genre': new RegExp(dev.title, 'i')}).sort({release:1}).limit(6).exec(function(err, games){
+                            var artigo = [];
+                        
+                            for (i = 0; i < articles.length; i++) {
+                                articles[i].title = decodeURIComponent(articles[i].title).replace('<p>', '').replace('</p>', '');
+                                artigo.push(articles[i]);
+                            }
+                            if(games.length > 0) {
+
+                            } else{
+                                games = undefined;
+                            }
+
+                            Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
+                                res.render('genre', {user: user, title: "Gueime - " + dev.title, dev: dev, docs: artigo, games: games, pub: true })
+                            }); 
+                        });
+                    });
+                });
+            }
+        }
+    });
+
+
+    // EDIT GENERO
+    app.get('/generos/:dev/editar', function(req, res, next){
+        var user = req.user;
+        var dev = req.params.dev;
+        if(!user){
+            res.redirect('/');
+        } else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            } else{
+                sessionReload(req, res, next);
+                Genre.findOne({status: 'publicado', slug: dev}).exec(function(err, docs){
+                    res.render('genreEdit',{user: user, title: "Gueime - " + docs.title, developer: docs, edit: true});
+                });
+            }
+        }
+    });
+
+    // NOVO GENERO
+    app.get('/criar/novo/genero', function(req, res, next){
+        var user = req.user;
+        if(!user){
+            res.redirect('/');
+        } else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            } else if(user.status == 'admin' || user.status == 'editor'){
+                sessionReload(req, res, next);
+                res.render('genreEdit',{user: user, title: "Gueime - Novo Jogo", edit: false});
+            } else{
+                res.redirect('/parceiros');
+            }
+        }
+    });
+
+    // CRIAÇÃO GENERO
+    app.post('/newGenre', function(req, res){
+        var user = req.user,
+            b = req.body;
+
+        var slug = func.string_to_slug(b.nomeGenero);
+
+
+            if(!b.position){
+                b.position = "background: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images/gameBg.jpg) no-repeat center -65px;";
+            }
+
+
+        if(!user){
+            res.redirect('/');
+        }else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            } else if(user.status == 'admin' || user.status == 'editor'){
+                if(b.editing == 'yes'){
+                    Genre.update({slug: b.lastSlug}, {$set:{
+                        title: b.nomeGenero,
+                        about: b.sobre,
+                        slug: slug,
+                        genCover: b.gameCover,
+                        cover: b.position,
+                        status: 'publicado'
+                    }}, function(err){
+                        res.redirect('/generos/' + slug);
+                    });
+                } else {
+                    new Genre({
+                        title: b.nomeGenero,
+                        about: b.sobre,
+                        slug: slug,
+                        genCover: b.gameCover,
+                        cover: b.position,
+                        status: 'publicado'
+                    }).save(function(err, docs){
+                        res.redirect('/generos/' + docs.slug);
+                    });
+                }           
+            }
+        }
+    });
+
+
+
     // =====================================
     // DISTRIBUIDORA PAGE ==================
     // =====================================
-    app.get('/distribuidora/:dev', function(req, res, next){
+    app.get('/distribuidoras/:dev', function(req, res, next){
         var user = req.user;
         var dev = req.params.dev;
 
         if(!user){
             DevPub.findOneAndUpdate({slug: dev, type: 'publisher'}, {$inc: { 'graph.views': 1}}, function(err, dev){
                 Artigos.find({status: 'publicado', 'graph.publisher': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
-                    Games.find({status: 'publicado', 'graph.publisher': new RegExp(dev.title, 'i')}).sort({_id:-1}).limit(6).exec(function(err, games){
+                    Games.find({status: 'publicado', 'graph.publisher': new RegExp(dev.title, 'i')}).sort({release:1}).limit(6).exec(function(err, games){
                         var artigo = [];
                         
                         for (i = 0; i < articles.length; i++) {
@@ -1414,7 +1562,7 @@ module.exports = function (app, passport, mongoose) {
                 sessionReload(req, res, next);
                 DevPub.findOneAndUpdate({slug: dev, type: 'publisher'}, {$inc: { 'graph.views': 1}}, function(err, dev){
                     Artigos.find({status: 'publicado', 'graph.publisher': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
-                        Games.find({status: 'publicado', 'graph.publisher': new RegExp(dev.title, 'i')}).sort({_id:-1}).limit(6).exec(function(err, games){
+                        Games.find({status: 'publicado', 'graph.publisher': new RegExp(dev.title, 'i')}).sort({release:1}).limit(6).exec(function(err, games){
                             var artigo = [];
                         
                             for (i = 0; i < articles.length; i++) {
@@ -1442,8 +1590,23 @@ module.exports = function (app, passport, mongoose) {
         }
     });
 
+    
+
+    // PAGINAÇÃO DISTRIBUIDORA
+    app.get('/paginationPub', function(req, res){
+        var pubTitle = req.query.b.toString();
+        var n = req.query.n;
+
+        Artigos.find({status: 'publicado', 'graph.publishers': new RegExp(pubTitle, 'i'), type: {$ne: 'analise'}}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).skip(n).exec(function (err, docs) {
+            for (i = 0; i < docs.length; i++) {
+                docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
+            }
+            res.render('tags', { docs: docs });
+        });
+    });
+
     // EDIT DISTRIBUIDORA
-    app.get('/distribuidora/:dev/editar', function(req, res, next){
+    app.get('/distribuidoras/:dev/editar', function(req, res, next){
         var user = req.user;
         var dev = req.params.dev;
         if(!user){
@@ -1463,19 +1626,6 @@ module.exports = function (app, passport, mongoose) {
                 });
             }
         }
-    });
-
-    // PAGINAÇÃO DISTRIBUIDORA
-    app.get('/paginationDev', function(req, res){
-        var devTitle = req.query.b.toString();
-        var n = req.query.n;
-
-        Artigos.find({status: 'publicado', 'graph.developers': new RegExp(devTitle, 'i'), type: {$ne: 'analise'}}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).skip(n).exec(function (err, docs) {
-            for (i = 0; i < docs.length; i++) {
-                docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
-            }
-            res.render('tags', { docs: docs });
-        });
     });
 
     // NOVO DISTRIBUIDORA
@@ -1498,14 +1648,14 @@ module.exports = function (app, passport, mongoose) {
     // =====================================
     // DESENVOLVEDOR PAGE ==================
     // =====================================
-    app.get('/desenvolvedor/:dev', function(req, res, next){
+    app.get('/desenvolvedores/:dev', function(req, res, next){
         var user = req.user;
         var dev = req.params.dev;
 
         if(!user){
             DevPub.findOneAndUpdate({slug: dev, type: 'developer'}, {$inc: { 'graph.views': 1}}, function(err, dev){
                 Artigos.find({status: 'publicado', 'graph.developers': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
-                    Games.find({status: 'publicado', 'graph.developer': new RegExp(dev.title, 'i')}).sort({_id:-1}).limit(6).exec(function(err, games){
+                    Games.find({status: 'publicado', 'graph.developer': new RegExp(dev.title, 'i')}).sort({release:1}).limit(6).exec(function(err, games){
                         var artigo = [];
                         
                         for (i = 0; i < articles.length; i++) {
@@ -1534,7 +1684,7 @@ module.exports = function (app, passport, mongoose) {
                 sessionReload(req, res, next);
                 DevPub.findOneAndUpdate({slug: dev, type: 'developer'}, {$inc: { 'graph.views': 1}}, function(err, dev){
                     Artigos.find({status: 'publicado', 'graph.developers': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
-                        Games.find({status: 'publicado', 'graph.developer': new RegExp(dev.title, 'i')}).sort({_id:-1}).limit(6).exec(function(err, games){
+                        Games.find({status: 'publicado', 'graph.developer': new RegExp(dev.title, 'i')}).sort({release:1}).limit(6).exec(function(err, games){
                             var artigo = [];
                         
                             for (i = 0; i < articles.length; i++) {
@@ -1563,7 +1713,7 @@ module.exports = function (app, passport, mongoose) {
     });
 
     // EDIT DESENVOLVEDOR
-    app.get('/desenvolvedor/:dev/editar', function(req, res, next){
+    app.get('/desenvolvedores/:dev/editar', function(req, res, next){
         var user = req.user;
         var dev = req.params.dev;
         if(!user){
@@ -1656,7 +1806,7 @@ module.exports = function (app, passport, mongoose) {
                             website: sendWebsite,
                             status: 'publicado'
                         }}, function(err){
-                            res.redirect('/desenvolvedor/' + slug);
+                            res.redirect('/desenvolvedores/' + slug);
                         });
                     } else {
                         new DevPub({
@@ -1670,7 +1820,7 @@ module.exports = function (app, passport, mongoose) {
                             website: sendWebsite,
                             status: 'publicado'
                         }).save(function(err, docs){
-                            res.redirect('/desenvolvedor/' + docs.slug);
+                            res.redirect('/desenvolvedores/' + docs.slug);
                         });
                     }
                 } else if(type == 'pub'){
@@ -1686,7 +1836,7 @@ module.exports = function (app, passport, mongoose) {
                             website: sendWebsite,
                             status: 'publicado'
                         }}, function(err){
-                            res.redirect('/distribuidora/' + slug);
+                            res.redirect('/distribuidoras/' + slug);
                         });
                     } else {
                         new DevPub({
@@ -1701,7 +1851,7 @@ module.exports = function (app, passport, mongoose) {
                             status: 'publicado'
                         }).save(function(err, docs){
                             console.log(docs);
-                            res.redirect('/distribuidora/' + docs.slug);
+                            res.redirect('/distribuidoras/' + docs.slug);
                         });
                     }
                 }            

@@ -58,7 +58,7 @@ block content
 
 
                     div.large-8.large-offset-1.medium-7.medium-offset-1.columns
-                        form(action="/newDevPub", method="POST")
+                        form(action="/newDevPub", method="POST" data-abide)
                             input(type="hidden", name="gameCover")
                             input(type="hidden", name="position")
                             
@@ -75,45 +75,57 @@ block content
                             
                             if(edit == true)
                                 if(dev == true)
-                                    input.gameEditTitle(type="text", placeholder="Nome do Desenvolvedor", name="nomeDevPub", value="#{developer.title}")
+                                    input.gameEditTitle(type="text", placeholder="Nome do Desenvolvedor", required, name="nomeDevPub", value="#{developer.title}")
+                                    small.error Obrigatório
                                 else
-                                    input.gameEditTitle(type="text", placeholder="Nome da Distribuidora", name="nomeDevPub", value="#{developer.title}")
+                                    input.gameEditTitle(type="text", placeholder="Nome da Distribuidora", required, name="nomeDevPub", value="#{developer.title}")
+                                    small.error Obrigatório
                             else
                                 if(dev == true)
-                                    input.gameEditTitle(type="text", placeholder="Nome do Desenvolvedor", name="nomeDevPub")
+                                    input.gameEditTitle(type="text", placeholder="Nome do Desenvolvedor", required, name="nomeDevPub")
+                                    small.error Obrigatório
                                 else
-                                    input.gameEditTitle(type="text", placeholder="Nome da Distribuidora", name="nomeDevPub")
+                                    input.gameEditTitle(type="text", placeholder="Nome da Distribuidora", required, name="nomeDevPub")
+                                    small.error Obrigatório
 
                             div.row#gamerStats
                                 div.large-6.columns
                                     ul.gameLogo
                                         li.gameLogoStats <i class="fa fa-calendar"></i> 
                                             if(edit == true)
-                                                input(type="text", placeholder="Data de Início (dd/mm/aaaa)", name="date", value="#{date}")
+                                                input(type="text", placeholder="Data de Início (dd/mm/aaaa)", required, name="date", value="#{date}", pattern="(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)")
+                                                small.error Obrigatório
                                             else
-                                                input(type="text", placeholder="Data de Início (dd/mm/aaaa)", name="date")
+                                                input(type="text", placeholder="Data de Início (dd/mm/aaaa)", required, name="date", pattern="(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)")
+                                                small.error Obrigatório
 
                                 div.large-6.columns
                                     ul.gameLogo
                                         li.gameLogoStats Website: 
                                             if(edit == true)
-                                                input(type="text", placeholder="WebSite", name="website", value="#{developer.website}")
+                                                input(type="text", placeholder="WebSite", name="website", required, value="#{developer.website}")
+                                                small.error Obrigatório
                                             else
-                                                input(type="text", placeholder="WebSite", name="website")
+                                                input(type="text", placeholder="WebSite", name="website", required)
+                                                small.error Obrigatório
 
                                 div.large-12.columns
                                     if(edit == true)
                                         if(dev == true)
-                                            textarea(name="sobre", placeholder="Sobre o desenvolvedor")
+                                            textarea(name="sobre", placeholder="Sobre o desenvolvedor", required)
                                                 !{developer.about}
+                                            small.error Obrigatório
                                         else
-                                            textarea(name="sobre", placeholder="Sobre a distribuidora")
+                                            textarea(name="sobre", placeholder="Sobre a distribuidora", required)
                                                 !{developer.about}
+                                            small.error Obrigatório
                                     else
                                         if(dev == true)
-                                            textarea(name="sobre", placeholder="Sobre o desenvolvedor")
+                                            textarea(name="sobre", placeholder="Sobre o desenvolvedor", required)
+                                            small.error Obrigatório
                                         else
-                                            textarea(name="sobre", placeholder="Sobre a distribuidora")
+                                            textarea(name="sobre", placeholder="Sobre a distribuidora", required)
+                                            small.error Obrigatório
 
                                 div.row
                                     div.medium-6.medium-offset-3.columns

@@ -730,7 +730,9 @@ textarea {
 #profile #imageAndOpt,
 #game #imageAndOpt,
 #profile #imageAndOptGame,
-#game #imageAndOptGame {
+#game #imageAndOptGame,
+#profile #imageAndOptGen,
+#game #imageAndOptGen {
   background-color: #479ecd;
   padding: 20px 0;
   text-align: center;
@@ -745,14 +747,20 @@ rgba(0,0,0,0.3)
 #game #imageAndOpt #userProfileImage,
 #profile #imageAndOptGame #userProfileImage,
 #game #imageAndOptGame #userProfileImage,
+#profile #imageAndOptGen #userProfileImage,
+#game #imageAndOptGen #userProfileImage,
 #profile #imageAndOpt #userGameImage,
 #game #imageAndOpt #userGameImage,
 #profile #imageAndOptGame #userGameImage,
 #game #imageAndOptGame #userGameImage,
+#profile #imageAndOptGen #userGameImage,
+#game #imageAndOptGen #userGameImage,
 #profile #imageAndOpt #dropzoneGameCover,
 #game #imageAndOpt #dropzoneGameCover,
 #profile #imageAndOptGame #dropzoneGameCover,
-#game #imageAndOptGame #dropzoneGameCover {
+#game #imageAndOptGame #dropzoneGameCover,
+#profile #imageAndOptGen #dropzoneGameCover,
+#game #imageAndOptGen #dropzoneGameCover {
   min-width: 100px;
   min-height: 100px;
   width: 100%;
@@ -764,17 +772,23 @@ rgba(0,0,0,0.3)
 #profile #imageAndOpt #userGameImage,
 #game #imageAndOpt #userGameImage,
 #profile #imageAndOptGame #userGameImage,
-#game #imageAndOptGame #userGameImage {
+#game #imageAndOptGame #userGameImage,
+#profile #imageAndOptGen #userGameImage,
+#game #imageAndOptGen #userGameImage {
   max-height: 280px;
 }
 #profile #imageAndOpt #profileStats,
 #game #imageAndOpt #profileStats,
 #profile #imageAndOptGame #profileStats,
 #game #imageAndOptGame #profileStats,
+#profile #imageAndOptGen #profileStats,
+#game #imageAndOptGen #profileStats,
 #profile #imageAndOpt #gameStats,
 #game #imageAndOpt #gameStats,
 #profile #imageAndOptGame #gameStats,
-#game #imageAndOptGame #gameStats {
+#game #imageAndOptGame #gameStats,
+#profile #imageAndOptGen #gameStats,
+#game #imageAndOptGen #gameStats {
   background-color: #e54c3c;
   box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
   -moz-box-shadow: 0px 0px 3px rgba(0,0,0,0.5);
@@ -788,30 +802,42 @@ rgba(0,0,0,0.3)
 #game #imageAndOpt #profileStats h3,
 #profile #imageAndOptGame #profileStats h3,
 #game #imageAndOptGame #profileStats h3,
+#profile #imageAndOptGen #profileStats h3,
+#game #imageAndOptGen #profileStats h3,
 #profile #imageAndOpt #gameStats h3,
 #game #imageAndOpt #gameStats h3,
 #profile #imageAndOptGame #gameStats h3,
-#game #imageAndOptGame #gameStats h3 {
+#game #imageAndOptGame #gameStats h3,
+#profile #imageAndOptGen #gameStats h3,
+#game #imageAndOptGen #gameStats h3 {
   color: #fff;
 }
 #profile #imageAndOpt #profileStats .icons,
 #game #imageAndOpt #profileStats .icons,
 #profile #imageAndOptGame #profileStats .icons,
 #game #imageAndOptGame #profileStats .icons,
+#profile #imageAndOptGen #profileStats .icons,
+#game #imageAndOptGen #profileStats .icons,
 #profile #imageAndOpt #gameStats .icons,
 #game #imageAndOpt #gameStats .icons,
 #profile #imageAndOptGame #gameStats .icons,
-#game #imageAndOptGame #gameStats .icons {
+#game #imageAndOptGame #gameStats .icons,
+#profile #imageAndOptGen #gameStats .icons,
+#game #imageAndOptGen #gameStats .icons {
   text-align: center;
 }
 #profile #imageAndOpt #profileStats #gueimePoints,
 #game #imageAndOpt #profileStats #gueimePoints,
 #profile #imageAndOptGame #profileStats #gueimePoints,
 #game #imageAndOptGame #profileStats #gueimePoints,
+#profile #imageAndOptGen #profileStats #gueimePoints,
+#game #imageAndOptGen #profileStats #gueimePoints,
 #profile #imageAndOpt #gameStats #gueimePoints,
 #game #imageAndOpt #gameStats #gueimePoints,
 #profile #imageAndOptGame #gameStats #gueimePoints,
-#game #imageAndOptGame #gameStats #gueimePoints {
+#game #imageAndOptGame #gameStats #gueimePoints,
+#profile #imageAndOptGen #gameStats #gueimePoints,
+#game #imageAndOptGen #gameStats #gueimePoints {
   max-width: 38px;
   margin-left: -5px;
 }
@@ -872,6 +898,9 @@ rgba(0,0,0,0.3)
 }
 #imageAndOptGame {
   background-color: #e54c3c !important;
+}
+#imageAndOptGen {
+  background-color: #27b899 !important;
 }
 #gameStats {
   background-color: #479ecd !important;
@@ -1036,6 +1065,9 @@ rgba(0,0,0,0.3)
   margin-right: 5px;
 }
 .gameLogoStats input {
+  width: 90%;
+}
+.gameLogoStats .error {
   width: 90%;
 }
 .row .reviewScore {

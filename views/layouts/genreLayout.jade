@@ -53,7 +53,7 @@ html.no-js(lang="pt_BR")
             }
             FB.XFBML.parse();
         script.scriptLoad.
-            var b = "#{game.title}"; 
+            var b = "#{dev.title}";
             profileContainer.waitForImages(function () {
                 $("#spinning").hide();
                 $('body').css('overflow-y', 'auto');
@@ -75,7 +75,7 @@ html.no-js(lang="pt_BR")
                 if (n < 7) {
                     $.ajax({
                         type: "GET",
-                        url: "/paginationGame",
+                        url: "/paginationDev",
                         data: {n: n, b: b},
                         dataType: 'html'
                     }).done(function (data) {
@@ -89,7 +89,7 @@ html.no-js(lang="pt_BR")
                 n = $('.item').length;
                 $.ajax({
                     type: "GET",
-                    url: "/paginationGame",
+                    url: "/paginationGenre",
                     data: { n: n, b: b },
                     dataType: 'html'
                 }).done(function (data) {

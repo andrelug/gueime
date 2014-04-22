@@ -1,4 +1,4 @@
-extends layouts/devPubLayout
+extends layouts/genreLayout
 
 block content
 
@@ -29,49 +29,26 @@ block content
         div.parallax(style="border-top:5px solid #479ECD;")
             article#mainText
                 div.row#game
-                    div.large-3.medium-4.columns#imageAndOptGame
+                    div.large-3.medium-4.columns#imageAndOptGen
                         div.row.show-for-small
                             div.small-12.columns
                                 h1#userTitle(style="color: white") #{dev.title}
                         div.editingProf
                             img#userGameImage(src="#{dev.devCover}")
                             if(user && user.status == 'admin' || user && user.status == 'editor')
-                                if(pub == true)
-                                    a.hide-for-small.button.tiny#editButtonHover(href="/distribuidoras/#{dev.slug}/editar") Editar
-                                else
-                                    a.hide-for-small.button.tiny#editButtonHover(href="/desenvolvedores/#{dev.slug}/editar") Editar
+                                a.hide-for-small.button.tiny#editButtonHover(href="/generos/#{dev.slug}/editar") Editar
                         div#gameStats.row
-                            //
-                                div.small-2.columns
-                                    h3 <i class="fa fa-user" title="Gamers"></i>
-                                div.small-10.columns
-                                    if(!dev.graph.gamers)
-                                        h3 0
-                                    else
-                                        h3 #{dev.graph.gamers}
                             div.small-2.columns
                                 h3 <i class="fa fa-eye" title="Visualizações"></i>
                             div.small-10.columns
                                 h3 #{dev.graph.views}
 
-                        div.row#gameMenu
-                            div.small-12.columns
-                                a Sobre
-
                     div.large-8.large-offset-1.medium-7.medium-offset-1.columns
                         h1#userTitle.show-for-medium-up #{dev.title}
                         div.row#gamerStats.show-for-medium-up
-                            div.medium-6.columns
-                                ul.gameLogo
-                                    li.gameLogoStats <i class="fa fa-calendar"></i> #{date}
-
-                            div.medium-6.columns
-                                ul.gameLogo
-                                    li.gameLogoStats Website:
-                                        a(href="#{dev.website}", style="text-transform: none;margin-left:10px") #{dev.website}                                     
-                                    
-
-                        include partials/devPubView
+                            div.medium-12.columns
+                                h3(style="margin-top:-8px") <i class="fa fa-info-circle" title="Sobre" style="color:white"></i>
+                                h5(style="color:white;padding-bottom:10px") #{dev.about}
         
             if(games != undefined)
                 div.row#gameReview
@@ -101,7 +78,7 @@ block content
                 div#profileTiles
                     div.row#activityDivision
                         div.medium-8.medium-centered.columns
-                            h2 Não há publicações ainda dessa empresa
+                            h2 Não há publicações ainda com este gênero
                                 
 
     div.row#load(style="display: none;")
