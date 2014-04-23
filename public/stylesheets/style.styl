@@ -792,7 +792,7 @@ textarea
         padding-top 0 !important
 
 @media only screen and (max-width: 64.063em)
-    #contentEditing a span
+    #contentEditing a span, #gameInformations a span, #gerenciarMenu a span
         display none !important
 
 #userStats, #gamerStats
@@ -820,7 +820,7 @@ textarea
     a
         color gAsphalt
 
-#contentEditing
+#contentEditing, #gameInformations, #gerenciarMenu
     background-color gGreen
     font-size 16pt
     margin-top 20px
@@ -835,6 +835,17 @@ textarea
     a:hover
         background-color darken(gGreen, 10%)
         color white
+
+#gameInformations
+    margin-bottom 20px
+
+    >a
+        width 20% !important
+
+#gerenciarMenu
+    margin 20px 0
+    > a
+        width 25%
 
 #profileEditing, #profileSocialEditing, #profileContaEditing, #profileConqEditing, #profileDeleEditing, #gameSobre
     background-color #ecf0f1
@@ -1065,3 +1076,18 @@ textarea
 
 #gameSearch, #newsSearch
     background-color gRed
+
+#gerenciarRow
+    margin-top 90px
+    padding 20px 0
+    background-color white
+
+    h1
+        font-family 'nexa', sans-serif
+        font-weight bold
+
+.gerenciarTable
+    width 100%
+
+    th, td
+        border 1px solid white

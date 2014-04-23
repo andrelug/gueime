@@ -133,9 +133,11 @@ block content
                                 a.create(href="#", data-dropdown="drop3") <i class="fa fa-coffee"></i> <span>Gerenciar</span>
                                 ul#drop3.f-dropdown(data-dropdown-content)
                                     li
+                                        a(href="/gerenciar/artigos") Artigos
+                                    li
                                         a(href="/gerenciar/jogos") Jogos
                                     li
-                                        a(href="/gerenciar/publicadoras") Publicadoras
+                                        a(href="/gerenciar/distribuidoras") Distribuidoras
                                     li
                                         a(href="/gerenciar/desenvolvedores") Desenvolvedores
                                     li
@@ -148,7 +150,7 @@ block content
                                     li
                                         a(href="/trivia/novo") Novo
                                     li
-                                        a(href="/trivia/gerenciar") Gerenciar
+                                        a(href="/gerenciar/trivia") Gerenciar
                                     li
                                         a(href="/trivia/stats") Stats
 
@@ -157,7 +159,7 @@ block content
                                     li
                                         a(href="/conquistas/nova") Nova
                                     li
-                                        a(href="/conquistas/gerenciar") Gerenciar
+                                        a(href="/gerenciar/conquistas") Gerenciar
                                     li
                                         a(href="/conquistas/stats") Stats
                         if(public == false)

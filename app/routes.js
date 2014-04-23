@@ -193,7 +193,7 @@ module.exports = function (app, passport, mongoose) {
         
         if (req.xhr === true) {
 
-            Artigos.findOneAndUpdate({ slug: noticia }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
+            Artigos.findOneAndUpdate({ slug: noticia, type: 'noticia' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
                 if(docs.status == 'publicado'){
                     var title = decodeURIComponent(docs.title).replace('<p>', '').replace('</p>', ''),
                         body = decodeURIComponent(docs.text);
@@ -215,7 +215,7 @@ module.exports = function (app, passport, mongoose) {
 
         } else {
             if (!user) {
-                Artigos.findOneAndUpdate({ slug: noticia }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
+                Artigos.findOneAndUpdate({ slug: noticia, type: 'noticia' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
                     if(docs.status == 'publicado'){
                         var title = decodeURIComponent(docs.title).replace('<p>', '').replace('</p>', ''),
                             body = decodeURIComponent(docs.text);
@@ -231,7 +231,7 @@ module.exports = function (app, passport, mongoose) {
                     res.redirect('/users/restore');
                 } else{
                     sessionReload(req, res, next);
-                    Artigos.findOneAndUpdate({ slug: noticia }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
+                    Artigos.findOneAndUpdate({ slug: noticia, type: 'noticia' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
                         if(docs.status == 'publicado'){
                             var title = decodeURIComponent(docs .title).replace('<p>', '').replace('</p>', ''),
                                 body = decodeURIComponent(docs.text);
@@ -256,7 +256,7 @@ module.exports = function (app, passport, mongoose) {
         var artigo = req.params.artigo;
         if (req.xhr === true) {
 
-            Artigos.findOneAndUpdate({ slug: artigo }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
+            Artigos.findOneAndUpdate({ slug: artigo, type: 'artigo' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
                 if(docs.status == 'publicado'){
                     var title = decodeURIComponent(docs.title),
                         body = decodeURIComponent(docs.text);
@@ -277,8 +277,8 @@ module.exports = function (app, passport, mongoose) {
 
         } else {
             if (!user) {
-                Artigos.findOneAndUpdate({ slug: artigo }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                    if(docs.statud == 'publicado'){
+                Artigos.findOneAndUpdate({ slug: artigo, type: 'artigo' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
+                    if(docs.status == 'publicado'){
                         var title = decodeURIComponent(docs.title),
                             body = decodeURIComponent(docs.text);
                         Users.find({ _id: docs.authors.main }, function (err, author) {
@@ -293,7 +293,7 @@ module.exports = function (app, passport, mongoose) {
                     res.redirect('/users/restore');
                 } else{
                     sessionReload(req, res, next);
-                    Artigos.findOneAndUpdate({ slug: artigo }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
+                    Artigos.findOneAndUpdate({ slug: artigo, type: 'artigo' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
                         if(docs.status == 'publicado'){
                             var title = decodeURIComponent(docs.title),
                                 body = decodeURIComponent(docs.text);
@@ -318,7 +318,7 @@ module.exports = function (app, passport, mongoose) {
         var analise = req.params.analise;
         if (req.xhr === true) {
 
-            Artigos.findOneAndUpdate({ slug: analise }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
+            Artigos.findOneAndUpdate({ slug: analise, type: 'analise' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
                 if(docs.status == 'publicado'){
                     var title = decodeURIComponent(docs.title),
                         body = decodeURIComponent(docs.text);
@@ -351,7 +351,7 @@ module.exports = function (app, passport, mongoose) {
 
         } else {
             if (!user) {
-                Artigos.findOneAndUpdate({ slug: analise }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
+                Artigos.findOneAndUpdate({ slug: analise, type: 'analise' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
                     if(docs.status == 'publicado'){
                         var title = decodeURIComponent(docs.title),
                             body = decodeURIComponent(docs.text);
@@ -378,7 +378,7 @@ module.exports = function (app, passport, mongoose) {
                     res.redirect('/users/restore');
                 } else{
                     sessionReload(req, res, next);
-                    Artigos.findOneAndUpdate({ slug: analise }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
+                    Artigos.findOneAndUpdate({ slug: analise, type: 'analise' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
                         if(docs.status == 'publicado'){
                             var title = decodeURIComponent(docs.title),
                                 body = decodeURIComponent(docs.text);
@@ -414,7 +414,7 @@ module.exports = function (app, passport, mongoose) {
         var video = req.params.video;
         if (req.xhr === true) {
 
-            Artigos.findOneAndUpdate({ slug: video }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
+            Artigos.findOneAndUpdate({ slug: video, type: 'video' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
                 if(docs.status == 'publicado'){
                     var title = decodeURIComponent(docs.title),
                         body = decodeURIComponent(docs.text);
@@ -434,7 +434,7 @@ module.exports = function (app, passport, mongoose) {
 
         } else {
             if (!user) {
-                Artigos.findOneAndUpdate({ slug: video }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
+                Artigos.findOneAndUpdate({ slug: video, type: 'video' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
                     if(docs.status == 'publicado'){
                         var title = decodeURIComponent(docs.title),
                             body = decodeURIComponent(docs.text);
@@ -450,7 +450,7 @@ module.exports = function (app, passport, mongoose) {
                     res.redirect('/users/restore');
                 } else{
                     sessionReload(req, res, next);
-                    Artigos.findOneAndUpdate({ slug: video }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
+                    Artigos.findOneAndUpdate({ slug: video, type: 'video' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
                         if(docs.status == 'publicado'){
                             var title = decodeURIComponent(docs.title),
                                 body = decodeURIComponent(docs.text);
@@ -1199,6 +1199,7 @@ module.exports = function (app, passport, mongoose) {
         }
     });
 
+    
     // UPLOAD DE NOVA COVER NA CRIAÇÃO DE PERFIL
     app.post('/newProfileCover', function (req, res, next) {
         var user = req.user;
@@ -1387,7 +1388,7 @@ module.exports = function (app, passport, mongoose) {
         if(!user){
             Genre.findOneAndUpdate({slug: dev}, {$inc: { 'graph.views': 1}}, function(err, dev){
                 Artigos.find({status: 'publicado', 'graph.genres': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
-                    Games.find({status: 'publicado', 'graph.genre': new RegExp(dev.title, 'i')}).sort({release:1}).limit(6).exec(function(err, games){
+                    Games.find({status: 'publicado', 'graph.genre': new RegExp(dev.title, 'i')}).sort({release:1}).limit(8).exec(function(err, games){
                         var artigo = [];
                         
                         for (i = 0; i < articles.length; i++) {
@@ -1411,7 +1412,7 @@ module.exports = function (app, passport, mongoose) {
                 sessionReload(req, res, next);
                 Genre.findOneAndUpdate({slug: dev}, {$inc: { 'graph.views': 1}}, function(err, dev){
                     Artigos.find({status: 'publicado', 'graph.genres': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
-                        Games.find({status: 'publicado', 'graph.genre': new RegExp(dev.title, 'i')}).sort({release:1}).limit(6).exec(function(err, games){
+                        Games.find({status: 'publicado', 'graph.genre': new RegExp(dev.title, 'i')}).sort({release:1}).limit(8).exec(function(err, games){
                             var artigo = [];
                         
                             for (i = 0; i < articles.length; i++) {
@@ -1528,7 +1529,7 @@ module.exports = function (app, passport, mongoose) {
         if(!user){
             DevPub.findOneAndUpdate({slug: dev, type: 'publisher'}, {$inc: { 'graph.views': 1}}, function(err, dev){
                 Artigos.find({status: 'publicado', 'graph.publisher': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
-                    Games.find({status: 'publicado', 'graph.publisher': new RegExp(dev.title, 'i')}).sort({release:1}).limit(6).exec(function(err, games){
+                    Games.find({status: 'publicado', 'graph.publisher': new RegExp(dev.title, 'i')}).sort({release:1}).limit(8).exec(function(err, games){
                         var artigo = [];
                         
                         for (i = 0; i < articles.length; i++) {
@@ -1557,7 +1558,7 @@ module.exports = function (app, passport, mongoose) {
                 sessionReload(req, res, next);
                 DevPub.findOneAndUpdate({slug: dev, type: 'publisher'}, {$inc: { 'graph.views': 1}}, function(err, dev){
                     Artigos.find({status: 'publicado', 'graph.publisher': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
-                        Games.find({status: 'publicado', 'graph.publisher': new RegExp(dev.title, 'i')}).sort({release:1}).limit(6).exec(function(err, games){
+                        Games.find({status: 'publicado', 'graph.publisher': new RegExp(dev.title, 'i')}).sort({release:1}).limit(8).exec(function(err, games){
                             var artigo = [];
                         
                             for (i = 0; i < articles.length; i++) {
@@ -1650,7 +1651,7 @@ module.exports = function (app, passport, mongoose) {
         if(!user){
             DevPub.findOneAndUpdate({slug: dev, type: 'developer'}, {$inc: { 'graph.views': 1}}, function(err, dev){
                 Artigos.find({status: 'publicado', 'graph.developers': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
-                    Games.find({status: 'publicado', 'graph.developer': new RegExp(dev.title, 'i')}).sort({release:1}).limit(6).exec(function(err, games){
+                    Games.find({status: 'publicado', 'graph.developer': new RegExp(dev.title, 'i')}).sort({release:1}).limit(8).exec(function(err, games){
                         var artigo = [];
                         
                         for (i = 0; i < articles.length; i++) {
@@ -1679,7 +1680,7 @@ module.exports = function (app, passport, mongoose) {
                 sessionReload(req, res, next);
                 DevPub.findOneAndUpdate({slug: dev, type: 'developer'}, {$inc: { 'graph.views': 1}}, function(err, dev){
                     Artigos.find({status: 'publicado', 'graph.developers': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
-                        Games.find({status: 'publicado', 'graph.developer': new RegExp(dev.title, 'i')}).sort({release:1}).limit(6).exec(function(err, games){
+                        Games.find({status: 'publicado', 'graph.developer': new RegExp(dev.title, 'i')}).sort({release:1}).limit(8).exec(function(err, games){
                             var artigo = [];
                         
                             for (i = 0; i < articles.length; i++) {
@@ -2211,6 +2212,420 @@ module.exports = function (app, passport, mongoose) {
     });
 
 
+
+    // =====================================
+    // GERENCIAR PÁGINAS ===================
+    // ===================================== 
+    app.get('/gerenciar/:tipo', function(req, res, next){
+        var user = req.user;
+        var tipo = req.params.tipo;
+
+        if(!user){
+            res.redirect('/');
+        }else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            }else if(user.status == 'admin'){
+                switch(tipo){
+                    case 'jogos':
+                        Games.find({}).sort({_id: -1}).exec(function(err, docs){
+                            for(i=0;i < docs.length;i++){
+                                var timeStamp = docs[i]._id.toString().substring(0,8);
+                                var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                                docs[i].date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                            }
+                            res.render('gerenciar', {title: "Gueime - Gerenciar Jogos", user: user, games: docs});
+                        });
+                        break
+
+                    case 'artigos':
+                        Artigos.find({}).sort({_id: -1}).exec(function(err, docs){
+                            for(i=0;i < docs.length;i++){
+                                var timeStamp = docs[i]._id.toString().substring(0,8);
+                                var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                                docs[i].date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                            }
+                            res.render('gerenciar', {title: "Gueime - Gerenciar Artigos", user: user, articles: docs});
+                        });
+                        break
+
+                    case 'desenvolvedores':
+                        DevPub.find({type: 'developer'}).sort({_id: -1}).exec(function(err, docs){
+                            for(i=0;i < docs.length;i++){
+                                var timeStamp = docs[i]._id.toString().substring(0,8);
+                                var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                                docs[i].date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                            }
+                            res.render('gerenciar', {title: "Gueime - Gerenciar Desenvolvedores", user: user, devs: docs});
+                        });
+                        break
+
+                    case 'distribuidoras':
+                        DevPub.find({type: 'publisher'}).sort({_id: -1}).exec(function(err, docs){
+                            for(i=0;i < docs.length;i++){
+                                var timeStamp = docs[i]._id.toString().substring(0,8);
+                                var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                                docs[i].date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                            }
+                            res.render('gerenciar', {title: "Gueime - Gerenciar Desenvolvedores", user: user, pubs: docs});
+                        });
+                        break
+
+                    case 'generos':
+                        Genre.find({}).sort({_id: -1}).exec(function(err, docs){
+                            for(i=0;i < docs.length;i++){
+                                var timeStamp = docs[i]._id.toString().substring(0,8);
+                                var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                                docs[i].date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                            }
+                            res.render('gerenciar', {title: "Gueime - Gerenciar Desenvolvedores", user: user, gens: docs});
+                        });
+                        break
+
+                    case 'usuarios':
+                        Users.find({}).sort({_id: -1}).exec(function(err, docs){
+                            for(i=0;i < docs.length;i++){
+                                var timeStamp = docs[i]._id.toString().substring(0,8);
+                                var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                                docs[i].date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                            }
+                            res.render('gerenciar', {title: "Gueime - Gerenciar Desenvolvedores", user: user, profile: docs});
+                        });
+                        break
+
+                }
+
+            } else{
+                res.redirect('/');
+            }
+        }
+    });
+
+    // =====================================
+    // DELETAR ELEMENTOS ===================
+    // ===================================== 
+
+    // JOGOS
+    app.put('/jogos/:jogo/deletar', function(req, res){
+        var user = req.user;
+        var jogo = req.params.jogo;
+        var action = req.body.action;
+        
+        if(!user){
+            res.redirect('/');
+        }else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            }else if(user.status == 'admin'){
+                if(action == 'del'){
+                    Games.remove({slug: jogo}, function(err){
+                        if(err)
+                            throw err
+                        res.send('OK');
+                    });
+                } else if(action == 'des'){
+                    Games.update({slug: jogo}, {$set: {status: 'deletado'}}, function(err){
+                        if(err)
+                            throw err
+                        res.send('OK');
+                    });
+                }
+            } else {
+                res.redirect('/');
+            }
+        }
+    });
+
+    // ARTIGOS
+    app.put('/artigos/:artigo/deletar', function(req, res){
+        var user = req.user;
+        var artigo = req.params.artigo;
+        var action = req.body.action;
+        
+        if(!user){
+            res.redirect('/');
+        }else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            }else if(user.status == 'admin'){
+                if(action == 'del'){
+                    Artigos.remove({slug: artigo}, function(err){
+                        if(err)
+                            throw err
+                        res.send('OK');
+                    });
+                } else if(action == 'des'){
+                    Artigos.update({slug: artigo}, {$set: {status: 'deletado'}}, function(err){
+                        if(err)
+                            throw err
+                        res.send('OK');
+                    });
+                }
+            } else {
+                res.redirect('/');
+            }
+        }
+    });
+
+    // DEVELOPERS
+    app.put('/desenvolvedores/:dev/deletar', function(req, res){
+        var user = req.user;
+        var dev = req.params.dev;
+        var action = req.body.action;
+        
+        if(!user){
+            res.redirect('/');
+        }else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            }else if(user.status == 'admin'){
+                if(action == 'del'){
+                    DevPub.remove({slug: dev, type: 'developer'}, function(err){
+                        if(err)
+                            throw err
+                        res.send('OK');
+                    });
+                } else if(action == 'des'){
+                    DevPub.update({slug: dev, type: 'developer'}, {$set: {status: 'deletado'}}, function(err){
+                        if(err)
+                            throw err
+                        res.send('OK');
+                    });
+                }
+            } else {
+                res.redirect('/');
+            }
+        }
+    });
+
+    // PUBLISHERS
+    app.put('/distribuidoras/:pub/deletar', function(req, res){
+        var user = req.user;
+        var pub = req.params.pub;
+        var action = req.body.action;
+        
+        if(!user){
+            res.redirect('/');
+        }else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            }else if(user.status == 'admin'){
+                if(action == 'del'){
+                    DevPub.remove({slug: pub, type: 'publisher'}, function(err){
+                        if(err)
+                            throw err
+                        res.send('OK');
+                    });
+                } else if(action == 'des'){
+                    DevPub.update({slug: pub, type: 'publisher'}, {$set: {status: 'deletado'}}, function(err){
+                        if(err)
+                            throw err
+                        res.send('OK');
+                    });
+                }
+            } else {
+                res.redirect('/');
+            }
+        }
+    });
+
+    // GENRES
+    app.put('/generos/:gen/deletar', function(req, res){
+        var user = req.user;
+        var gen = req.params.gen;
+        var action = req.body.action;
+        
+        if(!user){
+            res.redirect('/');
+        }else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            }else if(user.status == 'admin'){
+                if(action == 'del'){
+                    Genre.remove({slug: gen}, function(err){
+                        if(err)
+                            throw err
+                        res.send('OK');
+                    });
+                } else if(action == 'des'){
+                    Genre.update({slug: gen}, {$set: {status: 'deletado'}}, function(err){
+                        if(err)
+                            throw err
+                        res.send('OK');
+                    });
+                }
+            } else {
+                res.redirect('/');
+            }
+        }
+    });
+
+    // USUARIOS
+    app.put('/usuarios/:usuario/deletar', function(req, res){
+        var user = req.user;
+        var usuario = req.params.usuario;
+        var action = req.body.action;
+        
+        if(!user){
+            res.redirect('/');
+        }else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            }else if(user.status == 'admin'){
+                if(action == 'del'){
+                    Users.remove({'name.loginName': usuario}, function(err){
+                        if(err)
+                            throw err
+                        res.send('OK');
+                    });
+                } else if(action == 'des'){
+                    Users.update({'name.loginName': usuario}, {$set: {deleted: true}}, function(err){
+                        if(err)
+                            throw err
+                        res.send('OK');
+                    });
+                }
+            } else {
+                res.redirect('/');
+            }
+        }
+    });
+
+    // =====================================
+    // RESTORE ELEMENTOS ===================
+    // =====================================
+
+    // JOGOS
+    app.put('/jogos/:jogo/restore', function(req, res){
+        var user = req.user;
+        var jogo = req.params.jogo;
+        
+        if(!user){
+            res.redirect('/');
+        }else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            }else if(user.status == 'admin'){
+                Games.update({slug: jogo},{$set: {status: 'publicado'}}, function(err){
+                    if(err)
+                        throw err
+                    res.send('OK');
+                });
+            } else {
+                res.redirect('/');
+            }
+        }
+    });
+
+    // ARTIGOS
+    app.put('/artigos/:artigo/restore', function(req, res){
+        var user = req.user;
+        var artigo = req.params.artigo;
+        
+        if(!user){
+            res.redirect('/');
+        }else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            }else if(user.status == 'admin'){
+                Artigos.update({slug: artigo},{$set: {status: 'publicado'}}, function(err){
+                    if(err)
+                        throw err
+                    res.send('OK');
+                });
+            } else {
+                res.redirect('/');
+            }
+        }
+    });
+
+    // DEVELOPER
+    app.put('/desenvolvedores/:dev/restore', function(req, res){
+        var user = req.user;
+        var dev = req.params.dev;
+        
+        if(!user){
+            res.redirect('/');
+        }else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            }else if(user.status == 'admin'){
+                DevPub.update({slug: dev, type: 'developer'},{$set: {status: 'publicado'}}, function(err){
+                    if(err)
+                        throw err
+                    res.send('OK');
+                });
+            } else {
+                res.redirect('/');
+            }
+        }
+    });
+
+    // PUBLISHER
+    app.put('/distribuidoras/:pub/restore', function(req, res){
+        var user = req.user;
+        var pub = req.params.pub;
+        
+        if(!user){
+            res.redirect('/');
+        }else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            }else if(user.status == 'admin'){
+                DevPub.update({slug: pub, type: 'publisher'},{$set: {status: 'publicado'}}, function(err){
+                    if(err)
+                        throw err
+                    res.send('OK');
+                });
+            } else {
+                res.redirect('/');
+            }
+        }
+    });
+
+    // GENRES
+    app.put('/generos/:gen/restore', function(req, res){
+        var user = req.user;
+        var gen = req.params.gen;
+        
+        if(!user){
+            res.redirect('/');
+        }else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            }else if(user.status == 'admin'){
+                Genre.update({slug: gen},{$set: {status: 'publicado'}}, function(err){
+                    if(err)
+                        throw err
+                    res.send('OK');
+                });
+            } else {
+                res.redirect('/');
+            }
+        }
+    });
+
+    // USUARIOS
+    app.put('/usuarios/:usuario/restore', function(req, res){
+        var user = req.user;
+        var usuario = req.params.usuario;
+        
+        if(!user){
+            res.redirect('/');
+        }else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            }else if(user.status == 'admin'){
+                Users.update({'name.loginName': usuario},{$set: {deleted: false}}, function(err){
+                    if(err)
+                        throw err
+                    res.send('OK');
+                });
+            } else {
+                res.redirect('/');
+            }
+        }
+    });
 
     // =====================================
     // PÁGINAS ESPECIAIS ===================

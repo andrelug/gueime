@@ -3,6 +3,7 @@ doctype html
 html.no-js(lang="pt_BR")
     head
         include head
+        link(rel="stylesheet", href="/stylesheets/vendor/table.css")
 
     body(style="overflow-y: auto; background: url('../images/pattern.png') repeat #34495e")
         div#fb-root
@@ -25,7 +26,9 @@ html.no-js(lang="pt_BR")
         block content
 
         include scripts
-        script(src="/javascripts/profile.js")
+        script(src="/javascripts/vendor/jquery.dataTables.min.js")
+        script(src="/javascripts/vendor/tableFoundation.js")
+        script(src="/javascripts/gerenciar.js")
 
         script.
             $(window).on('popstate', function () {
@@ -51,7 +54,6 @@ html.no-js(lang="pt_BR")
             }
             FB.XFBML.parse();
         script.scriptLoad.
-            var b = "#{game.title}"; 
             profileContainer.waitForImages(function () {
                 $("#spinning").hide();
                 $('body').css('overflow-y', 'auto');
@@ -67,33 +69,8 @@ html.no-js(lang="pt_BR")
                     }                    
                     
                 });
-
-                var n = $('.item').length;
-                
-                if (n < 7) {
-                    $.ajax({
-                        type: "GET",
-                        url: "/paginationGame",
-                        data: {n: n, b: b},
-                        dataType: 'html'
-                    }).done(function (data) {
-                        profileContainer.isotope('insert', $(data));
-                    });
-                }
             }, null, true);
         script.
-            // LOAD MORE ARTICLES
-            $('#loadMoreProfile').on('click', function () {
-                n = $('.item').length;
-                $.ajax({
-                    type: "GET",
-                    url: "/paginationGame",
-                    data: { n: n, b: b },
-                    dataType: 'html'
-                }).done(function (data) {
-                    container.isotope('insert', $(data));
-                });
-            });
             $(window).on('popstate', function () {
                 $('.content-wrap').fadeOut();
                 $('body').css('overflow-y', 'auto');
@@ -103,5 +80,3 @@ html.no-js(lang="pt_BR")
                 }
                 $('.content').empty().css('background', 'white');
             });
-
-            

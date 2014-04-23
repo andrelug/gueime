@@ -915,7 +915,9 @@ rgba(0,0,0,0.3)
   }
 }
 @media only screen and (max-width: 64.063em) {
-  #contentEditing a span {
+  #contentEditing a span,
+  #gameInformations a span,
+  #gerenciarMenu a span {
     display: none !important;
   }
 }
@@ -942,21 +944,41 @@ rgba(0,0,0,0.3)
 #gamerStats a {
   color: #34495e;
 }
-#contentEditing {
+#contentEditing,
+#gameInformations,
+#gerenciarMenu {
   background-color: #27b899;
   font-size: 16pt;
   margin-top: 20px;
   text-align: center;
 }
-#contentEditing >a {
+#contentEditing >a,
+#gameInformations >a,
+#gerenciarMenu >a {
   width: 25%;
 }
-#contentEditing span {
+#contentEditing span,
+#gameInformations span,
+#gerenciarMenu span {
   display: inline-block !important;
 }
-#contentEditing a:hover {
+#contentEditing a:hover,
+#gameInformations a:hover,
+#gerenciarMenu a:hover {
   background-color: #23a68a;
   color: #fff;
+}
+#gameInformations {
+  margin-bottom: 20px;
+}
+#gameInformations >a {
+  width: 20% !important;
+}
+#gerenciarMenu {
+  margin: 20px 0;
+}
+#gerenciarMenu > a {
+  width: 25%;
 }
 #profileEditing,
 #profileSocialEditing,
@@ -1202,4 +1224,20 @@ rgba(0,0,0,0.3)
 #gameSearch,
 #newsSearch {
   background-color: #e54c3c;
+}
+#gerenciarRow {
+  margin-top: 90px;
+  padding: 20px 0;
+  background-color: #fff;
+}
+#gerenciarRow h1 {
+  font-family: 'nexa', sans-serif;
+  font-weight: bold;
+}
+.gerenciarTable {
+  width: 100%;
+}
+.gerenciarTable th,
+.gerenciarTable td {
+  border: 1px solid #fff;
 }

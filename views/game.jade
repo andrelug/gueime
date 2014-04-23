@@ -91,6 +91,22 @@ block content
                                     
 
                         include partials/gameView
+
+            div.row
+                div.medium-8.medium-centered.columns
+                    div.row#gameInformations
+                        a.create(href="/jogos/#{game.slug}") <i class="fa fa-globe"></i> <span>Geral</span>
+
+                        a.create(href="/jogos/#{game.slug}/wiki") <i class="fa fa-coffee"></i> <span>Wiki</span>
+
+                        a.create(href="/jogos/#{game.slug}/images") <i class="fa fa-picture-o"></i> <span>Imagens</span>
+
+                        a.create(href="/jogos/#{game.slug}/qa") <i class="fa fa-question"></i> <span>Q&A</span>
+
+                        a.create(href="/jogos/#{game.slug}/conquistas") <i class="fa fa-trophy"></i> <span>Conquistas</span>
+                    
+
+            
         
             if(analise != undefined)
                 div.row#gameReview

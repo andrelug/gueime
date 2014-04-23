@@ -102,3 +102,17 @@ NOTIFICATIONS
 --> http://www.ibm.com/developerworks/library/wa-notify-app/
 
 --> http://wavded.github.io/humane-js/
+
+
+
+SELECT AND AUTOCOMPLETE
+
+--> typeahead
+
+--> http://brianreavis.github.io/selectize.js/
+
+
+
+PARA FAZER EASTER EGGS
+
+--> http://dmauro.github.io/Keypress/   

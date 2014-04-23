@@ -32,7 +32,7 @@ $('#profileMenu').find('a').on('click', function () {
         case 'Informações':
             $('.slides').not('#profileEditing').slideUp();
             $('#profileEditing').slideToggle();
-            break;
+            break
 
         case 'Social':
             $('.slides').not('#profileSocialEditing').slideUp();
@@ -266,5 +266,4 @@ $('.gameLogoStats a').each(function (index, value) {
     } else if(ihref.indexOf('/distribuidoras') > -1) {
         $(this).attr('href', string_to_slug(ihref).replace('-distribuidoras-', '/distribuidoras/'));
     }
-    
 });

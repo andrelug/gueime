@@ -1,0 +1,219 @@
+extends layouts/gerenciarLayout
+
+block content
+
+    div#check(style="display:none;") check
+    
+    header.header.row
+        div.content-wrap
+            div.content
+        div#darken
+        div.row#searchBack(style="background-color: white;display:none;")
+            div.large-4.medium-6.medium-centered.large-centered.columns(style="height:8rem;")
+                span.vertical-align-helper
+                a(href="/"): img(src="/images/gueime.png", alt="Gueime Logo")
+
+        div#specialLogo.gueimeWhite.show-for-large-up(style="display:block;right:30px;left:auto")
+            a(href="/"): img(src="/images/gueime-white.png", alt="white logo")
+
+        div#specialLogo.gueimeWhite.show-for-medium-down.smallLogo(style="display:block;left: auto; right:20px;position:absolute;")
+            a(href="/"): img(src="/images/gueime-white-small.png", alt="white logo")
+
+        include partials/nav
+
+    div#wrapper
+        div.row#gerenciarRow
+            div.medium-10.medium-centered.columns
+                if(games)
+                    h1 Gerenciar Jogos
+                else if(articles)
+                    h1 Gerenciar Artigos
+                else if(devs)
+                    h1 Gerenciar Desenvolvedores
+                else if(pubs)
+                    h1 Gerenciar Distribuidoras
+                else if(profile)
+                    h1 Gerenciar Usuários
+
+            div.row
+                div.medium-10.medium-centered.columns
+                    div.row#gerenciarMenu
+                        a.create(href="/gerenciar/artigos", title="Gerenciar Conquistas") <i class="fa fa-pencil"></i> <span>Artigos</span>
+                        
+                        a.create(href="/gerenciar/jogos", title="Gerenciar Jogos") <i class="fa fa-gamepad"></i> <span>Jogos</span>
+
+                        a.create(href="/gerenciar/desenvolvedores", title="Gerenciar Conquistas") <i class="fa fa-coffee"></i> <span>Desenvolvedores</span>
+                        
+                        a.create(href="/gerenciar/generos", title="Gerenciar Gêneros") <i class="fa fa-sitemap"></i> <span>Gêneros</span>
+
+                        a.create(href="/gerenciar/distribuidoras", title="Gerenciar Distribuidora") <i class="fa fa-glass"></i> <span>Distribuidoras</span>
+
+                        a.create(href="/gerenciar/conquistas", title="Gerenciar Conquistas") <i class="fa fa-trophy"></i> <span>Conquistas</span>
+
+                        a.create(href="/gerenciar/usuarios", title="Gerenciar Usuários") <i class="fa fa-group"></i> <span>Usuários</span>
+
+                        a.create(href="/gerenciar/trivias", title="Gerenciar Trivias") <i class="fa fa-question"></i> <span>Trivias</span>
+
+
+                div.medium-10.medium-centered.columns
+                    table.gerenciarTable
+                        thead
+                            tr
+                                if(games)
+                                    th Nome
+                                    th Views
+                                    th Gamers
+                                    th Status
+                                    th Data
+                                    th Editar
+                                    th Deletar
+
+                                else if(articles)
+                                    th Título
+                                    th Tipo
+                                    th Views
+                                    th Status
+                                    th Data
+                                    th Editar
+                                    th Deletar
+
+                                else if(devs)
+                                    th Empresa
+                                    th Views
+                                    th Status
+                                    th Data
+                                    th Editar
+                                    th Deletar
+
+                                else if(pubs)
+                                    th Empresa
+                                    th Views
+                                    th Status
+                                    th Data
+                                    th Editar
+                                    th Deletar
+
+                                else if(gens)
+                                    th Gênero
+                                    th Views
+                                    th Status
+                                    th Data
+                                    th Editar
+                                    th Deletar
+
+                                else if(profile)
+                                    th Nome
+                                    th Username
+                                    th Email
+                                    th PageViews
+                                    th Deletado
+                                    th Publicações
+                                    th Acesso
+                                    th Data
+                                    th Deletar
+                        tbody
+                            if(games)
+                                for game in games
+                                    tr
+                                        td: a(href="/jogos/#{game.slug}") #{game.title}
+                                        td #{game.graph.views}
+                                        td #{game.graph.gamers}
+                                        if(game.status == 'deletado')
+                                            td.status #{game.status} (<a href="/jogos/#{game.slug}/restore" class="restore">Restore</a>)
+                                        else
+                                            td.status #{game.status}
+                                        td #{game.date}
+                                        td: a(href="/jogos/#{game.slug}/editar") Editar
+                                        td: a.deletarGen(href="/jogos/#{game.slug}/deletar") Deletar
+                                        //
+                                            td <fb:comments-count href=http://www.gueime.com.br/jogos/#{game.slug} ></fb:comments-count>
+
+                            else if(articles)
+                                for article in articles
+                                    tr
+                                        if(article.type == 'analise')
+                                            td: a(href="/analises/#{article.slug}") #{article.title}
+                                        else if(article.type == 'artigo')
+                                            td: a(href="/artigos/#{article.slug}") #{article.title}
+                                        else if(article.type == 'noticia')
+                                            td: a(href="/noticias/#{article.slug}") #{article.title}
+                                        else if(article.type == 'video')
+                                            td: a(href="/videos/#{article.slug}") #{article.title}
+                                        td #{article.type}
+                                        td #{article.graph.views}
+                                        if(article.status == 'deletado')
+                                            td.status #{article.status} (<a href="/artigos/#{article.slug}/restore" class="restore">Restore</a>)
+                                        else
+                                            td.status #{article.status}
+                                        td #{article.date}
+                                        if(article.type == 'analise')
+                                            td: a(href="/analises/#{article.slug}/editar") Editar
+                                        if(article.type == 'artigo')
+                                            td: a(href="/artigos/#{article.slug}/editar") Editar
+                                        if(article.type == 'noticia')
+                                            td: a(href="/noticias/#{article.slug}/editar") Editar
+                                        if(article.type == 'video')
+                                            td: a(href="/videos/#{article.slug}/editar") Editar
+                                        td: a.deletarGen(href="/artigos/#{article.slug}/deletar") Deletar
+
+                            else if(devs)
+                                for dev in devs
+                                    tr
+                                        td #{dev.title}
+                                        td #{dev.graph.views}
+                                        if(dev.status == 'deletado')
+                                            td.status #{dev.status} (<a href="/desenvolvedores/#{dev.slug}/restore" class="restore">Restore</a>)
+                                        else
+                                            td.status #{dev.status}
+                                        td #{dev.date}
+                                        td: a(href="/desenvolvedores/#{dev.slug}/editar") Editar
+                                        td: a.deletarGen(href="/desenvolvedores/#{dev.slug}/deletar") Deletar
+
+                            else if(pubs)
+                                for pub in pubs
+                                    tr
+                                        td #{pub.title}
+                                        td #{pub.graph.views}
+                                        if(pub.status == 'deletado')
+                                            td.status #{pub.status} (<a href="/distribuidoras/#{pub.slug}/restore" class="restore">Restore</a>)
+                                        else
+                                            td.status #{pub.status}
+                                        td #{pub.date}
+                                        td: a(href="/distribuidoras/#{pub.slug}/editar") Editar
+                                        td: a.deletarGen(href="/distribuidoras/#{pub.slug}/deletar") Deletar
+
+                            else if(gens)
+                                for gen in gens
+                                    tr
+                                        td #{gen.title}
+                                        td #{gen.graph.views}
+                                        if(gen.status == 'deletado')
+                                            td.status #{gen.status} (<a href="/generos/#{gen.slug}/restore" class="restore">Restore</a>)
+                                        else
+                                            td.status #{gen.status}
+                                        td #{gen.date}
+                                        td: a(href="/generos/#{gen.slug}/editar") Editar
+                                        td: a.deletarGen(href="/generos/#{gen.slug}/deletar") Deletar
+
+                            else if(profile)
+                                for prof in profile
+                                    tr
+                                        td #{prof.name.first} #{prof.name.last}
+                                        td #{prof.name.loginName}
+                                        td #{prof.email}
+                                        td #{prof.graph.visits}
+                                        if(prof.deleted == true)
+                                            td.statusUser #{prof.deleted} (<a href="/usuarios/#{prof.name.loginName}/restore" class="restoreUser">Restore</a>)
+                                        else
+                                            td.statusUser #{prof.deleted}
+                                        td #{prof.graph.publications}
+                                        td #{prof.status}
+                                        td #{prof.date}
+                                        td: a.deletarUser(href="/usuarios/#{prof.name.loginName}/deletar") Deletar
+                                        
+                    
+    div.row#load(style="display: none;")
+        div.medium-6.small-centered.columns
+            a#loadMore.button Mais artigos
+                     
+    include partials/footer

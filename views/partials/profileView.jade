@@ -65,32 +65,38 @@ div#profileSocialEditing.row.slides
         div.row
             div.large-6.columns
                 h5 XboxLive: 
-                    span.viewInfos #{user.social.xboxLive.name}
+                    if(profile.social.xboxLive.name)
+                        span.viewInfos #{profile.social.xboxLive.name}
 
             div.large-6.columns
                 h5 PSN: 
-                    span.viewInfos #{user.social.psn.name}
+                    if(profile.social.psn.name)
+                        span.viewInfos #{profile.social.psn.name}
 
         div.row
             div.large-6.columns
                 h5 Steam:
-                    span.viewInfos #{user.social.steam.name}
+                    if(profile.social.steam.name)
+                        span.viewInfos #{profile.social.steam.name}
 
             div.large-6.columns
                 h5 Wii U:
-                    span.viewInfos #{user.social.nintendo}
+                    if(profile.social.nintendo)
+                        span.viewInfos #{profile.social.nintendo}
 
         div.row
             div.large-6.columns
-                h5 Wii U:
-                    span.viewInfos #{user.social.gameCenter}
+                h5 GameCenter:
+                    if(profile.social.gameCenter)
+                        span.viewInfos #{profile.social.gameCenter}
 
             div.large-6.columns
                 h5 Alvanista:
-                    span.viewInfos #{user.social.alvanista}
+                    if(profile.social.alvanista)
+                        span.viewInfos #{profile.social.alvanista}
 
 div#profileConqEditing.row.slides
     div.medium-12.columns
-        if(user.gamification.achievements.length < 1)
+        if(profile.gamification.achievements.length < 1)
             h5 #{profile.name.first} não tem nenhuma conquista ainda
         else

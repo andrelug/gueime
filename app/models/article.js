@@ -52,8 +52,7 @@ var ArticleSchema = new mongoose.Schema({
     },
     highlight: {type: Boolean, default: false},
     status: {type: String, default: 'rascunho'},
-    facet: {type: [String], index: true},
-    date: { type: Date, default: Date.now }
+    facet: {type: [String], index: true}
 });
 
 // create the model for users and expose it to app // Artigo var
