@@ -2299,11 +2299,6 @@ module.exports = function (app, passport, mongoose) {
 
                     case 'usuarios':
                         Users.find({}).sort({_id: -1}).exec(function(err, docs){
-                            for(i=0;i < docs.length;i++){
-                                var timeStamp = docs[i]._id.toString().substring(0,8);
-                                var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
-                                docs[i].date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
-                            }
                             res.render('gerenciar', {title: "Gueime - Gerenciar Desenvolvedores", user: user, profile: docs});
                         });
                         break
@@ -2502,6 +2497,44 @@ module.exports = function (app, passport, mongoose) {
                 }
             } else {
                 res.redirect('/');
+            }
+        }
+    });
+
+    // CHANGE USER STATUS
+    app.put('/changeUserStatus', function(req, res){
+        var user = req.user;
+        var changeUser = req.body.user;
+        var status = req.body.status;
+
+        if(!user){
+            res.redirect('/');
+        }else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            }else if(user.status == 'admin'){
+                Users.update({'name.loginName': changeUser}, {$set: {status: status}}, function(err){
+                    res.send('OK');
+                });
+            }
+        }
+    });
+
+    // CHANGE ARTICLE STATUS
+    app.put('/changeArticleStatus', function(req, res){
+        var user = req.user;
+        var changeArt = req.body.art;
+        var status = req.body.status;
+
+        if(!user){
+            res.redirect('/');
+        }else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            }else if(user.status == 'admin'){
+                Artigos.update({slug: changeArt}, {$set: {status: status}}, function(err){
+                    res.send('OK');
+                });
             }
         }
     });

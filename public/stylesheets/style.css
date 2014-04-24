@@ -1297,6 +1297,13 @@ rgba(0,0,0,0.3)
 #gerenciarMenu .create {
   height: 100%;
 }
+.statusSelect,
+.statusArticleSelect {
+  margin: 0;
+  height: 30px;
+  font-size: 10pt;
+  padding: 0 0 0 5px;
+}
 @media only screen and (max-width: 40em) {
   .create img {
     top: 20px !important;

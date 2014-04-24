@@ -127,3 +127,45 @@ $(document).on('click', '.restoreUser', function (event) {
         });
     }
 });
+
+$(document).ready(function () {
+    $('.statusSelect').each(function () {
+        var status = $(this).parent().siblings('.profStatus').text();
+        $(this).find('option[value="' + status + '"]').attr('selected', 'selected');
+    });
+
+    $('.statusArticleSelect').each(function () {
+        var status = $(this).parent().siblings('.status').text();
+        $(this).find('option[value="' + status + '"]').attr('selected', 'selected');
+    });
+});
+
+$('.statusSelect').on('change', function () {
+    var esse = $(this);
+    var status = $(this).find('option:selected').text();
+    var user = $(this).attr('title');
+    $.ajax({
+        url: '/changeUserStatus',
+        type: 'PUT',
+        data: { status: status, user: user }
+    }).done(function (data) {
+        esse.parent().siblings('.profStatus').fadeOut(function(){
+            $(this).text(status).fadeIn();
+        });
+    });
+});
+
+$('.statusArticleSelect').on('change', function () {
+    var esse = $(this);
+    var status = $(this).find('option:selected').text();
+    var art = $(this).attr('title');
+    $.ajax({
+        url: '/changeArticleStatus',
+        type: 'PUT',
+        data: { status: status, art: art }
+    }).done(function (data) {
+        esse.parent().siblings('.status').fadeOut(function(){
+            $(this).text(status).fadeIn();
+        });
+    });
+});

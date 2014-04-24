@@ -73,6 +73,7 @@ block content
                                     th Tipo
                                     th Views
                                     th Status
+                                    th Mudar Status
                                     th Data
                                     th Editar
                                     th Deletar
@@ -109,7 +110,7 @@ block content
                                     th Deletado
                                     th Publicações
                                     th Acesso
-                                    th Data
+                                    th Mudar Acesso
                                     th Deletar
                         tbody
                             if(games)
@@ -125,8 +126,6 @@ block content
                                         td #{game.date}
                                         td: a(href="/jogos/#{game.slug}/editar") Editar
                                         td: a.deletarGen(href="/jogos/#{game.slug}/deletar") Deletar
-                                        //
-                                            td <fb:comments-count href=http://www.gueime.com.br/jogos/#{game.slug} ></fb:comments-count>
 
                             else if(articles)
                                 for article in articles
@@ -145,6 +144,13 @@ block content
                                             td.status #{article.status} (<a href="/artigos/#{article.slug}/restore" class="restore">Restore</a>)
                                         else
                                             td.status #{article.status}
+
+                                        td
+                                            select.statusArticleSelect(title="#{article.slug}")
+                                                option(value="rascunho") rascunho
+                                                option(value="pendente") pendente
+                                                option(value="revisao") revisao
+                                                option(value="publicado") publicado
                                         td #{article.date}
                                         if(article.type == 'analise')
                                             td: a(href="/analises/#{article.slug}/editar") Editar
@@ -207,8 +213,13 @@ block content
                                         else
                                             td.statusUser #{prof.deleted}
                                         td #{prof.graph.publications}
-                                        td #{prof.status}
-                                        td #{prof.date}
+                                        td.profStatus #{prof.status}
+                                        td
+                                            select.statusSelect(title="#{prof.name.loginName}")
+                                                option(value="user") user
+                                                option(value="parceiro") parceiro
+                                                option(value="editor") editor
+                                                option(value="admin") admin
                                         td: a.deletarUser(href="/usuarios/#{prof.name.loginName}/deletar") Deletar
                                         
                     
