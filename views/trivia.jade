@@ -1,0 +1,50 @@
+extends layouts/triviaLayout
+
+block content
+
+    div#check(style="display:none;") check
+    
+    header.header.row.header2
+        div.content-wrap
+            div.content
+        div#darken
+        div.row#searchBack(style="background-color: white;display:none;")
+            div.large-4.medium-6.medium-centered.large-centered.columns(style="height:8rem;")
+                span.vertical-align-helper
+                a(href="/"): img(src="/images/gueime.png", alt="Gueime Logo")
+
+        div#specialLogo.gueimeWhite.show-for-large-up(style="display:block;right:30px;left:auto")
+            a(href="/"): img(src="/images/gueime-white.png", alt="white logo")
+
+        div#specialLogo.gueimeWhite.show-for-medium-down.smallLogo(style="display:block;left: auto; right:20px;position:absolute;")
+            a(href="/"): img(src="/images/gueime-white-small.png", alt="white logo")
+
+        include partials/nav
+
+    div#wrapper
+        div.row#gerenciarRow
+            div.medium-8.medium-centered.columns
+                h1 Gueime Trivia
+            
+            div.medium-8.medium-centered.columns
+                div.row#gerenciarMenu.triviaMenu
+                    a.create(href="/gerenciar/artigos", title="Estatísticas") <img src="#{user.photo}"> <span>#{user.name.first}</span>
+                        
+                    a.create(href="/gerenciar/jogos", title="Configurações") <i class="fa fa-gamepad"></i> <span>Configurações</span>
+
+                    a.create(href="/gerenciar/desenvolvedores", title="Gerenciar Conquistas") <i class="fa fa-coffee"></i> <span>Desenvolvedores</span>
+
+            div.medium-8.medium-centered.columns
+                div.row#triviaTipos
+                    div.medium-6.medium-centered.columns
+                        a.triviaPlay.button(href="#") <i class="fa fa-play-circle-o"></i> Jogar
+                        
+
+
+
+
+    div.row#load(style="display: none;")
+        div.medium-6.small-centered.columns
+            a#loadMore.button Mais artigos
+                     
+    include partials/footer

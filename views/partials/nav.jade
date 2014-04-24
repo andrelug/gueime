@@ -4,6 +4,17 @@ div#nav-sticky
             div.large-5.medium-9.small-10.medium-centered.columns.large-centered
                 div#suggestion
                     input#mainInput(type="text", class="typeahead", placeholder="Ache tudo sobre Games!")
+                    a(href="#").filtros filtros
+    div.filter.row
+        div.medium-8.medium-centered.small-12.small-centered.columns
+            div.row#gerenciarMenu.filterMenu
+                a.create(title="Gerenciar Conquistas", data-filter=".noticias") <span>Notícias</span>
+
+                a.create(title="Gerenciar Conquistas", data-filter=".artigos") <span>Artigos</span>
+
+                a.create(title="Gerenciar Conquistas", data-filter=".analises") <span>Análises</span>
+
+                a.create(title="Gerenciar Conquistas", data-filter=".videos") <span>Vídeos</span>
 
     div.contain-to-grid
         div.row

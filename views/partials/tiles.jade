@@ -1,7 +1,7 @@
 for doc in docs
     
     if(doc.type == 'noticia')
-        a(href="/noticias/#{doc.slug}", data-link="ajax").item
+        a(href="/noticias/#{doc.slug}", data-link="ajax").item.noticias
             div.hidden.infoNews.row
                 div.small-12.small-centered.columns.headline
                     p #{doc.description}
@@ -18,7 +18,7 @@ for doc in docs
                         h2.ref #{doc.title}
 
     else if(doc.type == 'analise')
-        a(href="/analises/#{doc.slug}", data-link="ajax").item.w4
+        a(href="/analises/#{doc.slug}", data-link="ajax").item.w4.analises
             div.hidden.infoGame.row
                 div.small-12.small-centered.columns.headline
                     p #{doc.description}
@@ -34,7 +34,7 @@ for doc in docs
                     h2.ref #{doc.title}
 
     else if(doc.type == 'artigo')
-        a(href="/artigos/#{doc.slug}", data-link="ajax").item.w4
+        a(href="/artigos/#{doc.slug}", data-link="ajax").item.w4.artigos
             div.hidden.infoArticle.row
                 div.small-12.small-centered.columns.headline
                     p #{doc.description}
@@ -50,7 +50,7 @@ for doc in docs
                     h2.ref #{doc.title}
 
     else
-        a(href="/videos/#{doc.slug}", data-link="ajax").item
+        a(href="/videos/#{doc.slug}", data-link="ajax").item.videos
             div.hidden.infoVideo.row
                 div.small-12.small-centered.columns.headline
                     p #{doc.description}

@@ -42,6 +42,14 @@ html.no-js(lang="pt_BR")
                     }                    
                     
                 });
+                $('.filtros').show();
+
+                container.isoSelective({
+                    linkSelector: '.filterMenu a',
+                    attrSelector: 'data-filter',
+                    activeClass: 'toggledOn',
+                    preventEmpty: true
+                });
 
                 n = $('.item').length;
                 if (n < 7) {

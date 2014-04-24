@@ -3,8 +3,7 @@ doctype html
 html.no-js(lang="pt_BR")
     head
         include head
-        if(canonical == true)
-            link(rel="canonical", href="http://www.gueime.com.br/profile/#{profile.name.loginName}")
+        link(rel="stylesheet", href="/stylesheets/vendor/table.css")
 
     body(style="overflow-y: auto; background: url('../images/pattern.png') repeat #34495e")
         div#fb-root
@@ -27,7 +26,7 @@ html.no-js(lang="pt_BR")
         block content
 
         include scripts
-        script(src="/javascripts/profile.js")
+        script(src="/javascripts/trivia.js")
 
         script.
             $(window).on('popstate', function () {
@@ -53,7 +52,6 @@ html.no-js(lang="pt_BR")
             }
             FB.XFBML.parse();
         script.scriptLoad.
-            var b = "#{profile._id}";
             profileContainer.waitForImages(function () {
                 $("#spinning").hide();
                 $('body').css('overflow-y', 'auto');
@@ -66,37 +64,11 @@ html.no-js(lang="pt_BR")
                         gutter: 20,
                         rowHeight: 10,
                         columnWidth: 24
-                    }                 
+                    }                    
                     
                 });
-
-                var n = $('.item').length;
-                
-                if (n < 7) {
-                    $.ajax({
-                        type: "GET",
-                        url: "/paginationProfile",
-                        data: {n: n, b: b},
-                        dataType: 'html'
-                    }).done(function (data) {
-                        profileContainer.isotope('insert', $(data));
-                    });
-                }
             }, null, true);
         script.
-            // LOAD MORE ARTICLES
-            $('#loadMoreProfile').on('click', function () {
-                n = $('.item').length;
-                $.ajax({
-                    type: "GET",
-                    url: "/paginationProfile",
-                    data: { n: n, b: b },
-                    dataType: 'html'
-                }).done(function (data) {
-                    container.isotope('insert', $(data));
-                });
-            });
-
             $(window).on('popstate', function () {
                 $('.content-wrap').fadeOut();
                 $('body').css('overflow-y', 'auto');
@@ -106,5 +78,3 @@ html.no-js(lang="pt_BR")
                 }
                 $('.content').empty().css('background', 'white');
             });
-
-            

@@ -1,21 +1,10 @@
 div.row#gridArticles
-    if(game != undefined && game.length > 0)
-        for doc in game
-            a(href="/noticias/#{doc.slug}", data-link="ajax").item
-                div.hidden.infoNews.row
-                    div.small-12.small-centered.columns.headline
-                        p #{doc.description}
-                    div.small-12.small-centered.columns
-                        div.row.graph
-                            div.large-6.medium-6.small-6.columns
-                                span 
-                            div.large-6.medium-6.small-6.columns
-                                span.toRight <i class="fa fa-eye"></i> #{doc.graph.views}<i class="fa fa-comment", style="margin-left:10px;"></i> <fb:comments-count href=http://www.gueime.com.br/noticias/#{doc.slug} ></fb:comments-count>
-                div.articleImage(style="background-image: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images#{doc.cover.image});")
-                div.details
-                    div.name
-                        span#newsText
-                            h2.ref #{doc.title}
+    if(games != undefined && games.length > 0)
+        for game in games
+            a(href="/jogos/#{game.slug}").item
+                div.gameAnalise(style="#{game.cover}  margin:0px")
+                    div.analisePattern(style="background-color:rgba(36, 50, 80, 0.6);")
+                        h3(style="color:white;") #{game.title}
 
     include partials/tiles
 
@@ -31,7 +20,7 @@ script.scriptLoad.
         $('#specialLogo').remove();
 
 
-        container.isotope({
+        container.isotope({ 
             itemSelector: '.item',
             layoutMode: 'masonry',
             masonry:{
@@ -40,6 +29,14 @@ script.scriptLoad.
                 columnWidth: 24
             }
                     
+        });
+        $('.filtros').show();
+
+        container.isoSelective({
+            linkSelector: '.filterMenu a',
+            attrSelector: 'data-filter',
+            activeClass: 'toggledOn',
+            preventEmpty: true
         });
 
         var nav = $('#nav-sticky');

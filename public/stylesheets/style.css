@@ -171,6 +171,9 @@ rgba(0,0,0,0.3)
 .infoGame {
   background-color: #e54c3c;
 }
+.infoGamed {
+  background: url("/images/pattern.png") repeat;
+}
 .infoNews {
   background-color: #27b899;
 }
@@ -568,6 +571,11 @@ textarea {
   position: relative;
   background-color: #fff;
   margin: 0px;
+  box-shadow: 0 -1px 3px rgba(0,0,0,0.3);
+rgba(0,0,0,0.3)
+  -webkit-box-shadow: 0 -1px 3px rgba(0,0,0,0.3);
+  -ms-box-shadow: 0 -1px 3px rgba(0,0,0,0.3);
+  -moz-box-shadow: 0 -1px 3px rgba(0,0,0,0.3);
 }
 #author #authorImage {
   display: inline-block;
@@ -920,6 +928,9 @@ rgba(0,0,0,0.3)
   #gerenciarMenu a span {
     display: none !important;
   }
+  #gerenciarMenu.filterMenu a span {
+    display: block !important;
+  }
 }
 #userStats,
 #gamerStats {
@@ -933,7 +944,7 @@ rgba(0,0,0,0.3)
   -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 #gamerStats {
-  background-color: #479ecd;
+  background-color: #27b899;
 }
 #gamerStats li {
   color: #fff;
@@ -943,6 +954,9 @@ rgba(0,0,0,0.3)
 }
 #gamerStats a {
   color: #34495e;
+}
+#gamerStats h2 {
+  color: #fff;
 }
 #contentEditing,
 #gameInformations,
@@ -967,6 +981,9 @@ rgba(0,0,0,0.3)
 #gerenciarMenu a:hover {
   background-color: #23a68a;
   color: #fff;
+}
+#gerenciarMenu.filterMenu {
+  margin: 0 !important;
 }
 #gameInformations {
   margin-bottom: 20px;
@@ -1100,7 +1117,6 @@ rgba(0,0,0,0.3)
   -ms-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
   -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
   padding: 30px;
-  margin: 0 0 20px 0;
   background-color: #34495e;
 }
 .row .reviewScore h4 {
@@ -1166,9 +1182,21 @@ rgba(0,0,0,0.3)
   background-size: 100%;
   text-align: center;
 }
+.gameAnalise:hover {
+  opacity: 0.9;
+}
+.gameAnalise:hover h3 {
+  text-shadow: 0px 1px 1px #000;
+}
 @media only screen and (max-width: 40em) {
   .gameAnalise {
     background-size: auto;
+  }
+  .header2 {
+    top: -91px !important;
+  }
+  #gerenciarRow {
+    padding-top: 70px !important;
   }
 }
 .analisePattern {
@@ -1178,6 +1206,11 @@ rgba(0,0,0,0.3)
   height: 250px;
   width: 100%;
   background: url("/images/pattern.png") repeat;
+}
+.analisePattern h3 {
+  font-size: 30pt;
+  font-family: 'nexa', sans-serif;
+  font-weight: bold;
 }
 .smallScoreGame {
   position: relative;
@@ -1240,4 +1273,61 @@ rgba(0,0,0,0.3)
 .gerenciarTable th,
 .gerenciarTable td {
   border: 1px solid #fff;
+}
+#triviaTipos .triviaPlay {
+  background-color: #338ac3;
+  width: 100%;
+  padding: 50px 20px;
+  color: #fff;
+  font-size: 30pt;
+}
+#triviaTipos .triviaPlay:hover {
+  background-color: #2e7cb0;
+}
+.triviaMenu .create {
+  height: 50px !important;
+}
+.triviaMenu .create img {
+  width: 56px;
+  height: 50px;
+  position: absolute;
+  left: 15px;
+  top: 0;
+}
+#gerenciarMenu .create {
+  height: 100%;
+}
+@media only screen and (max-width: 40em) {
+  .create img {
+    top: 20px !important;
+  }
+}
+.filtros {
+  position: absolute;
+  top: 12px;
+  right: -33px;
+  color: #fff;
+  display: none;
+}
+.filtros:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+.filter {
+  background-color: #fff;
+  display: none;
+}
+.filter ul {
+  position: relative;
+  margin-bottom: 0px;
+}
+.filter ul li {
+  float: left;
+  list-style: none;
+}
+.filter ul li a {
+  margin: 0;
+}
+.toggledOn {
+  background-color: #1b816b;
 }

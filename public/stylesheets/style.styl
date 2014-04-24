@@ -159,6 +159,9 @@ input[type="text"], textarea
 .infoGame
     background-color gRed
 
+.infoGamed
+    background url(/images/pattern.png) repeat
+
 .infoNews
     background-color gGreen
 
@@ -550,6 +553,11 @@ textarea
     position relative
     background-color white
     margin 0px
+    box-shadow 0 -1px 3px rgba(0,0,0,0.3)
+    -0-box-shadow 0 -1px 3px rgba(0,0,0,0.3)
+    -webkit-box-shadow 0 -1px 3px rgba(0,0,0,0.3)
+    -ms-box-shadow 0 -1px 3px rgba(0,0,0,0.3)
+    -moz-box-shadow 0 -1px 3px rgba(0,0,0,0.3)
 
     #authorImage
         display inline-block
@@ -795,6 +803,9 @@ textarea
     #contentEditing a span, #gameInformations a span, #gerenciarMenu a span
         display none !important
 
+    #gerenciarMenu.filterMenu a span
+        display block !important
+
 #userStats, #gamerStats
     background-color gRed
     color white
@@ -809,7 +820,7 @@ textarea
         
 
 #gamerStats
-    background-color gBlue
+    background-color gGreen
 
     li
         color white
@@ -819,6 +830,9 @@ textarea
 
     a
         color gAsphalt
+
+    h2
+        color white
 
 #contentEditing, #gameInformations, #gerenciarMenu
     background-color gGreen
@@ -835,6 +849,9 @@ textarea
     a:hover
         background-color darken(gGreen, 10%)
         color white
+
+#gerenciarMenu.filterMenu
+    margin 0 !important
 
 #gameInformations
     margin-bottom 20px
@@ -954,7 +971,6 @@ textarea
     -ms-box-shadow 0 1px 3px rgba(0,0,0,0.3)
     -moz-box-shadow 0 1px 3px rgba(0,0,0,0.3)
     padding 30px
-    margin 0 0 20px 0
     background-color gAsphalt
 
     h4
@@ -1019,9 +1035,20 @@ textarea
     background-size 100%
     text-align center
 
+.gameAnalise:hover
+    opacity 0.9
+
+    h3
+        text-shadow 0px 1px 1px black
+
 @media only screen and (max-width: 40em)
     .gameAnalise
         background-size auto
+    .header2
+        top -91px !important
+
+    #gerenciarRow
+        padding-top 70px !important
 
 .analisePattern
     position absolute
@@ -1030,6 +1057,11 @@ textarea
     height 250px
     width 100%
     background url(/images/pattern.png) repeat
+
+    h3
+        font-size 30pt
+        font-family 'nexa', sans-serif
+        font-weight bold
 
 
 .smallScoreGame
@@ -1091,3 +1123,61 @@ textarea
 
     th, td
         border 1px solid white
+
+#triviaTipos
+
+    .triviaPlay
+        background-color gDarkBlue
+        width 100%
+        padding 50px 20px
+        color white
+        font-size 30pt
+
+    .triviaPlay:hover
+        background-color darken(gDarkBlue, 10%)
+
+.triviaMenu .create
+    height 50px !important
+    img
+        width 56px
+        height 50px
+        position absolute
+        left 15px
+        top 0
+
+#gerenciarMenu .create
+    height 100%
+
+
+@media only screen and (max-width: 40em)
+    .create img
+        top 20px !important
+
+
+.filtros
+    position absolute
+    top 12px
+    right -33px
+    color white
+    display none
+
+.filtros:hover
+    color white
+    text-decoration underline
+
+.filter
+    background-color white
+    display none
+    ul
+        position relative
+        margin-bottom 0px
+        li
+            float left
+            list-style none
+            a
+                margin 0
+                
+
+
+.toggledOn
+    background-color darken(gGreen, 30%)

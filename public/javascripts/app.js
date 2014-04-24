@@ -56,6 +56,12 @@ tagSearch = function (str) {
                     dataType: 'html'
                 }).done(function (data) {
                     container.isotope('insert', $(data));
+                    container.isoSelective({
+                        linkSelector: '.filterMenu a',
+                        attrSelector: 'data-filter',
+                        activeClass: 'toggledOn',
+                        preventEmpty: true
+                    });
                 });
             }
         }, null, true);
@@ -150,6 +156,12 @@ $('#loadMore').on('click', function () {
         dataType: 'html'
     }).done(function (data) {
         container.isotope('insert', $(data));
+        container.isoSelective({
+            linkSelector: '.filterMenu a',
+            attrSelector: 'data-filter',
+            activeClass: 'toggledOn',
+            preventEmpty: true
+        });
     });
 });
 
@@ -224,6 +236,11 @@ $(function() {
 
 $('#alertMessage').on('click', function () {
     history.pushState(null, null, '/');
+});
+
+$('.filtros').on('click', function (event) {
+    event.preventDefault();
+    $('.filter').slideToggle();
 });
 
 // Analytics specific

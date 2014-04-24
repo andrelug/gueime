@@ -58,7 +58,7 @@ block content
 
 
                     div.large-8.large-offset-1.medium-7.medium-offset-1.columns
-                        form(action="/newGame", method="POST")
+                        form(action="/newGame", method="POST", data-abide)
                             input(type="hidden", name="gameCover")
                             input(type="hidden", name="position")
                             if(edit == true)
@@ -68,52 +68,66 @@ block content
                                 input(type="hidden", name="editing", value="no")
                             
                             if(edit == true)
-                                input.gameEditTitle(type="text", placeholder="Nome do Jogo", name="nomeJogo", value="#{game.title}")
+                                input.gameEditTitle(type="text", placeholder="Nome do Jogo", name="nomeJogo", value="#{game.title}", required)
+                                small.error Obrigatório
                             else
-                                input.gameEditTitle(type="text", placeholder="Nome do Jogo", name="nomeJogo")
+                                input.gameEditTitle(type="text", placeholder="Nome do Jogo", name="nomeJogo", required)
+                                small.error Obrigatório
                             div.row#gamerStats
                                 div.large-6.columns
                                     ul.gameLogo
                                         li.gameLogoStats <i class="fa fa-calendar"></i> 
                                             if(edit == true)
-                                                input(type="text", placeholder="Data de Lançamento (dd/mm/aaaa)", name="date", value="#{date}")
+                                                input(type="text", placeholder="Data de Lançamento (dd/mm/aaaa)", name="date", value="#{date}", required, pattern="(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)")
+                                                small.error Obrigatório
                                             else
-                                                input(type="text", placeholder="Data de Lançamento (dd/mm/aaaa)", name="date")
+                                                input(type="text", placeholder="Data de Lançamento (dd/mm/aaaa)", name="date", required, pattern="(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)")
+                                                small.error Obrigatório
                                         li.gameLogoStats <i class="fa fa-gamepad"></i> 
                                             if(edit == true)
-                                                input(type="text", placeholder="Plataformas", name="plataformas", value="#{game.graph.console}")
+                                                input(type="text", placeholder="Plataformas", name="plataformas", value="#{game.graph.console}", required)
+                                                small.error Obrigatório
                                             else
-                                                input(type="text", placeholder="Plataformas", name="plataformas")
+                                                input(type="text", placeholder="Plataformas", name="plataformas", required)
+                                                small.error Obrigatório
                                         li.gameLogoStats <i class="fa fa-gavel"></i> 
                                             if(edit == true)
-                                                input(type="text", placeholder="ESRB", name="esrb", value="#{game.graph.esrb}")
+                                                input(type="text", placeholder="ESRB", name="esrb", value="#{game.graph.esrb}", required)
+                                                small.error Obrigatório
                                             else
-                                                input(type="text", placeholder="ESRB", name="esrb")
+                                                input(type="text", placeholder="ESRB", name="esrb", required)
+                                                small.error Obrigatório
 
                                 div.large-6.columns
                                     ul.gameLogo
                                         li.gameLogoStats Gênero: 
                                             if(edit == true)
-                                                input(type="text", placeholder="Gênero", name="genero", value="#{game.graph.genre}")
+                                                input(type="text", placeholder="Gênero", name="genero", value="#{game.graph.genre}", required)
+                                                small.error Obrigatório
                                             else
-                                                input(type="text", placeholder="Gênero", name="genero")
+                                                input(type="text", placeholder="Gênero", name="genero", required)
+                                                small.error Obrigatório
                                         li.gameLogoStats Desenvolvedor: 
                                             if(edit == true)
-                                                input(type="text", placeholder="Desenvolvedor", name="desenvolvedor", value="#{game.graph.developer}")
+                                                input(type="text", placeholder="Desenvolvedor", name="desenvolvedor", value="#{game.graph.developer}", required)
+                                                small.error Obrigatório
                                             else
-                                                input(type="text", placeholder="Desenvolvedor", name="desenvolvedor")
+                                                input(type="text", placeholder="Desenvolvedor", name="desenvolvedor", required)
+                                                small.error Obrigatório
                                         li.gameLogoStats Distribuidora: 
                                             if(edit == true)
-                                                input(type="text", placeholder="Distribuidora", name="distribuidora", value="#{game.graph.publisher}")
+                                                input(type="text", placeholder="Distribuidora", name="distribuidora", value="#{game.graph.publisher}", required)
+                                                small.error Obrigatório
                                             else
-                                                input(type="text", placeholder="Distribuidora", name="distribuidora")
+                                                input(type="text", placeholder="Distribuidora", name="distribuidora", required)
+                                                small.error Obrigatório
 
                                 div.large-12.columns
                                     if(edit == true)
-                                        textarea(name="sobre", placeholder="Sobre o jogo")
+                                        textarea(name="sobre", placeholder="Sobre o jogo", required)
                                             !{game.about}
                                     else
-                                        textarea(name="sobre", placeholder="Sobre o jogo")
+                                        textarea(name="sobre", placeholder="Sobre o jogo", required)
 
                                 div.row
                                     div.medium-6.medium-offset-3.columns

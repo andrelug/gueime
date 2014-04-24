@@ -138,7 +138,7 @@ module.exports = function (app, passport, mongoose) {
                             gameStr = 0
                         }
                         Games.find({status: 'publicado', title: new RegExp(gameStr, 'i') }, function(err, game){
-                            res.render('tags', { docs: docs, game: game  });
+                            res.render('tags', { docs: docs, games: game  });
                         });
                     });
                 }
@@ -175,7 +175,7 @@ module.exports = function (app, passport, mongoose) {
                             gameStr = 0
                         }
                         Games.find({status: 'publicado', title: new RegExp(gameStr, 'i') }, function(err, game){
-                            res.render('tags', { docs: docs, game: game });
+                            res.render('tags', { docs: docs, games: game });
                         });
                     });
                 }
@@ -339,7 +339,7 @@ module.exports = function (app, passport, mongoose) {
                         if(!user){
                             res.render('artigoAjax', { tipo: 'analise', article: docs, title: title, body: body, author: author[0], decimal: decimal, score: score, bad: bad, good: good });
                         } else {
-                            Users.find({ _id: docs.authors.main }, function (err, author) {
+                            Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
                                 res.render('artigoAjax', { tipo: 'analise', article: docs, title: title, body: body, author: author[0], user: user, decimal: decimal, score: score, bad: bad, good: good });
                             });
                         }
@@ -395,8 +395,14 @@ module.exports = function (app, passport, mongoose) {
                             }
 
                             Users.find({ _id: docs.authors.main }, function (err, author) {
-                                Users.find({ _id: docs.authors.main }, function (err, author) {
-                                    res.render('artigo', { tipo: 'analise', article: docs, title: title, body: body, user: user, author: author[0], decimal: decimal, score: score, bad: bad, good: good });
+                                Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
+                                    Games.findOne({slug: analise, status: 'publicado'}, function(err, game){
+                                        if(game.release){
+                                            var date = game.release;
+                                            date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                                        }
+                                        res.render('artigo', { tipo: 'analise', article: docs, title: title, body: body, user: user, author: author[0], decimal: decimal, score: score, bad: bad, good: good, game: game, date:date });
+                                    });
                                 });
                             });
                         } else {
@@ -422,7 +428,7 @@ module.exports = function (app, passport, mongoose) {
                         if(!user){
                             res.render('artigoAjax', { tipo: 'video', article: docs, title: title, body: body, author: author[0] });
                         } else {
-                            Users.find({ _id: docs.authors.main }, function (err, author) {
+                            Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
                                 res.render('artigoAjax', { tipo: 'video', article: docs, title: title, body: body, author: author[0], user: user });
                             });
                         }
@@ -455,7 +461,9 @@ module.exports = function (app, passport, mongoose) {
                             var title = decodeURIComponent(docs.title),
                                 body = decodeURIComponent(docs.text);
                             Users.find({ _id: docs.authors.main }, function (err, author) {
-                                res.render('artigo', { tipo: 'video', article: docs, title: title, body: body, user: user, author: author[0] });
+                                Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
+                                    res.render('artigo', { tipo: 'video', article: docs, title: title, body: body, user: user, author: author[0] });
+                                });
                             });
                         } else {
                             res.redirect('/?redirect=true');
@@ -1263,8 +1271,15 @@ module.exports = function (app, passport, mongoose) {
     app.put('/infoSend', function(req, res){
         var user = req.user;
         var b = req.body;
-        var date = b.birthDate.split('/');
-        var birthDate = new Date(date[2], date[1] - 1, date[0]);
+        var date, birthDate;
+        
+        if(b.birthDate != ''){
+            date = b.birthDate.split('/');
+            birthDate = new Date(date[2], date[1] - 1, date[0]);
+        } else {
+            birthDate = null;
+        }
+        
 
         if(!user){
             res.redirect('/');
@@ -2625,6 +2640,14 @@ module.exports = function (app, passport, mongoose) {
                 res.redirect('/');
             }
         }
+    });
+
+    // =====================================
+    // TRIVIA ==============================
+    // =====================================
+    app.get('/trivia', function(req, res, next){
+        var user = req.user;
+        res.render('trivia', {user: user, title: "Gueime - Trivia"});
     });
 
     // =====================================

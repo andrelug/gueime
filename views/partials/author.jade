@@ -20,6 +20,31 @@ if(tipo == 'analise')
                                 ul
                                     for ruim in bad
                                         li <span>-</span> #{ruim}
+
+
+    div.row#gamerStats.show-for-medium-up
+        div.medium-8.medium-centered.columns
+            div.row
+                a(href="/jogos/#{article.slug}", title="#{article.title}"): h2 Informações do Jogo
+                div.medium-6.columns
+                    ul.gameLogo
+                        li.gameLogoStats <i class="fa fa-calendar"></i> #{date}
+                        li.gameLogoStats <i class="fa fa-gamepad"></i> 
+                            each console in game.graph.console
+                                a(href="/consoles/#{console}") #{console} 
+                        li.gameLogoStats <i class="fa fa-gavel"></i> #{game.graph.esrb}
+
+                div.medium-6.columns
+                    ul.gameLogo
+                        li.gameLogoStats Gênero:  
+                            each genero in game.graph.genre
+                                a(href="/generos/#{genero}") #{genero} 
+                        li.gameLogoStats Desenvolvedor: 
+                            each dev in game.graph.developer
+                                a(href="/desenvolvedores/#{dev}") #{dev} 
+                        li.gameLogoStats Distribuidora:  
+                            each pub in game.graph.publisher
+                                a(href="/distribuidoras/#{pub}") #{pub}  
 section#author.row
     div.large-3.medium-6.columns.autImage
         div.row
