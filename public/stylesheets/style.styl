@@ -122,11 +122,6 @@ input[type="text"], textarea
     -webkit-box-shadow 0 1px 3px rgba(0,0,0,0.3)
     -ms-box-shadow 0 1px 3px rgba(0,0,0,0.3)
     -moz-box-shadow 0 1px 3px rgba(0,0,0,0.3)
-    -webkit-transition all 400ms ease
-    -moz-transition all 400ms ease
-    -ms-transition all 400ms ease
-    -o-transition all 400ms ease
-    transition all 400ms ease
 
 .hidden
     position absolute
@@ -652,52 +647,6 @@ textarea
     margin-top 20px
     display block !important
 
-.twitter-typeahead
-    width 100%
-
-.typeahead
-    background-color #fff
-
-.typeahead:focus
-    border 2px solid #0097cf
-
-.tt-query
-    -webkit-box-shadow inset 0 1px 1px rgba(0, 0, 0, 0.075)
-    -moz-box-shadow inset 0 1px 1px rgba(0, 0, 0, 0.075)
-    box-shadow inset 0 1px 1px rgba(0, 0, 0, 0.075)
-
-.tt-hint
-    color #999
-
-.tt-dropdown-menu
-    width 422px
-    padding 8px 0
-    background-color #fff
-    border 1px solid #ccc
-    border 1px solid rgba(0, 0, 0, 0.2)
-    -webkit-border-radius 8px
-    -moz-border-radius 8px
-    border-radius 8px
-    -webkit-box-shadow 0 5px 10px rgba(0,0,0,.2)
-    -moz-box-shadow 0 5px 10px rgba(0,0,0,.2)
-    box-shadow 0 5px 10px rgba(0,0,0,.2)
-
-.tt-suggestion
-    padding 3px 20px
-    font-size 18px
-    line-height 24px
-
-.tt-suggestion.tt-cursor
-    color #fff
-    background-color #0097cf
-
-.tt-suggestion p
-    margin 0
-
-.gist
-    font-size 14px
-
-
 #loadMore, #loadMoreProfile
     width 100%
 
@@ -820,7 +769,7 @@ textarea
         
 
 #gamerStats
-    background-color gGreen
+    background-color gBlue
 
     li
         color white
@@ -1014,6 +963,11 @@ textarea
         h4
             left 40% !important
 
+    #profile, #game
+
+        #imageAndOpt, #imageAndOptGame, #imageAndOptGen
+            margin-top 0 !important
+
 #submitNewGame
     width 100%
     background-color gGreen
@@ -1172,7 +1126,7 @@ textarea
     text-decoration underline
 
 .filter
-    background-color white
+    background-color gGreen
     display none
     ul
         position relative
@@ -1182,8 +1136,33 @@ textarea
             list-style none
             a
                 margin 0
-                
+
+.toggledOn, a.create:active
+    background-color darken(gGreen, 30%) !important
 
 
-.toggledOn
-    background-color darken(gGreen, 30%)
+.autocomplete-suggestions
+    border 1px solid #999
+    background #FFF
+    cursor default
+    text-align left
+    max-height 350px
+    overflow auto
+
+#mainInput
+    font-size 12pt
+.autocomplete-suggestions .autocomplete-selected
+    background #F0F0F0 
+.autocomplete-suggestions div
+    font-size 14pt
+    padding 5px
+    white-space nowrap
+    overflow hidden
+.autocomplete-suggestions strong
+    font-weight normal
+    color #3399FF
+
+.autocomplete-suggestions
+    position fixed !important
+    z-index 200 !important
+

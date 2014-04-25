@@ -69,8 +69,8 @@ var UserSchema = new mongoose.Schema({
         gamesCol: [String],
         gamesLike: [String],
         publications: Number,
-        searches: Number
-
+        searches: Number,
+        searchStr: [String]
     },
     gamification: {
         points: {type: Number, default: 0},

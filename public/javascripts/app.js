@@ -69,8 +69,17 @@ tagSearch = function (str) {
     });
 }
 
+// Autocomplete
+$('#mainInput').autocomplete({
+    serviceUrl: '/autocomplete',
+    minChars: 3,
+    deferRequestBy: 400,
+    autoSelectFirst: true
+});
+
+
 $('#mainInput').keypress(function (event) {
-    if (event.keyCode == 13) {
+    if (event.keyCode === 13) {
         if($(this).val() != ''){
             $('#tagSelection').append('<span>' + $(this).val() + '<a class="tag" id="' + $(this).val().split(' ').join('-') + '">x</a></span>');
             // execute search
@@ -245,7 +254,32 @@ $('.filtros').on('click', function (event) {
 
 // Analytics specific
 /* Page Exit */
-    window.onbeforeunload = sendView;
-    function sendView(){
-        ga('send', 'event', 'time', 'exit', '/'+window.location.href.replace('http://www.gueime.com.br/', ''));
+window.onbeforeunload = sendView;
+function sendView(){
+    ga('send', 'event', 'time', 'exit', '/'+window.location.href.replace('http://www.gueime.com.br/', ''));
+}
+
+var filts = 'bla';
+$('.filterMenu').find('a').on('click', function () {
+    var check = $(this).attr('class');
+    var filt = ',' + $(this).attr('data-filter');
+
+    if (check != 'create toggledOn') {
+        $(this).addClass('toggledOn');
+        if (filts == 'bla, *') {
+            filts = filts.replace(', *', '');
+        }
+        filts += filt;
+        console.log(filts)
+        container.isotope({ filter: filts });
+    } else {
+        $(this).removeClass('toggledOn');
+        filts = filts.replace(filt, '')
+        console.log(filts)
+        if (filts == 'bla') {
+            filts = 'bla, *'
+        }
+        container.isotope({ filter: filts });
     }
+
+});

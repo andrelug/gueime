@@ -18,12 +18,12 @@ function string_to_slug(str) {
     return str;
 }
 $('#profileMenu').find('a').on('click', function () {
-    var check = $(this).attr('class')
+    var check = $(this).attr('class');
     $('#profileMenu').find('a').each(function () {
         $(this).removeClass('selecionado');
     });
-  
-    if(check != 'selecionado'){
+
+    if (check != 'selecionado') {
         $(this).addClass('selecionado');
     }
 
@@ -38,7 +38,7 @@ $('#profileMenu').find('a').on('click', function () {
             $('.slides').not('#profileSocialEditing').slideUp();
             $('#profileSocialEditing').slideToggle();
             break
-            
+
         case 'Conta':
             $('.slides').not('#profileContaEditing').slideUp();
             $('#profileContaEditing').slideToggle();

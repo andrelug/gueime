@@ -9,6 +9,8 @@ div.row#gridArticles
     include partials/tiles
 
 
+style.
+    .autocomplete-suggestions{position:absolute !important;}
 script.scriptLoad.
     var container = $('#gridArticles');
     var containerGames = $('#gridGames');
@@ -31,6 +33,13 @@ script.scriptLoad.
                     
         });
         $('.filtros').show();
+        // Autocomplete
+        $('#mainInput').autocomplete({
+            serviceUrl: '/autocomplete',
+            minChars: 3,
+            deferRequestBy: 400,
+            autoSelectFirst: true
+        });
 
         container.isoSelective({
             linkSelector: '.filterMenu a',

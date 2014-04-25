@@ -6,7 +6,6 @@ var Genre = require('./models/genre');
 var func = require('../config/functions');
 var facebook = require('../config/facebook.js');
 var ip = require('ip');
-var async = require('async');
 var fs = require("fs");
 var transloadit = require('node-transloadit');
 
@@ -62,17 +61,48 @@ module.exports = function (app, passport, mongoose) {
     });
 
 
-    // TYPEAHEAD
-    app.get('/typeahead', function(req, res){
-        data = req.query.data;
+    // AUTOCOMPLETE
+    app.get('/autocomplete', function(req, res){
+        data = req.query.query;
 
+        
         Artigos.find({facet: new RegExp(data, 'i')}, {facet: 1, _id: 0}, function(err, docs){
-            var sendArray = [];
-            for(i=0; i < docs.length; i++){
-                sendArray.push(docs[i].facet);
-            }
-            sendArray = sendArray.toString().split(',');
-            res.end(JSON.stringify(sendArray));
+            Games.find({title: new RegExp(data, 'i')}, {title: 1, _id: 0}, function(err, games){
+                DevPub.find({title: new RegExp(data, 'i')}, {title: 1, _id: 0}, function(err, devPub){
+                    var sendArray = [];
+                    for(i=0; i < docs.length; i++){
+                        sendArray.push(docs[i].facet);
+                    }
+                    for(i=0; i < games.length; i++){
+                        sendArray.push(games[i].title);
+                    }
+                    for(i=0; i < devPub.length; i++){
+                        sendArray.push(devPub[i].title);
+                    }
+
+                    sendArray = sendArray.toString().toLowerCase().split(',');
+
+                    var uniqueArray = sendArray.filter(function(elem, pos) {
+                        return sendArray.indexOf(elem) == pos;
+                    });
+
+                    var filtered = (function(pattern){
+                        var filtered = [], i = uniqueArray.length, re = new RegExp(pattern, 'i');
+                        while (i--) {
+                            if (re.test(uniqueArray[i])) {
+                                filtered.push(uniqueArray[i]);
+                            }
+                        }
+                        return filtered;
+                    })(data);
+
+                    send = {
+                        suggestions: filtered
+                    }
+
+                    res.end(JSON.stringify(send));
+                });
+            });
         });
     });
 
@@ -167,7 +197,7 @@ module.exports = function (app, passport, mongoose) {
                         res.render('tags', { docs: docs, game: game  });
                     });
                 } else {
-                    Users.update({'_id': user._id}, {$inc: {'graph.searches': 1}}, function(err){
+                    Users.update({'_id': user._id}, {$inc: {'graph.searches': 1}, $push: {'graph.searchStr': searchStr}}, function(err){
                         var gameStr;
                         if(req.query.str != undefined){
                             gameStr = req.query.str.toString();
@@ -337,10 +367,22 @@ module.exports = function (app, passport, mongoose) {
 
                     Users.find({ _id: docs.authors.main }, function (err, author) {
                         if(!user){
-                            res.render('artigoAjax', { tipo: 'analise', article: docs, title: title, body: body, author: author[0], decimal: decimal, score: score, bad: bad, good: good });
+                            Games.findOne({slug: analise, status: 'publicado'}, function(err, game){
+                                if(game.release){
+                                    var date = game.release;
+                                    date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                                }
+                                res.render('artigoAjax', { tipo: 'analise', article: docs, title: title, body: body, author: author[0], decimal: decimal, score: score, bad: bad, good: good });
+                            });
                         } else {
                             Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
-                                res.render('artigoAjax', { tipo: 'analise', article: docs, title: title, body: body, author: author[0], user: user, decimal: decimal, score: score, bad: bad, good: good });
+                                Games.findOne({slug: analise, status: 'publicado'}, function(err, game){
+                                    if(game.release){
+                                        var date = game.release;
+                                        date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                                    }
+                                    res.render('artigoAjax', { tipo: 'analise', article: docs, title: title, body: body, author: author[0], user: user, decimal: decimal, score: score, bad: bad, good: good, game: game, date: date });
+                                });
                             });
                         }
                     });
@@ -367,7 +409,13 @@ module.exports = function (app, passport, mongoose) {
                             decimal = scores[1];
                         }
                         Users.find({ _id: docs.authors.main }, function (err, author) {
-                            res.render('artigo', { tipo: 'analise', article: docs, title: title, body: body, author: author[0], decimal: decimal, score: score, bad: bad, good: good });
+                            Games.findOne({slug: analise, status: 'publicado'}, function(err, game){
+                                if(game.release){
+                                    var date = game.release;
+                                    date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                                }
+                                res.render('artigo', { tipo: 'analise', article: docs, title: title, body: body, author: author[0], decimal: decimal, score: score, bad: bad, good: good, game: game, date: date });
+                            });
                         });
                     } else {
                         res.redirect('/?redirect=true');
@@ -515,15 +563,21 @@ module.exports = function (app, passport, mongoose) {
                 if(user.deleted == true){
                     res.redirect('/users/restore');
                 } else{
-                    Artigos.findOneAndUpdate({slug: noticia}, {status: 'editando'}, {new: true}, function(err, docs){
-                        if (user.status == 'admin' || docs.authors.main == user.id) {
+                    Artigos.findOneAndUpdate({slug: noticia}, {status: 'editando'}, {new: false}, function(err, docs){
+                        if (user.status == 'admin' && docs.authors.main == user.id || docs.authors.main == user.id) {
+                            var title = decodeURIComponent(docs.title),
+                                body = decodeURIComponent(docs.text);
+                            Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id}, $inc: {'graph.visits': 1, 'gamification.points': -10} }, function (err) {
+                                res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'noticia', edit: true});
+                            });
+                        } else if (user.status == 'admin') {
                             var title = decodeURIComponent(docs.title),
                                 body = decodeURIComponent(docs.text);
                             Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id}, $inc: {'graph.visits': 1} }, function (err) {
-                                 res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'noticia', edit: true});
+                                res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'noticia', edit: true});
                             });
                         } else {
-                            Artigos.findOneAndUpdate({slug: noticia}, {status: 'publicado'}, {new: true}, function(err, docs){
+                            Artigos.update({slug: noticia}, {status: docs.status}, {new: true}, function(err, docs){
                                 res.redirect('/');
                             });
                         }
@@ -549,15 +603,21 @@ module.exports = function (app, passport, mongoose) {
                 if(user.deleted == true){
                     res.redirect('/users/restore');
                 } else{
-                    Artigos.findOneAndUpdate({slug: artigo}, {status: 'editando'}, {new: true}, function(err, docs){
-                        if (user.status == 'admin' || docs.authors.main == user.id) {
+                    Artigos.findOneAndUpdate({slug: artigo}, {status: 'editando'}, {new: false}, function(err, docs){
+                        if (user.status == 'admin' && docs.authors.main == user.id || docs.authors.main == user.id) {
+                            var title = decodeURIComponent(docs.title),
+                                body = decodeURIComponent(docs.text);
+                            Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id}, $inc: {'graph.visits': 1, 'gamification.points': -30} }, function (err) {
+                                res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'artigo', edit: true});
+                            });
+                        } else if (user.status == 'admin') {
                             var title = decodeURIComponent(docs.title),
                                 body = decodeURIComponent(docs.text);
                             Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id}, $inc: {'graph.visits': 1} }, function (err) {
                                 res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'artigo', edit: true});
                             });
                         } else {
-                            Artigos.findOneAndUpdate({slug: artigo}, {status: 'publicado'}, {new: true}, function(err, docs){
+                            Artigos.update({slug: artigo}, {status: docs.status}, {new: true}, function(err, docs){
                                 res.redirect('/');
                             });
                         }
@@ -583,15 +643,21 @@ module.exports = function (app, passport, mongoose) {
                 if(user.deleted == true){
                     res.redirect('/users/restore');
                 } else{
-                    Artigos.findOneAndUpdate({slug: analise}, {status: 'editando'}, {new: true}, function(err, docs){
-                        if (user.status == 'admin' || docs.authors.main == user.id) {
+                    Artigos.findOneAndUpdate({slug: analise}, {status: 'editando'}, {new: false}, function(err, docs){
+                        if (user.status == 'admin' && docs.authors.main == user.id || docs.authors.main == user.id) {
+                            var title = decodeURIComponent(docs.title),
+                                body = decodeURIComponent(docs.text);
+                            Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id}, $inc: {'graph.visits': 1, 'gamification.points': -50} }, function (err) {
+                                res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'analise', edit: true});
+                            });
+                        } else if (user.status == 'admin') {
                             var title = decodeURIComponent(docs.title),
                                 body = decodeURIComponent(docs.text);
                             Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id}, $inc: {'graph.visits': 1} }, function (err) {
                                 res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'analise', edit: true});
                             });
                         } else {
-                            Artigos.findOneAndUpdate({slug: analise}, {status: 'publicado'}, {new: true}, function(err, docs){
+                            Artigos.update({slug: analise}, {status: docs.status}, {new: true}, function(err, docs){
                                 res.redirect('/');
                             });
                         }
@@ -618,15 +684,21 @@ module.exports = function (app, passport, mongoose) {
                 if(user.deleted == true){
                     res.redirect('/users/restore');
                 } else{
-                    Artigos.findOneAndUpdate({slug: noticia}, {status: 'editando'}, {new: true}, function(err, docs){
-                        if (user.status == 'admin' || docs.authors.main == user.id) {
+                    Artigos.findOneAndUpdate({slug: video}, {status: 'editando'}, {new: false}, function(err, docs){
+                        if (user.status == 'admin' && docs.authors.main == user.id || docs.authors.main == user.id) {
+                            var title = decodeURIComponent(docs.title),
+                                body = decodeURIComponent(docs.text);
+                            Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id}, $inc: {'graph.visits': 1, 'gamification.points': -5} }, function (err) {
+                                res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'video', edit: true});
+                            });
+                        } else if (user.status == 'admin') {
                             var title = decodeURIComponent(docs.title),
                                 body = decodeURIComponent(docs.text);
                             Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id}, $inc: {'graph.visits': 1} }, function (err) {
                                 res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'video', edit: true});
                             });
                         } else {
-                            Artigos.findOneAndUpdate({slug: video}, {status: 'publicado'}, {new: true}, function(err, docs){
+                            Artigos.update({slug: video}, {status: docs.status}, {new: true}, function(err, docs){
                                 res.redirect('/');
                             });
                         }
@@ -646,13 +718,13 @@ module.exports = function (app, passport, mongoose) {
             if(user.deleted == true){
                 res.redirect('/users/restore');
             } else{
-                Artigos.findOneAndUpdate({slug: slug}, {$set: {status: 'deletado'}},{new: true}, function(err, docs){
+                Artigos.findOneAndUpdate({slug: slug}, {$set: {status: 'deletado'}},{new: false}, function(err, docs){
                     if (user.status == 'admin' || docs.authors.main == user.id) {
                         Users.update({loginName: user.loginName}, {$set: {creating: false, creatingId: 0}}, function(err){
                             res.redirect('/?deletado=true');
                         });
                     } else {
-                        Artigos.findOneAndUpdate({slug: slug}, {$set: {status: 'publicado'}},{new: true}, function(err, docs){
+                        Artigos.update({slug: slug}, {$set: {status: docs.status}}, function(err, docs){
                             res.redirect('/');
                         });
                     }
@@ -671,13 +743,13 @@ module.exports = function (app, passport, mongoose) {
             if(user.deleted == true){
                 res.redirect('/users/restore');
             } else{
-                Artigos.findOneAndUpdate({status: 'rascunho', 'authors.main': user._id}, {$set: {status: 'deletado'}},{new: true}, function(err, docs){
+                Artigos.findOneAndUpdate({status: 'rascunho', 'authors.main': user._id}, {$set: {status: 'deletado'}},{new: false}, function(err, docs){
                     if (user.status == 'admin' || docs.authors.main == user.id) {
                         Users.update({loginName: user.loginName}, {$set: {creating: false, creatingId: 0}}, function(err){
                             res.redirect('/?deletado=true');
                         });
                     } else {
-                        Artigos.findOneAndUpdate({status: 'rascunho', 'authors.main': user._id}, {$set: {status: 'publicado'}},{new: true}, function(err, docs){
+                        Artigos.update({status: 'rascunho', 'authors.main': user._id}, {$set: {status: docs.status}}, function(err, docs){
                             res.redirect('/');
                         });
                     }
@@ -709,7 +781,7 @@ module.exports = function (app, passport, mongoose) {
     // UPLOAD DE NOVA COVER NA CRIAÇÃO DE ARTIGOS
     app.post('/newCover', function (req, res, next) {
         var user = req.user;
-        var sendImg = req.files.file.name;
+        var sendImg = user.name.loginName + req.files.file.name;
         if (user.status == 'admin' || user.status == 'parceiro') {
             // get the temporary location of the file
             var tmp_path = req.files.file.path;
@@ -747,7 +819,7 @@ module.exports = function (app, passport, mongoose) {
     // UPLOAD DE IMAGENS DURANTE A CRIAÇÃO DE ARTIGOS
     app.post('/artigoImage', function (req, res, next) {
         var user = req.user;
-        var sendImg = req.files.file.name;
+        var sendImg =  user.name.loginName + req.files.file.name;
 
         if (user.status == 'admin' || user.status == 'parceiro') {
             // get the temporary location of the file
@@ -965,7 +1037,7 @@ module.exports = function (app, passport, mongoose) {
 
             if (desenvolvedores != undefined) { desenvolvedores = func.string_to_slug(b.desenvolvedores); if (desenvolvedores.indexOf('-') > -1) { desenvolvedores = desenvolvedores.split(/[\s,-]+/); facet = facet.concat(desenvolvedores); } else { facet.push(desenvolvedores.split(' ')) } }
 
-            if (generos != undefined) { if (generos.indexOf('-') > -1) { generos = generos.split(/[\s,-]+/); facet = facet.concat(generos); } else { facet.push(generos.split(' ')) } }
+            if (generos != undefined) { generos = func.string_to_slug(b.generos); if (generos.indexOf('-') > -1) { generos = generos.split(/[\s,-]+/); facet = facet.concat(generos); } else { facet.push(generos.split(' ')) } }
 
             if (categoriaArtigo != undefined) { categoriaArtigo = func.string_to_slug(b.categoriaArtigo); if (categoriaArtigo.indexOf('-') > -1) { categoriaArtigo = categoriaArtigo.split(/[\s,]+/); facet = facet.concat(categoriaArtigo); } else { facet.push(categoriaArtigo.split(' ')) } }
 
@@ -976,7 +1048,7 @@ module.exports = function (app, passport, mongoose) {
             console.log(facet);
             
             var status;
-            if(user.status == 'admin'){
+            if(user.status == 'admin' || user.status == 'editor'){
                 status = 'publicado';
             } else {
                 status = 'revisao';
@@ -988,8 +1060,15 @@ module.exports = function (app, passport, mongoose) {
                 return facet.indexOf(elem) == pos;
             });
 
+            var criador;
+            if(b.criador != undefined){
+                criador = b.criador;
+            } else {
+                criador = user._id;
+            }
+
             if (b.tipo == 'noticia') {
-                Artigos.update({$or: [{ "status": 'rascunho'}, {"status": 'editando'}],'authors.main': user._id}, { $set: {
+                Artigos.update({$or: [{ "status": 'rascunho'}, {"status": 'editando'}, {"status": 'pendente'}],'authors.main': criador}, { $set: {
 
                     type: b.tipo,
                     description: b.descricao,
@@ -1003,7 +1082,8 @@ module.exports = function (app, passport, mongoose) {
                     'graph.developers': b.desenvolvedores,
                     'graph.publishers': b.publicadoras,
                     'news.story': b.continuacaoHistoria,
-                    slug: slug
+                    slug: slug,
+                    'authors.revision': user._id
 
                 }, $addToSet: {
                     facet: { $each: sendFacet }
@@ -1011,22 +1091,31 @@ module.exports = function (app, passport, mongoose) {
                 }, function (err) {
                     if (err)
                         throw err
-                    if(user.status == 'admin'){
-                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0}, $inc: {'graph.publications': 1}}, function (err) {
-                            if (err)
-                                throw err
-                            res.redirect('/' + b.tipo + 's/' + slug);
+                    if(user.status == 'admin' || user.status == 'editor'){
+                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0}}, function (err) {
+                            // Atribuição de pontuação
+                            Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 10}}, function(err){
+                                // Ganha pontos por revisão
+                                if(criador != user._id){
+                                    Users.update({_id: user._id}, {$inc: {'gamification.points': 30}}, function(err){
+                                        res.redirect('/' + b.tipo + 's/' + slug);
+                                    });
+                                } else {
+                                    res.redirect('/' + b.tipo + 's/' + slug);
+                                }
+                            });
                         });
                     } else{
+                        // Manda pra revisão
                         Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0} }, function (err) {
                             if (err)
                                 throw err
-                            res.redirect('/' + b.tipo + 's/' + slug);
+                            res.redirect('/');
                         });
                     }
                 });
             } else if (b.tipo == 'artigo') {
-                Artigos.update({ $or: [{ "status": 'rascunho'}, {"status": 'editando'}],'authors.main': user._id }, { $set: {
+                Artigos.update({ $or: [{ "status": 'rascunho'}, {"status": 'editando'}, {"status": 'pendente'}],'authors.main': criador }, { $set: {
 
                     type: b.tipo,
                     description: b.descricao,
@@ -1041,7 +1130,8 @@ module.exports = function (app, passport, mongoose) {
                     'graph.publishers': b.publicadoras,
                     'article.category': b.categoriaArtigo,
                     'article.serie': b.serieArtigo,
-                    slug: slug
+                    slug: slug,
+                    'authors.revision': user._id
 
                 }, $addToSet: {
                     facet: { $each: sendFacet }
@@ -1049,22 +1139,31 @@ module.exports = function (app, passport, mongoose) {
                 }, function (err) {
                     if (err)
                         throw err
-                    if(user.status == 'admin'){
-                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0}, $inc: {'graph.publications': 1}}, function (err) {
-                            if (err)
-                                throw err
-                            res.redirect('/' + b.tipo + 's/' + slug);
+                    if(user.status == 'admin' || user.status == 'editor'){
+                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0}}, function (err) {
+                            // Atribuição de pontuação
+                            Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 30}}, function(err){
+                                // Ganha pontos por revisão
+                                if(criador != user._id){
+                                    Users.update({_id: user._id}, {$inc: {'gamification.points': 30}}, function(err){
+                                        res.redirect('/' + b.tipo + 's/' + slug);
+                                    });
+                                } else {
+                                    res.redirect('/' + b.tipo + 's/' + slug);
+                                }
+                            });
                         });
                     } else{
+                        // Manda pra revisão
                         Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0} }, function (err) {
                             if (err)
                                 throw err
-                            res.redirect('/' + b.tipo + 's/' + slug);
+                            res.redirect('/');
                         });
                     }
                 });
             } else if (b.tipo == 'analise') {
-                Artigos.update({ $or: [{ "status": 'rascunho'}, {"status": 'editando'}],'authors.main': user._id }, { $set: {
+                Artigos.update({ $or: [{ "status": 'rascunho'}, {"status": 'editando'}, {"status": 'pendente'}],'authors.main': criador }, { $set: {
 
                     type: b.tipo,
                     description: b.descricao,
@@ -1077,7 +1176,8 @@ module.exports = function (app, passport, mongoose) {
                     'review.good': analiseBom,
                     'review.bad': analiseRuim,
                     'review.punchLine': b.analiseEfeito,
-                    slug: slug
+                    slug: slug,
+                    'authors.revision': user._id
 
 
                 }, $addToSet: {
@@ -1086,22 +1186,31 @@ module.exports = function (app, passport, mongoose) {
                 }, function (err) {
                     if (err)
                         throw err
-                    if(user.status == 'admin'){
-                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0}, $inc: {'graph.publications': 1}}, function (err) {
-                            if (err)
-                                throw err
-                            res.redirect('/' + b.tipo + 's/' + slug);
+                    if(user.status == 'admin' || user.status == 'editor'){
+                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0}}, function (err) {
+                            // Atribuição de pontuação
+                            Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 50}}, function(err){
+                                // Ganha pontos por revisão
+                                if(criador != user._id){
+                                    Users.update({_id: user._id}, {$inc: {'gamification.points': 30}}, function(err){
+                                        res.redirect('/' + b.tipo + 's/' + slug);
+                                    });
+                                } else {
+                                    res.redirect('/' + b.tipo + 's/' + slug);
+                                }
+                            });
                         });
                     } else{
+                        // Manda pra revisão
                         Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0} }, function (err) {
                             if (err)
                                 throw err
-                            res.redirect('/' + b.tipo + 's/' + slug);
+                            res.redirect('/');
                         });
                     }
                 });
             } else {
-                Artigos.update({ $or: [{ "status": 'rascunho'}, {"status": 'editando'}],'authors.main': user._id }, { $set: {
+                Artigos.update({ $or: [{ "status": 'rascunho'}, {"status": 'editando'}, {"status": 'pendente'}],'authors.main': criador }, { $set: {
 
                     type: b.tipo,
                     description: b.descricao,
@@ -1117,7 +1226,8 @@ module.exports = function (app, passport, mongoose) {
                     'video.type': b.tipoVideo,
                     'video.canal': b.canalVideo,
                     'video.url': b.urlVideo,
-                    slug: slug
+                    slug: slug,
+                    'authors.revision': user._id
 
                 }, $addToSet: {
                     facet: { $each: sendFacet }
@@ -1125,17 +1235,26 @@ module.exports = function (app, passport, mongoose) {
                 }, function (err) {
                     if (err)
                         throw err
-                    if(user.status == 'admin'){
-                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0}, $inc: {'graph.publications': 1}}, function (err) {
-                            if (err)
-                                throw err
-                            res.redirect('/' + b.tipo + 's/' + slug);
+                    if(user.status == 'admin' || user.status == 'editor'){
+                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0}}, function (err) {
+                            // Atribuição de pontuação
+                            Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 5}}, function(err){
+                                // Ganha pontos por revisão
+                                if(criador != user._id){
+                                    Users.update({_id: user._id}, {$inc: {'gamification.points': 30}}, function(err){
+                                        res.redirect('/' + b.tipo + 's/' + slug);
+                                    });
+                                } else {
+                                    res.redirect('/' + b.tipo + 's/' + slug);
+                                }
+                            });
                         });
                     } else{
+                        // Manda pra revisão
                         Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0} }, function (err) {
                             if (err)
                                 throw err
-                            res.redirect('/' + b.tipo + 's/' + slug);
+                            res.redirect('/');
                         });
                     }
                 });
@@ -1211,7 +1330,7 @@ module.exports = function (app, passport, mongoose) {
     // UPLOAD DE NOVA COVER NA CRIAÇÃO DE PERFIL
     app.post('/newProfileCover', function (req, res, next) {
         var user = req.user;
-        var sendImg = req.files.file.name;
+        var sendImg = user.name.loginName + req.files.file.name;
         if (user.status == 'admin' || user.status == 'parceiro') {
             // get the temporary location of the file
             var tmp_path = req.files.file.path;
@@ -2062,7 +2181,7 @@ module.exports = function (app, passport, mongoose) {
     // UPLOAD DE NOVA COVER NA CRIAÇÃO DE GAME
     app.post('/newGameCapa', function (req, res, next) {
         var user = req.user;
-        var sendImg = req.files.file.name;
+        var sendImg = user.name.loginName + req.files.file.name;
         if (user.status == 'admin' || user.status == 'parceiro') {
             // get the temporary location of the file
             var tmp_path = req.files.file.path;
@@ -2100,7 +2219,7 @@ module.exports = function (app, passport, mongoose) {
     // NOVA CAPA DO JOGO
     app.post('/newGameCover', function (req, res, next) {
         var user = req.user;
-        var sendImg = req.files.file.name;
+        var sendImg = user.name.loginName + req.files.file.name;
         if (user.status == 'admin' || user.status == 'parceiro') {
             // get the temporary location of the file
             var tmp_path = req.files.file.path;
@@ -2532,8 +2651,29 @@ module.exports = function (app, passport, mongoose) {
             if(user.deleted == true){
                 res.redirect('/users/restore');
             }else if(user.status == 'admin'){
-                Artigos.update({slug: changeArt}, {$set: {status: status}}, function(err){
-                    res.send('OK');
+                Artigos.findOneAndUpdate({slug: changeArt}, {$set: {status: status}}, function(err, docs){
+                    if(status == 'publicado'){
+                        if(docs.type == 'noticia'){
+                            Users.update({_id: docs.authors.main}, {$inc: {'gamification.points': 10}}, function(err){
+                                res.send('OK');
+                            });
+                        } else if(docs.type == 'artigo'){
+                            Users.update({_id: docs.authors.main}, {$inc: {'gamification.points': 30}}, function(err){
+                                res.send('OK');
+                            });
+                        } else if(docs.type == 'analise'){
+                            Users.update({_id: docs.authors.main}, {$inc: {'gamification.points': 50}}, function(err){
+                                res.send('OK');
+                            });
+                        } else if(docs.type == 'video'){
+                            Users.update({_id: docs.authors.main}, {$inc: {'gamification.points': 5}}, function(err){
+                                res.send('OK');
+                            });
+                        }
+                    } else {
+                        res.send('OK');
+                    }
+
                 });
             }
         }

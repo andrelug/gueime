@@ -15,7 +15,8 @@ var ArticleSchema = new mongoose.Schema({
     authors: {
         name: String,
         main: String,
-        sub: [String]
+        sub: [String],
+        revision: String
     },
     update: [{
         _id: false,

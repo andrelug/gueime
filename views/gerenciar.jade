@@ -70,6 +70,7 @@ block content
 
                                 else if(articles)
                                     th Título
+                                    th Autor
                                     th Tipo
                                     th Views
                                     th Status
@@ -138,6 +139,7 @@ block content
                                             td: a(href="/noticias/#{article.slug}") #{article.title}
                                         else if(article.type == 'video')
                                             td: a(href="/videos/#{article.slug}") #{article.title}
+                                        td #{article.authors.name}
                                         td #{article.type}
                                         td #{article.graph.views}
                                         if(article.status == 'deletado')
@@ -151,6 +153,8 @@ block content
                                                 option(value="pendente") pendente
                                                 option(value="revisao") revisao
                                                 option(value="publicado") publicado
+                                                option(value="editando") editando
+                                                option(value="deletado") deletado
                                         td #{article.date}
                                         if(article.type == 'analise')
                                             td: a(href="/analises/#{article.slug}/editar") Editar

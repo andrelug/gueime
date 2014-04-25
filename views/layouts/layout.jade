@@ -44,11 +44,11 @@ html.no-js(lang="pt_BR")
                 });
                 $('.filtros').show();
 
-                container.isoSelective({
-                    linkSelector: '.filterMenu a',
-                    attrSelector: 'data-filter',
-                    activeClass: 'toggledOn',
-                    preventEmpty: true
+                $('#mainInput').autocomplete({
+                    serviceUrl: '/autocomplete',
+                    minChars: 3,
+                    deferRequestBy: 400,
+                    autoSelectFirst: true
                 });
 
                 n = $('.item').length;

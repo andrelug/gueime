@@ -134,11 +134,6 @@ rgba(0,0,0,0.3)
   -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
   -ms-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
   -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-  -webkit-transition: all 400ms ease;
-  -moz-transition: all 400ms ease;
-  -ms-transition: all 400ms ease;
-  -o-transition: all 400ms ease;
-  transition: all 400ms ease;
 }
 .hidden {
   position: absolute;
@@ -686,51 +681,6 @@ rgba(0,0,0,0.3)
   margin-top: 20px;
   display: block !important;
 }
-.twitter-typeahead {
-  width: 100%;
-}
-.typeahead {
-  background-color: #fff;
-}
-.typeahead:focus {
-  border: 2px solid #0097cf;
-}
-.tt-query {
-  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
-  -moz-box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
-  box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
-}
-.tt-hint {
-  color: #999;
-}
-.tt-dropdown-menu {
-  width: 422px;
-  padding: 8px 0;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border: 1px solid rgba(0,0,0,0.2);
-  -webkit-border-radius: 8px;
-  -moz-border-radius: 8px;
-  border-radius: 8px;
-  -webkit-box-shadow: 0 5px 10px rgba(0,0,0,0.2);
-  -moz-box-shadow: 0 5px 10px rgba(0,0,0,0.2);
-  box-shadow: 0 5px 10px rgba(0,0,0,0.2);
-}
-.tt-suggestion {
-  padding: 3px 20px;
-  font-size: 18px;
-  line-height: 24px;
-}
-.tt-suggestion.tt-cursor {
-  color: #fff;
-  background-color: #0097cf;
-}
-.tt-suggestion p {
-  margin: 0;
-}
-.gist {
-  font-size: 14px;
-}
 #loadMore,
 #loadMoreProfile {
   width: 100%;
@@ -944,7 +894,7 @@ rgba(0,0,0,0.3)
   -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 #gamerStats {
-  background-color: #27b899;
+  background-color: #479ecd;
 }
 #gamerStats li {
   color: #fff;
@@ -1160,6 +1110,14 @@ rgba(0,0,0,0.3)
   .smallScore h4 {
     left: 40% !important;
   }
+  #profile #imageAndOpt,
+  #game #imageAndOpt,
+  #profile #imageAndOptGame,
+  #game #imageAndOptGame,
+  #profile #imageAndOptGen,
+  #game #imageAndOptGen {
+    margin-top: 0 !important;
+  }
 }
 #submitNewGame {
   width: 100%;
@@ -1321,7 +1279,7 @@ rgba(0,0,0,0.3)
   text-decoration: underline;
 }
 .filter {
-  background-color: #fff;
+  background-color: #27b899;
   display: none;
 }
 .filter ul {
@@ -1335,6 +1293,35 @@ rgba(0,0,0,0.3)
 .filter ul li a {
   margin: 0;
 }
-.toggledOn {
-  background-color: #1b816b;
+.toggledOn,
+a.create:active {
+  background-color: #1b816b !important;
+}
+.autocomplete-suggestions {
+  border: 1px solid #999;
+  background: #fff;
+  cursor: default;
+  text-align: left;
+  max-height: 350px;
+  overflow: auto;
+}
+#mainInput {
+  font-size: 12pt;
+}
+.autocomplete-suggestions .autocomplete-selected {
+  background: #f0f0f0;
+}
+.autocomplete-suggestions div {
+  font-size: 14pt;
+  padding: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.autocomplete-suggestions strong {
+  font-weight: normal;
+  color: #39f;
+}
+.autocomplete-suggestions {
+  position: fixed !important;
+  z-index: 200 !important;
 }
