@@ -39,7 +39,7 @@ var ArticleSchema = new mongoose.Schema({
         main: {type: Boolean, default: false}
     },
     video: {
-        type: String,
+        tipo: String,
         canal: String,
         url: String
     },

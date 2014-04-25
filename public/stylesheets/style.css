@@ -433,6 +433,7 @@ rgba(0,0,0,0.3)
   font-weight: bold;
   color: #2c3e50;
   font-size: 2.75em;
+  text-transform: capitalize;
   display: inline-block;
 }
 .gameEditTitle {
@@ -1324,4 +1325,20 @@ a.create:active {
 .autocomplete-suggestions {
   position: fixed !important;
   z-index: 200 !important;
+}
+.ui-menu {
+  background-color: #fff;
+  border: 1px solid #5b80a4;
+  padding: 0;
+}
+.ui-menu .ui-menu-item a:hover {
+  background-color: #5b80a4;
+  color: #fff;
+  margin: 0 !important;
+}
+.ui-menu .ui-menu-item a.ui-state-focus,
+.ui-menu .ui-menu-item a.ui-state-active {
+  background-color: #5b80a4;
+  color: #fff;
+  margin: 0 !important;
 }

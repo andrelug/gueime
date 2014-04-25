@@ -420,6 +420,7 @@ input[type="text"], textarea
         font-weight bold
         color #2c3e50
         font-size 2.75em
+        text-transform capitalize
         display inline-block
 
 .gameEditTitle
@@ -1166,3 +1167,17 @@ textarea
     position fixed !important
     z-index 200 !important
 
+.ui-menu
+    background-color white
+    border 1px solid lighten(gAsphalt, 30%)
+    padding 0
+
+    .ui-menu-item a:hover
+        background-color lighten(gAsphalt, 30%)
+        color white
+        margin 0 !important
+
+.ui-menu .ui-menu-item a.ui-state-focus, .ui-menu .ui-menu-item a.ui-state-active
+    background-color lighten(gAsphalt, 30%)
+    color white
+    margin 0 !important

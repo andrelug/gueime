@@ -527,7 +527,7 @@ module.exports = function (app, passport, mongoose) {
     app.get('/criar/:tipo', function (req, res, next) {
         var user = req.user;
         var tipo = req.params.tipo;
-
+        
         if(user.creatingId != 0){
             res.redirect('/?onlyOne=true');
         } else{
@@ -537,7 +537,7 @@ module.exports = function (app, passport, mongoose) {
                 if(user.deleted == true){
                     res.redirect('/users/restore');
                 } else{
-                    sessionReload(req, res, next);
+                    sessionReload(req, res, next); 
                     Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
                         res.render('create', { user: user, title: "Gueime - Hora de criar um artigo sensacional!", tipo: tipo, criar: true });
                     });
@@ -546,7 +546,7 @@ module.exports = function (app, passport, mongoose) {
                 sessionReload(req, res, next);
                 res.redirect('/parceiros');
             }
-        }
+        } 
     });
 
 
@@ -1223,7 +1223,7 @@ module.exports = function (app, passport, mongoose) {
                     'graph.genres': b.generos,
                     'graph.developers': b.desenvolvedores,
                     'graph.publishers': b.publicadoras,
-                    'video.type': b.tipoVideo,
+                    'video.tipo': b.tipoVideo,
                     'video.canal': b.canalVideo,
                     'video.url': b.urlVideo,
                     slug: slug,
@@ -2813,6 +2813,191 @@ module.exports = function (app, passport, mongoose) {
                 res.redirect('/');
             }
         }
+    });
+
+    // =====================================
+    // AUTOCOMPLETES =======================
+    // =====================================
+
+    // GAMES
+    app.get('/autoGame', function(req, res){
+        var user = req.user;
+        var query = req.query.query;
+
+        Games.find({title: new RegExp(query, 'i')}, {title: 1, _id: 0}, function(err, games){
+            var sendArray = [];
+
+            for(i=0; i < games.length; i++){
+                sendArray.push(games[i].title);
+            }
+
+            sendArray = sendArray.toString().toLowerCase().split(',');
+
+            res.send(JSON.stringify(sendArray));
+        });
+    });
+
+    // AUTHORS
+    app.get('/autoAuthor', function(req, res){
+        var user = req.user;
+        var query = req.query.query;
+
+        Users.find({$or: [{'name.first': new RegExp(query, 'i')}, {'name.last': new RegExp(query, 'i')}, {'name.loginName': new RegExp(query, 'i')}], 'name.loginName': {$ne: user.name.loginName}}, {'name.first': 1, 'name.last': 1, 'name.loginName': 1, _id: 0}, function(err, authors){
+            var sendArray = [];
+
+            for(i=0; i < authors.length; i++){
+                sendArray.push(authors[i].name.first + ' ' + authors[i].name.last + '(' + authors[i].name.loginName + ')');
+            }
+
+            sendArray = sendArray.toString().toLowerCase().split(',');
+
+            res.send(JSON.stringify(sendArray));
+        });
+    });
+
+
+    // CONTINUAÇÃO HISTÓRIA
+    app.get('/autoStory', function(req, res){
+        var user = req.user;
+        var query = req.query.query;
+
+        Artigos.find({'news.story': new RegExp(query, 'i')}, {'news.story': 1, _id: 0}, function(err, story){
+            var sendArray = [];
+
+            for(i=0; i < story.length; i++){
+                sendArray.push(story[i].news.story);
+            }
+
+            sendArray = sendArray.toString().toLowerCase().split(',');
+
+            res.send(JSON.stringify(sendArray));
+        });
+    });
+    
+    // CATEGORIA ARTIGO
+    app.get('/autoArtCat', function(req, res){
+        var user = req.user;
+        var query = req.query.query;
+
+        Artigos.find({'article.category': new RegExp(query, 'i')}, {'article.category': 1, _id: 0}, function(err, cat){
+            var sendArray = [];
+
+            for(i=0; i < cat.length; i++){
+                sendArray.push(cat[i].article.category);
+            }
+
+            sendArray = sendArray.toString().toLowerCase().split(',');
+
+            res.send(JSON.stringify(sendArray));
+        });
+    });
+
+    // SERIE ARTIGO
+    app.get('/autoArtSerie', function(req, res){
+        var user = req.user;
+        var query = req.query.query;
+
+        Artigos.find({'article.serie': new RegExp(query, 'i')}, {'article.serie': 1, _id: 0}, function(err, cat){
+            var sendArray = [];
+            console.log(cat)
+            for(i=0; i < cat.length; i++){
+                sendArray.push(cat[i].article.serie);
+            }
+
+            sendArray = sendArray.toString().toLowerCase().split(',');
+
+            res.send(JSON.stringify(sendArray));
+        });
+    });
+
+    // TIPO VÍDEO
+    app.get('/autoTipoVideo', function(req, res){
+        var user = req.user;
+        var query = req.query.query;
+
+        Artigos.find({'video.tipo': new RegExp(query, 'i')}, {'video.tipo': 1, _id: 0}, function(err, vid){
+            var sendArray = [];
+
+            for(i=0; i < vid.length; i++){
+                sendArray.push(vid[i].video.tipo);
+            }
+
+            sendArray = sendArray.toString().toLowerCase().split(',');
+
+            res.send(JSON.stringify(sendArray));
+        });
+    });
+
+    // CONSOLES
+    app.get('/autoConsoles', function(req, res){
+        var user = req.user;
+        var query = req.query.query;
+
+        Artigos.find({'graph.consoles': new RegExp(query, 'i')}, {'graph.consoles': 1, _id: 0}, function(err, consoles){
+            var sendArray = [];
+
+            for(i=0; i < consoles.length; i++){
+                sendArray.push(consoles[i].graph.consoles);
+            }
+
+            sendArray = sendArray.toString().toLowerCase().split(',');
+
+            res.send(JSON.stringify(sendArray));
+        });
+    });
+
+    // GENEROS
+    app.get('/autoGeneros', function(req, res){
+        var user = req.user;
+        var query = req.query.query;
+
+        Genre.find({title: new RegExp(query, 'i')}, {title: 1, _id: 0}, function(err, gen){
+            var sendArray = [];
+
+            for(i=0; i < gen.length; i++){
+                sendArray.push(gen[i].title);
+            }
+
+            sendArray = sendArray.toString().toLowerCase().split(',');
+
+            res.send(JSON.stringify(sendArray));
+        });
+    });
+
+    // DESENVOLVEDORES
+    app.get('/autoDes', function(req, res){
+        var user = req.user;
+        var query = req.query.query;
+
+        DevPub.find({title: new RegExp(query, 'i'), type: 'developer'}, {title: 1, _id: 0}, function(err, dev){
+            var sendArray = [];
+
+            for(i=0; i < dev.length; i++){
+                sendArray.push(dev[i].title);
+            }
+
+            sendArray = sendArray.toString().toLowerCase().split(',');
+
+            res.send(JSON.stringify(sendArray));
+        });
+    });
+
+    // DISTRIBUIDORAS
+    app.get('/autoPub', function(req, res){
+        var user = req.user;
+        var query = req.query.query;
+
+        DevPub.find({title: new RegExp(query, 'i'), type: 'publisher'}, {title: 1, _id: 0}, function(err, pub){
+            var sendArray = [];
+
+            for(i=0; i < pub.length; i++){
+                sendArray.push(pub[i].title);
+            }
+
+            sendArray = sendArray.toString().toLowerCase().split(',');
+
+            res.send(JSON.stringify(sendArray));
+        });
     });
 
     // =====================================
