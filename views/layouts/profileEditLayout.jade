@@ -98,9 +98,9 @@ html.no-js(lang="pt_BR")
                         if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
                             $('#dropzoneProfileImage').css('width', '20%');
                             $('#loadingAj').fadeOut();
-                            imageCover = '/uploads/' + file.name;
-                            $('.mainImage').delay(500).attr('style', 'background: url(/uploads/' + file.name + ') no-repeat center 0px;');
-                            window.setTimeout(function () { $('.mainImage').delay(6000).attr('style', 'background: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images/userInput/' + file.name + ') no-repeat center 0px;'); }, 6000);
+                            imageCover = '/uploads/' + thisUser + file.name;
+                            $('.mainImage').delay(500).attr('style', 'background: url(/uploads/' + thisUser + file.name + ') no-repeat center 0px;');
+                            window.setTimeout(function () { $('.mainImage').delay(6000).attr('style', 'background: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images/userInput/' + thisUser + file.name + ') no-repeat center 0px;'); }, 6000);
                         }
                     });
                 }
@@ -168,4 +168,5 @@ html.no-js(lang="pt_BR")
                 $('.content').empty().css('background', 'white');
             });
 
-            
+        script.
+            var thisUser = "#{user.name.loginName}";

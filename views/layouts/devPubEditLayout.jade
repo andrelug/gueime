@@ -83,8 +83,8 @@ html.no-js(lang="pt_BR")
                         if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
                             $('#dropzoneGameImage').css('width', '20%');
                             $('#loadingAj').fadeOut();
-                            $('.mainImage').delay(500).attr('style', 'background: url(/uploads/' + file.name + ') no-repeat center 0px;');
-                            window.setTimeout(function () { $('.mainImage').attr('style', 'background: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images/userInput/' + file.name + ') no-repeat center 0px;'); }, 6000);
+                            $('.mainImage').delay(500).attr('style', 'background: url(/uploads/' + thisUser + file.name + ') no-repeat center 0px;');
+                            window.setTimeout(function () { $('.mainImage').attr('style', 'background: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images/userInput/' + thisUser + file.name + ') no-repeat center 0px;'); }, 6000);
                         }
                     });
                 }
@@ -100,9 +100,9 @@ html.no-js(lang="pt_BR")
                         console.log(file);
                         console.log(file.name);
                         if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
-                            gameCover = 'https://s3-sa-east-1.amazonaws.com/portalgueime/gameCover/' + file.name;
-                            $('#userGameImage').attr('src', '/uploads/' + file.name);
-                            window.setTimeout(function () {$('#userGameImage').attr('src', 'https://s3-sa-east-1.amazonaws.com/portalgueime/gameCover/' + file.name);}, 6000);
+                            gameCover = 'https://s3-sa-east-1.amazonaws.com/portalgueime/gameCover/' + thisUser + file.name;
+                            $('#userGameImage').attr('src', '/uploads/' + thisUser + file.name);
+                            window.setTimeout(function () {$('#userGameImage').attr('src', 'https://s3-sa-east-1.amazonaws.com/portalgueime/gameCover/' + thisUser + file.name);}, 6000);
                         }
                     });
                 }
@@ -169,5 +169,6 @@ html.no-js(lang="pt_BR")
                 }
                 $('.content').empty().css('background', 'white');
             });
-
+        script.
+            var thisUser = "#{user.name.loginName}";
             
