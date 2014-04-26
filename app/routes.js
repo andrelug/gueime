@@ -1,13 +1,14 @@
-var Users = require('./models/user');
-var Artigos = require('./models/article');
-var Games = require('./models/game');
-var DevPub = require('./models/devPub');
-var Genre = require('./models/genre');
-var func = require('../config/functions');
-var facebook = require('../config/facebook.js');
-var ip = require('ip');
-var fs = require("fs");
-var transloadit = require('node-transloadit');
+var Users = require('./models/user'),
+    Artigos = require('./models/article'),
+    Games = require('./models/game'),
+    DevPub = require('./models/devPub'),
+    Genre = require('./models/genre'),
+    func = require('../config/functions'),
+    facebook = require('../config/facebook.js'),
+    ip = require('ip'),
+    fs = require("fs"),
+    transloadit = require('node-transloadit'),
+    nodemailer = require("nodemailer");
 
 var client = new transloadit('6a960970bff411e38b2aefa7e162a72d', '293a0ad266df65f8e8396cb6d972da8d14f2e608');
 
@@ -35,27 +36,79 @@ module.exports = function (app, passport, mongoose) {
 
         var onlyOne = req.query.onlyOne;
 
-        if (!user) {
-            Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).exec(function (err, docs) {
-                for (i = 0; i < docs.length; i++) {
-                    docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
-                }
-                res.render('index', { title: "Gueime - O melhor site de games do Brasil!", docs: docs, messages: redirected, deletado: deletado, onlyOne: onlyOne });
-            });
-        } else {
-            if(user.deleted == true){
-                res.redirect('/users/restore');
+        var searchTag = req.query.t;
+
+        if(searchTag){
+            var searchStr = [];
+
+            searchStr = searchTag.split('-');
+            if (!user) {
+                Artigos.find({ facet: { $all: searchStr}, status: 'publicado' }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({'_id': -1}).limit(6).exec(function (err, docs) {
+                    for (i = 0; i < docs.length; i++) {
+                        docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
+                    }
+                    var gameStr;
+                    
+                    if(searchTag != undefined){
+                        gameStr = searchTag.toString().split(/[ ,]+/).join(' ');
+                    } else{
+                        gameStr = 0
+                    }
+                    Games.find({status: 'publicado', title: new RegExp(gameStr, 'i') }, function(err, game){
+                        res.render('index', { title: "Gueime - O melhor site de games do Brasil!", docs: docs, messages: redirected, deletado: deletado, onlyOne: onlyOne, games: game, searchTag: searchTag});
+                    });
+                });
             } else {
-                sessionReload(req, res, next);
+                if(user.deleted == true){
+                    res.redirect('/users/restore');
+                } else {
+                    sessionReload(req, res, next);
+                    Artigos.find({ facet: { $all: searchStr}, status: 'publicado' }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).limit(6).exec(function (err, docs) {
+                        if(err)
+                            console.log(err);
+                        for (i = 0; i < docs.length; i++) {
+                            docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
+                        }
+                        var gameStr;
+                    
+                        if(searchTag != undefined){
+                            gameStr = searchTag.split('-').join(' ');
+                        } else{
+                            gameStr = 0
+                        }
+                        console.log(gameStr);
+                        Games.find({status: 'publicado', title: new RegExp(gameStr, 'i') }, function(err, game){
+                            Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
+                                res.render('index', { user: user, title: "Gueime - O melhor site de games do Brasil!", docs: docs, messages: redirected, deletado: deletado, onlyOne: onlyOne, games: game, searchTag: searchTag});
+                            });
+                        });
+                    
+                    });
+                }
+            }
+        } else {
+            if (!user) {
                 Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).exec(function (err, docs) {
                     for (i = 0; i < docs.length; i++) {
                         docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                     }
-                    Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
-                        res.render('index', { user: user, title: "Gueime - O melhor site de games do Brasil!", docs: docs, messages: redirected, deletado: deletado, onlyOne: onlyOne });
-                    });
-                    
+                    res.render('index', { title: "Gueime - O melhor site de games do Brasil!", docs: docs, messages: redirected, deletado: deletado, onlyOne: onlyOne});
                 });
+            } else {
+                if(user.deleted == true){
+                    res.redirect('/users/restore');
+                } else {
+                    sessionReload(req, res, next);
+                    Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).exec(function (err, docs) {
+                        for (i = 0; i < docs.length; i++) {
+                            docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
+                        }
+                        Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
+                            res.render('index', { user: user, title: "Gueime - O melhor site de games do Brasil!", docs: docs, messages: redirected, deletado: deletado, onlyOne: onlyOne});
+                        });
+                    
+                    });
+                }
             }
         }
     });
@@ -150,26 +203,10 @@ module.exports = function (app, passport, mongoose) {
                     docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                 }
                 if(!user){
-                    var gameStr;
-                    if(req.query.str != undefined){
-                        gameStr = req.query.str.toString();
-                    } else{
-                        gameStr = 0
-                    }
-                    Games.find({status: 'publicado', title: new RegExp(gameStr, 'i') }, function(err, game){
-                        res.render('tags', { docs: docs, game: game  });
-                    });
+                    res.render('tags', { docs: docs});
                 } else {
                     Users.update({'_id': user._id}, {$inc: {'graph.searches': 1}}, function(err){
-                        var gameStr;
-                        if(req.query.str != undefined){
-                            gameStr = req.query.str.toString();
-                        } else{
-                            gameStr = 0
-                        }
-                        Games.find({status: 'publicado', title: new RegExp(gameStr, 'i') }, function(err, game){
-                            res.render('tags', { docs: docs, games: game  });
-                        });
+                        res.render('tags', { docs: docs});
                     });
                 }
             });
@@ -181,15 +218,15 @@ module.exports = function (app, passport, mongoose) {
                 }
             }
             searchStr = searchStr.toString().split(',');
-
             Artigos.find({ facet: { $all: searchStr}, status: 'publicado' }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).limit(6).exec(function (err, docs) {
                 for (i = 0; i < docs.length; i++) {
                     docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
                 }
                 if(!user){
                     var gameStr;
+                    
                     if(req.query.str != undefined){
-                        gameStr = req.query.str.toString();
+                        gameStr = req.query.str.toString().split(/[ ,]+/).join(' ');
                     } else{
                         gameStr = 0
                     }
@@ -199,8 +236,9 @@ module.exports = function (app, passport, mongoose) {
                 } else {
                     Users.update({'_id': user._id}, {$inc: {'graph.searches': 1}, $push: {'graph.searchStr': searchStr}}, function(err){
                         var gameStr;
+
                         if(req.query.str != undefined){
-                            gameStr = req.query.str.toString();
+                            gameStr = req.query.str.toString().split(/[ ,]+/).join(' ');
                         } else{
                             gameStr = 0
                         }
@@ -3012,10 +3050,67 @@ module.exports = function (app, passport, mongoose) {
     // PÁGINAS ESPECIAIS ===================
     // ===================================== 
 
+    // CONTATO
+    app.get('/contato', function(req, res){
+        var user = req.user;
+
+        if(user && user.deleted == true){
+            res.redirect('/users/restore');
+        }else{
+
+            res.render('contato', {title: "Gueime - Contato", user: user});
+        }
+    });
+
+    // SEND EMAIL
+    
+
+    app.post('/contatoSend', function(req, res){
+        var user = req.user;
+        var b = req.body;
+
+        var smtpTransport = nodemailer.createTransport("SMTP",{
+            service: "Hotmail",
+            auth: {
+                user: "andre@gueime.com.br",
+                pass: "Watashiwa1"
+            }
+        });
+
+        // setup e-mail data with unicode symbols
+        var mailOptions = {
+            from: b.email, // sender address
+            to: "André Lucas <andre@gueime.com.br>", // list of receivers
+            subject: "Contato - Gueime (" + b.nome + ")", // Subject line
+            text: b.mensagem, // plaintext body
+            html: b.mensagem // html body
+        }
+
+        // send mail with defined transport object
+        smtpTransport.sendMail(mailOptions, function(error, response){
+            if(error){
+                console.log(error);
+            }else{
+                console.log("Message sent: " + response.message);
+            }
+
+
+            smtpTransport.close(); // shut down the connection pool, no more messages
+            res.send('OK');
+        });
+
+    });
+
     // PARCEIROS
     app.get('/parceiros', function(req, res){
         var user = req.user
         res.render('parceiros', {title: "Gueime - Parceiros", user: user})
+    });
+
+    // PARCEIROS
+    app.get('/quem-somos', function(req, res){
+        var user = req.user
+        res.render('quem', {title: "Gueime - Quem Somos", user: user})
     });
     // =====================================
     // USER SIGNUP =========================

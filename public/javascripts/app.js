@@ -26,7 +26,7 @@ tagSearch = function (str) {
         }
     }).done(function (data) {
         $('#load').before(data);
-        history.pushState(null, null, '/?t=' + searchStr.toString().split(' ').join('-'));
+        history.pushState(null, null, '/?t=' + searchStr.toString().split(/[ ,]+/).join('-'));
 
         $('#gridArticles').waitForImages(function () {
             $('#load').show();
@@ -45,7 +45,7 @@ tagSearch = function (str) {
                 history.pushState(null, null, '/');
                 ga('send', 'pageview', '/');
             } else {
-                ga('send', 'pageview', '/?t=' + searchStr.toString().split(' ').join('-'));
+                ga('send', 'pageview', '/?t=' + searchStr.toString().split(/[ ,]+/).join('-'));
             }
             n = $('.item').length;
             if (n < 7) {
@@ -56,12 +56,6 @@ tagSearch = function (str) {
                     dataType: 'html'
                 }).done(function (data) {
                     container.isotope('insert', $(data));
-                    container.isoSelective({
-                        linkSelector: '.filterMenu a',
-                        attrSelector: 'data-filter',
-                        activeClass: 'toggledOn',
-                        preventEmpty: true
-                    });
                 });
             }
         }, null, true);
@@ -81,7 +75,7 @@ $('#mainInput').autocomplete({
 $('#mainInput').keypress(function (event) {
     if (event.keyCode === 13) {
         if($(this).val() != ''){
-            $('#tagSelection').append('<span>' + $(this).val() + '<a class="tag" id="' + $(this).val().split(' ').join('-') + '">x</a></span>');
+            $('#tagSelection').append('<span>' + $(this).val() + '<a class="tag" id="' + $(this).val().split(/[ ,]+/).join('-') + '">x</a></span>');
             // execute search
             searchStr.push($(this).val());
             tagSearch(searchStr);
@@ -283,3 +277,30 @@ $('.filterMenu').find('a').on('click', function () {
     }
 
 });
+
+
+
+// CONTATO
+$('#enviarContato').on('click', function () {
+    $('#infoContato').submit();
+});
+$('#infoContato')
+    .on('invalid', function () {
+
+    })
+    .on('valid', function () {
+        $.ajax({
+            type: 'POST',
+            url: '/contatoSend',
+            data: $('#infoContato').serialize(),
+            beforeSend: function(){
+                $('#enviarContato').fadeOut(300, function () {
+                    $(this).text('Enviando').fadeIn();
+                });
+            }
+        }).done(function (data) {
+            $('#enviarContato').fadeOut(300, function () {
+                    $(this).text('Enviado').fadeIn();
+                });
+        });
+    });

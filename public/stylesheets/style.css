@@ -961,7 +961,8 @@ rgba(0,0,0,0.3)
 }
 #enviarInfo,
 #enviarSocial,
-#enviarConta {
+#enviarConta,
+#enviarContato {
   width: 100%;
   background-color: #27b899;
 }
@@ -1341,4 +1342,17 @@ a.create:active {
   background-color: #5b80a4;
   color: #fff;
   margin: 0 !important;
+}
+.footerLinks {
+  margin-top: 40px;
+}
+.footerLinks ul li {
+  list-style: none;
+  font-size: 14pt;
+}
+.footerLinks ul li a {
+  color: #fff;
+}
+.footerLinks ul li a:hover {
+  text-decoration: underline;
 }

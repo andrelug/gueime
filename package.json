@@ -30,7 +30,8 @@
     "newrelic": "*",
     "ip": "*",
     "connect-mongo": "*",
-    "node-transloadit": "*"
+    "node-transloadit": "*",
+    "nodemailer": "*"
   },
   "noAnalyze": true,
   "license": "Apache",

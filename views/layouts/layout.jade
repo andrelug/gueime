@@ -51,17 +51,7 @@ html.no-js(lang="pt_BR")
                     autoSelectFirst: true
                 });
 
-                n = $('.item').length;
-                if (n < 7) {
-                    $.ajax({
-                        type: "GET",
-                        url: "/pagination",
-                        data: {n: n},
-                        dataType: 'html'
-                    }).done(function (data) {
-                        container.isotope('insert', $(data));
-                    });
-                }
+                
 
                 var nav = $('#nav-sticky');
                 nav_sticky = nav.offset().top; //get the Y-position of section
@@ -96,3 +86,38 @@ html.no-js(lang="pt_BR")
                 }
                 $('.content').empty().css('background', 'white');
             });
+
+        if(searchTag != undefined)
+            script.
+                var searchTag = '#{searchTag}';
+                searchTag = searchTag.split('-');
+                for(i=0; i < searchTag.length; i++){
+                    console.log(searchTag[i]);
+                    $('#tagSelection').append('<span>' + searchTag[i] + '<a class="tag" id="' + searchTag[i] + '">x</a></span>');
+                    searchStr.push(searchTag[i]);
+                }
+                
+                n = $('.item').length;
+                if (n < 7) {
+                    $.ajax({
+                        type: "GET",
+                        url: "/pagination",
+                        data: { n: n, str: searchStr },
+                        dataType: 'html'
+                    }).done(function (data) {
+                        container.isotope('insert', $(data));
+                    });
+                }
+        else
+            script.
+                n = $('.item').length;
+                if (n < 7) {
+                    $.ajax({
+                        type: "GET",
+                        url: "/pagination",
+                        data: {n: n},
+                        dataType: 'html'
+                    }).done(function (data) {
+                        container.isotope('insert', $(data));
+                    });
+                }
