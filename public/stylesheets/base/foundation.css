@@ -4,8 +4,7 @@
 	src: url('NexaLight.eot?') format('eot'), 
 	     url('NexaLight.otf')  format('opentype'),
 	     url('NexaLight.woff') format('woff'), 
-	     url('NexaLight.ttf')  format('truetype'),
-	     url('NexaLight.svg#NexaLight') format('svg');
+	     url('NexaLight.ttf')  format('truetype');
     font-weight: normal;
 	font-style: normal;
 }
@@ -14,8 +13,7 @@
 	src: url('NexaBold.eot?') format('eot'), 
 	     url('NexaBold.otf')  format('opentype'),
 	     url('NexaBold.woff') format('woff'), 
-	     url('NexaBold.ttf')  format('truetype'),
-	     url('NexaBold.svg#NexaBold') format('svg');
+	     url('NexaBold.ttf')  format('truetype');
     font-weight: bold;
 	font-style: normal;
 }
