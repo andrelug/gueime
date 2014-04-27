@@ -155,7 +155,7 @@ $(document).on('close', '[data-reveal]', function () {
     $('#myModal').css('position', 'fixed');
     $('.outWrap').css('height', 'auto');
     $('#nav-sticky').css('display', 'block');
-    if (window.location.href != 'http://localhost:24279/') {
+    if (window.location.href != 'http://www.gueime.com.br/') {
         window.history.go(-1);
     }
     ga('send', 'pageview', '/');
