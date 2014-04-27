@@ -1144,7 +1144,7 @@ module.exports = function (app, passport, mongoose) {
             if(user.deleted == true){
                 res.redirect('/users/restore');
             } else {
-                Users.update({_id: user._id}, {$set: {cover: position, photo: b.gameCover,}}, function(err){
+                Users.update({_id: user._id}, {$set: {cover: position, photo: b.gameCover}}, function(err){
                     res.redirect('/profile');
                 });
             }
