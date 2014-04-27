@@ -52,7 +52,7 @@ var ArticleSchema = new mongoose.Schema({
         views: Number
     },
     highlight: {type: Boolean, default: false},
-    status: {type: String, default: 'rascunho'},
+    status: {type: String, index: true, default: 'rascunho'},
     facet: {type: [String], index: true}
 });
 

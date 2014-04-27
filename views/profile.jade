@@ -129,6 +129,8 @@ block content
                                         a(href="/criar/novo/genero") Gênero
                                     li
                                         a(href="/criar/novo/usuario") Usuário
+                                    li
+                                        a(href="/criar/novo/console") Console
 
                                 a.create(href="#", data-dropdown="drop3") <i class="fa fa-coffee"></i> <span>Gerenciar</span>
                                 ul#drop3.f-dropdown(data-dropdown-content)
@@ -201,3 +203,7 @@ block content
             a#loadMore.button Mais artigos
                      
     include partials/footer
+
+    div#myModal.reveal-modal(data-reveal)
+        div#spinningContent
+            img(src="/images/spinning.gif")

@@ -1,5 +1,5 @@
 div#perguntas
-    form#wizard(action="/graph", method="post")
+    form#wizard(action="/graph/#{id}", method="post")
         input(type="hidden", name="position")
         input(type="hidden", name="coverUrl", value="#{article.cover.image}")
         input(type="hidden", name="docTitle")

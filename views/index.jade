@@ -13,9 +13,10 @@ block content
         div.alert-box(data-alert, style="margin-bottom: 0; height: 60px")
             p Você só pode ter um texto em edição por vez. Procure em sua página de perfil por algum artigo com status: rascunho.
             a#alertMessage(href="#", style="color: white; opacity: 1").close &times;
-
-    div.content-wrap
-        div.content
+    if(revision == 'true')
+        div.alert-box(data-alert, style="margin-bottom: 0; height: 60px")
+            p Sensacional! Agora seu artigo foi enviado para revisão! Aguarde um pouco e se tudo estiver correto ele logo será publicado
+            a#alertMessage(href="#", style="color: white; opacity: 1").close &times;
             
     div#darken       
     div.row(style="background-color: white;")
@@ -41,3 +42,7 @@ block content
             a#loadMore.button Mais artigos
 
     include partials/footer
+
+    div#myModal.reveal-modal(data-reveal)
+        div#spinningContent
+            img(src="/images/spinning.gif")

@@ -20,7 +20,7 @@ div#nav-sticky
         div.row
             div.gueimeWhite
                 a(href="/"): img(src="/images/gueime-white.png", alt="white logo")
-            div.large-3.medium-4.small-8.columns
+            div.large-4.medium-4.small-8.columns
                 if (!user)
                     a.facebook(href="/auth/facebook") <i class="fa fa-facebook"></i> Entrar com Facebook
                 else if(user.status == 'admin' || user.status == 'parceiro')
@@ -37,25 +37,15 @@ div#nav-sticky
                             a(href="/criar/video") Vídeo
                     if(criar == true)
                         a.deletar <i class="fa fa-trash-o"></i> Deletar
-                        form#deletar(action="/deletarCriando", method="post")
-                            input(type="hidden", name="slug")
+                        form#deletar(action="/deletar/#{id}", method="post")
                     if(article)
-                        if(!edit)
-                            if(article.authors.main == user.id || user.status == 'admin')
-                                if(tipo == 'noticia')
-                                    a(href="/noticias/#{article.slug}/editar").editar <i class="fa fa-gears"></i> Editar
-                                else if(tipo == 'analise')
-                                    a(href="/analises/#{article.slug}/editar").editar <i class="fa fa-gears"></i> Editar
-                                else if(tipo == 'artigo')
-                                    a(href="/artigos/#{article.slug}/editar").editar <i class="fa fa-gears"></i> Editar
-                                else
-                                    a(href="/videos/#{article.slug}/editar").editar <i class="fa fa-gears"></i> Editar
-                            
-                        else
-                            if(edit == true)
-                                a.deletar <i class="fa fa-trash-o"></i> Deletar
-                                form#deletar(action="/deletar", method="post")
-                                    input(type="hidden", name="slug", value="#{article.slug}")
+                        if(article.authors.main == user.id || user.status == 'admin')
+                            a(href="/editar/#{article.slug}").editar <i class="fa fa-gears"></i> Editar
+                            a.deletar <i class="fa fa-trash-o"></i> Deletar
+                            form#deletar(action="/deletar/#{article.id}", method="post")
+
+
+                                
                 else
                     a(href="/profile").user <i class="fa fa-dashboard"></i> #{user.name.first}
                                     
@@ -67,7 +57,7 @@ div#nav-sticky
                     a.logout(href="/logout") <i class="fa fa-sign-out"></i> sair
                         
                             
-            div.large-7.medium-6.columns.small-12#tagSelection
+            div.large-6.medium-6.columns.small-12#tagSelection
                 
 
             if(user)

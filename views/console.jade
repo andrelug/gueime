@@ -1,4 +1,4 @@
-extends layouts/genreLayout
+extends layouts/consoleLayout
 
 block content
 
@@ -36,7 +36,7 @@ block content
                         div.editingProf
                             img#userGameImage(src="#{dev.devCover}")
                             if(user && user.status == 'admin' || user && user.status == 'editor')
-                                a.hide-for-small.button.tiny#editButtonHover(href="/generos/#{dev.slug}/editar") Editar
+                                a.hide-for-small.button.tiny#editButtonHover(href="/consoles/#{dev.slug}/editar") Editar
                         div#gameStats.row
                             div.small-2.columns
                                 h3 <i class="fa fa-eye" title="Visualizações"></i>
@@ -47,7 +47,11 @@ block content
                         h1#userTitle.show-for-medium-up #{dev.title}
                         div.row#gamerStats.show-for-medium-up
                             div.medium-12.columns
-                                h3(style="margin-top:-8px") <i class="fa fa-info-circle" title="Sobre" style="color:white"></i>
+                                div.row
+                                    div.small-6.columns
+                                        h3(style="margin-top:-8px") <i class="fa fa-info-circle" title="Sobre" style="color:white"></i>
+                                    div.medium-3.columns 
+                                        span.gameLogoStats <i class="fa fa-calendar"></i> #{date}
                                 h5(style="color:white;padding-bottom:10px") #{dev.about}
         
             if(games != undefined)
@@ -78,7 +82,7 @@ block content
                 div#profileTiles
                     div.row#activityDivision
                         div.medium-8.medium-centered.columns
-                            h2 Não há publicações ainda com este gênero
+                            h2 Não há publicações ainda com este console
                                 
 
     div.row#load(style="display: none;")

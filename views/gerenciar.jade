@@ -150,20 +150,11 @@ block content
                                         td
                                             select.statusArticleSelect(title="#{article.slug}")
                                                 option(value="rascunho") rascunho
-                                                option(value="pendente") pendente
                                                 option(value="revisao") revisao
                                                 option(value="publicado") publicado
-                                                option(value="editando") editando
                                                 option(value="deletado") deletado
                                         td #{article.date}
-                                        if(article.type == 'analise')
-                                            td: a(href="/analises/#{article.slug}/editar") Editar
-                                        if(article.type == 'artigo')
-                                            td: a(href="/artigos/#{article.slug}/editar") Editar
-                                        if(article.type == 'noticia')
-                                            td: a(href="/noticias/#{article.slug}/editar") Editar
-                                        if(article.type == 'video')
-                                            td: a(href="/videos/#{article.slug}/editar") Editar
+                                        td: a(href="/editar/#{article.slug}") Editar
                                         td: a.deletarGen(href="/artigos/#{article.slug}/deletar") Deletar
 
                             else if(devs)
@@ -232,3 +223,7 @@ block content
             a#loadMore.button Mais artigos
                      
     include partials/footer
+
+    div#myModal.reveal-modal(data-reveal)
+        div#spinningContent
+            img(src="/images/spinning.gif")

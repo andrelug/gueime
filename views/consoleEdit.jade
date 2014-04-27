@@ -58,7 +58,7 @@ block content
 
 
                     div.large-8.large-offset-1.medium-7.medium-offset-1.columns
-                        form(action="/newGenre", method="POST" data-abide)
+                        form(action="/newConsole", method="POST" data-abide)
                             input(type="hidden", name="gameCover")
                             input(type="hidden", name="position")
 
@@ -69,21 +69,29 @@ block content
                                 input(type="hidden", name="editing", value="no")
                             
                             if(edit == true)
-                                input.gameEditTitle(type="text", placeholder="Nome do Gênero", required, name="nomeGenero", value="#{developer.title}")
+                                input.gameEditTitle(type="text", placeholder="Nome do Console", required, name="nomeConsole", value="#{developer.title}")
                                 small.error Obrigatório
                             else
-                                input.gameEditTitle(type="text", placeholder="Nome do Gênero", required, name="nomeGenero")
+                                input.gameEditTitle(type="text", placeholder="Nome do Console", required, name="nomeConsole")
                                 small.error Obrigatório
-
 
                             div.row#gamerStats
                                 div.large-12.columns
+                                    ul.gameLogo
+                                        li.gameLogoStats <i class="fa fa-calendar"></i> 
+                                            if(edit == true)
+                                                input(type="text", placeholder="Data de Início (dd/mm/aaaa)", required, name="date", value="#{date}", pattern="(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)")
+                                                small.error Obrigatório
+                                            else
+                                                input(type="text", placeholder="Data de Início (dd/mm/aaaa)", required, name="date", pattern="(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)")
+                                                small.error Obrigatório
+                                div.large-12.columns
                                     if(edit == true)
-                                        textarea(name="sobre", placeholder="Sobre o gênero", required)
+                                        textarea(name="sobre", placeholder="Sobre o console", required)
                                             !{developer.about}
                                         small.error Obrigatório
                                     else
-                                        textarea(name="sobre", placeholder="Sobre o gênero", required)
+                                        textarea(name="sobre", placeholder="Sobre o console", required)
                                         small.error Obrigatório
                                 div.row
                                     div.medium-6.medium-offset-3.columns

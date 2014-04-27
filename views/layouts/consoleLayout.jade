@@ -30,13 +30,7 @@ html.no-js(lang="pt_BR")
 
         script.
             $(window).on('popstate', function () {
-                $('.content-wrap').fadeOut();
-                $('body').css('overflow-y', 'auto');
-                $('#darken').css('display', 'none');
-                if($('#mainText').html() !== undefined){
-                    ga('send', 'pageview', '/'+window.location.href.replace('http://www.gueime.com.br/',''));
-                }
-                $('.content').empty();
+                $('#myModal').foundation('reveal', 'close');
             });
             var facebookComments = $(".fb-comments");
             var facebookLikes = $('.fb-like');
@@ -52,7 +46,7 @@ html.no-js(lang="pt_BR")
             }
             FB.XFBML.parse();
         script.scriptLoad.
-            var b = "#{game.title}"; 
+            var b = "#{dev.title}";
             profileContainer.waitForImages(function () {
                 $("#spinning").hide();
                 $('body').css('overflow-y', 'auto');
@@ -74,7 +68,7 @@ html.no-js(lang="pt_BR")
                 if (n < 7) {
                     $.ajax({
                         type: "GET",
-                        url: "/paginationGame",
+                        url: "/paginationConsole",
                         data: {n: n, b: b},
                         dataType: 'html'
                     }).done(function (data) {
@@ -88,7 +82,7 @@ html.no-js(lang="pt_BR")
                 n = $('.item').length;
                 $.ajax({
                     type: "GET",
-                    url: "/paginationGame",
+                    url: "/paginationConsole",
                     data: { n: n, b: b },
                     dataType: 'html'
                 }).done(function (data) {
@@ -96,7 +90,13 @@ html.no-js(lang="pt_BR")
                 });
             });
             $(window).on('popstate', function () {
-                $('#myModal').foundation('reveal', 'close');
+                $('.content-wrap').fadeOut();
+                $('body').css('overflow-y', 'auto');
+                $('#darken').css('display', 'none');
+                if($('#mainText').html() !== undefined){
+                    ga('send', 'pageview', '/'+window.location.href.replace('http://www.gueime.com.br/',''));
+                }
+                $('.content').empty().css('background', 'white');
             });
 
             

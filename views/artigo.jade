@@ -4,9 +4,6 @@ block content
     div#check(style="display:none;") check
     
     header.header.row
-        div.content-wrap
-            div.content
-        div#darken
         div.row#searchBack(style="background-color: white;display:none;")
             div.large-4.medium-6.medium-centered.large-centered.columns(style="height:8rem;")
                 span.vertical-align-helper
@@ -60,3 +57,7 @@ block content
             a#loadMore.button Mais artigos
                      
     include partials/footer
+
+    div#myModal.reveal-modal(data-reveal)
+        div#spinningContent
+            img(src="/images/spinning.gif")

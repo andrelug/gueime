@@ -77,8 +77,6 @@ var UserSchema = new mongoose.Schema({
         level: {type: Number, default: 1},
         achievements: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Achievement' }]
     },
-    creating: {type: Boolean, default: false},
-    creatingId: {type: String, default: 0},
     follow: [{_id: false, type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     followedBy: [{_id: false, type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     deleted: {type: Boolean, default: false}

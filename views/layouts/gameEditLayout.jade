@@ -22,7 +22,8 @@ html.no-js(lang="pt_BR")
             fjs.parentNode.insertBefore(js, fjs);
             }(document, 'script', 'facebook-jssdk'));
 
-        block content
+        div.outWrap(style="overflow:hidden;")
+            block content
 
         script(src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js")
         script(src="/javascripts/vendor/fastclick.js")
@@ -169,14 +170,7 @@ html.no-js(lang="pt_BR")
             });
         script.
             $(window).on('popstate', function () {
-                $('.content-wrap').fadeOut();
-                $('body').css('overflow-y', 'auto');
-                $('#darken').css('display', 'none');
-                if($('#mainText').html() !== undefined){
-                    ga('send', 'pageview', '/'+window.location.href.replace('http://www.gueime.com.br/',''));
-                }
-                $('.content').empty().css('background', 'white');
+                $('#myModal').foundation('reveal', 'close');
             });
 
-        script.
             var thisUser = "#{user.name.loginName}";

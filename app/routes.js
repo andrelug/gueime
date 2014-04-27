@@ -1,6 +1,7 @@
 var Users = require('./models/user'),
     Artigos = require('./models/article'),
     Games = require('./models/game'),
+    Console = require('./models/console'),
     DevPub = require('./models/devPub'),
     Genre = require('./models/genre'),
     func = require('../config/functions'),
@@ -36,6 +37,8 @@ module.exports = function (app, passport, mongoose) {
 
         var onlyOne = req.query.onlyOne;
 
+        var revision = req.query.revision;
+
         var searchTag = req.query.t;
 
         if(searchTag){
@@ -44,9 +47,6 @@ module.exports = function (app, passport, mongoose) {
             searchStr = searchTag.split('-');
             if (!user) {
                 Artigos.find({ facet: { $all: searchStr}, status: 'publicado' }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({'_id': -1}).limit(6).exec(function (err, docs) {
-                    for (i = 0; i < docs.length; i++) {
-                        docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
-                    }
                     var gameStr;
                     
                     if(searchTag != undefined){
@@ -65,10 +65,8 @@ module.exports = function (app, passport, mongoose) {
                     sessionReload(req, res, next);
                     Artigos.find({ facet: { $all: searchStr}, status: 'publicado' }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).limit(6).exec(function (err, docs) {
                         if(err)
-                            console.log(err);
-                        for (i = 0; i < docs.length; i++) {
-                            docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
-                        }
+                            throw(err);
+
                         var gameStr;
                     
                         if(searchTag != undefined){
@@ -89,9 +87,7 @@ module.exports = function (app, passport, mongoose) {
         } else {
             if (!user) {
                 Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).exec(function (err, docs) {
-                    for (i = 0; i < docs.length; i++) {
-                        docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
-                    }
+
                     res.render('index', { title: "Gueime - O melhor site de games do Brasil!", docs: docs, messages: redirected, deletado: deletado, onlyOne: onlyOne});
                 });
             } else {
@@ -100,11 +96,9 @@ module.exports = function (app, passport, mongoose) {
                 } else {
                     sessionReload(req, res, next);
                     Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).exec(function (err, docs) {
-                        for (i = 0; i < docs.length; i++) {
-                            docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
-                        }
+
                         Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
-                            res.render('index', { user: user, title: "Gueime - O melhor site de games do Brasil!", docs: docs, messages: redirected, deletado: deletado, onlyOne: onlyOne});
+                            res.render('index', { user: user, title: "Gueime - O melhor site de games do Brasil!", docs: docs, messages: redirected, deletado: deletado, onlyOne: onlyOne, revision: revision});
                         });
                     
                     });
@@ -168,9 +162,7 @@ module.exports = function (app, passport, mongoose) {
 
         if (!req.query.str) {
             Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).skip(n).exec(function (err, docs) {
-                for (i = 0; i < docs.length; i++) {
-                    docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
-                }
+
                 res.render('tags', { docs: docs });
             });
         } else {
@@ -183,9 +175,7 @@ module.exports = function (app, passport, mongoose) {
             searchStr = searchStr.toString().split(',');
 
             Artigos.find({ facet: { $all: searchStr}, status: 'publicado' }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).limit(6).skip(n).exec(function (err, docs) {
-                for (i = 0; i < docs.length; i++) {
-                    docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
-                }
+
                 res.render('tags', { docs: docs });
             });
         }
@@ -199,9 +189,7 @@ module.exports = function (app, passport, mongoose) {
 
         if (!req.query.str) {
             Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).exec(function (err, docs) {
-                for (i = 0; i < docs.length; i++) {
-                    docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
-                }
+
                 if(!user){
                     res.render('tags', { docs: docs});
                 } else {
@@ -219,9 +207,7 @@ module.exports = function (app, passport, mongoose) {
             }
             searchStr = searchStr.toString().split(',');
             Artigos.find({ facet: { $all: searchStr}, status: 'publicado' }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).limit(6).exec(function (err, docs) {
-                for (i = 0; i < docs.length; i++) {
-                    docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
-                }
+
                 if(!user){
                     var gameStr;
                     
@@ -263,7 +249,7 @@ module.exports = function (app, passport, mongoose) {
 
             Artigos.findOneAndUpdate({ slug: noticia, type: 'noticia' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
                 if(docs.status == 'publicado'){
-                    var title = decodeURIComponent(docs.title).replace('<p>', '').replace('</p>', ''),
+                    var title = docs.title,
                         body = decodeURIComponent(docs.text);
                     Users.find({ _id: docs.authors.main }, function (err, author) {
                         if(!user){
@@ -285,7 +271,7 @@ module.exports = function (app, passport, mongoose) {
             if (!user) {
                 Artigos.findOneAndUpdate({ slug: noticia, type: 'noticia' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
                     if(docs.status == 'publicado'){
-                        var title = decodeURIComponent(docs.title).replace('<p>', '').replace('</p>', ''),
+                        var title = docs.title,
                             body = decodeURIComponent(docs.text);
                         Users.find({ _id: docs.authors.main }, function (err, author) {
                             res.render('artigo', { tipo: 'noticia', article: docs, title: title, body: body, author: author[0] });
@@ -301,7 +287,7 @@ module.exports = function (app, passport, mongoose) {
                     sessionReload(req, res, next);
                     Artigos.findOneAndUpdate({ slug: noticia, type: 'noticia' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
                         if(docs.status == 'publicado'){
-                            var title = decodeURIComponent(docs .title).replace('<p>', '').replace('</p>', ''),
+                            var title = docs.title,
                                 body = decodeURIComponent(docs.text);
                             Users.find({ _id: docs.authors.main }, function (err, author) {
                                 Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
@@ -326,7 +312,7 @@ module.exports = function (app, passport, mongoose) {
 
             Artigos.findOneAndUpdate({ slug: artigo, type: 'artigo' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
                 if(docs.status == 'publicado'){
-                    var title = decodeURIComponent(docs.title),
+                    var title = docs.title,
                         body = decodeURIComponent(docs.text);
 
                     Users.find({ _id: docs.authors.main }, function (err, author) {
@@ -347,7 +333,7 @@ module.exports = function (app, passport, mongoose) {
             if (!user) {
                 Artigos.findOneAndUpdate({ slug: artigo, type: 'artigo' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
                     if(docs.status == 'publicado'){
-                        var title = decodeURIComponent(docs.title),
+                        var title = docs.title,
                             body = decodeURIComponent(docs.text);
                         Users.find({ _id: docs.authors.main }, function (err, author) {
                             res.render('artigo', { tipo: 'artigo', article: docs, title: title, body: body, author: author[0] });
@@ -363,7 +349,7 @@ module.exports = function (app, passport, mongoose) {
                     sessionReload(req, res, next);
                     Artigos.findOneAndUpdate({ slug: artigo, type: 'artigo' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
                         if(docs.status == 'publicado'){
-                            var title = decodeURIComponent(docs.title),
+                            var title = docs.title,
                                 body = decodeURIComponent(docs.text);
 
                             Users.find({ _id: docs.authors.main }, function (err, author) {
@@ -388,7 +374,7 @@ module.exports = function (app, passport, mongoose) {
 
             Artigos.findOneAndUpdate({ slug: analise, type: 'analise' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
                 if(docs.status == 'publicado'){
-                    var title = decodeURIComponent(docs.title),
+                    var title = docs.title,
                         body = decodeURIComponent(docs.text);
                     
                     var scores = docs.review.score.toString().split('.'),
@@ -433,7 +419,7 @@ module.exports = function (app, passport, mongoose) {
             if (!user) {
                 Artigos.findOneAndUpdate({ slug: analise, type: 'analise' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
                     if(docs.status == 'publicado'){
-                        var title = decodeURIComponent(docs.title),
+                        var title = docs.title,
                             body = decodeURIComponent(docs.text);
                          var scores = docs.review.score.toString().split('.'),
                             score = scores[0],
@@ -466,7 +452,7 @@ module.exports = function (app, passport, mongoose) {
                     sessionReload(req, res, next);
                     Artigos.findOneAndUpdate({ slug: analise, type: 'analise' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
                         if(docs.status == 'publicado'){
-                            var title = decodeURIComponent(docs.title),
+                            var title = docs.title,
                                 body = decodeURIComponent(docs.text);
                              var scores = docs.review.score.toString().split('.'),
                                 score = scores[0],
@@ -508,7 +494,7 @@ module.exports = function (app, passport, mongoose) {
 
             Artigos.findOneAndUpdate({ slug: video, type: 'video' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
                 if(docs.status == 'publicado'){
-                    var title = decodeURIComponent(docs.title),
+                    var title = docs.title,
                         body = decodeURIComponent(docs.text);
                     Users.find({ _id: docs.authors.main }, function (err, author) {
                         if(!user){
@@ -528,7 +514,7 @@ module.exports = function (app, passport, mongoose) {
             if (!user) {
                 Artigos.findOneAndUpdate({ slug: video, type: 'video' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
                     if(docs.status == 'publicado'){
-                        var title = decodeURIComponent(docs.title),
+                        var title = docs.title,
                             body = decodeURIComponent(docs.text);
                         Users.find({ _id: docs.authors.main }, function (err, author) {
                             res.render('artigo', { tipo: 'video', article: docs, title: title, body: body, author: author[0] });
@@ -544,7 +530,7 @@ module.exports = function (app, passport, mongoose) {
                     sessionReload(req, res, next);
                     Artigos.findOneAndUpdate({ slug: video, type: 'video' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
                         if(docs.status == 'publicado'){
-                            var title = decodeURIComponent(docs.title),
+                            var title = docs.title,
                                 body = decodeURIComponent(docs.text);
                             Users.find({ _id: docs.authors.main }, function (err, author) {
                                 Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
@@ -566,228 +552,94 @@ module.exports = function (app, passport, mongoose) {
         var user = req.user;
         var tipo = req.params.tipo;
         
-        if(user.creatingId != 0){
-            res.redirect('/?onlyOne=true');
-        } else{
-            if (!user) {
-                res.redirect('/parceiros')
-            } else if (user.status == 'admin' || user.status == 'parceiro') {
-                if(user.deleted == true){
-                    res.redirect('/users/restore');
-                } else{
-                    sessionReload(req, res, next); 
-                    Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
-                        res.render('create', { user: user, title: "Gueime - Hora de criar um artigo sensacional!", tipo: tipo, criar: true });
-                    });
-                }
-            } else {
-                sessionReload(req, res, next);
-                res.redirect('/parceiros');
-            }
-        } 
-    });
-
-
-    // EDIÇÃO DE NOTICIAS
-    app.get('/noticias/:noticia/editar', function(req, res){
-        var noticia = req.params.noticia;
-        var user = req.user;
-        if(!user){
-            res.redirect('/parceiros');
-        } else{
-            if(user.creatingId != 0){
-                res.redirect('/?onlyOne=true');
-            } else{
-                if(user.deleted == true){
-                    res.redirect('/users/restore');
-                } else{
-                    Artigos.findOneAndUpdate({slug: noticia}, {status: 'editando'}, {new: false}, function(err, docs){
-                        if (user.status == 'admin' && docs.authors.main == user.id || docs.authors.main == user.id) {
-                            var title = decodeURIComponent(docs.title),
-                                body = decodeURIComponent(docs.text);
-                            Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id}, $inc: {'graph.visits': 1, 'gamification.points': -10} }, function (err) {
-                                res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'noticia', edit: true});
-                            });
-                        } else if (user.status == 'admin') {
-                            var title = decodeURIComponent(docs.title),
-                                body = decodeURIComponent(docs.text);
-                            Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id}, $inc: {'graph.visits': 1} }, function (err) {
-                                res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'noticia', edit: true});
-                            });
-                        } else {
-                            Artigos.update({slug: noticia}, {status: docs.status}, {new: true}, function(err, docs){
-                                res.redirect('/');
-                            });
-                        }
-                    });
-                }
-            }  
-        }
-        
-    });
-
-    // EDIÇÃO DE ARTIGOS
-    app.get('/artigos/:artigo/editar', function(req, res){
-        var artigo = req.params.artigo;
-        var user = req.user;
-
-
-        if(!user){
-            res.redirect('/parceiros');
-        } else{
-            if(user.creatingId != 0){
-                res.redirect('/?onlyOne=true');
-            } else{
-                if(user.deleted == true){
-                    res.redirect('/users/restore');
-                } else{
-                    Artigos.findOneAndUpdate({slug: artigo}, {status: 'editando'}, {new: false}, function(err, docs){
-                        if (user.status == 'admin' && docs.authors.main == user.id || docs.authors.main == user.id) {
-                            var title = decodeURIComponent(docs.title),
-                                body = decodeURIComponent(docs.text);
-                            Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id}, $inc: {'graph.visits': 1, 'gamification.points': -30} }, function (err) {
-                                res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'artigo', edit: true});
-                            });
-                        } else if (user.status == 'admin') {
-                            var title = decodeURIComponent(docs.title),
-                                body = decodeURIComponent(docs.text);
-                            Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id}, $inc: {'graph.visits': 1} }, function (err) {
-                                res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'artigo', edit: true});
-                            });
-                        } else {
-                            Artigos.update({slug: artigo}, {status: docs.status}, {new: true}, function(err, docs){
-                                res.redirect('/');
-                            });
-                        }
-                    });
-                }
-            }
-        }
-        
-    });
-
-
-    // EDIÇÃO DE ANALISES
-    app.get('/analises/:analise/editar', function(req, res){
-        var analise = req.params.analise;
-        var user = req.user;
-
-        if(!user){
-            res.redirect('/parceiros');
-        } else{
-            if(user.creatingId != 0){
-                res.redirect('/?onlyOne=true');
-            } else{
-                if(user.deleted == true){
-                    res.redirect('/users/restore');
-                } else{
-                    Artigos.findOneAndUpdate({slug: analise}, {status: 'editando'}, {new: false}, function(err, docs){
-                        if (user.status == 'admin' && docs.authors.main == user.id || docs.authors.main == user.id) {
-                            var title = decodeURIComponent(docs.title),
-                                body = decodeURIComponent(docs.text);
-                            Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id}, $inc: {'graph.visits': 1, 'gamification.points': -50} }, function (err) {
-                                res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'analise', edit: true});
-                            });
-                        } else if (user.status == 'admin') {
-                            var title = decodeURIComponent(docs.title),
-                                body = decodeURIComponent(docs.text);
-                            Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id}, $inc: {'graph.visits': 1} }, function (err) {
-                                res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'analise', edit: true});
-                            });
-                        } else {
-                            Artigos.update({slug: analise}, {status: docs.status}, {new: true}, function(err, docs){
-                                res.redirect('/');
-                            });
-                        }
-                    });
-                }
-            }
-        }
-        
-    });
-
-
-    // EDIÇÃO DE VIDEOS
-    app.get('/videos/:video/editar', function(req, res){
-        var video = req.params.video;
-        var user = req.user;
-
-
-        if(!user){
-            res.redirect('/parceiros');
-        } else{
-            if(user.creatingId != 0){
-                res.redirect('/?onlyOne=true');
-            } else{
-                if(user.deleted == true){
-                    res.redirect('/users/restore');
-                } else{
-                    Artigos.findOneAndUpdate({slug: video}, {status: 'editando'}, {new: false}, function(err, docs){
-                        if (user.status == 'admin' && docs.authors.main == user.id || docs.authors.main == user.id) {
-                            var title = decodeURIComponent(docs.title),
-                                body = decodeURIComponent(docs.text);
-                            Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id}, $inc: {'graph.visits': 1, 'gamification.points': -5} }, function (err) {
-                                res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'video', edit: true});
-                            });
-                        } else if (user.status == 'admin') {
-                            var title = decodeURIComponent(docs.title),
-                                body = decodeURIComponent(docs.text);
-                            Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id}, $inc: {'graph.visits': 1} }, function (err) {
-                                res.render('editar', {user: user, article: docs, title: title, body: body, tipo: 'video', edit: true});
-                            });
-                        } else {
-                            Artigos.update({slug: video}, {status: docs.status}, {new: true}, function(err, docs){
-                                res.redirect('/');
-                            });
-                        }
-                    });
-                }
-            }
-        }   
-        
-    });
-
-
-    // DELETAR ARTIGOS
-    app.post('/deletar', function(req, res){
-        var user = req.user;
-        var slug = req.body.slug;
-        if (user.status == 'admin' || user.status == 'parceiro') {
+        if (!user) {
+            res.redirect('/parceiros')
+        } else if (user.status == 'admin' || user.status == 'parceiro' || user.status == 'editor') {
             if(user.deleted == true){
                 res.redirect('/users/restore');
             } else{
-                Artigos.findOneAndUpdate({slug: slug}, {$set: {status: 'deletado'}},{new: false}, function(err, docs){
-                    if (user.status == 'admin' || docs.authors.main == user.id) {
-                        Users.update({loginName: user.loginName}, {$set: {creating: false, creatingId: 0}}, function(err){
-                            res.redirect('/?deletado=true');
+                sessionReload(req, res, next); 
+                new Artigos({
+                    'authors.main': user._id,
+                    'authors.name': user.name.first + ' ' + user.name.last,
+                    type: tipo
+                }).save(function (err, docs) {
+                    if (err)
+                        throw err
+                    res.render('create', { user: user, title: "Gueime - Hora de criar um artigo sensacional!", id: docs._id, tipo: tipo, criar: true });
+
+                });
+            }
+        } else {
+            sessionReload(req, res, next);
+            res.redirect('/parceiros');
+        }
+    });
+
+
+    // EDIÇÃO DE TUDO
+    app.get('/editar/:texto', function(req, res){
+        var texto = req.params.texto;
+        var user = req.user;
+        if(!user){
+            res.redirect('/parceiros');
+        } else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            } else{
+                Artigos.findOneAndUpdate({slug: texto}, {$set: {status: 'rascunho'}}, {new: false}, function(err, docs){
+                    if (user.status == 'admin' && docs.authors.main == user.id || user.status == 'editor' && docs.authors.main == user.id || docs.authors.main == user.id) {
+                        var title = docs.title,
+                            body = decodeURIComponent(docs.text);
+
+                        var points;
+                        switch(docs.type){
+                            case 'noticia':
+                                points = 10;
+                                break;
+                            case 'artigo':
+                                points = 30;
+                                break;
+                            case 'analise':
+                                points = 50;
+                                break;
+                            case 'video':
+                                points = 5;
+                                break;
+                        }
+                        Users.update({ 'name.loginName': user.name.loginName }, { $inc: {'gamification.points': -points} }, function (err) {
+                            res.render('editar', {user: user, article: docs, title: title, body: body, tipo: docs.type, id: docs._id});
                         });
+                    } else if (user.status == 'admin') {
+                        var title = docs.title,
+                            body = decodeURIComponent(docs.text);
+
+                        res.render('editar', {user: user, article: docs, title: title, body: body, tipo: docs.type, id: docs._id});
                     } else {
-                        Artigos.update({slug: slug}, {$set: {status: docs.status}}, function(err, docs){
+                        Artigos.update({slug: texto}, {status: docs.status}, function(err, docs){
                             res.redirect('/');
                         });
                     }
                 });
             }
-        } else {
-            res.redirect('/');
         }
     });
+
 
     // DELETAR CRIANDO
-    app.post('/deletarCriando', function(req, res){
+    app.post('/deletar/:id', function(req, res){
         var user = req.user;
+        var id = req.params.id;
         
-        if (user.status == 'admin' || user.status == 'parceiro') {
+        if (user.status == 'admin' || user.status == 'parceiro' || user.status == 'editor') {
             if(user.deleted == true){
                 res.redirect('/users/restore');
             } else{
-                Artigos.findOneAndUpdate({status: 'rascunho', 'authors.main': user._id}, {$set: {status: 'deletado'}},{new: false}, function(err, docs){
+                Artigos.findOneAndUpdate({_id: id}, {$set: {status: 'deletado'}},{new: false}, function(err, docs){
                     if (user.status == 'admin' || docs.authors.main == user.id) {
-                        Users.update({loginName: user.loginName}, {$set: {creating: false, creatingId: 0}}, function(err){
-                            res.redirect('/?deletado=true');
-                        });
+                        res.redirect('/?deletado=true');
                     } else {
-                        Artigos.update({status: 'rascunho', 'authors.main': user._id}, {$set: {status: docs.status}}, function(err, docs){
+                        Artigos.update({_id: id}, {$set: {status: docs.status}}, function(err, docs){
                             res.redirect('/');
                         });
                     }
@@ -796,21 +648,6 @@ module.exports = function (app, passport, mongoose) {
         } else {
             res.redirect('/');
         }
-    });
-
-
-    // SAIU SEM SALVAR
-    app.put('/exitNoSave', function(req, res){
-        var user = req.user;
-        var slug = req.query.slug;
-
-        Users.update({loginName: user.loginName}, {$set: {creating: false, creatingId: 0}}, function(err){
-            Artigos.update({slug: slug}, {$set: {status: 'pendente'}}, function(err){
-                if(err)
-                    throw err
-                res.end();
-            });
-        });
     });
 
 
@@ -900,104 +737,32 @@ module.exports = function (app, passport, mongoose) {
 
 
     // SALVAR NOVO ARTIGO
-    app.post('/novoArtigo', function (req, res) {
+    app.post('/novoArtigo/:id', function (req, res) {
         var user = req.user;
+        var id = req.params.id;
 
+        if (user.status == 'admin' || user.status == 'parceiro' || user.status == 'editor') {
 
-        if (user.status == 'admin' || user.status == 'parceiro') {
-            if (user.creating == false) {
-                new Artigos({
-                    'authors.main': user._id,
-                    text: req.body.content,
-                    'authors.name': user.name.first + ' ' + user.name.last
-                }).save(function (err, docs) {
-                    if (err)
-                        throw err
-                    Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id} }, function (err) {
-                        res.send(JSON.stringify(req.body));
-                    });
-                    
-                });
-                
-            } else {
-                Artigos.update({ "status": 'rascunho', _id: user.creatingId }, { $set: { text: req.body.content} }, function (err) {
-                    if (err)
-                        throw err
-                    res.send(JSON.stringify(req.body));
-                });
-                
-            }
-        } else {
-            console.log("fora...era pra redirecionar");
-            res.redirect('/parceiros');
-        }
-    });
-
-    // EDITAR ARTIGO
-    app.post('/editarArtigo', function (req, res) {
-        var user = req.user;
-
-
-        if (user.status == 'admin' || user.status == 'parceiro') {
-
-            Artigos.update({ "status": 'editando', _id: user.creatingId }, { $set: { text: req.body.content} }, function (err) {
-                console.log('editando Artigo');
-                res.send(JSON.stringify(req.body));
-            });
-
-        } else {
-            res.redirect('/parceiros');
-        }
-    });
-
-
-    // SALVAR NOVO TITULO
-    app.post('/novoTitulo', function (req, res) {
-        var user = req.user;
-
-        if (user.status == 'admin' || user.status == 'parceiro') {
-            if (user.creating == false) {
-
-                new Artigos({
-                    'authors.main': user._id,
-                    title: decodeURIComponent(req.body.content).replace('<p>', '').replace('</p>', ''),
-                    'authors.name': user.name.first + ' ' + user.name.last
-                }).save(function (err, docs) {
-                    if (err)
-                        throw err
-                    console.log('até aqui');
-                    Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: true, creatingId: docs._id} }, function (err) {
-                        console.log(err)
-                        console.log('devia ter salvo o user');
-                        res.send(JSON.stringify(req.body));
-                    });
-                    
-                });
-
-            } else {
-                Artigos.update({ "status": 'rascunho', _id: user.creatingId}, { $set: { title: decodeURIComponent(req.body.content).replace('<p>', '').replace('</p>', '')} }, function (err) {
-                    if (err)
-                        throw err
-                    console.log("atualizando Artigo existente");
-                    res.send(JSON.stringify(req.body));
-                });
-            }
-        } else {
-            console.log("fora...era pra redirecionar");
-            res.redirect('/parceiros');
-        }
-    });
-
-    // EDITAR TITULO ARTIGO
-    app.post('/editarTitulo', function (req, res) {
-        var user = req.user;
-
-        if (user.status == 'admin' || user.status == 'parceiro') {
-
-            Artigos.update({ "status": 'editando', _id: user.creatingId}, { $set: { title: decodeURIComponent(req.body.content).replace('<p>', '').replace('</p>', '')} }, function (err) {
+            Artigos.update({_id: id}, {$set: {text: req.body.content}}, function(err){
                 if (err)
                     throw err
-                console.log('editando titulo');
+                res.send(JSON.stringify(req.body));
+            });
+        } else {
+            res.redirect('/parceiros');
+        }
+    });
+
+    // SALVAR NOVO TITULO
+    app.post('/novoTitulo/:id', function (req, res) {
+        var user = req.user;
+        var id = req.params.id;
+
+        if (user.status == 'admin' || user.status == 'parceiro' || user.status == 'editor') {
+
+            Artigos.update({_id: id},{ $set: { title: decodeURIComponent(req.body.content).replace('<p>', '').replace('</p>', '')} }, function(err){
+                if (err)
+                    throw err
                 res.send(JSON.stringify(req.body));
             });
 
@@ -1007,25 +772,23 @@ module.exports = function (app, passport, mongoose) {
     });
 
     // SLUG CHECK
-    app.get('/titleCheck', function(req,res){
+    app.get('/titleCheck/:id', function(req,res){
         var user = req.user,
+            id = req.params.id,
             check = req.query.check,
             title = req.query.title;
             slug = func.string_to_slug(decodeURIComponent(title.replace('<p>', '').replace('</p>', '')));
             console.log(check);
 
         if(check == 'true'){
-            Artigos.find({ "status": 'editando', _id: user.creatingId}, function(err, docs){
+            Artigos.find({ _id: id}, function(err, docs){
                 if(docs[0].slug == slug){
-                    console.log('mesmo titulo');
                     res.end('yes');
                 } else{
                     Artigos.find({slug: slug}, function(err, arts){
                         if(arts.length > 0){
-                            console.log('editando: slug repetido');
                             res.end('no');
                         } else{
-                            console.log('editando: slug valido');
                             res.end('yes');
                         }
                     });
@@ -1034,10 +797,8 @@ module.exports = function (app, passport, mongoose) {
         }else{
             Artigos.find({slug: slug}, function(err, arts){
                 if(arts.length > 0){
-                    console.log('criando: slug repetido');
                     res.end('no');
                 } else{
-                    console.log('criando: slug valido');
                     res.end('yes');
                 }
             });
@@ -1046,11 +807,12 @@ module.exports = function (app, passport, mongoose) {
 
 
     // GRAPH NOVO ARTIGO
-    app.post('/graph', function (req, res) {
+    app.post('/graph/:id', function (req, res) {
         var user = req.user;
         var b = req.body;
+        var id = req.params.id;
 
-        if (user.status == 'admin' || user.status == 'parceiro') {
+        if (user.status == 'admin' || user.status == 'parceiro' || user.status == 'editor') {
             // Não consegui ainda pensar num jeito simples de colocar $push apenas nas arrays e $set quando for único...no momento usarei esse código abaixo na hora de pegar as infos e jogar na página (transformando em arrays)
             var games = b.jogo,
                 tags = b.tags,
@@ -1093,7 +855,7 @@ module.exports = function (app, passport, mongoose) {
             }
 
             facet = func.cleanArray(facet);
-            console.log(slug);
+
             sendFacet = facet.filter(function(elem, pos) {
                 return facet.indexOf(elem) == pos;
             });
@@ -1106,9 +868,8 @@ module.exports = function (app, passport, mongoose) {
             }
 
             if (b.tipo == 'noticia') {
-                Artigos.update({$or: [{ "status": 'rascunho'}, {"status": 'editando'}, {"status": 'pendente'}],'authors.main': criador}, { $set: {
+                Artigos.update({_id: id}, { $set: {
 
-                    type: b.tipo,
                     description: b.descricao,
                     status: status,
                     'cover.image': b.coverUrl,
@@ -1130,32 +891,25 @@ module.exports = function (app, passport, mongoose) {
                     if (err)
                         throw err
                     if(user.status == 'admin' || user.status == 'editor'){
-                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0}}, function (err) {
-                            // Atribuição de pontuação
-                            Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 10}}, function(err){
-                                // Ganha pontos por revisão
-                                if(criador != user._id){
-                                    Users.update({_id: user._id}, {$inc: {'gamification.points': 30}}, function(err){
-                                        res.redirect('/' + b.tipo + 's/' + slug);
-                                    });
-                                } else {
+                        // Atribuição de pontuação
+                        Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 10}}, function(err){
+                            // Ganha pontos por revisão
+                            if(criador != user._id){
+                                Users.update({_id: user._id}, {$inc: {'gamification.points': 30}}, function(err){
                                     res.redirect('/' + b.tipo + 's/' + slug);
-                                }
-                            });
+                                });
+                            } else {
+                                res.redirect('/' + b.tipo + 's/' + slug);
+                            }
                         });
                     } else{
                         // Manda pra revisão
-                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0} }, function (err) {
-                            if (err)
-                                throw err
-                            res.redirect('/');
-                        });
+                        res.redirect('/?revision=true');
                     }
                 });
             } else if (b.tipo == 'artigo') {
-                Artigos.update({ $or: [{ "status": 'rascunho'}, {"status": 'editando'}, {"status": 'pendente'}],'authors.main': criador }, { $set: {
+                Artigos.update({_id: id}, { $set: {
 
-                    type: b.tipo,
                     description: b.descricao,
                     status: status,
                     'cover.image': b.coverUrl,
@@ -1178,32 +932,25 @@ module.exports = function (app, passport, mongoose) {
                     if (err)
                         throw err
                     if(user.status == 'admin' || user.status == 'editor'){
-                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0}}, function (err) {
-                            // Atribuição de pontuação
-                            Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 30}}, function(err){
-                                // Ganha pontos por revisão
-                                if(criador != user._id){
-                                    Users.update({_id: user._id}, {$inc: {'gamification.points': 30}}, function(err){
-                                        res.redirect('/' + b.tipo + 's/' + slug);
-                                    });
-                                } else {
+                        // Atribuição de pontuação
+                        Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 10}}, function(err){
+                            // Ganha pontos por revisão
+                            if(criador != user._id){
+                                Users.update({_id: user._id}, {$inc: {'gamification.points': 30}}, function(err){
                                     res.redirect('/' + b.tipo + 's/' + slug);
-                                }
-                            });
+                                });
+                            } else {
+                                res.redirect('/' + b.tipo + 's/' + slug);
+                            }
                         });
                     } else{
                         // Manda pra revisão
-                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0} }, function (err) {
-                            if (err)
-                                throw err
-                            res.redirect('/');
-                        });
+                        res.redirect('/?revision=true');
                     }
                 });
             } else if (b.tipo == 'analise') {
-                Artigos.update({ $or: [{ "status": 'rascunho'}, {"status": 'editando'}, {"status": 'pendente'}],'authors.main': criador }, { $set: {
+                Artigos.update({_id: id}, { $set: {
 
-                    type: b.tipo,
                     description: b.descricao,
                     status: status,
                     'cover.image': b.coverUrl,
@@ -1225,32 +972,25 @@ module.exports = function (app, passport, mongoose) {
                     if (err)
                         throw err
                     if(user.status == 'admin' || user.status == 'editor'){
-                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0}}, function (err) {
-                            // Atribuição de pontuação
-                            Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 50}}, function(err){
-                                // Ganha pontos por revisão
-                                if(criador != user._id){
-                                    Users.update({_id: user._id}, {$inc: {'gamification.points': 30}}, function(err){
-                                        res.redirect('/' + b.tipo + 's/' + slug);
-                                    });
-                                } else {
+                        // Atribuição de pontuação
+                        Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 10}}, function(err){
+                            // Ganha pontos por revisão
+                            if(criador != user._id){
+                                Users.update({_id: user._id}, {$inc: {'gamification.points': 30}}, function(err){
                                     res.redirect('/' + b.tipo + 's/' + slug);
-                                }
-                            });
+                                });
+                            } else {
+                                res.redirect('/' + b.tipo + 's/' + slug);
+                            }
                         });
                     } else{
                         // Manda pra revisão
-                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0} }, function (err) {
-                            if (err)
-                                throw err
-                            res.redirect('/');
-                        });
+                        res.redirect('/?revision=true');
                     }
                 });
             } else {
-                Artigos.update({ $or: [{ "status": 'rascunho'}, {"status": 'editando'}, {"status": 'pendente'}],'authors.main': criador }, { $set: {
+                Artigos.update({_id: id}, { $set: {
 
-                    type: b.tipo,
                     description: b.descricao,
                     status: status,
                     'cover.image': b.coverUrl,
@@ -1274,26 +1014,20 @@ module.exports = function (app, passport, mongoose) {
                     if (err)
                         throw err
                     if(user.status == 'admin' || user.status == 'editor'){
-                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0}}, function (err) {
-                            // Atribuição de pontuação
-                            Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 5}}, function(err){
-                                // Ganha pontos por revisão
-                                if(criador != user._id){
-                                    Users.update({_id: user._id}, {$inc: {'gamification.points': 30}}, function(err){
-                                        res.redirect('/' + b.tipo + 's/' + slug);
-                                    });
-                                } else {
+                        // Atribuição de pontuação
+                        Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 10}}, function(err){
+                            // Ganha pontos por revisão
+                            if(criador != user._id){
+                                Users.update({_id: user._id}, {$inc: {'gamification.points': 30}}, function(err){
                                     res.redirect('/' + b.tipo + 's/' + slug);
-                                }
-                            });
+                                });
+                            } else {
+                                res.redirect('/' + b.tipo + 's/' + slug);
+                            }
                         });
                     } else{
                         // Manda pra revisão
-                        Users.update({ 'name.loginName': user.name.loginName }, { $set: { creating: false, creatingId: 0} }, function (err) {
-                            if (err)
-                                throw err
-                            res.redirect('/');
-                        });
+                        res.redirect('/?revision=true');
                     }
                 });
             }
@@ -1320,9 +1054,7 @@ module.exports = function (app, passport, mongoose) {
             } else{
                 sessionReload(req, res, next);
                 Artigos.find({status: 'publicado', 'authors.main': user._id}, {description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1}).sort({'_id': -1}).limit(6).exec(function(err, docs){
-                    for (i = 0; i < docs.length; i++) {
-                        docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
-                    }
+
                     if(user.birthDate){
                         var date = user.birthDate;
                         date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
@@ -1348,9 +1080,7 @@ module.exports = function (app, passport, mongoose) {
             } else{
                 sessionReload(req, res, next);
                 Artigos.find({status: 'publicado', 'authors.main': user._id}, {description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1}).sort({'_id': -1}).limit(6).exec(function(err, docs){
-                    for (i = 0; i < docs.length; i++) {
-                        docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
-                    }
+
                     if(user.birthDate){
                         var date = user.birthDate;
                         date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
@@ -1503,9 +1233,6 @@ module.exports = function (app, passport, mongoose) {
         if(!user){
             Users.findOne({'name.loginName': profile}, function(err, profileUser){
                 Artigos.find({status: 'publicado', 'authors.main': profileUser._id}, {description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1}).sort({'_id': -1}).limit(6).exec(function(err, docs){
-                    for (i = 0; i < docs.length; i++) {
-                        docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
-                    }
                     if(profileUser.birthDate){
                         var date = profileUser.birthDate;
                         date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
@@ -1520,9 +1247,7 @@ module.exports = function (app, passport, mongoose) {
                 sessionReload(req, res, next);
                 Users.findOne({'name.loginName': profile}, function(err, profileUser){
                     Artigos.find({status: 'publicado', 'authors.main': profileUser._id}, {description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1}).sort({'_id': -1}).limit(6).exec(function(err, docs){
-                        for (i = 0; i < docs.length; i++) {
-                            docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
-                        }
+
                         if(profileUser.birthDate){
                             var date = profileUser.birthDate;
                             date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
@@ -1542,13 +1267,175 @@ module.exports = function (app, passport, mongoose) {
         var n = req.query.n;
 
         Artigos.find({status: 'publicado', 'authors.main': userId}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).skip(n).exec(function (err, docs) {
-            for (i = 0; i < docs.length; i++) {
-                docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
-            }
+
             res.render('tags', { docs: docs });
         });
     });
 
+    // =====================================
+    // CONSOLE PAGE ========================
+    // =====================================
+    app.get('/consoles/:con', function(req, res, next){
+        var user = req.user;
+        var dev = req.params.con;
+
+        if(!user){
+            Console.findOneAndUpdate({slug: dev}, {$inc: { 'graph.views': 1}}, function(err, dev){
+                Artigos.find({status: 'publicado', 'graph.consoles': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
+                    Games.find({status: 'publicado', 'graph.console': new RegExp(dev.title, 'i')}).sort({'graph.views':-1}).limit(8).exec(function(err, games){
+                        var artigo = [];
+                        
+                        for (i = 0; i < articles.length; i++) {
+                            artigo.push(articles[i]);
+                        }
+                        if(games.length > 0) {
+
+                        } else{
+                            games = undefined;
+                        }
+
+                        if(dev.startDate){
+                            var date = dev.startDate;
+                            date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                        }
+
+                        res.render('console', {user: user, title: "Gueime - " + dev.title, dev: dev, docs: artigo, games: games, date: date, pub: true })
+                    });
+                });
+            });
+        } else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            } else{
+                sessionReload(req, res, next);
+                Console.findOneAndUpdate({slug: dev}, {$inc: { 'graph.views': 1}}, function(err, dev){
+                    Artigos.find({status: 'publicado', 'graph.consoles': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
+                        Games.find({status: 'publicado', 'graph.console': new RegExp(dev.title, 'i')}).sort({'graph.views':-1}).limit(8).exec(function(err, games){
+                            var artigo = [];
+                        
+                            for (i = 0; i < articles.length; i++) {
+                                artigo.push(articles[i]);
+                            }
+                            if(games.length > 0) {
+
+                            } else{
+                                games = undefined;
+                            }
+
+                            if(dev.startDate){
+                                var date = dev.startDate;
+                                date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                            }
+
+                            Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
+                                res.render('console', {user: user, title: "Gueime - " + dev.title, dev: dev, docs: artigo, games: games, date: date, pub: true })
+                            }); 
+                        });
+                    });
+                });
+            }
+        }
+    });
+
+    // EDIT CONSOLE
+    app.get('/consoles/:con/editar', function(req, res, next){
+        var user = req.user;
+        var dev = req.params.con;
+        if(!user){
+            res.redirect('/');
+        } else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            } else{
+                sessionReload(req, res, next);
+                Console.findOne({status: 'publicado', slug: dev}).exec(function(err, docs){
+                    var date;
+                    if(docs.startDate){
+                        date = docs.startDate;
+                        date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                    }
+                    res.render('consoleEdit',{user: user, title: "Gueime - " + docs.title, developer: docs, date: date, edit: true});
+                });
+            }
+        }
+    });
+
+    // NOVO CONSOLE
+    app.get('/criar/novo/console', function(req, res, next){
+        var user = req.user;
+        if(!user){
+            res.redirect('/');
+        } else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            } else if(user.status == 'admin' || user.status == 'editor'){
+                sessionReload(req, res, next);
+                res.render('consoleEdit',{user: user, title: "Gueime - Novo Jogo", edit: false});
+            } else{
+                res.redirect('/parceiros');
+            }
+        }
+    });
+
+    // CRIAÇÃO CONSOLE
+    app.post('/newConsole', function(req, res){
+        var user = req.user,
+            b = req.body;
+
+        var slug = func.string_to_slug(b.nomeConsole);
+
+        var date = b.date.split('/');
+        var lauchDate = new Date(date[2], date[1] - 1, date[0]);
+
+        if(!b.position){
+            b.position = "background: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images/gameBg.jpg) no-repeat center -65px;";
+        }
+
+
+        if(!user){
+            res.redirect('/');
+        }else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            } else if(user.status == 'admin' || user.status == 'editor'){
+                if(b.editing == 'yes'){
+                    Console.update({slug: b.lastSlug}, {$set:{
+                        title: b.nomeConsole,
+                        about: b.sobre,
+                        slug: slug,
+                        startDate: lauchDate,
+                        genCover: b.gameCover,
+                        cover: b.position,
+                        status: 'publicado'
+                    }}, function(err){
+                        res.redirect('/consoles/' + slug);
+                    });
+                } else {
+                    new Console({
+                        title: b.nomeConsole,
+                        about: b.sobre,
+                        slug: slug,
+                        startDate: lauchDate,
+                        genCover: b.gameCover,
+                        cover: b.position,
+                        status: 'publicado'
+                    }).save(function(err, docs){
+                        res.redirect('/consoles/' + docs.slug);
+                    });
+                }           
+            }
+        }
+    });
+
+    // PAGINAÇÃO CONSOLE
+    app.get('/paginationConsole', function(req, res){
+        var pubTitle = req.query.b.toString();
+        var n = req.query.n;
+
+        Artigos.find({status: 'publicado', 'graph.consoles': new RegExp(pubTitle, 'i'), type: {$ne: 'analise'}}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).skip(n).exec(function (err, docs) {
+            res.render('tags', { docs: docs });
+        });
+    });
 
     // =====================================
     // GENERO PAGE =========================
@@ -1564,7 +1451,6 @@ module.exports = function (app, passport, mongoose) {
                         var artigo = [];
                         
                         for (i = 0; i < articles.length; i++) {
-                            articles[i].title = decodeURIComponent(articles[i].title).replace('<p>', '').replace('</p>', '');
                             artigo.push(articles[i]);
                         }
                         if(games.length > 0) {
@@ -1588,7 +1474,6 @@ module.exports = function (app, passport, mongoose) {
                             var artigo = [];
                         
                             for (i = 0; i < articles.length; i++) {
-                                articles[i].title = decodeURIComponent(articles[i].title).replace('<p>', '').replace('</p>', '');
                                 artigo.push(articles[i]);
                             }
                             if(games.length > 0) {
@@ -1689,7 +1574,15 @@ module.exports = function (app, passport, mongoose) {
         }
     });
 
+    // PAGINAÇÃO GENERO
+    app.get('/paginationGenre', function(req, res){
+        var pubTitle = req.query.b.toString();
+        var n = req.query.n;
 
+        Artigos.find({status: 'publicado', 'graph.genres': new RegExp(pubTitle, 'i'), type: {$ne: 'analise'}}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).skip(n).exec(function (err, docs) {
+            res.render('tags', { docs: docs });
+        });
+    });
 
     // =====================================
     // DISTRIBUIDORA PAGE ==================
@@ -1705,7 +1598,6 @@ module.exports = function (app, passport, mongoose) {
                         var artigo = [];
                         
                         for (i = 0; i < articles.length; i++) {
-                            articles[i].title = decodeURIComponent(articles[i].title).replace('<p>', '').replace('</p>', '');
                             artigo.push(articles[i]);
                         }
                         if(games.length > 0) {
@@ -1734,7 +1626,6 @@ module.exports = function (app, passport, mongoose) {
                             var artigo = [];
                         
                             for (i = 0; i < articles.length; i++) {
-                                articles[i].title = decodeURIComponent(articles[i].title).replace('<p>', '').replace('</p>', '');
                                 artigo.push(articles[i]);
                             }
                             if(games.length > 0) {
@@ -1766,9 +1657,6 @@ module.exports = function (app, passport, mongoose) {
         var n = req.query.n;
 
         Artigos.find({status: 'publicado', 'graph.publishers': new RegExp(pubTitle, 'i'), type: {$ne: 'analise'}}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).skip(n).exec(function (err, docs) {
-            for (i = 0; i < docs.length; i++) {
-                docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
-            }
             res.render('tags', { docs: docs });
         });
     });
@@ -1827,7 +1715,6 @@ module.exports = function (app, passport, mongoose) {
                         var artigo = [];
                         
                         for (i = 0; i < articles.length; i++) {
-                            articles[i].title = decodeURIComponent(articles[i].title).replace('<p>', '').replace('</p>', '');
                             artigo.push(articles[i]);
                         }
                         if(games.length > 0) {
@@ -1856,7 +1743,6 @@ module.exports = function (app, passport, mongoose) {
                             var artigo = [];
                         
                             for (i = 0; i < articles.length; i++) {
-                                articles[i].title = decodeURIComponent(articles[i].title).replace('<p>', '').replace('</p>', '');
                                 artigo.push(articles[i]);
                             }
                             if(games.length > 0) {
@@ -1909,9 +1795,6 @@ module.exports = function (app, passport, mongoose) {
         var n = req.query.n;
 
         Artigos.find({status: 'publicado', 'graph.developers': new RegExp(devTitle, 'i'), type: {$ne: 'analise'}}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).skip(n).exec(function (err, docs) {
-            for (i = 0; i < docs.length; i++) {
-                docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
-            }
             res.render('tags', { docs: docs });
         });
     });
@@ -2042,7 +1925,6 @@ module.exports = function (app, passport, mongoose) {
                         var decimal, score;
                         
                         for (i = 0; i < articles.length; i++) {
-                            articles[i].title = decodeURIComponent(articles[i].title).replace('<p>', '').replace('</p>', '');
                             if(articles[i].type == 'analise'){
                                 analise.push(articles[i]);
                                     
@@ -2084,7 +1966,6 @@ module.exports = function (app, passport, mongoose) {
                         var decimal, score;
                         
                         for (i = 0; i < articles.length; i++) {
-                            articles[i].title = decodeURIComponent(articles[i].title).replace('<p>', '').replace('</p>', '');
                             if(articles[i].type == 'analise'){
                                 analise.push(articles[i]);
                                     
@@ -2169,9 +2050,6 @@ module.exports = function (app, passport, mongoose) {
         var n = req.query.n;
 
         Artigos.find({status: 'publicado', 'graph.games': new RegExp(gameTitle, 'i'), type: {$ne: 'analise'}}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).skip(n).exec(function (err, docs) {
-            for (i = 0; i < docs.length; i++) {
-                docs[i].title = decodeURIComponent(docs[i].title).replace('<p>', '').replace('</p>', '')
-            }
             res.render('tags', { docs: docs });
         });
     });
@@ -2971,11 +2849,11 @@ module.exports = function (app, passport, mongoose) {
         var user = req.user;
         var query = req.query.query;
 
-        Artigos.find({'graph.consoles': new RegExp(query, 'i')}, {'graph.consoles': 1, _id: 0}, function(err, consoles){
+        Console.find({title: new RegExp(query, 'i')}, {title: 1, _id: 0}, function(err, consoles){
             var sendArray = [];
 
             for(i=0; i < consoles.length; i++){
-                sendArray.push(consoles[i].graph.consoles);
+                sendArray.push(consoles[i].title);
             }
 
             sendArray = sendArray.toString().toLowerCase().split(',');

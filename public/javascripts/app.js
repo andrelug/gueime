@@ -21,6 +21,7 @@ tagSearch = function (str) {
                 $('.editar').remove();
                 $('#searchBack').slideDown();
                 $('#profileTiles').remove();
+                $('#load').before('<div id="spinning"><img src="/images/spinning.gif" /></div>');
             }
             $('.scriptLoad').remove();
         }
@@ -115,19 +116,18 @@ var ajaxPage = function (url) {
         url: url,
         dataType: 'html',
         beforeSend: function () {
-            $('body').css('overflow-y', 'hidden');
-            $('#darken').css('display', 'block');
-            $('.content-wrap').fadeIn();
-
+            $("html, body").animate({ scrollTop: 0 });
+            $('#nav-sticky').css('display', 'none');
+            
         }
     }).done(function (data) {
-
-        $('.content').html(data);
-        $('#loading').delay(500).waitForImages(function () {
+        $('#myModal').html(data).css('position', 'absolute');
+        $('.outWrap').css('height', 0);
+        $('#loading').waitForImages(function () {
             $('#spinningContent').fadeOut(500);
             $('#loading').animate({ 'opacity': 1 }, function () {
-
-                $('.content').css('background', 'url(/images/pattern.png) repeat #34495e');
+                
+                $('#myModal').css('background', 'url(/images/pattern.png) repeat #34495e');
                 var facebookComments = $(".fb-comments");
                 var facebookLikes = $('.fb-like');
 
@@ -142,13 +142,27 @@ var ajaxPage = function (url) {
                 }
                 FB.XFBML.parse();
             });
-            
+
 
 
 
         });
     });
 }
+
+// CLOSE OVERLAY
+$(document).on('close', '[data-reveal]', function () {
+    $('#myModal').css('position', 'fixed');
+    $('.outWrap').css('height', 'auto');
+    $('#nav-sticky').css('display', 'block');
+    if (window.location.href != 'http://localhost:24279/') {
+        window.history.go(-1);
+    }
+    ga('send', 'pageview', '/');
+    $('#myModal').fadeOut(function () {
+        $(this).html('<div id="spinningContent"><img src="/images/spinning.gif" /></div>').css('background', 'white');
+    });
+});
 
 $('#loadMore').on('click', function () {
     n = $('.item').length;
@@ -167,31 +181,6 @@ $('#loadMore').on('click', function () {
         });
     });
 });
-
-
-// Close overlay
-
-$(document).on('click', '.exit', function () {
-    $('.content-wrap').fadeOut();
-    $('body').css('overflow-y', 'auto');
-    $('#darken').css('display', 'none');
-    window.history.go(-1);
-    ga('send', 'pageview', '/');
-    $('.content').empty().css('background', 'white');
-});
-
-
-/* Query funfionando */
-/*
-$.ajax({
-    url: '/typeahead',
-    type: 'GET',
-    data: { data: query }
-}).done(function (result) {
-    console.log(result);
-    overall = result;
-});
-*/
 
 
 
@@ -304,3 +293,11 @@ $('#infoContato')
                 });
         });
     });
+
+// DELETAR ARTIGO
+$('.deletar').on('click', function () {
+    var result = confirm("Quer realmente deletar?");
+    if(result == true){
+        $('#deletar').submit();
+    }
+});

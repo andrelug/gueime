@@ -46,33 +46,7 @@ $(function () {
             }, 6000);
 
         },
-        autosave: '/novoArtigo',
-        autosaveInterval: 10, // seconds
-        autosaveCallback: function (json) {
-            console.log(json);
-
-        }
-    });
-
-    $('#editContent').redactor({
-        lang: 'pt_br',
-        plugins: ['fontcolor', 'awesome', 'fontsize', 'fontfamily'],
-        placeholder: 'Texto sensacional',
-        minHeight: 300,
-        imageUpload: '/artigoImage',
-        convertImageLinks: true,
-        convertVideoLinks: true,
-        imageUploadCallback: function (image, json) {
-            console.log(image);
-            console.log(json.filelink);
-            window.setTimeout(function () {
-                var oldUrl = json.filelink;
-                var fileName = json.filelink.replace('http://www.gueime.com.br/uploads/', '')
-                var newUrl = 'https://s3-sa-east-1.amazonaws.com/portalgueime/images/' + thisUser + fileName;
-                $('img[src="' + oldUrl + '"]').attr('src', newUrl);
-            }, 6000);
-        },
-        autosave: '/editarArtigo',
+        autosave: '/novoArtigo/' + thisArticle,
         autosaveInterval: 10, // seconds
         autosaveCallback: function (json) {
             console.log(json);
@@ -84,7 +58,7 @@ $(function () {
         lang: 'pt_br',
         toolbar: false,
         minHeight: 97,
-        autosave: '/novoTitulo',
+        autosave: '/novoTitulo/' + thisArticle,
         autosaveInterval: 5, // seconds
         autosaveCallback: function (json) {
             console.log(json);
@@ -95,20 +69,6 @@ $(function () {
         }
     });
 
-    $('#editTitle').redactor({
-        lang: 'pt_br',
-        toolbar: false,
-        minHeight: 97,
-        autosave: '/editarTitulo',
-        autosaveInterval: 5, // seconds
-        autosaveCallback: function (json) {
-            console.log(json);
-            nJson = decodeURIComponent(json.content);
-            docTitle = decodeURIComponent(json.content);
-            $('.teste').html(nJson);
-
-        }
-    });
 });
 
 $('.gueimeWhite').css('display', 'block').css('left', 'auto').css('right', 30);
@@ -118,7 +78,6 @@ $('.deletar').on('click', function () {
     if(result == true){
         $('#deletar').submit();
     }
-    
 });
 
 $(document).ready(function(){
@@ -173,10 +132,13 @@ $(document).ready(function(){
     $bg.bind('dblclick', reset);
 });
 
-
+$('#sendButton').on('click', function () {
+    $('#perguntas').slideDown();
+    $('#sendButton').slideUp();
+});
 
 // Create Steps
-
+var editChecked;
 $("#wizard").steps({
     transitionEffect: 2,
     labels: {
@@ -198,37 +160,30 @@ $("#wizard").steps({
         $('input[name=docTitle]').attr('value', docTitle);
         exitNoSave = false;
 
-        form.submit();
+        editCheck = $('#editCheck').html();
+        editChecked;
+        if (editCheck == 'check') {
+            editChecked = true;
+        } else {
+            editChecked = false;
+        }
+
+
+        $.ajax({
+            url: '/titleCheck/' + thisArticle,
+            typo: "get",
+            data: { title: docTitle, check: editChecked }
+        }).done(function (data) {
+            if (data == 'yes') {
+                form.submit();
+            } else {
+                $('#slugErr').slideDown().delay(2000).slideUp();
+            }
+        });
+
+        
     }
 });
-var editChecked;
-$('#sendButton').on('click', function () {
-
-    var editCheck = $('#editCheck').html();
-    editChecked;
-    if (editCheck == 'check') {
-        editChecked = true;
-    } else {
-        editChecked = false;
-    }
-
-
-    $.ajax({
-        url: '/titleCheck',
-        typo: "get",
-        data: { title: docTitle, check: editChecked }
-    }).done(function (data) {
-        if (data == 'yes') {
-            $('#perguntas').slideDown();
-            $('#sendButton').slideUp();
-        } else {
-            $('#slugErr').slideDown().delay(2000).slideUp();
-        }
-    });
-
-
-
-})
 
 $('#jogoSimNao').find('a').on('click', function () {
     if ($(this).html() === 'sim') {
@@ -315,13 +270,6 @@ $('#semSerie').find('a').on('click', function () {
 window.onbeforeunload = sendView;
 function sendView(){
     ga('send', 'event', 'time', 'exit', '/'+window.location.href.replace('http://www.gueime.com.br/'));
-    if(exitNoSave == true){
-        $.ajax({
-            type: "put",
-            url: "/exitNoSave",
-            data: { slug: window.location.href.replace('http://localhost:24279/', '') }
-        });
-    }
 }
 
 
@@ -341,7 +289,7 @@ $('input[name="jogo"]')
         }
     })
     .autocomplete({
-        minLength: 3,
+        minLength: 2,
         source: function (request, response) {  
             $.getJSON("/autoGame", {
                 query: extractLast( request.term )
@@ -372,7 +320,7 @@ $('input[name="outrosAutores"]')
         }
     })
     .autocomplete({
-        minLength: 3,
+        minLength: 2,
         source: function (request, response) {  
             $.getJSON("/autoAuthor", {
                 query: extractLast( request.term )
@@ -398,7 +346,7 @@ $('input[name="outrosAutores"]')
 $('input[name="continuacaoHistoria"]')
     
     .autocomplete({
-        minLength: 3,
+        minLength: 2,
         source: function (request, response) {  
             $.getJSON("/autoStory", {
                 query: extractLast( request.term )
@@ -414,7 +362,7 @@ $('input[name="categoriaArtigo"]')
         }
     })
     .autocomplete({
-        minLength: 3,
+        minLength: 2,
         source: function (request, response) {  
             $.getJSON("/autoArtCat", {
                 query: extractLast( request.term )
@@ -440,7 +388,7 @@ $('input[name="categoriaArtigo"]')
 $('input[name="serieArtigo"]')
     
     .autocomplete({
-        minLength: 3,
+        minLength: 2,
         source: function (request, response) {  
             $.getJSON("/autoArtSerie", {
                 query: extractLast( request.term )
@@ -451,7 +399,7 @@ $('input[name="serieArtigo"]')
 $('input[name="tipoVideo"]')
     
     .autocomplete({
-        minLength: 3,
+        minLength: 2,
         source: function (request, response) {  
             $.getJSON("/autoTipoVideo", {
                 query: extractLast( request.term )
@@ -468,7 +416,7 @@ $('input[name="consoles"]')
         }
     })
     .autocomplete({
-        minLength: 3,
+        minLength: 2,
         source: function (request, response) {  
             $.getJSON("/autoConsoles", {
                 query: extractLast( request.term )
@@ -499,7 +447,7 @@ $('input[name="generos"]')
         }
     })
     .autocomplete({
-        minLength: 3,
+        minLength: 2,
         source: function (request, response) {  
             $.getJSON("/autoGeneros", {
                 query: extractLast( request.term )
@@ -530,7 +478,7 @@ $('input[name="desenvolvedores"]')
         }
     })
     .autocomplete({
-        minLength: 3,
+        minLength: 2,
         source: function (request, response) {  
             $.getJSON("/autoDes", {
                 query: extractLast( request.term )
@@ -561,7 +509,7 @@ $('input[name="publicadoras"]')
         }
     })
     .autocomplete({
-        minLength: 3,
+        minLength: 2,
         source: function (request, response) {  
             $.getJSON("/autoPub", {
                 query: extractLast( request.term )
@@ -583,5 +531,3 @@ $('input[name="publicadoras"]')
             return false;
         }
     });
-
-$('.ui-autocomplete').addClass('f-dropdown');
