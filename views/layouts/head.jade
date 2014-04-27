@@ -18,12 +18,13 @@ script.
     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-    ga('create', 'UA-36793982-5', 'gueime.com.br');
+    ga('create', 'UA-36793982-1', 'gueime.com.br');
     ga('send', 'pageview');
+
 
 // Azure analytics
 script.
     window.appInsights={queue:[],applicationInsightsId:null,accountId:null,appUserId:null,configUrl:null,start:function(n){function u(n,t){n[t]=function(){var i=arguments;n.queue.push(function(){n[t].apply(n,i)})}}function f(n){var t=document.createElement("script");return t.type="text/javascript",t.src=n,t.async=!0,t}function r(){i.appendChild(f("//az416426.vo.msecnd.net/scripts/ai.0.js"))}var i,t;this.applicationInsightsId=n;u(this,"logEvent");u(this,"logPageView");i=document.getElementsByTagName("script")[0].parentNode;this.configUrl===null?r():(t=f(this.configUrl),t.onload=r,t.onerror=r,i.appendChild(t));this.start=function(){}}};
 
-    appInsights.start("4336c345-20f9-4958-bc87-f19b18ab9c65");
+    appInsights.start("e4cc912c-51f6-43b4-baf1-2ff5252fdbc9");
     appInsights.logPageView();
