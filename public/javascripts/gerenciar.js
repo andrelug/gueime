@@ -35,7 +35,7 @@ $('.deletarGen').on('click', function (event) {
                 esse.parents('tr').fadeOut();
             }
         });
-    } else {
+    } else if( action == 'des'){
         $.ajax({
             url: href,
             type: 'PUT',
@@ -67,7 +67,7 @@ $('.deletarUser').on('click', function (event) {
                 esse.parents('tr').fadeOut();
             }
         });
-    } else {
+    } else if( action == 'des'){
         $.ajax({
             url: href,
             type: 'PUT',

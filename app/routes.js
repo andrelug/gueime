@@ -1136,6 +1136,7 @@ module.exports = function (app, passport, mongoose) {
     app.post('/profileImage', function(req, res){
         var user = req.user;
         var position = req.body.position;
+        var b = req.body;
 
         if(!user){
             res.redirect('/');
@@ -1143,7 +1144,7 @@ module.exports = function (app, passport, mongoose) {
             if(user.deleted == true){
                 res.redirect('/users/restore');
             } else {
-                Users.update({_id: user._id}, {$set: {cover: position}}, function(err){
+                Users.update({_id: user._id}, {$set: {cover: position, photo: b.gameCover,}}, function(err){
                     res.redirect('/profile');
                 });
             }
@@ -2317,7 +2318,7 @@ module.exports = function (app, passport, mongoose) {
                                 var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
                                 docs[i].date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                             }
-                            res.render('gerenciar', {title: "Gueime - Gerenciar Desenvolvedores", user: user, pubs: docs});
+                            res.render('gerenciar', {title: "Gueime - Gerenciar Distribuidoras", user: user, pubs: docs});
                         });
                         break
 
@@ -2328,13 +2329,24 @@ module.exports = function (app, passport, mongoose) {
                                 var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
                                 docs[i].date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                             }
-                            res.render('gerenciar', {title: "Gueime - Gerenciar Desenvolvedores", user: user, gens: docs});
+                            res.render('gerenciar', {title: "Gueime - Gerenciar Gêneros", user: user, gens: docs});
                         });
                         break
 
                     case 'usuarios':
                         Users.find({}).sort({_id: -1}).exec(function(err, docs){
-                            res.render('gerenciar', {title: "Gueime - Gerenciar Desenvolvedores", user: user, profile: docs});
+                            res.render('gerenciar', {title: "Gueime - Gerenciar Usuários", user: user, profile: docs});
+                        });
+                        break
+
+                    case 'consoles':
+                        Console.find({}).sort({_id: -1}).exec(function(err, docs){
+                            for(i=0;i < docs.length;i++){
+                                var timeStamp = docs[i]._id.toString().substring(0,8);
+                                var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                                docs[i].date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                            }
+                            res.render('gerenciar', {title: "Gueime - Gerenciar Consoles", user: user, consoles: docs});
                         });
                         break
 
@@ -2536,6 +2548,37 @@ module.exports = function (app, passport, mongoose) {
         }
     });
 
+    // CONSOLES
+    app.put('/consoles/:con/deletar', function(req, res){
+        var user = req.user;
+        var con = req.params.con;
+        var action = req.body.action;
+        
+        if(!user){
+            res.redirect('/');
+        }else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            }else if(user.status == 'admin'){
+                if(action == 'del'){
+                    Console.remove({slug: con}, function(err){
+                        if(err)
+                            throw err
+                        res.send('OK');
+                    });
+                } else if(action == 'des'){
+                    Console.update({slug: con}, {$set: {status: 'deletado'}}, function(err){
+                        if(err)
+                            throw err
+                        res.send('OK');
+                    });
+                }
+            } else {
+                res.redirect('/');
+            }
+        }
+    });
+
     // CHANGE USER STATUS
     app.put('/changeUserStatus', function(req, res){
         var user = req.user;
@@ -2721,6 +2764,28 @@ module.exports = function (app, passport, mongoose) {
                 res.redirect('/users/restore');
             }else if(user.status == 'admin'){
                 Users.update({'name.loginName': usuario},{$set: {deleted: false}}, function(err){
+                    if(err)
+                        throw err
+                    res.send('OK');
+                });
+            } else {
+                res.redirect('/');
+            }
+        }
+    });
+
+    // CONSOLES
+    app.put('/consoles/:con/restore', function(req, res){
+        var user = req.user;
+        var con = req.params.con;
+        
+        if(!user){
+            res.redirect('/');
+        }else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            }else if(user.status == 'admin'){
+                Console.update({slug: con},{$set: {status: 'publicado'}}, function(err){
                     if(err)
                         throw err
                     res.send('OK');

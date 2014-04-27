@@ -52,7 +52,7 @@ block content
 
                         a.create(href="/gerenciar/usuarios", title="Gerenciar Usuários") <i class="fa fa-group"></i> <span>Usuários</span>
 
-                        a.create(href="/gerenciar/trivias", title="Gerenciar Trivias") <i class="fa fa-question"></i> <span>Trivias</span>
+                        a.create(href="/gerenciar/consoles", title="Gerenciar Trivias") <i class="fa fa-power-off"></i> <span>Consoles</span>
 
 
                 div.medium-10.medium-centered.columns
@@ -113,6 +113,14 @@ block content
                                     th Acesso
                                     th Mudar Acesso
                                     th Deletar
+
+                                else if(consoles)
+                                    th Console
+                                    th Views
+                                    th Status
+                                    th Data
+                                    th Editar
+                                    th Deletar 
                         tbody
                             if(games)
                                 for game in games
@@ -216,6 +224,19 @@ block content
                                                 option(value="editor") editor
                                                 option(value="admin") admin
                                         td: a.deletarUser(href="/usuarios/#{prof.name.loginName}/deletar") Deletar
+
+                            else if(consoles)
+                                for console in consoles
+                                    tr
+                                        td #{console.title}
+                                        td #{console.graph.views}
+                                        if(console.status == 'deletado')
+                                            td.status #{console.status} (<a href="/consoles/#{console.slug}/restore" class="restore">Restore</a>)
+                                        else
+                                            td.status #{console.status}
+                                        td #{console.date}
+                                        td: a(href="/consoles/#{console.slug}/editar") Editar
+                                        td: a.deletarGen(href="/consoles/#{console.slug}/deletar") Deletar
                                         
                     
     div.row#load(style="display: none;")

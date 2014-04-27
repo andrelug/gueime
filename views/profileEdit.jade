@@ -36,54 +36,17 @@ block content
             article#mainText
                 div.row#profile
                     div.large-3.medium-4.columns#imageAndOpt
-                        div.row.show-for-small
-                            div.small-12.columns
-                                h1#userTitle(style="color: white") #{profile.name.first} #{profile.name.last}
-                        img#userProfileImage(src="#{profile.photo}")
-                        div#profileStats.row
-                            div.small-2.columns
-                                h3 <i class="fa fa-user" title="Status"></i>
-                            div.small-10.columns
-                                if(profile.status == 'admin')
-                                    h3 Admin
-                                else if(profile.status == 'parceiro')
-                                    h3 Editor
-                                else
-                                    h3 Usuário
-                            div.small-2.columns
-                                h3 <i class="fa fa-gamepad" title="Level"></i>
-                            div.small-10.columns
-                                h3 Lv. #{profile.gamification.level}
-                            div.small-2.columns
-                                img#gueimePoints(src="/images/gueime-white-small.png", alt="Gueime Points", title="Gueime Points")
-                            div.small-10.columns
-                                h3 #{profile.gamification.points}
-                        if(public == false)
-                            div.row#profileMenu
-                                div.small-12.columns
-                                    a Informações
-                                div.small-12.columns
-                                    a Social
-                                div.small-12.columns
-                                    a Conta
-                                div.small-12.columns
-                                    a Conquistas
-                                div.small-12.columns
-                                    a Deletar
-
-                        else
-                            div.row#profileMenu
-                                div.small-12.columns
-                                    a Informações
-                                div.small-12.columns
-                                    a Social
-                                div.small-12.columns
-                                    a Conquistas
+                        img#userGameImage(src="#{profile.photo}")
+                        div.editingProf
+                            form#dropzoneGameCover(action="/newGameCover", class="dropzone", enctype="multipart/form-data", style="border:none;")
+                                input(type="file", name="file", style="display: none;")
 
                     div.large-8.large-offset-1.medium-7.medium-offset-1.columns
                         form(action="/profileImage", method="POST")
+                            input(type="hidden", name="gameCover")
                             input(type="hidden", name="position")
                             input.button#profileImageSubmit(type="submit", value="Enviar", style="width: 100%")
+
                         h1#userTitle.show-for-medium-up #{profile.name.first} #{profile.name.last}
 
                         div.row#userStats.show-for-medium-up

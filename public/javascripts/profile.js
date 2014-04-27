@@ -171,6 +171,7 @@ $('#mainImageChange').on('mouseleave', function () {
 });
 $('#profileImageSubmit').on('click', function () {
     var image = $('.mainImage').attr('style');
+    $('input[name=gameCover]').attr('value', gameCover);
     $('input[name=position]').attr('value', image);
 });
 

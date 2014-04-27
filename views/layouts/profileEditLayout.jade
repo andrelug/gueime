@@ -109,6 +109,25 @@ html.no-js(lang="pt_BR")
                 }
             };
 
+            var gameCover
+            Dropzone.options.dropzoneGameCover = {
+                paramName: "file", // The name that will be used to transfer the file
+                maxFilesize: 1, // MB,
+                addRemoveLinks: true,
+                previewsContainer: null,
+                init: function () {
+                    this.on("complete", function (file) {
+                        console.log(file);
+                        console.log(file.name);
+                        if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+                            gameCover = 'https://s3-sa-east-1.amazonaws.com/portalgueime/gameCover/' + thisUser + file.name;
+                            $('#userGameImage').attr('src', '/uploads/' + thisUser + file.name);
+                            window.setTimeout(function () {$('#userGameImage').attr('src', 'https://s3-sa-east-1.amazonaws.com/portalgueime/gameCover/' + thisUser + file.name);}, 6000);
+                        }
+                    });
+                }
+            };
+
             $(document).ready(function(){
                 var $bg = $('.mainImage'),
                     origin = {x: 0, y: 0},

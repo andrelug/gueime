@@ -25,7 +25,7 @@ block content
         if(public == false)
             section.mainImage#mainImageChange(style="#{profile.cover}")
                 div.wrapImage
-                    a.button#editImageButton(href="/profile/editar") Trocar Imagem
+                    a.button#editImageButton(href="/profile/editar") Trocar Imagens
                     article.bloco
         else
             section.mainImage(style="#{profile.cover}")
@@ -146,6 +146,8 @@ block content
                                         a(href="/gerenciar/generos") Gêneros
                                     li
                                         a(href="/gerenciar/usuarios") Usuários
+                                    li
+                                        a(href="/gerenciar/consoles") Usuários
 
                                 a.create(href="#", data-dropdown="drop4") <i class="fa fa-question"></i> <span>Trivia</span>
                                 ul#drop4.f-dropdown(data-dropdown-content)

@@ -862,6 +862,10 @@ rgba(0,0,0,0.3)
     margin-top: 0 !important;
     padding-top: 0 !important;
   }
+  #textTitle,
+  #userTitle {
+    font-size: 1.9em;
+  }
 }
 @media only screen and (max-width: 64.063em) {
   #contentEditing a span,
