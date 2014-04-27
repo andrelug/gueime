@@ -3,6 +3,18 @@ doctype html
 html.no-js(lang="pt_BR")
     head
         include head
+        meta(name="description", content="#{game.about}")
+        meta(property="og:title", content="#{game.title}")
+        meta(property="og:type", content="game")
+        meta(property="og:image", content="http://www.gueime.com.br#{game.gameCover}")
+        meta(property="og:url", content="http://www.gueime.com.br/jogos/#{game.slug}")
+        meta(property="og:description", content="#{game.about}")
+        meta(name="twitter:card", content="summary")
+        meta(name="twitter:url", content="http://www.gueime.com.br/jogos/#{game.slug}")
+        meta(name="twitter:title", content="#{game.title}")
+        meta(name="twitter:description", content="#{game.about}")
+        meta(name="twitter:image", content="http://www.gueime.com.br#{game.gameCover}")
+
 
     body(style="overflow-y: auto; background: url('../images/pattern.png') repeat #34495e")
         div#fb-root
