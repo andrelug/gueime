@@ -303,3 +303,39 @@ $(function(){var c=$("iframe[src^='//www.youtube.com']"),h=$("#mainText");c.each
 window.onbeforeunload=sendView;function sendView(){ga("send","event","time","exit","/"+window.location.href.replace("http://www.gueime.com.br/",""))}var filts="bla";
 $(".filterMenu").find("a").on("click",function(){var c=$(this).attr("class"),h=","+$(this).attr("data-filter");"create toggledOn"!=c?($(this).addClass("toggledOn"),"bla, *"==filts&&(filts=filts.replace(", *","")),filts+=h,console.log(filts)):($(this).removeClass("toggledOn"),filts=filts.replace(h,""),console.log(filts),"bla"==filts&&(filts="bla, *"));container.isotope({filter:filts})});$("#enviarContato").on("click",function(){$("#infoContato").submit()});
 $("#infoContato").on("invalid",function(){}).on("valid",function(){$.ajax({type:"POST",url:"/contatoSend",data:$("#infoContato").serialize(),beforeSend:function(){$("#enviarContato").fadeOut(300,function(){$(this).text("Enviando").fadeIn()})}}).done(function(c){$("#enviarContato").fadeOut(300,function(){$(this).text("Enviado").fadeIn()})})});$(".deletar").on("click",function(){!0==confirm("Quer realmente deletar?")&&$("#deletar").submit()});$(document).foundation();
+
+// ANALYTICS
+//filters
+$('a[data-filter!=""]').on('click', function () {
+    var action = $(this).attr('data-filter');
+    if(action == undefined){
+        ga('send', 'event', 'button', 'filter', 'openFilter');
+    } else{
+        ga('send', 'event', 'button', 'filter', action);
+    } 
+});
+
+// Login/Registrer
+$('.facebookLogin').on('click', function(){
+    ga('send', 'event', 'button', 'loginFacebook', '/'+window.location.href.replace('http://www.gueime.com.br/', ''));
+});
+$('.twitterLogin').on('click', function(){
+    ga('send', 'event', 'button', 'loginTwitter', '/'+window.location.href.replace('http://www.gueime.com.br/', ''));
+});
+$('.googleLogin').on('click', function(){
+    ga('send', 'event', 'button', 'loginGoogle', '/'+window.location.href.replace('http://www.gueime.com.br/', ''));
+});
+//LoadMore
+$('#loadMore').on('click', function(){
+    ga('send', 'event', 'button', 'click', 'loadMore');
+});
+
+$('#profileMenu').find('a').on('click', function(){
+    var item = $(this).text();
+    ga('send', 'event', 'button', 'click','profile/'+ item);
+});
+
+$('#gameMenu').find('a').on('click', function(){
+    var item = $(this).text();
+    ga('send', 'event', 'button', 'click', 'etc/' + item);
+});

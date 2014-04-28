@@ -22,7 +22,15 @@ div#nav-sticky
                 a(href="/"): img(src="/images/gueime-white.png", alt="white logo")
             div.large-4.medium-4.small-8.columns
                 if (!user)
-                    a.facebook(href="/auth/facebook") <i class="fa fa-facebook"></i> Entrar com Facebook
+                    a.facebook(href="#", data-dropdown="dropLogin") <i class="fa fa-sign-in"></i> Log In / Registrar
+                    ul#dropLogin.entrarLogin.f-dropdown(data-dropdown-content)
+                        li
+                            a.facebookLogin(href="/auth/facebook") <i class="fa fa-facebook"></i> Facebook
+                        li
+                            a.googleLogin(href="/auth/google") <i class="fa fa-google-plus"></i> Google+
+                        li
+                            a.twitterLogin(href="/auth/twitter") <i class="fa fa-twitter"></i> Twitter
+
                 else if(user.status == 'admin' || user.status == 'parceiro')
                     a(href="/profile").user <i class="fa fa-dashboard"></i> #{user.name.first}
                     a.create(href="#", data-dropdown="drop1") <i class="fa fa-pencil-square-o"></i> Criar

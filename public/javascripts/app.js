@@ -253,12 +253,10 @@ $('.filterMenu').find('a').on('click', function () {
             filts = filts.replace(', *', '');
         }
         filts += filt;
-        console.log(filts)
         container.isotope({ filter: filts });
     } else {
         $(this).removeClass('toggledOn');
         filts = filts.replace(filt, '')
-        console.log(filts)
         if (filts == 'bla') {
             filts = 'bla, *'
         }
@@ -300,4 +298,40 @@ $('.deletar').on('click', function () {
     if(result == true){
         $('#deletar').submit();
     }
+});
+
+// ANALYTICS
+//filters
+$('a[data-filter!=""]').on('click', function () {
+    var action = $(this).attr('data-filter');
+    if(action == undefined){
+        ga('send', 'event', 'button', 'filter', 'openFilter');
+    } else{
+        ga('send', 'event', 'button', 'filter', action);
+    } 
+});
+
+// Login/Registrer
+$('.facebookLogin').on('click', function(){
+    ga('send', 'event', 'button', 'loginFacebook', '/'+window.location.href.replace('http://www.gueime.com.br/', ''));
+});
+$('.twitterLogin').on('click', function(){
+    ga('send', 'event', 'button', 'loginTwitter', '/'+window.location.href.replace('http://www.gueime.com.br/', ''));
+});
+$('.googleLogin').on('click', function(){
+    ga('send', 'event', 'button', 'loginGoogle', '/'+window.location.href.replace('http://www.gueime.com.br/', ''));
+});
+//LoadMore
+$('#loadMore').on('click', function(){
+    ga('send', 'event', 'button', 'click', 'loadMore');
+});
+
+$('#profileMenu').find('a').on('click', function(){
+    var item = $(this).text();
+    ga('send', 'event', 'button', 'click','profile/'+ item);
+});
+
+$('#gameMenu').find('a').on('click', function(){
+    var item = $(this).text();
+    ga('send', 'event', 'button', 'click', 'etc/' + item);
 });
