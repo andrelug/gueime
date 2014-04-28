@@ -251,12 +251,21 @@ module.exports = function (app, passport, mongoose) {
                 if(docs.status == 'publicado'){
                     var title = docs.title,
                         body = decodeURIComponent(docs.text);
+
+                        var timeStamp = docs._id.toString().substring(0,8);
+                        var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                        docs.date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+
                     Users.find({ _id: docs.authors.main }, function (err, author) {
                         if(!user){
-                            res.render('artigoAjax', { tipo: 'noticia', article: docs, title: title, body: body, author: author[0] });
+                            Artigos.find({ tags: { $all: docs.tags}, status: 'publicado', _id: {$ne: docs._id} }, {_id: -1, title: 1, 'graph.views': 1, 'cover.position': 1,slug: 1, type: 1}).sort({'graph.views': -1}).limit(4).exec(function(err, related){
+                                res.render('artigoAjax', { tipo: 'noticia', article: docs, title: title, body: body, author: author[0], date: date, related: related });
+                            });
                         }else {
                             Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
-                                res.render('artigoAjax', { tipo: 'noticia', article: docs, title: title, body: body, author: author[0], user: user });
+                                Artigos.find({ tags: { $all: docs.tags}, status: 'publicado', _id: {$ne: docs._id} }, {_id: -1, title: 1, 'graph.views': 1, 'cover.position': 1,slug: 1, type: 1}).sort({'graph.views': -1}).limit(4).exec(function(err, related){
+                                    res.render('artigoAjax', { tipo: 'noticia', article: docs, title: title, body: body, author: author[0], user: user, date: date, related: related });
+                                });
                             });
                         }
                     });
@@ -273,8 +282,14 @@ module.exports = function (app, passport, mongoose) {
                     if(docs.status == 'publicado'){
                         var title = docs.title,
                             body = decodeURIComponent(docs.text);
+                        var timeStamp = docs._id.toString().substring(0,8);
+                        var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                        docs.date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+
                         Users.find({ _id: docs.authors.main }, function (err, author) {
-                            res.render('artigo', { tipo: 'noticia', article: docs, title: title, body: body, author: author[0] });
+                            Artigos.find({ tags: { $all: docs.tags}, status: 'publicado', _id: {$ne: docs._id} }, {_id: -1, title: 1, 'graph.views': 1, 'cover.position': 1,slug: 1, type: 1}).sort({'graph.views': -1}).limit(4).exec(function(err, related){
+                                res.render('artigo', { tipo: 'noticia', article: docs, title: title, body: body, author: author[0], date:date, related: related });
+                            });
                         });
                     } else{
                         res.redirect('/?redirect=true');
@@ -289,9 +304,16 @@ module.exports = function (app, passport, mongoose) {
                         if(docs.status == 'publicado'){
                             var title = docs.title,
                                 body = decodeURIComponent(docs.text);
+
+                            var timeStamp = docs._id.toString().substring(0,8);
+                            var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                            docs.date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+
                             Users.find({ _id: docs.authors.main }, function (err, author) {
                                 Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
-                                    res.render('artigo', { tipo: 'noticia', article: docs, title: title, body: body, user: user, author: author[0] });
+                                    Artigos.find({ tags: { $all: docs.tags}, status: 'publicado', _id: {$ne: docs._id} }, {_id: -1, title: 1, 'graph.views': 1, 'cover.position': 1,slug: 1, type: 1}).sort({'graph.views': -1}).limit(4).exec(function(err, related){
+                                        res.render('artigo', { tipo: 'noticia', article: docs, title: title, body: body, user: user, author: author[0], date: date, related: related });
+                                    });
                                 });
                             });
                         } else {
@@ -314,13 +336,20 @@ module.exports = function (app, passport, mongoose) {
                 if(docs.status == 'publicado'){
                     var title = docs.title,
                         body = decodeURIComponent(docs.text);
+                    var timeStamp = docs._id.toString().substring(0,8);
+                    var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                    docs.date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
 
                     Users.find({ _id: docs.authors.main }, function (err, author) {
                         if(!user){
-                            res.render('artigoAjax', { tipo: 'artigo', article: docs, title: title, body: body, author: author[0] });
+                            Artigos.find({ tags: { $all: docs.tags}, status: 'publicado', _id: {$ne: docs._id} }, {_id: -1, title: 1, 'graph.views': 1, 'cover.position': 1,slug: 1, type: 1}).sort({'graph.views': -1}).limit(4).exec(function(err, related){
+                                res.render('artigoAjax', { tipo: 'artigo', article: docs, title: title, body: body, author: author[0], date: date, related: related });
+                            });
                         } else {
                             Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
-                                res.render('artigoAjax', { tipo: 'artigo', article: docs, title: title, body: body, author: author[0], user: user });
+                                Artigos.find({ tags: { $all: docs.tags}, status: 'publicado', _id: {$ne: docs._id} }, {_id: -1, title: 1, 'graph.views': 1, 'cover.position': 1,slug: 1, type: 1}).sort({'graph.views': -1}).limit(4).exec(function(err, related){
+                                    res.render('artigoAjax', { tipo: 'artigo', article: docs, title: title, body: body, author: author[0], user: user, date: date, related: related });
+                                });
                             });
                         }
                     });
@@ -335,8 +364,15 @@ module.exports = function (app, passport, mongoose) {
                     if(docs.status == 'publicado'){
                         var title = docs.title,
                             body = decodeURIComponent(docs.text);
+
+                        var timeStamp = docs._id.toString().substring(0,8);
+                        var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                        docs.date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+
                         Users.find({ _id: docs.authors.main }, function (err, author) {
-                            res.render('artigo', { tipo: 'artigo', article: docs, title: title, body: body, author: author[0] });
+                            Artigos.find({ tags: { $all: docs.tags}, status: 'publicado', _id: {$ne: docs._id} }, {_id: -1, title: 1, 'graph.views': 1, 'cover.position': 1,slug: 1, type: 1}).sort({'graph.views': -1}).limit(4).exec(function(err, related){
+                                res.render('artigo', { tipo: 'artigo', article: docs, title: title, body: body, author: author[0], date: date, related: related });
+                            });
                         });
                     } else {
                         res.redirect('/?redirect=true');
@@ -351,10 +387,15 @@ module.exports = function (app, passport, mongoose) {
                         if(docs.status == 'publicado'){
                             var title = docs.title,
                                 body = decodeURIComponent(docs.text);
+                            var timeStamp = docs._id.toString().substring(0,8);
+                            var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                            docs.date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
 
                             Users.find({ _id: docs.authors.main }, function (err, author) {
                                 Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
-                                    res.render('artigo', { tipo: 'artigo', article: docs, title: title, body: body, user: user, author: author[0] });
+                                    Artigos.find({ tags: { $all: docs.tags}, status: 'publicado', _id: {$ne: docs._id} }, {_id: -1, title: 1, 'graph.views': 1, 'cover.position': 1,slug: 1, type: 1}).sort({'graph.views': -1}).limit(4).exec(function(err, related){
+                                        res.render('artigo', { tipo: 'artigo', article: docs, title: title, body: body, user: user, author: author[0], date: date, related: related });
+                                    });
                                 });
                             });
                         } else {
@@ -396,7 +437,9 @@ module.exports = function (app, passport, mongoose) {
                                     var date = game.release;
                                     date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                                 }
-                                res.render('artigoAjax', { tipo: 'analise', article: docs, title: title, body: body, author: author[0], decimal: decimal, score: score, bad: bad, good: good });
+                                Artigos.find({ tags: { $all: docs.tags}, status: 'publicado', _id: {$ne: docs._id} }, {_id: -1, title: 1, 'graph.views': 1, 'cover.position': 1,slug: 1, type: 1}).sort({'graph.views': -1}).limit(4).exec(function(err, related){
+                                    res.render('artigoAjax', { tipo: 'analise', article: docs, title: title, body: body, author: author[0], decimal: decimal, score: score, bad: bad, good: good, related: related });
+                                });
                             });
                         } else {
                             Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
@@ -405,7 +448,9 @@ module.exports = function (app, passport, mongoose) {
                                         var date = game.release;
                                         date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                                     }
-                                    res.render('artigoAjax', { tipo: 'analise', article: docs, title: title, body: body, author: author[0], user: user, decimal: decimal, score: score, bad: bad, good: good, game: game, date: date });
+                                    Artigos.find({ tags: { $all: docs.tags}, status: 'publicado', _id: {$ne: docs._id} }, {_id: -1, title: 1, 'graph.views': 1, 'cover.position': 1,slug: 1, type: 1}).sort({'graph.views': -1}).limit(4).exec(function(err, related){
+                                        res.render('artigoAjax', { tipo: 'analise', article: docs, title: title, body: body, author: author[0], user: user, decimal: decimal, score: score, bad: bad, good: good, game: game, date: date, related:related });
+                                    });
                                 });
                             });
                         }
@@ -438,7 +483,9 @@ module.exports = function (app, passport, mongoose) {
                                     var date = game.release;
                                     date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                                 }
-                                res.render('artigo', { tipo: 'analise', article: docs, title: title, body: body, author: author[0], decimal: decimal, score: score, bad: bad, good: good, game: game, date: date });
+                                Artigos.find({ tags: { $all: docs.tags}, status: 'publicado', _id: {$ne: docs._id} }, {_id: -1, title: 1, 'graph.views': 1, 'cover.position': 1,slug: 1, type: 1}).sort({'graph.views': -1}).limit(4).exec(function(err, related){
+                                    res.render('artigo', { tipo: 'analise', article: docs, title: title, body: body, author: author[0], decimal: decimal, score: score, bad: bad, good: good, game: game, date: date, related: related });
+                                });
                             });
                         });
                     } else {
@@ -473,7 +520,9 @@ module.exports = function (app, passport, mongoose) {
                                             var date = game.release;
                                             date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                                         }
-                                        res.render('artigo', { tipo: 'analise', article: docs, title: title, body: body, user: user, author: author[0], decimal: decimal, score: score, bad: bad, good: good, game: game, date:date });
+                                        Artigos.find({ tags: { $all: docs.tags}, status: 'publicado', _id: {$ne: docs._id} }, {_id: -1, title: 1, 'graph.views': 1, 'cover.position': 1,slug: 1, type: 1}).sort({'graph.views': -1}).limit(4).exec(function(err, related){
+                                            res.render('artigo', { tipo: 'analise', article: docs, title: title, body: body, user: user, author: author[0], decimal: decimal, score: score, bad: bad, good: good, game: game, date:date, related: related });
+                                        });
                                     });
                                 });
                             });
@@ -496,12 +545,20 @@ module.exports = function (app, passport, mongoose) {
                 if(docs.status == 'publicado'){
                     var title = docs.title,
                         body = decodeURIComponent(docs.text);
+                    var timeStamp = docs._id.toString().substring(0,8);
+                    var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                    docs.date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+
                     Users.find({ _id: docs.authors.main }, function (err, author) {
                         if(!user){
-                            res.render('artigoAjax', { tipo: 'video', article: docs, title: title, body: body, author: author[0] });
+                            Artigos.find({ tags: { $all: docs.tags}, status: 'publicado', _id: {$ne: docs._id} }, {_id: -1, title: 1, 'graph.views': 1, 'cover.position': 1,slug: 1, type: 1}).sort({'graph.views': -1}).limit(4).exec(function(err, related){
+                                res.render('artigoAjax', { tipo: 'video', article: docs, title: title, body: body, author: author[0], date: date, related: related });
+                            });
                         } else {
                             Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
-                                res.render('artigoAjax', { tipo: 'video', article: docs, title: title, body: body, author: author[0], user: user });
+                                Artigos.find({ tags: { $all: docs.tags}, status: 'publicado', _id: {$ne: docs._id} }, {_id: -1, title: 1, 'graph.views': 1, 'cover.position': 1,slug: 1, type: 1}).sort({'graph.views': -1}).limit(4).exec(function(err, related){
+                                    res.render('artigoAjax', { tipo: 'video', article: docs, title: title, body: body, author: author[0], user: user, date:date, related: related });
+                                });
                             });
                         }
                     });
@@ -516,8 +573,15 @@ module.exports = function (app, passport, mongoose) {
                     if(docs.status == 'publicado'){
                         var title = docs.title,
                             body = decodeURIComponent(docs.text);
+
+                        var timeStamp = docs._id.toString().substring(0,8);
+                        var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                        docs.date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+
                         Users.find({ _id: docs.authors.main }, function (err, author) {
-                            res.render('artigo', { tipo: 'video', article: docs, title: title, body: body, author: author[0] });
+                            Artigos.find({ tags: { $all: docs.tags}, status: 'publicado', _id: {$ne: docs._id} }, {_id: -1, title: 1, 'graph.views': 1, 'cover.position': 1,slug: 1, type: 1}).sort({'graph.views': -1}).limit(4).exec(function(err, related){
+                                res.render('artigo', { tipo: 'video', article: docs, title: title, body: body, author: author[0], date:date, related: related });
+                            });
                         });
                     } else {
                         res.redirect('/?redirect=true');
@@ -532,9 +596,16 @@ module.exports = function (app, passport, mongoose) {
                         if(docs.status == 'publicado'){
                             var title = docs.title,
                                 body = decodeURIComponent(docs.text);
+                            var timeStamp = docs._id.toString().substring(0,8);
+                            var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                            docs.date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+
                             Users.find({ _id: docs.authors.main }, function (err, author) {
                                 Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}}, function(err){
-                                    res.render('artigo', { tipo: 'video', article: docs, title: title, body: body, user: user, author: author[0] });
+                                    Artigos.find({ tags: { $all: docs.tags}, status: 'publicado', _id: {$ne: docs._id} }, {_id: -1, title: 1, 'graph.views': 1, 'cover.position': 1,slug: 1, type: 1}).sort({'graph.views': -1}).limit(4).exec(function(err, related){
+                                        res.render('artigo', { tipo: 'video', article: docs, title: title, body: body, user: user, author: author[0], date: date, related: related });
+                                    });
+                                    
                                 });
                             });
                         } else {
@@ -547,7 +618,7 @@ module.exports = function (app, passport, mongoose) {
     });
 
 
-    // PÁGINA DE CRIAÇÃO DE NOVOS ARTIGOS
+    // PÁGINA DE CRIAÇÃO DE NOVOS TUDO
     app.get('/criar/:tipo', function (req, res, next) {
         var user = req.user;
         var tipo = req.params.tipo;
@@ -826,12 +897,19 @@ module.exports = function (app, passport, mongoose) {
         if (user.status == 'admin' || user.status == 'parceiro' || user.status == 'editor') {
             // Não consegui ainda pensar num jeito simples de colocar $push apenas nas arrays e $set quando for único...no momento usarei esse código abaixo na hora de pegar as infos e jogar na página (transformando em arrays)
             var games = b.jogo,
+                sendGames,
                 tags = b.tags,
+                sendTags,
                 consoles = b.consoles,
+                sendConsoles,
                 publicadoras = b.publicadoras,
+                sendPublicadoras,
                 desenvolvedores = b.desenvolvedores,
+                sendDesenvolvedores,
                 generos = b.generos,
+                sendGeneros,
                 categoriaArtigo = b.categoriaArtigo,
+                sendCategoriaArtigo,
                 analiseBom = b.analiseBom,
                 analiseRuim = b.analiseRuim,
                 slug = func.string_to_slug(decodeURIComponent(b.docTitle.replace('<p>', '').replace('</p>', '')));
@@ -840,25 +918,25 @@ module.exports = function (app, passport, mongoose) {
 
             var facet = [];
 
-            if (games != undefined) { games = func.string_to_slug(b.jogo); if (games.indexOf('-') > -1) { games = games.split(/[\s,-]+/); facet = facet.concat(games); } else { facet.push(games.split(' ')) } }
+            if (games != undefined) { games = func.string_to_slug(b.jogo); if (games.indexOf('-') > -1) { games = games.split(/[\s,-]+/); sendGames = b.jogo.toString().replace(/,\s*$/, "").split(','); facet = facet.concat(games); } else { facet.push(games.split(' ')); sendGames = b.jogo } }
 
-            if (tags != undefined) { tags = func.string_to_slug(b.tags); if (tags.indexOf('-') > -1) { tags = tags.split(/[\s,-]+/); facet = facet.concat(tags); } else { facet.push(tags.split(' ')) } }
+            if (tags != undefined) { tags = func.string_to_slug(b.tags); if (tags.indexOf('-') > -1) { tags = tags.split(/[\s,-]+/); sendTags = b.tags.toString().replace(/,\s*$/, "").split(','); facet = facet.concat(tags); } else { facet.push(tags.split(' ')); sendTags = b.tags; } }
 
-            if (consoles != undefined) { consoles = func.string_to_slug(b.consoles); if (consoles.indexOf('-') > -1) { consoles = consoles.split(/[\s,-]+/); facet = facet.concat(consoles); } else { facet.push(consoles.split(' ')) } }
+            if (consoles != undefined) { consoles = func.string_to_slug(b.consoles); if (consoles.indexOf('-') > -1) { consoles = consoles.split(/[\s,-]+/); sendConsoles = b.consoles.toString().replace(/,\s*$/, "").split(','); facet = facet.concat(consoles); } else { facet.push(consoles.split(' ')); sendConsoles = b.consoles; } }
 
-            if (publicadoras != undefined) { publicadoras = func.string_to_slug(b.publicadoras); if (publicadoras.indexOf('-') > -1) { publicadoras = publicadoras.split(/[\s,-]+/); facet = facet.concat(publicadoras); } else { facet.push(publicadoras.split(' ')) } }
+            if (publicadoras != undefined) { publicadoras = func.string_to_slug(b.publicadoras); if (publicadoras.indexOf('-') > -1) { publicadoras = publicadoras.split(/[\s,-]+/); sendPublicadoras = b.publicadoras.toString().replace(/,\s*$/, "").split(','); facet = facet.concat(publicadoras); } else { facet.push(publicadoras.split(' ')); sendPublicadoras = b.publicadoras; } }
 
-            if (desenvolvedores != undefined) { desenvolvedores = func.string_to_slug(b.desenvolvedores); if (desenvolvedores.indexOf('-') > -1) { desenvolvedores = desenvolvedores.split(/[\s,-]+/); facet = facet.concat(desenvolvedores); } else { facet.push(desenvolvedores.split(' ')) } }
+            if (desenvolvedores != undefined) { desenvolvedores = func.string_to_slug(b.desenvolvedores); if (desenvolvedores.indexOf('-') > -1) { desenvolvedores = desenvolvedores.split(/[\s,-]+/); sendDesenvolvedores = b.desenvolvedores.toString().replace(/,\s*$/, "").split(','); facet = facet.concat(desenvolvedores); } else { facet.push(desenvolvedores.split(' ')); sendDesenvolvedores = b.desenvolvedores; } }
 
-            if (generos != undefined) { generos = func.string_to_slug(b.generos); if (generos.indexOf('-') > -1) { generos = generos.split(/[\s,-]+/); facet = facet.concat(generos); } else { facet.push(generos.split(' ')) } }
+            if (generos != undefined) { generos = func.string_to_slug(b.generos); if (generos.indexOf('-') > -1) { generos = generos.split(/[\s,-]+/); sendGeneros = b.generos.toString().replace(/,\s*$/, "").split(','); facet = facet.concat(generos); } else { facet.push(generos.split(' ')); sendGeneros = b.generos; } }
 
-            if (categoriaArtigo != undefined) { categoriaArtigo = func.string_to_slug(b.categoriaArtigo); if (categoriaArtigo.indexOf('-') > -1) { categoriaArtigo = categoriaArtigo.split(/[\s,]+/); facet = facet.concat(categoriaArtigo); } else { facet.push(categoriaArtigo.split(' ')) } }
+            if (categoriaArtigo != undefined) { categoriaArtigo = func.string_to_slug(b.categoriaArtigo); if (categoriaArtigo.indexOf('-') > -1) { categoriaArtigo = categoriaArtigo.split(/[\s,]+/); sendCategoriaArtigo = b.categoriaArtigo.toString().replace(/,\s*$/, "").split(','); facet = facet.concat(categoriaArtigo); } else { facet.push(categoriaArtigo.split(' ')); sendCategoriaArtigo = b.categoriaArtigo; } }
 
             if (analiseBom != undefined) { if (analiseBom.indexOf(',') > -1) { analiseBom = analiseBom.split(','); } }
             if (analiseRuim != undefined) { if (analiseRuim.indexOf(',') > -1) { analiseRuim = analiseRuim.split(','); } }
-            console.log(facet);
+
             facet.push(b.serieArtigo, b.tipoVideo, b.canalVideo);
-            console.log(facet);
+
             
             var status;
             if(user.status == 'admin' || user.status == 'editor'){
@@ -887,12 +965,12 @@ module.exports = function (app, passport, mongoose) {
                     status: status,
                     'cover.image': b.coverUrl,
                     'cover.position': b.position,
-                    tags: b.tags,
-                    'graph.games': b.jogo,
-                    'graph.consoles': b.consoles,
-                    'graph.genres': b.generos,
-                    'graph.developers': b.desenvolvedores,
-                    'graph.publishers': b.publicadoras,
+                    tags: sendTags,
+                    'graph.games': sendGames,
+                    'graph.consoles': sendConsoles,
+                    'graph.genres': sendGeneros,
+                    'graph.developers': sendDesenvolvedores,
+                    'graph.publishers': sendPublicadoras,
                     'news.story': b.continuacaoHistoria,
                     slug: slug,
                     'authors.revision': user._id
@@ -927,13 +1005,13 @@ module.exports = function (app, passport, mongoose) {
                     status: status,
                     'cover.image': b.coverUrl,
                     'cover.position': b.position,
-                    tags: b.tags,
-                    'graph.games': b.jogo,
-                    'graph.consoles': b.consoles,
-                    'graph.genres': b.generos,
-                    'graph.developers': b.desenvolvedores,
-                    'graph.publishers': b.publicadoras,
-                    'article.category': b.categoriaArtigo,
+                    tags: sendTags,
+                    'graph.games': sendGames,
+                    'graph.consoles': sendConsoles,
+                    'graph.genres': sendGeneros,
+                    'graph.developers': sendDesenvolvedores,
+                    'graph.publishers': sendPublicadoras,
+                    'article.category': sendCategoriaArtigo,
                     'article.serie': b.serieArtigo,
                     slug: slug,
                     'authors.revision': user._id
@@ -968,8 +1046,12 @@ module.exports = function (app, passport, mongoose) {
                     status: status,
                     'cover.image': b.coverUrl,
                     'cover.position': b.position,
-                    tags: b.tags,
-                    'graph.games': b.jogo,
+                    tags: sendTags,
+                    'graph.games': sendGames,
+                    'graph.consoles': sendConsoles,
+                    'graph.genres': sendGeneros,
+                    'graph.developers': sendDesenvolvedores,
+                    'graph.publishers': sendPublicadoras,
                     'review.score': b.nota,
                     'review.good': analiseBom,
                     'review.bad': analiseRuim,
@@ -1008,12 +1090,12 @@ module.exports = function (app, passport, mongoose) {
                     status: status,
                     'cover.image': b.coverUrl,
                     'cover.position': b.position,
-                    tags: b.tags,
-                    'graph.games': b.jogo,
-                    'graph.consoles': b.consoles,
-                    'graph.genres': b.generos,
-                    'graph.developers': b.desenvolvedores,
-                    'graph.publishers': b.publicadoras,
+                    tags: sendTags,
+                    'graph.games': sendGames,
+                    'graph.consoles': sendConsoles,
+                    'graph.genres': sendGeneros,
+                    'graph.developers': sendDesenvolvedores,
+                    'graph.publishers': sendPublicadoras,
                     'video.tipo': b.tipoVideo,
                     'video.canal': b.canalVideo,
                     'video.url': b.urlVideo,
@@ -2212,15 +2294,15 @@ module.exports = function (app, passport, mongoose) {
 
             var facet = [];
 
-            if (plataformas != undefined) { plataformas = func.string_to_slug(b.plataformas); if (plataformas.indexOf('-') > -1) { plataformas = plataformas.split(/[\s,-]+/); sendPlataformas = b.plataformas.toString().split(','); facet = facet.concat(plataformas); } else { facet.push(plataformas.split(' ')); sendPlataformas = b.plataformas}}
+            if (plataformas != undefined) { plataformas = func.string_to_slug(b.plataformas); if (plataformas.indexOf('-') > -1) { plataformas = plataformas.split(/[\s,-]+/); sendPlataformas = b.plataformas.toString().replace(/,\s*$/, "").split(','); facet = facet.concat(plataformas); } else { facet.push(plataformas.split(' ')); sendPlataformas = b.plataformas}}
 
-            if (esrb != undefined) { esrb = func.string_to_slug(b.esrb); if (esrb.indexOf('-') > -1) { esrb = esrb.split(/[\s,-]+/); sendEsrb = b.esrb.toString().split(','); facet = facet.concat(esrb); } else { facet.push(esrb.split(' ')); sendEsrb = b.esrb } }
+            if (esrb != undefined) { esrb = func.string_to_slug(b.esrb); if (esrb.indexOf('-') > -1) { esrb = esrb.split(/[\s,-]+/); sendEsrb = b.esrb.toString().replace(/,\s*$/, "").split(','); facet = facet.concat(esrb); } else { facet.push(esrb.split(' ')); sendEsrb = b.esrb } }
 
-            if (genero != undefined) { genero = func.string_to_slug(b.genero); if (genero.indexOf('-') > -1) { genero = genero.split(/[\s,-]+/); sendGenero = b.genero.toString().split(','); facet = facet.concat(genero); } else { facet.push(genero.split(' ')); sendGenero = b.genero } }
+            if (genero != undefined) { genero = func.string_to_slug(b.genero); if (genero.indexOf('-') > -1) { genero = genero.split(/[\s,-]+/); sendGenero = b.genero.toString().replace(/,\s*$/, "").split(','); facet = facet.concat(genero); } else { facet.push(genero.split(' ')); sendGenero = b.genero } }
 
-            if (desenvolvedor != undefined) { desenvolvedor = func.string_to_slug(b.desenvolvedor); if (desenvolvedor.indexOf('-') > -1) { desenvolvedor = desenvolvedor.split(/[\s,-]+/); sendDesenvolvedor = b.desenvolvedor.toString().split(','); facet = facet.concat(desenvolvedor); } else { facet.push(desenvolvedor.split(' ')); sendDesenvolvedor = b.desenvolvedor } }
+            if (desenvolvedor != undefined) { desenvolvedor = func.string_to_slug(b.desenvolvedor); if (desenvolvedor.indexOf('-') > -1) { desenvolvedor = desenvolvedor.split(/[\s,-]+/); sendDesenvolvedor = b.desenvolvedor.toString().replace(/,\s*$/, "").split(','); facet = facet.concat(desenvolvedor); } else { facet.push(desenvolvedor.split(' ')); sendDesenvolvedor = b.desenvolvedor } }
 
-            if (distribuidora != undefined) { distribuidora = func.string_to_slug(b.distribuidora); if (distribuidora.indexOf('-') > -1) { distribuidora = distribuidora.split(/[\s,-]+/); sendDistribuidora = b.distribuidora.toString().split(','); facet = facet.concat(distribuidora); } else { facet.push(distribuidora.split(' ')); sendDistribuidora = b.distribuidora }}
+            if (distribuidora != undefined) { distribuidora = func.string_to_slug(b.distribuidora); if (distribuidora.indexOf('-') > -1) { distribuidora = distribuidora.split(/[\s,-]+/); sendDistribuidora = b.distribuidora.toString().replace(/,\s*$/, "").split(','); facet = facet.concat(distribuidora); } else { facet.push(distribuidora.split(' ')); sendDistribuidora = b.distribuidora }}
 
             if(!b.position){
                 b.position = "background: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images/gameBg.jpg) no-repeat center -65px;";

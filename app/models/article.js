@@ -22,7 +22,7 @@ var ArticleSchema = new mongoose.Schema({
         _id: false,
         type: Date
     }],
-    tags: String,
+    tags: [String],
     type: String,
     article: {
         category: [String],
@@ -45,11 +45,11 @@ var ArticleSchema = new mongoose.Schema({
         autoral: {type: Boolean, default: false}
     },
     graph: {
-        games: String,
-        consoles:String,
-        genres: String,
-        developers: String,
-        publishers: String,
+        games: [String],
+        consoles:[String],
+        genres: [String],
+        developers: [String],
+        publishers: [String],
         views: Number
     },
     highlight: {type: Boolean, default: false},

@@ -68,8 +68,8 @@ block content
 
                     div.large-8.large-offset-1.medium-7.medium-offset-1.columns
                         h1#userTitle.show-for-medium-up #{game.title}
-                        div.row#gamerStats.show-for-medium-up
-                            div.medium-6.columns
+                        div.row#gamerStats
+                            div.small-6.columns
                                 ul.gameLogo
                                     li.gameLogoStats <i class="fa fa-calendar"></i> #{date}
                                     li.gameLogoStats <i class="fa fa-gamepad"></i> 
@@ -77,7 +77,7 @@ block content
                                             a(href="/consoles/#{console}") #{console} 
                                     li.gameLogoStats <i class="fa fa-gavel"></i> #{game.graph.esrb}
 
-                            div.medium-6.columns
+                            div.small-6.columns
                                 ul.gameLogo
                                     li.gameLogoStats Gênero:  
                                         each genero in game.graph.genre

@@ -87,8 +87,8 @@ block content
 
                     div.large-8.large-offset-1.medium-7.medium-offset-1.columns
                         h1#userTitle.show-for-medium-up #{profile.name.first} #{profile.name.last}
-                        div.row#userStats.show-for-medium-up
-                            div.medium-6.columns
+                        div.row#userStats
+                            div.small-6.columns
                                 ul.gameLogo
                                     if(profile.graph.publications == undefined)
                                         li.gameLogoStats <i class="fa fa-pencil"></i> Nenhum artigo publicado
@@ -99,7 +99,7 @@ block content
                                     li.gameLogoStats <i class="fa fa-gamepad"></i> 10 Jogos na coleção
                                     li.gameLogoStats <i class="fa fa-eye"></i> Visitou #{profile.graph.visits} páginas
 
-                            div.medium-6.columns
+                            div.small-6.columns
                                 ul.gameLogo
                                     if(profile.social.xboxLive.name)
                                         li

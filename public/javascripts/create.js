@@ -19,7 +19,7 @@ $(function () {
                 if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
                     $('#dropzoneImage').css('width', '20%');
                     $('#loadingAj').fadeOut();
-                    imageCover = '/uploads/' + file.name;
+                    imageCover = '/uploads/' + thisUser + file.name;
                     $('.mainImage').delay(500).attr('style', 'background: url(/uploads/' + thisUser + file.name + ') no-repeat center 0px;');
                     window.setTimeout(function () { $('.mainImage').delay(6000).attr('style', 'background: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images/userInput/' + thisUser + file.name + ') no-repeat center 0px;'); }, 6000);
                 }
@@ -154,7 +154,7 @@ $("#wizard").steps({
 
         var image = $('.mainImage').attr('style');
         $('input[name=position]').attr('value', image);
-        if($('input[name=coverUrl]').attr('value') == undefined){
+        if($('input[name=coverUrl]').attr('value') == ""){
             $('input[name=coverUrl]').attr('value', imageCover);
         }        
         $('input[name=docTitle]').attr('value', docTitle);
