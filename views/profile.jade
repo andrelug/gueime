@@ -96,7 +96,10 @@ block content
                                         li.gameLogoStats <i class="fa fa-pencil"></i> #{profile.graph.publications} Artigo publicado
                                     else
                                         li.gameLogoStats <i class="fa fa-pencil"></i> #{profile.graph.publications} Artigos publicados
-                                    li.gameLogoStats <i class="fa fa-gamepad"></i> 10 Jogos na coleção
+                                    if(profile.graph.gamesCol == undefined)
+                                        li.gameLogoStats <i class="fa fa-gamepad"></i> Nenhum jogo na coleção
+                                    else
+                                        li.gameLogoStats <i class="fa fa-gamepad"></i> #{profile.graph.gamesCol} Jogos na coleção
                                     li.gameLogoStats <i class="fa fa-eye"></i> Visitou #{profile.graph.visits} páginas
 
                             div.small-6.columns

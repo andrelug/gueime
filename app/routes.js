@@ -689,7 +689,7 @@ module.exports = function (app, passport, mongoose) {
                             points = 0;
                         }
                         
-                        Users.update({ 'name.loginName': user.name.loginName }, { $inc: {'gamification.points': -points} }, function (err) {
+                        Users.update({ 'name.loginName': user.name.loginName }, { $inc: {'graph.publications': -1, 'gamification.points': -points} }, function (err) {
                             res.render('editar', {user: user, article: docs, title: title, body: body, tipo: docs.type, id: docs._id});
                         });
                     } else if (user.status == 'admin') {
