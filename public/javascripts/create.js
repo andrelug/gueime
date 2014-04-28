@@ -41,7 +41,7 @@ $(function () {
             window.setTimeout(function () {
                 var oldUrl = json.filelink;
                 var fileName = json.filelink.replace('http://www.gueime.com.br/uploads/', '')
-                var newUrl = 'https://s3-sa-east-1.amazonaws.com/portalgueime/images/' + thisUser + fileName;
+                var newUrl = 'https://s3-sa-east-1.amazonaws.com/portalgueime/images/' + fileName;
                 $('img[src="' + oldUrl + '"]').attr('src', newUrl);
             }, 6000);
 
