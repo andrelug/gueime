@@ -2496,9 +2496,9 @@ module.exports = function (app, passport, mongoose) {
     });
 
     // ARTIGOS
-    app.put('/artigos/:artigo/deletar', function(req, res){
+    app.put('/artigos/:id/deletar', function(req, res){
         var user = req.user;
-        var artigo = req.params.artigo;
+        var id = req.params.id;
         var action = req.body.action;
         
         if(!user){
@@ -2508,13 +2508,13 @@ module.exports = function (app, passport, mongoose) {
                 res.redirect('/users/restore');
             }else if(user.status == 'admin'){
                 if(action == 'del'){
-                    Artigos.remove({slug: artigo}, function(err){
+                    Artigos.remove({_id: id}, function(err){
                         if(err)
                             throw err
                         res.send('OK');
                     });
                 } else if(action == 'des'){
-                    Artigos.update({slug: artigo}, {$set: {status: 'deletado'}}, function(err){
+                    Artigos.update({_id: id}, {$set: {status: 'deletado'}}, function(err){
                         if(err)
                             throw err
                         res.send('OK');
