@@ -5,6 +5,17 @@ html.no-js(lang="pt_BR")
         include head
         if(canonical == true)
             link(rel="canonical", href="http://www.gueime.com.br/profile/#{profile.name.loginName}")
+        meta(name="description", content="#{profile.bio}")
+        meta(property="og:title", content="#{profile.name.first} #{profile.name.last}")
+        meta(property="og:type", content="user")
+        meta(property="og:image", content="#{profile.photo}")
+        meta(property="og:url", content="http://www.gueime.com.br/profile/#{profile.name.loginName}")
+        meta(property="og:description", content="#{profile.bio}")
+        meta(name="twitter:card", content="summary")
+        meta(name="twitter:url", content="http://www.gueime.com.br/profile/#{profile.name.loginName}")
+        meta(name="twitter:title", content="#{profile.name.first} #{profile.name.last}")
+        meta(name="twitter:description", content="#{profile.bio}")
+        meta(name="twitter:image", content="#{profile.photo}")
 
     body(style="overflow-y: auto; background: url('../images/pattern.png') repeat #34495e")
         div#fb-root

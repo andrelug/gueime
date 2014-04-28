@@ -168,7 +168,7 @@ block content
                             else if(devs)
                                 for dev in devs
                                     tr
-                                        td #{dev.title}
+                                        td: a(href="/desenvolvedores/#{dev.slug}") #{dev.title}
                                         td #{dev.graph.views}
                                         if(dev.status == 'deletado')
                                             td.status #{dev.status} (<a href="/desenvolvedores/#{dev.slug}/restore" class="restore">Restore</a>)
@@ -181,7 +181,7 @@ block content
                             else if(pubs)
                                 for pub in pubs
                                     tr
-                                        td #{pub.title}
+                                        td: a(href="/distribuidoras/#{pub.slug}") #{pub.title}
                                         td #{pub.graph.views}
                                         if(pub.status == 'deletado')
                                             td.status #{pub.status} (<a href="/distribuidoras/#{pub.slug}/restore" class="restore">Restore</a>)
@@ -194,7 +194,7 @@ block content
                             else if(gens)
                                 for gen in gens
                                     tr
-                                        td #{gen.title}
+                                        td: a(href="/generos/#{gen.slug}")  #{gen.title}
                                         td #{gen.graph.views}
                                         if(gen.status == 'deletado')
                                             td.status #{gen.status} (<a href="/generos/#{gen.slug}/restore" class="restore">Restore</a>)
@@ -207,7 +207,7 @@ block content
                             else if(profile)
                                 for prof in profile
                                     tr
-                                        td #{prof.name.first} #{prof.name.last}
+                                        td: a(href="/profile/#{prof.name.loginName}")  #{prof.name.first} #{prof.name.last}
                                         td #{prof.name.loginName}
                                         td #{prof.email}
                                         td #{prof.graph.visits}
@@ -228,7 +228,7 @@ block content
                             else if(consoles)
                                 for console in consoles
                                     tr
-                                        td #{console.title}
+                                        td: a(href="/consoles/#{con.slug}")  #{console.title}
                                         td #{console.graph.views}
                                         if(console.status == 'deletado')
                                             td.status #{console.status} (<a href="/consoles/#{console.slug}/restore" class="restore">Restore</a>)

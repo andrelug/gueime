@@ -41,7 +41,8 @@ var ArticleSchema = new mongoose.Schema({
     video: {
         tipo: String,
         canal: String,
-        url: String
+        url: String,
+        autoral: {type: Boolean, default: false}
     },
     graph: {
         games: String,

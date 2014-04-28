@@ -593,20 +593,31 @@ module.exports = function (app, passport, mongoose) {
                             body = decodeURIComponent(docs.text);
 
                         var points;
-                        switch(docs.type){
-                            case 'noticia':
-                                points = 10;
-                                break;
-                            case 'artigo':
-                                points = 30;
-                                break;
-                            case 'analise':
+                        if(docs.type == 'video' && docs.status == 'publicado'){
+                            if(docs.video.autoral == true){
                                 points = 50;
-                                break;
-                            case 'video':
+                            } else {
                                 points = 5;
-                                break;
+                            }
+                        } else if(docs.status == 'publicado'){
+                            switch(docs.type){
+                                case 'noticia':
+                                    points = 10;
+                                    break;
+                                case 'artigo':
+                                    points = 30;
+                                    break;
+                                case 'analise':
+                                    points = 50;
+                                    break;
+                                case 'video':
+                                    points = 5;
+                                    break;
+                            }
+                        } else {
+                            points = 0;
                         }
+                        
                         Users.update({ 'name.loginName': user.name.loginName }, { $inc: {'gamification.points': -points} }, function (err) {
                             res.render('editar', {user: user, article: docs, title: title, body: body, tipo: docs.type, id: docs._id});
                         });
@@ -825,6 +836,8 @@ module.exports = function (app, passport, mongoose) {
                 analiseRuim = b.analiseRuim,
                 slug = func.string_to_slug(decodeURIComponent(b.docTitle.replace('<p>', '').replace('</p>', '')));
 
+            var autoral = b.autoral;
+
             var facet = [];
 
             if (games != undefined) { games = func.string_to_slug(b.jogo); if (games.indexOf('-') > -1) { games = games.split(/[\s,-]+/); facet = facet.concat(games); } else { facet.push(games.split(' ')) } }
@@ -933,7 +946,7 @@ module.exports = function (app, passport, mongoose) {
                         throw err
                     if(user.status == 'admin' || user.status == 'editor'){
                         // Atribuição de pontuação
-                        Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 10}}, function(err){
+                        Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 30}}, function(err){
                             // Ganha pontos por revisão
                             if(criador != user._id){
                                 Users.update({_id: user._id}, {$inc: {'gamification.points': 30}}, function(err){
@@ -973,7 +986,7 @@ module.exports = function (app, passport, mongoose) {
                         throw err
                     if(user.status == 'admin' || user.status == 'editor'){
                         // Atribuição de pontuação
-                        Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 10}}, function(err){
+                        Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 50}}, function(err){
                             // Ganha pontos por revisão
                             if(criador != user._id){
                                 Users.update({_id: user._id}, {$inc: {'gamification.points': 30}}, function(err){
@@ -1005,7 +1018,8 @@ module.exports = function (app, passport, mongoose) {
                     'video.canal': b.canalVideo,
                     'video.url': b.urlVideo,
                     slug: slug,
-                    'authors.revision': user._id
+                    'authors.revision': user._id,
+                    'video.autoral': autoral
 
                 }, $addToSet: {
                     facet: { $each: sendFacet }
@@ -1014,8 +1028,14 @@ module.exports = function (app, passport, mongoose) {
                     if (err)
                         throw err
                     if(user.status == 'admin' || user.status == 'editor'){
+                        var videoPoints;
+                        if(autoral == 'true'){
+                            videoPoints = 50;
+                        } else {
+                            videoPoints = 5;
+                        }
                         // Atribuição de pontuação
-                        Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 10}}, function(err){
+                        Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': videoPoints}}, function(err){
                             // Ganha pontos por revisão
                             if(criador != user._id){
                                 Users.update({_id: user._id}, {$inc: {'gamification.points': 30}}, function(err){
