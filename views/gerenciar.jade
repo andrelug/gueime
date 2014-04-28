@@ -163,7 +163,7 @@ block content
                                                 option(value="deletado") deletado
                                         td #{article.date}
                                         td: a(href="/editar/#{article.slug}") Editar
-                                        td: a.deletarGen(href="/artigos/#{article.slug}/deletar") Deletar
+                                        td: a.deletarGen(href="/artigos/#{article._id}/deletar") Deletar
 
                             else if(devs)
                                 for dev in devs

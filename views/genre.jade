@@ -34,7 +34,7 @@ block content
                             div.small-12.columns
                                 h1#userTitle(style="color: white") #{dev.title}
                         div.editingProf
-                            img#userGameImage(src="#{dev.genCover}")
+                            img#userGameImage(src="#{dev.genCover}", style="border:none;")
                             if(user && user.status == 'admin' || user && user.status == 'editor')
                                 a.hide-for-small.button.tiny#editButtonHover(href="/generos/#{dev.slug}/editar") Editar
                         div#gameStats.row

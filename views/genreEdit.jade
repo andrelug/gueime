@@ -47,7 +47,7 @@ block content
                 div.row#game
                     div.large-3.medium-4.columns#imageAndOptGame
                         if(edit == true)
-                            img#userGameImage(src="#{developer.devCover}")
+                            img#userGameImage(src="#{developer.genCover}")
                             div.editingProf
                                 form#dropzoneGameCover(action="/newGameCover", class="dropzone", enctype="multipart/form-data", style="border:none;")
                                     input(type="file", name="file", style="display: none;")
