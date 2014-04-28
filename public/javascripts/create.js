@@ -154,9 +154,9 @@ $("#wizard").steps({
 
         var image = $('.mainImage').attr('style');
         $('input[name=position]').attr('value', image);
-        if($('input[name=coverUrl]').attr('value') == ""){
+        if($('input[name=coverUrl]').attr('value') == undefined || imageCover != undefined){
             $('input[name=coverUrl]').attr('value', imageCover);
-        }        
+        }
         $('input[name=docTitle]').attr('value', docTitle);
         exitNoSave = false;
 
