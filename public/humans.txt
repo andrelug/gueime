@@ -1,0 +1,34 @@
+/* TEAM */
+                            
+CEO / Designer / Developer: André Lucas
+Site: http://portfolio.andrelug.com
+Twitter: @andrelug_
+Location: Belo Horizonte, Brazil
+
+Designer: Vitor Castanheira
+Site: http://www.gueime.com.br
+Location: Belo Horizonte, Brazil
+
+Finances: Rodrigo Valladares
+Site: http://www.gueime.com.br
+Location: Belo Horizonte, Brazil
+
+Editor: Gabriel Hamndan
+Site: http://www.gueime.com.br
+Twitter: @dghamdan
+Location: Belo Horizonte, Brazil
+
+Editor: Alvaro Oliveira
+Site: http://www.gueime.com.br
+Location: Belo Horizonte, Brazil
+
+Editor: Pedro Kraft
+Site: http://www.gueime.com.br
+Location: USA
+
+
+/* SITE */
+Last update:2014/04/28
+Language: Portuguese
+Doctype:HTML5
+IDE: Photoshop, Microsoft WebMatrix

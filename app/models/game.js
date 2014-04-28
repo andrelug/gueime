@@ -3,35 +3,24 @@ var mongoose = require('mongoose');
 
 var GameSchema = new mongoose.Schema({
 
-    title: String,
+    title: {type: String, unique: true, index: true},
     slug: {type: String, unique: true, index: true},
-    description: String,
-    text: String,
-    cover: Buffer,
-    images: [Buffer],
+    about: String,
+    cover: {type: String, default: "background: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images/gameBg.jpg) no-repeat center -65px;"},
+    gameCover: String,
     release: Date,
     graph: {
-        console:{
-            main: String,
-            others: [String]
-        },
-        genre: {
-            main: String,
-            others: [String]
-        },
-        developer: {
-            main: String,
-            others: [String]
-        },
-        publisher: {
-            main: String,
-            others: [String]
-        },
-        ageRange: String,
-        views: Number
+        console: [String],
+        genre: [String],
+        developer: [String],
+        publisher: [String],
+        esrb: [String],
+        views: Number,
+        gamers: Number
     },
+    status: String,
     facet: {type: [String], index: true}
 });
 
-// create the model for users and expose it to app // Users var
+// create the model for users and expose it to app // Game var
 module.exports = mongoose.model('Game', GameSchema);

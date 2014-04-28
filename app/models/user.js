@@ -6,23 +6,23 @@ var UserSchema = new mongoose.Schema({
     name: {
         first: String,
         parsed: String,
-        middle: String,
         last: String,
         nickName: String,
         loginName: {type: String, lowercase: true, trim: true, unique: true}
     },
+    status: {type: String, default: "user"},
     birthDate: Date,
-    email: {type: String, required: true, unique: true, index: true},
+    email: {type: String},
     gender: String,
-    sites: [String],
+    site: String,
     bio: String,
     photo: String,
+    cover: {type: String, default: "background: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images/profileBg.jpg) no-repeat center 0px;"},
     password: {
         main: String
     },
     localization: {
         country: String,
-        state: String,
         city: String
     },
     social: {
@@ -38,7 +38,8 @@ var UserSchema = new mongoose.Schema({
             id: String,
             token: String,
             displayName: String,
-            username: String
+            username: String,
+            url: String
         },
         google: {
             id: String,
@@ -46,11 +47,38 @@ var UserSchema = new mongoose.Schema({
             email: String,
             name: String,
             url: String
-        }
+        },
+        xboxLive: {
+            name: String,
+            points: Number
+        },
+        psn: {
+            name: String,
+            level: Number
+        },
+        steam: {
+            name: String,
+            level: Number
+        },
+        nintendo: String,
+        gameCenter: String,
+        alvanista: String
     },
-    creating: {type: Boolean, default: false},
-    follow: [{_id: false, type: mongoose.Schema.Types.ObjectId}],
-    followedBy: [{_id: false, type: mongoose.Schema.Types.ObjectId}],
+    graph: {
+        visits: Number,
+        gamesCol: [String],
+        gamesLike: [String],
+        publications: Number,
+        searches: Number,
+        searchStr: [String]
+    },
+    gamification: {
+        points: {type: Number, default: 0},
+        level: {type: Number, default: 1},
+        achievements: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Achievement' }]
+    },
+    follow: [{_id: false, type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
+    followedBy: [{_id: false, type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     deleted: {type: Boolean, default: false}
 });
 

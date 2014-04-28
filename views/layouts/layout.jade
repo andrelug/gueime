@@ -3,37 +3,68 @@ doctype html
 html.no-js(lang="pt_BR")
     head
         include head
+        meta(name="description", content="Gueime - O melhor site de games do Brasil. Confira as últimas notícias, análises e notícias!")
+        meta(property="og:title", content="Gueime")
+        meta(property="og:type", content="website")
+        meta(property="og:image", content="http://www.gueime.com.br/images/gueime.png")
+        meta(property="og:url", content="http://www.gueime.com.br")
+        meta(property="og:description", content="Gueime - O melhor site de games do Brasil. Confira as últimas notícias, análises e notícias!")
+        meta(name="twitter:card", content="summary")
+        meta(name="twitter:url", content="http://www.gueime.com.br/")
+        meta(name="twitter:title", content="Gueime")
+        meta(name="twitter:description", content="Gueime - O melhor site de games do Brasil. Confira as últimas notícias, análises e notícias!")
+        meta(name="twitter:image", content="http://www.gueime.com.br/images/gueime.png")
 
     body
-        block content
+        div#fb-root
+
+        script.
+            window.fbAsyncInit = function() {
+                FB.init({
+                    appId      : '{561543940541408}',
+                    status     : true,
+                    xfbml      : true
+                });
+            };
+            (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/pt_BR/all.js";
+            fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));  
+            
+        
+        div.outWrap(style="overflow:hidden;")
+            block content
 
         include scripts
-        script.
-            // Closing Overlay
-
-            // Need to check if this is good for performance
-            $(document).on('keyup', function (event) {
-                if(event.keyCode == 27 ){
-                    $('.content-wrap').fadeOut();
-                    $('body').css('overflow-y', 'auto');
-                    $('#darken').css('display', 'none');
-                    window.history.go(-1);
-                    ga('send', 'pageview', '/');
-                }
-            });
-
+        script.scriptLoad.
             container.waitForImages(function () {
                 $("#spinning").hide();
                 $('body').css('overflow-y', 'auto');
                 container.animate({ 'opacity': 1 });
 
-
-                container.packery({
+                container.isotope({
                     itemSelector: '.item',
-                    gutter: 20,
-                    rowHeight: 10
+                    layoutMode: 'masonry',
+                    masonry:{
+                        gutter: 20,
+                        rowHeight: 10,
+                        columnWidth: 24
+                    }                    
+                    
                 });
-                var pckry = container.data('packery');
+                $('.filtros').show();
+
+                $('#mainInput').autocomplete({
+                    serviceUrl: '/autocomplete',
+                    minChars: 3,
+                    deferRequestBy: 400,
+                    autoSelectFirst: true
+                });
+
+                
 
                 var nav = $('#nav-sticky');
                 nav_sticky = nav.offset().top; //get the Y-position of section
@@ -58,3 +89,42 @@ html.no-js(lang="pt_BR")
                     }
                 });
             }, null, true);
+        script.
+            $(window).on('popstate', function () {
+                $('#myModal').foundation('reveal', 'close');
+            });
+
+        if(searchTag != undefined)
+            script.
+                var searchTag = '#{searchTag}';
+                searchTag = searchTag.split('-');
+                for(i=0; i < searchTag.length; i++){
+                    console.log(searchTag[i]);
+                    $('#tagSelection').append('<span>' + searchTag[i] + '<a class="tag" id="' + searchTag[i] + '">x</a></span>');
+                    searchStr.push(searchTag[i]);
+                }
+                
+                n = $('.item').length;
+                if (n < 7) {
+                    $.ajax({
+                        type: "GET",
+                        url: "/pagination",
+                        data: { n: n, str: searchStr },
+                        dataType: 'html'
+                    }).done(function (data) {
+                        container.isotope('insert', $(data));
+                    });
+                }
+        else
+            script.
+                n = $('.item').length;
+                if (n < 7) {
+                    $.ajax({
+                        type: "GET",
+                        url: "/pagination",
+                        data: {n: n},
+                        dataType: 'html'
+                    }).done(function (data) {
+                        container.isotope('insert', $(data));
+                    });
+                }

@@ -12,14 +12,14 @@ if('development' == app.get('env')) {
 	    },
 
 	    'twitterAuth' : {
-		    'consumerKey' 		: 'VW9Qu0dlq9cKE5TlkU3joQ',
-		    'consumerSecret' 	: '8Hg3uADYMHSCouhe9W8YmtN3QWf6q1eXf1xBJbUnf8c',
+		    'consumerKey' 		: 'd7Nm9kGmddTbp8bVPd3IRWpAq',
+		    'consumerSecret' 	: 'x2FJbmrix0HaHd0HXWpw5mLVbRvmalCnWLc83bxv481KMd9QeL',
 		    'callbackURL' 		: 'http://localhost:24279/auth/twitter/callback'
 	    },
 
 	    'googleAuth' : {
-		    'clientID' 		: '886140459979-r26dp1t5it9a8oc6cjevhe0p4mrvr2te.apps.googleusercontent.com',
-		    'clientSecret' 	: 'nKSXebFZEen0mmKB8WuuIXuK',
+		    'clientID' 		: '255367409904.apps.googleusercontent.com',
+		    'clientSecret' 	: '99dda7gFKNaONJL6rg23odNZ',
 		    'callbackURL' 	: 'http://localhost:24279/auth/google/callback'
 	    }
 
@@ -30,19 +30,19 @@ if('development' == app.get('env')) {
 	    'facebookAuth' : {
 		    'clientID' 		: '561543940541408', // your App ID
 		    'clientSecret' 	: 'd550945b38741f8f0dde17027270218e', // your App Secret
-		    'callbackURL' 	: 'http://dev.gueime.com.br/auth/facebook/callback'
+		    'callbackURL' 	: 'http://www.gueime.com.br/auth/facebook/callback'
 	    },
 
 	    'twitterAuth' : {
-		    'consumerKey' 		: 'VW9Qu0dlq9cKE5TlkU3joQ',
-		    'consumerSecret' 	: '8Hg3uADYMHSCouhe9W8YmtN3QWf6q1eXf1xBJbUnf8c',
-		    'callbackURL' 		: 'http://dev.gueime.com.br/auth/twitter/callback'
+		    'consumerKey' 		: 'd7Nm9kGmddTbp8bVPd3IRWpAq',
+		    'consumerSecret' 	: 'x2FJbmrix0HaHd0HXWpw5mLVbRvmalCnWLc83bxv481KMd9QeL',
+		    'callbackURL' 		: 'http://www.gueime.com.br/auth/twitter/callback'
 	    },
 
 	    'googleAuth' : {
-		    'clientID' 		: '886140459979-r26dp1t5it9a8oc6cjevhe0p4mrvr2te.apps.googleusercontent.com',
-		    'clientSecret' 	: 'nKSXebFZEen0mmKB8WuuIXuK',
-		    'callbackURL' 	: 'http://dev.gueime.com.br/auth/google/callback'
+		    'clientID' 		: '255367409904.apps.googleusercontent.com',
+		    'clientSecret' 	: '99dda7gFKNaONJL6rg23odNZ',
+		    'callbackURL' 	: 'http://www.gueime.com.br/auth/google/callback'
 	    }
 
     };

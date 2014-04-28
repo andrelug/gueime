@@ -1,6 +1,5 @@
-require('newrelic');
+var newrelic = require('newrelic');
 var express = require('express')
-  , routes = require('./routes')
   , http = require('http')
   , mongoose = require('mongoose')
   , passport = require('passport')
@@ -28,7 +27,7 @@ app.configure(function () {
     app.use(express.methodOverride());
     app.use(express.session({ store: new MongoStore({
         mongoose_connection: gueimesessions
-    }), secret: 'blablabladfkdaskldsfblkablafdsa34', cookie: { maxAge: 36000000 }
+    }), secret: 'blablabladfkdaskldsfblkablafdsa34', cookie: { maxAge: 172800000 }
     })); // session secret
     app.use(passport.initialize());
     app.use(passport.session()); // persistent login sessions
@@ -36,6 +35,14 @@ app.configure(function () {
     app.use(app.router);
     app.use(require('stylus').middleware(path.join(__dirname, 'public')));
     app.use(express.static(path.join(__dirname, 'public')));
+    app.use(function(req, res) {
+      res.status(400);
+      res.render('404', {title: '404: File Not Found'});
+    });
+    app.use(function(error, req, res, next) {
+      res.status(500);
+      res.render('500', {title:'500: Internal Server Error', error: error});
+    });
     app.enable('trust proxy');
 });
 
@@ -43,8 +50,19 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 });
 
+
+// New Relic
+app.locals.newrelic = newrelic;
+
 // routes ======================================================================
 require('./app/routes.js')(app, passport, mongoose); // load our routes and pass in our app and fully configured passport
+
+
+
+app.use(function(error, req, res, next) {
+    res.status(500);
+    res.render('500.jade', {title:'500: Internal Server Error', error: error});
+});
 
 
 http.createServer(app).listen(app.get('port'), function(){

@@ -1,4 +1,7 @@
-var bla;
+var imageCover;
+var docTitle;
+var nJson;
+var exitNoSave = true;
 $(function () {
 
     Dropzone.options.dropzoneImage = {
@@ -11,10 +14,14 @@ $(function () {
                 $('#loadingAj').show();
             });
             this.on("complete", function (file) {
+                console.log(file);
+                console.log(file.name);
                 if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
                     $('#dropzoneImage').css('width', '20%');
                     $('#loadingAj').fadeOut();
-                    $('.mainImage').delay(500).attr('style', 'background: url(/uploads/' + file.name + ') no-repeat center 0px;');
+                    imageCover = '/uploads/' + thisUser + file.name;
+                    $('.mainImage').delay(500).attr('style', 'background: url(/uploads/' + thisUser + file.name + ') no-repeat center 0px;');
+                    window.setTimeout(function () { $('.mainImage').delay(6000).attr('style', 'background: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images/userInput/' + thisUser + file.name + ') no-repeat center 0px;'); }, 6000);
                 }
             });
         }
@@ -27,15 +34,22 @@ $(function () {
         minHeight: 300,
         imageUpload: '/artigoImage',
         convertImageLinks: true,
+        convertVideoLinks: true,
         imageUploadCallback: function (image, json) {
+            console.log(image);
+            console.log(json.filelink);
+            window.setTimeout(function () {
+                var oldUrl = json.filelink;
+                var fileName = json.filelink.replace('http://www.gueime.com.br/uploads/', '')
+                var newUrl = 'https://s3-sa-east-1.amazonaws.com/portalgueime/images/' + thisUser + fileName;
+                $('img[src="' + oldUrl + '"]').attr('src', newUrl);
+            }, 6000);
 
         },
-        autosave: '/novoArtigo',
+        autosave: '/novoArtigo/' + thisArticle,
         autosaveInterval: 10, // seconds
         autosaveCallback: function (json) {
             console.log(json);
-            var nJson = decodeURIComponent(json.content);
-            $('.teste').html(nJson);
 
         }
     });
@@ -43,8 +57,27 @@ $(function () {
     $('#createTitle').redactor({
         lang: 'pt_br',
         toolbar: false,
-        minHeight: 97
+        minHeight: 97,
+        autosave: '/novoTitulo/' + thisArticle,
+        autosaveInterval: 5, // seconds
+        autosaveCallback: function (json) {
+            console.log(json);
+            nJson = decodeURIComponent(json.content);
+            docTitle = decodeURIComponent(json.content);
+            $('.teste').html(nJson);
+
+        }
     });
+
+});
+
+$('.gueimeWhite').css('display', 'block').css('left', 'auto').css('right', 30);
+
+$('.deletar').on('click', function () {
+    var result = confirm("Quer realmente deletar?");
+    if(result == true){
+        $('#deletar').submit();
+    }
 });
 
 $(document).ready(function(){
@@ -98,3 +131,403 @@ $(document).ready(function(){
     $bg.bind('mousedown mouseup mouseleave', handle);
     $bg.bind('dblclick', reset);
 });
+
+$('#sendButton').on('click', function () {
+    $('#perguntas').slideDown();
+    $('#sendButton').slideUp();
+});
+
+// Create Steps
+var editChecked;
+$("#wizard").steps({
+    transitionEffect: 2,
+    labels: {
+        current: "atual",
+        pagination: "paginação",
+        finish: "terminar",
+        next: "próximo",
+        previous: "anterior",
+        loading: "carregando"
+    },
+    onFinished: function (event, currentIndex) {
+        var form = $(this);
+
+        var image = $('.mainImage').attr('style');
+        $('input[name=position]').attr('value', image);
+        if($('input[name=coverUrl]').attr('value') == ""){
+            $('input[name=coverUrl]').attr('value', imageCover);
+        }        
+        $('input[name=docTitle]').attr('value', docTitle);
+        exitNoSave = false;
+
+        editCheck = $('#editCheck').html();
+        editChecked;
+        if (editCheck == 'check') {
+            editChecked = true;
+        } else {
+            editChecked = false;
+        }
+
+
+        $.ajax({
+            url: '/titleCheck/' + thisArticle,
+            typo: "get",
+            data: { title: docTitle, check: editChecked }
+        }).done(function (data) {
+            if (data == 'yes') {
+                form.submit();
+            } else {
+                $('#slugErr').slideDown().delay(2000).slideUp();
+            }
+        });
+
+        
+    }
+});
+
+$('#jogoSimNao').find('a').on('click', function () {
+    if ($(this).html() === 'sim') {
+        $('#qualJogo').slideDown();
+        $('#jogoSimNao').slideUp();
+    }else{
+        $('#semJogo').slideDown();
+        $('#jogoSimNao').slideUp();
+    }
+
+});
+
+$('#autorSimNao').find('a').on('click', function () {
+    if ($(this).html() === 'sim') {
+        $('#qualAutor').slideDown();
+        $('#autorSimNao').slideUp();
+    }else{
+        $('#semAutor').slideDown();
+        $('#autorSimNao').slideUp();
+    }
+
+});
+
+$('#continuaSimNao').find('a').on('click', function () {
+    if ($(this).html() === 'sim') {
+        $('#qualContinua').slideDown();
+        $('#continuaSimNao').slideUp();
+    }else{
+        $('#semContinua').slideDown();
+        $('#continuaSimNao').slideUp();
+    }
+
+});
+
+$('#serieSimNao').find('a').on('click', function () {
+    if ($(this).html() === 'sim') {
+        $('#qualSerie').slideDown();
+        $('#serieSimNao').slideUp();
+    }else{
+        $('#semSerie').slideDown();
+        $('#serieSimNao').slideUp();
+    }
+
+});
+
+$('#qualJogo').find('a').on('click', function () {
+    $('#qualJogo').slideUp();
+    $('#jogoSimNao').slideDown();
+});
+$('#semJogo').find('a').on('click', function () {
+    $('#semJogo').slideUp();
+    $('#jogoSimNao').slideDown();
+});
+
+$('#qualAutor').find('a').on('click', function () {
+    $('#qualAutor').slideUp();
+    $('#autorSimNao').slideDown();
+});
+$('#semAutor').find('a').on('click', function () {
+    $('#semAutor').slideUp();
+    $('#autorSimNao').slideDown();
+});
+
+$('#qualContinua').find('a').on('click', function () {
+    $('#qualContinua').slideUp();
+    $('#continuaSimNao').slideDown();
+});
+$('#semContinua').find('a').on('click', function () {
+    $('#semContinua').slideUp();
+    $('#continuaSimNao').slideDown();
+});
+
+$('#qualSerie').find('a').on('click', function () {
+    $('#qualSerie').slideUp();
+    $('#serieSimNao').slideDown();
+});
+$('#semSerie').find('a').on('click', function () {
+    $('#semSerie').slideUp();
+    $('#serieSimNao').slideDown();
+});
+
+// Analytics specific
+/* Page Exit */
+window.onbeforeunload = sendView;
+function sendView(){
+    ga('send', 'event', 'time', 'exit', '/'+window.location.href.replace('http://www.gueime.com.br/'));
+}
+
+
+// AUTOCOMPLETES
+
+function split( val ) {
+    return val.split( /,\s*/ );
+}
+function extractLast( term ) {
+    return split( term ).pop();
+}
+$('input[name="jogo"]')
+    .bind( "keydown", function( event ) {
+        if ( event.keyCode === $.ui.keyCode.TAB &&
+            $( this ).data( "ui-autocomplete" ).menu.active ) {
+            event.preventDefault();
+        }
+    })
+    .autocomplete({
+        minLength: 2,
+        source: function (request, response) {  
+            $.getJSON("/autoGame", {
+                query: extractLast( request.term )
+            }, response );
+        },
+        focus: function() {
+          // prevent value inserted on focus
+          return false;
+        },
+        select: function( event, ui ) {
+            var terms = split( this.value );
+            // remove the current input
+            terms.pop();
+            // add the selected item
+            terms.push( ui.item.value );
+            // add placeholder to get the comma-and-space at the end
+            terms.push( "" );
+            this.value = terms.join( ", " );
+            return false;
+        }
+    });
+
+$('input[name="outrosAutores"]')
+    .bind( "keydown", function( event ) {
+        if ( event.keyCode === $.ui.keyCode.TAB &&
+            $( this ).data( "ui-autocomplete" ).menu.active ) {
+            event.preventDefault();
+        }
+    })
+    .autocomplete({
+        minLength: 2,
+        source: function (request, response) {  
+            $.getJSON("/autoAuthor", {
+                query: extractLast( request.term )
+            }, response );
+        },
+        focus: function() {
+          // prevent value inserted on focus
+          return false;
+        },
+        select: function( event, ui ) {
+            var terms = split( this.value );
+            // remove the current input
+            terms.pop();
+            // add the selected item
+            terms.push( ui.item.value );
+            // add placeholder to get the comma-and-space at the end
+            terms.push( "" );
+            this.value = terms.join( ", " );
+            return false;
+        }
+    });
+
+$('input[name="continuacaoHistoria"]')
+    
+    .autocomplete({
+        minLength: 2,
+        source: function (request, response) {  
+            $.getJSON("/autoStory", {
+                query: extractLast( request.term )
+            }, response );
+        }
+    });
+
+$('input[name="categoriaArtigo"]')
+    .bind( "keydown", function( event ) {
+        if ( event.keyCode === $.ui.keyCode.TAB &&
+            $( this ).data( "ui-autocomplete" ).menu.active ) {
+            event.preventDefault();
+        }
+    })
+    .autocomplete({
+        minLength: 2,
+        source: function (request, response) {  
+            $.getJSON("/autoArtCat", {
+                query: extractLast( request.term )
+            }, response );
+        },
+        focus: function() {
+          // prevent value inserted on focus
+          return false;
+        },
+        select: function( event, ui ) {
+            var terms = split( this.value );
+            // remove the current input
+            terms.pop();
+            // add the selected item
+            terms.push( ui.item.value );
+            // add placeholder to get the comma-and-space at the end
+            terms.push( "" );
+            this.value = terms.join( ", " );
+            return false;
+        }
+    });
+
+$('input[name="serieArtigo"]')
+    
+    .autocomplete({
+        minLength: 2,
+        source: function (request, response) {  
+            $.getJSON("/autoArtSerie", {
+                query: extractLast( request.term )
+            }, response );
+        }
+    });
+
+$('input[name="tipoVideo"]')
+    
+    .autocomplete({
+        minLength: 2,
+        source: function (request, response) {  
+            $.getJSON("/autoTipoVideo", {
+                query: extractLast( request.term )
+            }, response );
+        }
+    });
+
+
+$('input[name="consoles"]')
+    .bind( "keydown", function( event ) {
+        if ( event.keyCode === $.ui.keyCode.TAB &&
+            $( this ).data( "ui-autocomplete" ).menu.active ) {
+            event.preventDefault();
+        }
+    })
+    .autocomplete({
+        minLength: 2,
+        source: function (request, response) {  
+            $.getJSON("/autoConsoles", {
+                query: extractLast( request.term )
+            }, response );
+        },
+        focus: function() {
+          // prevent value inserted on focus
+          return false;
+        },
+        select: function( event, ui ) {
+            var terms = split( this.value );
+            // remove the current input
+            terms.pop();
+            // add the selected item
+            terms.push( ui.item.value );
+            // add placeholder to get the comma-and-space at the end
+            terms.push( "" );
+            this.value = terms.join( ", " );
+            return false;
+        }
+    });
+
+$('input[name="generos"]')
+    .bind( "keydown", function( event ) {
+        if ( event.keyCode === $.ui.keyCode.TAB &&
+            $( this ).data( "ui-autocomplete" ).menu.active ) {
+            event.preventDefault();
+        }
+    })
+    .autocomplete({
+        minLength: 2,
+        source: function (request, response) {  
+            $.getJSON("/autoGeneros", {
+                query: extractLast( request.term )
+            }, response );
+        },
+        focus: function() {
+          // prevent value inserted on focus
+          return false;
+        },
+        select: function( event, ui ) {
+            var terms = split( this.value );
+            // remove the current input
+            terms.pop();
+            // add the selected item
+            terms.push( ui.item.value );
+            // add placeholder to get the comma-and-space at the end
+            terms.push( "" );
+            this.value = terms.join( ", " );
+            return false;
+        }
+    });
+
+$('input[name="desenvolvedores"]')
+    .bind( "keydown", function( event ) {
+        if ( event.keyCode === $.ui.keyCode.TAB &&
+            $( this ).data( "ui-autocomplete" ).menu.active ) {
+            event.preventDefault();
+        }
+    })
+    .autocomplete({
+        minLength: 2,
+        source: function (request, response) {  
+            $.getJSON("/autoDes", {
+                query: extractLast( request.term )
+            }, response );
+        },
+        focus: function() {
+          // prevent value inserted on focus
+          return false;
+        },
+        select: function( event, ui ) {
+            var terms = split( this.value );
+            // remove the current input
+            terms.pop();
+            // add the selected item
+            terms.push( ui.item.value );
+            // add placeholder to get the comma-and-space at the end
+            terms.push( "" );
+            this.value = terms.join( ", " );
+            return false;
+        }
+    });
+
+$('input[name="publicadoras"]')
+    .bind( "keydown", function( event ) {
+        if ( event.keyCode === $.ui.keyCode.TAB &&
+            $( this ).data( "ui-autocomplete" ).menu.active ) {
+            event.preventDefault();
+        }
+    })
+    .autocomplete({
+        minLength: 2,
+        source: function (request, response) {  
+            $.getJSON("/autoPub", {
+                query: extractLast( request.term )
+            }, response );
+        },
+        focus: function() {
+          // prevent value inserted on focus
+          return false;
+        },
+        select: function( event, ui ) {
+            var terms = split( this.value );
+            // remove the current input
+            terms.pop();
+            // add the selected item
+            terms.push( ui.item.value );
+            // add placeholder to get the comma-and-space at the end
+            terms.push( "" );
+            this.value = terms.join( ", " );
+            return false;
+        }
+    });

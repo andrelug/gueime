@@ -4,72 +4,58 @@ var mongoose = require('mongoose');
 var ArticleSchema = new mongoose.Schema({
 
     title: String,
-    slug: {type: String, unique: true},
+    slug: {type: String},
     description: String,
-    cover: Buffer,
+    cover: {
+        image: String,
+        position: String
+    },
     subtitle: String,
     text: String,
     authors: {
-        main: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
-        sub: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}]
+        name: String,
+        main: String,
+        sub: [String],
+        revision: String
     },
     update: [{
         _id: false,
         type: Date
     }],
+    tags: [String],
     type: String,
     article: {
-        category: {
-            main: String,
-            others: [String]
-        }
+        category: [String],
+        serie: String
     },
     news:{
-        tags: [String],
-        story: {type: String, unique: true}
+        story: String
     },
     review: {
         score: Number,
-        good: [String],
-        bad: [String],
+        good: String,
+        bad: String,
         punchLine: String,
         main: {type: Boolean, default: false}
     },
     video: {
-        type: String,
+        tipo: String,
         canal: String,
-        url: String
+        url: String,
+        autoral: {type: Boolean, default: false}
     },
     graph: {
-        games: {
-            main: {type: mongoose.Schema.Types.ObjectId, ref: 'Game'},
-            others: [{_id: false, type: mongoose.Schema.Types.ObjectId, ref: 'Game'}]
-        },
-        console:{
-            main: String,
-            others: [String]
-        },
-        genre: {
-            main: String,
-            others: [String]
-        },
-        developer: {
-            main: String,
-            others: [String]
-        },
-        publisher: {
-            main: String,
-            others: [String]
-        },
-        ageRange: String,
+        games: [String],
+        consoles:[String],
+        genres: [String],
+        developers: [String],
+        publishers: [String],
         views: Number
     },
-    published: {
-        status: String,
-        highlight: Boolean
-    },
+    highlight: {type: Boolean, default: false},
+    status: {type: String, index: true, default: 'rascunho'},
     facet: {type: [String], index: true}
 });
 
-// create the model for users and expose it to app // Users var
+// create the model for users and expose it to app // Artigo var
 module.exports = mongoose.model('Article', ArticleSchema);

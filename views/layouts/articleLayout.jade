@@ -3,8 +3,58 @@ doctype html
 html.no-js(lang="pt_BR")
     head
         include head
+        if(article)
+            meta(name="description", content="#{article.description}")
+            meta(property="og:title", content="#{title}")
+            meta(property="og:type", content="article")
+            meta(property="og:image", content="http://www.gueime.com.br#{article.cover.image}")
+            meta(property="og:url", content="http://www.gueime.com.br/#{article.type}s/#{article.slug}")
+            meta(property="og:description", content="#{article.description}")
+            meta(name="twitter:card", content="summary")
+            meta(name="twitter:url", content="http://www.gueime.com.br/#{article.type}s/#{article.slug}")
+            meta(name="twitter:title", content="#{title}")
+            meta(name="twitter:description", content="#{article.description}")
+            meta(name="twitter:image", content="http://www.gueime.com.br#{article.cover.image}")
 
-    body(style="overflow: auto;")
-        block content
+    body(style="overflow-y: auto; background: url('../images/pattern.png') repeat #34495e")
+        div#fb-root
+        script.
+            window.fbAsyncInit = function() {
+                FB.init({
+                    appId      : '{561543940541408}',
+                    status     : true,
+                    xfbml      : true
+                });
+            };
+            (function(d, s, id){
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) {return;}
+            js = d.createElement(s); js.id = id;
+            js.src = "//connect.facebook.net/pt_BR/all.js";
+            fjs.parentNode.insertBefore(js, fjs);
+            }(document, 'script', 'facebook-jssdk'));
+
+        div.outWrap(style="overflow:hidden;")
+            block content
 
         include scripts
+
+        script.
+            $(window).on('popstate', function () {
+                $('#myModal').foundation('reveal', 'close');
+            });
+            var facebookComments = $(".fb-comments");
+            var facebookLikes = $('.fb-like');
+
+            facebookLikes.attr("data-href", window.location.href);
+            facebookComments.attr("data-href", window.location.href);
+
+            if($(window).width() < 760){
+                facebookComments.attr('data-width', 550)
+            }
+            if($(window).width() < 595){
+                facebookComments.attr('data-width', 380)
+            }
+            FB.XFBML.parse();
+
+            
