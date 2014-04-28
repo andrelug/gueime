@@ -37,7 +37,7 @@ body {
 .deletar {
   color: #fff;
   margin: 0px;
-  padding: 14px;
+  padding: 15px;
   display: block;
   float: left;
 }
@@ -51,6 +51,7 @@ body {
 }
 .deletar {
   background-color: #e54c3c;
+  padding-bottom: 15px;
 }
 .deletar:hover {
   background-color: #e23522;
@@ -1350,4 +1351,28 @@ a.create:active {
 }
 .footerLinks ul li a:hover {
   text-decoration: underline;
+}
+.entrarLogin {
+  text-align: center;
+}
+.entrarLogin .facebookLogin {
+  color: #45619d;
+}
+.entrarLogin .facebookLogin:hover {
+  background-color: #45619d;
+  color: #fff;
+}
+.entrarLogin .twitterLogin {
+  color: #5eaade;
+}
+.entrarLogin .twitterLogin:hover {
+  background-color: #5eaade;
+  color: #fff;
+}
+.entrarLogin .googleLogin {
+  color: #d14232;
+}
+.entrarLogin .googleLogin:hover {
+  background-color: #d14232;
+  color: #fff;
 }
