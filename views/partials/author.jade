@@ -5,7 +5,10 @@ if(tipo == 'analise')
                 div.large-3.medium-5.columns
                     div.smallScore
                         img(src="/images/nota_layout2.png")
-                        h4 #{score}<span>.#{decimal}</span>
+                        if(score == 10)
+                            h4(style="font-size: 60pt;top:37px;left:67px;") #{score}
+                        else
+                            h4 #{score}<span>.#{decimal}</span>
                 div.large-9.medium-7.columns
                     h5 #{article.review.punchLine}
                     div.row
