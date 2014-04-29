@@ -936,7 +936,7 @@ module.exports = function (app, passport, mongoose) {
             if (analiseRuim != undefined) { if (analiseRuim.indexOf(',') > -1) { analiseRuim = analiseRuim.split(','); } }
 
             facet.push(b.serieArtigo, b.tipoVideo, b.canalVideo);
-
+            console.log('ate aqui');
             
             var status;
             if(user.status == 'admin' || user.status == 'editor'){
@@ -1040,6 +1040,7 @@ module.exports = function (app, passport, mongoose) {
                     }
                 });
             } else if (b.tipo == 'analise') {
+                console.log('mais aqui');
                 Artigos.update({_id: id}, { $set: {
 
                     description: b.descricao,
@@ -1047,11 +1048,6 @@ module.exports = function (app, passport, mongoose) {
                     'cover.image': b.coverUrl,
                     'cover.position': b.position,
                     tags: sendTags,
-                    'graph.games': sendGames,
-                    'graph.consoles': sendConsoles,
-                    'graph.genres': sendGeneros,
-                    'graph.developers': sendDesenvolvedores,
-                    'graph.publishers': sendPublicadoras,
                     'review.score': b.nota,
                     'review.good': analiseBom,
                     'review.bad': analiseRuim,
@@ -1067,6 +1063,7 @@ module.exports = function (app, passport, mongoose) {
                     if (err)
                         throw err
                     if(user.status == 'admin' || user.status == 'editor'){
+                        console.log('e então aqui');
                         // Atribuição de pontuação
                         Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 50}}, function(err){
                             // Ganha pontos por revisão
