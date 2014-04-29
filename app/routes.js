@@ -1721,7 +1721,7 @@ module.exports = function (app, passport, mongoose) {
             } else{
                 sessionReload(req, res, next);
                 DevPub.findOneAndUpdate({slug: dev, type: 'publisher'}, {$inc: { 'graph.views': 1}}, function(err, dev){
-                    Artigos.find({status: 'publicado', 'graph.publisher': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
+                    Artigos.find({status: 'publicado', 'graph.publishers': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
                         Games.find({status: 'publicado', 'graph.publisher': new RegExp(dev.title, 'i')}).sort({release:1}).limit(8).exec(function(err, games){
                             var artigo = [];
                         

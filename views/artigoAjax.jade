@@ -32,3 +32,19 @@ div#loading
                 include partials/analise
                 div.fb-like(data-href="", data-layout="button_count", data-action="like", data-show-faces="true", data-share="true")
             include partials/author
+
+script.
+    $('.gameLogoStats a').each(function (index, value) {
+        var ihref = $(this).attr('href');
+        if(ihref.indexOf('/consoles/') > -1){
+            $(this).attr('href', string_to_slug(ihref).replace('-consoles-', '/consoles/'));
+        } else if(ihref.indexOf('/generos/') > -1){
+            $(this).attr('href', string_to_slug(ihref).replace('-generos-', '/generos/'));
+        } else if(ihref.indexOf('/desenvolvedores/') > -1){
+            $(this).attr('href', string_to_slug(ihref).replace('-desenvolvedores-', '/desenvolvedores/'));
+        } else if(ihref.indexOf('/distribuidoras') > -1) {
+            $(this).attr('href', string_to_slug(ihref).replace('-distribuidoras-', '/distribuidoras/'));
+        } else if(ihref.indexOf('/jogos') > -1){
+            $(this).attr('href', string_to_slug(ihref).replace('-jogos-', '/jogos/'));
+        }
+    });
