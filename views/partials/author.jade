@@ -13,13 +13,13 @@ if(tipo == 'analise')
                     h5 #{article.review.punchLine}
                     div.row
                         div.medium-6.columns
-                            if(good)
+                            if(good[0] != '')
                                 ul.good
                                     for bom in good
                                         li <span>+</span> #{bom}
 
                         div.medium-6.columns
-                            if(bad)
+                            if(bad[0] != '')
                                 ul
                                     for ruim in bad
                                         li <span>-</span> #{ruim}
