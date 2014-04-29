@@ -27,14 +27,14 @@ app.configure(function () {
     app.use(express.methodOverride());
     app.use(express.session({ store: new MongoStore({
         mongoose_connection: gueimesessions
-    }), secret: 'blablabladfkdaskldsfblkablafdsa34', cookie: { maxAge: 172800000 }
+    }), secret: 'blablabladfkdaskldsfblkablafdsa34', cookie: { maxAge: 518400000 }
     })); // session secret
     app.use(passport.initialize());
     app.use(passport.session()); // persistent login sessions
     app.use(flash()); // use connect-flash for flash messages stored in session
     app.use(app.router);
     app.use(require('stylus').middleware(path.join(__dirname, 'public')));
-    app.use(express.static(path.join(__dirname, 'public')));
+    app.use(express.static(path.join(__dirname, 'public'), {maxAge: 86400000}));
     app.use(function(req, res) {
       res.status(400);
       res.render('404', {title: '404: File Not Found'});
