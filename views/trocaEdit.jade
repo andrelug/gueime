@@ -1,0 +1,92 @@
+extends layouts/devPubEditLayout
+
+block content
+
+    div#check(style="display:none;") check
+    
+    header.header.row
+        div.content-wrap
+            div.content
+        div#darken
+        div.row#searchBack(style="background-color: white;display:none;")
+            div.large-4.medium-6.medium-centered.large-centered.columns(style="height:8rem;")
+                span.vertical-align-helper
+                a(href="/"): img(src="/images/gueime.png", alt="Gueime Logo")
+
+        div#specialLogo.gueimeWhite.show-for-large-up(style="display:block;right:30px;left:auto")
+            a(href="/"): img(src="/images/gueime-white.png", alt="white logo")
+
+        div#specialLogo.gueimeWhite.show-for-medium-down.smallLogo(style="display:block;left: auto; right:20px;position:absolute;")
+            a(href="/"): img(src="/images/gueime-white-small.png", alt="white logo")
+
+        include partials/nav
+
+    div#wrapper
+        div.parallax(style="border-top:5px solid #479ECD;")
+            article#mainText
+                div.row#game
+                    div.large-3.medium-4.columns#imageAndOptGame
+                        if(edit == true)
+                            img#userGameImage(src="#{developer.cover}")
+                            div.editingProf
+                                form#dropzoneGameCover(action="/newGameCover", class="dropzone", enctype="multipart/form-data", style="border:none;")
+                                    input(type="file", name="file", style="display: none;")
+                        else
+                            div.editingProf(style="height: 300px;background-color: white")
+                                form#dropzoneGameCover(action="/newGameCover", class="dropzone", enctype="multipart/form-data", style="border:none;")
+                                    input(type="file", name="file", style="display: none;")
+
+
+                    div.large-8.large-offset-1.medium-7.medium-offset-1.columns
+                        form(action="/newProduto", method="POST" data-abide)
+                            input(type="hidden", name="gameCover")
+
+                            if(edit == true)
+                                input(type="hidden", name="editing", value="yes")
+                                input(type="hidden", name="lastSlug", value="#{developer.slug}")
+                            else
+                                input(type="hidden", name="editing", value="no")
+                            
+                            if(edit == true)
+                                input.gameEditTitle(type="text", placeholder="Nome do Produto", required, name="nomeProd", value="#{developer.title}")
+                                small.error Obrigatório
+                            else
+                                input.gameEditTitle(type="text", placeholder="Nome do Produto", required, name="nomeProd")
+                                small.error Obrigatório
+
+                            div.row#gamerStats
+                                div.large-6.columns
+                                    if(edit == true)
+                                        label Quantos Disponíveis?
+                                            input(type="number", name="quantidade", required, placeholder="Quantos disponíveis?", value="#{developer.many}")
+                                        small.error Obrigatório
+                                    else
+                                        label Quantos Disponíveis?
+                                            input(type="number", name="quantidade", required, placeholder="Quantos disponíveis?")
+                                        small.error Obrigatório
+                                div.large-6.columns
+                                    if(edit == true)
+                                        label Quanto pontos custa?
+                                            input(type="number", name="custo", required, placeholder="Quanto pontos custa?", value="#{developer.much}")
+                                        small.error Obrigatório
+                                    else
+                                        label Quantos pontos custa?
+                                            input(type="number", name="custo", required, placeholder="Quanto pontos custa?")
+                                        small.error Obrigatório
+                                div.large-12.columns
+                                    if(edit == true)
+                                        textarea(name="sobre", placeholder="Sobre o Produto", required)
+                                            !{developer.about}
+                                        small.error Obrigatório
+                                    else
+                                        textarea(name="sobre", placeholder="Sobre o Produto", required)
+                                        small.error Obrigatório
+                                div.row
+                                    div.medium-6.medium-offset-3.columns
+                                        input.button#submitNewGame(type="submit")
+                     
+    include partials/footer
+
+    div#myModal.reveal-modal(data-reveal)
+        div#spinningContent
+            img(src="/images/spinning.gif")

@@ -1,0 +1,58 @@
+extends layouts/createLayout
+
+block content
+    header.header.row
+        div.content-wrap
+            div.content
+        div#darken
+        div.row#searchBack(style="background-color: white;display:none;")
+            div.large-4.medium-6.medium-centered.large-centered.columns(style="height:8rem;")
+                span.vertical-align-helper
+                img(src="/images/gueime.png", alt="Gueime Logo")
+
+        include partials/nav
+
+    div#wrapper
+        section.mainImage
+            div#loadingAj(style="display:none;")
+                img(src="/images/spinning.gif")
+            div.dropzone-previews
+            form#dropzoneImage(action="/newCover", class="dropzone", enctype="multipart/form-data")
+                input(type="file", name="file")
+            div.wrapImage
+                article.bloco
+                
+        mixin mainText
+            article#mainText
+                textarea#createTitle(name="content")
+                textarea#createContent(name="content")
+
+            div.row
+                div.large-8.large-centered.columns#enviarArtigo
+                    button#sendButton ENVIAR
+                    div(style="text-align: center")
+                        h3#slugErr(style="display: none;") Aparentemente esse título que escolheu é repetido. Tente outro
+
+            div.row
+                div.large-8.large-centered.columns
+                    include partials/createForm
+
+            footer.row
+                div.large-4.columns
+                    img(src="/images/gueime-white.png")
+                    h4 Você está acessando o Gueime 3.0
+
+                    p &copy; 2014 - Gueime
+
+        if(tipo == 'noticia')
+            div.parallax(style="border-top:5px solid #27b899;")
+                mixin mainText
+        else if(tipo == 'artigo')
+            div.parallax(style="border-top:5px solid rgb(71,158,205);")
+                mixin mainText
+        else if(tipo == 'video')
+            div.parallax(style="border-top:5px solid #34495e;")
+                mixin mainText
+        else
+            div.parallax(style="border-top:5px solid #E54C3C;")
+                mixin mainText

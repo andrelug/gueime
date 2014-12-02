@@ -1,0 +1,38 @@
+div.row#gerenciarRow
+    div.medium-10.medium-centered.columns
+        h1 Gerenciar Artigos
+
+        div.medium-10.medium-centered.columns
+            table.gerenciarTable
+                thead
+                    tr
+                        th Título
+                        th Tipo
+                        th Views
+                        th Status
+                        th Data
+                        th Editar
+                        if(user.status == 'admin')
+                            th Deletar
+
+                tbody
+                    for article in articles
+                        tr
+                            if(article.type == 'analise')
+                                td: a(href="/analises/#{article.slug}") #{article.title}
+                            else if(article.type == 'artigo')
+                                td: a(href="/artigos/#{article.slug}") #{article.title}
+                            else if(article.type == 'noticia')
+                                td: a(href="/noticias/#{article.slug}") #{article.title}
+                            else if(article.type == 'video')
+                                td: a(href="/videos/#{article.slug}") #{article.title}
+                            td #{article.type}
+                            td #{article.graph.views}
+                            if(article.status == 'deletado')
+                                td.status #{article.status} (<a href="/artigos/#{article.slug}/restore" class="restore">Restore</a>)
+                            else
+                                td.status #{article.status}
+                            td #{article.date}
+                            td: a(href="/editar/#{article._id}") Editar
+                            if(user.status == 'admin')
+                                td: a.deletarGen(href="/artigos/#{article._id}/deletar") Deletar

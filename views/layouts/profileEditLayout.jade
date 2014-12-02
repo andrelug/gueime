@@ -1,0 +1,154 @@
+doctype html
+<!--[if IE 9]><html class="lt-ie10" lang="pt_BR" > <![endif]-->
+html.no-js(lang="pt_BR")
+    head
+        include head
+        if(canonical == true)
+            link(rel="canonical", href="http://www.gueime.com.br/profile/#{profile.name.loginName}")
+
+    body(style="overflow-y: auto; background: url('../images/pattern.png') repeat #34495e")
+        include facebookInit
+
+        div.outWrap(style="overflow:hidden;")
+            block content
+
+        include profileScripts
+
+        include facebook
+
+        script.scriptLoad.
+            profileContainer.waitForImages(function () {
+                $("#spinning").hide();
+                $('body').css('overflow-y', 'auto');
+                profileContainer.animate({ 'opacity': 1 });
+
+                profileContainer.isotope({
+                    itemSelector: '.item',
+                    layoutMode: 'masonry',
+                    masonry:{
+                        gutter: 20,
+                        rowHeight: 10,
+                        columnWidth: 24
+                    }                    
+                    
+                });
+
+                var n = $('.item').length;
+                var b = "#{profile._id}";
+                if (n < 7) {
+                    $.ajax({
+                        type: "GET",
+                        url: "/paginationProfile",
+                        data: {n: n, b: b},
+                        dataType: 'html'
+                    }).done(function (data) {
+                        profileContainer.isotope('insert', $(data));
+                    });
+                }
+            }, null, true);
+            Dropzone.options.dropzoneProfileImage = {
+                paramName: "file", // The name that will be used to transfer the file
+                maxFilesize: 2, // MB,
+                addRemoveLinks: true,
+                previewsContainer: null,
+                init: function () {
+                    this.on('addedfile', function () {
+                        $('#loadingAj').show();
+                    });
+                    this.on("complete", function (file) {
+                        console.log(file);
+                        console.log(file.name);
+                        if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+                            $('#dropzoneProfileImage').css('width', '20%');
+                            $('#loadingAj').fadeOut();
+                            imageCover = '/uploads/' + thisUser + file.name;
+                            $('.mainImage').delay(500).attr('style', 'background: url(/uploads/' + thisUser + file.name + ') no-repeat center 0px;');
+                            window.setTimeout(function () { $('.mainImage').delay(6000).attr('style', 'background: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images/userInput/' + thisUser + file.name + ') no-repeat center 0px;'); }, 6000);
+                        }
+                    });
+                }
+            };
+
+            var gameCover = 'none';
+            Dropzone.options.dropzoneGameCover = {
+                paramName: "file", // The name that will be used to transfer the file
+                maxFilesize: 1, // MB,
+                addRemoveLinks: true,
+                previewsContainer: null,
+                init: function () {
+                    this.on("complete", function (file) {
+                        console.log(file);
+                        console.log(file.name);
+                        if (this.getUploadingFiles().length === 0 && this.getQueuedFiles().length === 0) {
+                            gameCover = 'https://s3-sa-east-1.amazonaws.com/portalgueime/gameCover/' + thisUser + file.name;
+                            $('#userGameImage').attr('src', '/uploads/' + thisUser + file.name);
+                            window.setTimeout(function () {$('#userGameImage').attr('src', 'https://s3-sa-east-1.amazonaws.com/portalgueime/gameCover/' + thisUser + file.name);}, 6000);
+                        }
+                    });
+                }
+            };
+
+            $(document).ready(function(){
+                var $bg = $('.mainImage'),
+                    origin = {x: 0, y: 0},
+                    start = {x: 0, y: 0},
+                    movecontinue = false;
+
+                function move (e){
+                    var moveby = {
+                        x: origin.x - e.clientX,
+                        y: origin.y - e.clientY
+                    };
+
+                    if (movecontinue === true) {
+                        start.x = start.x - moveby.x;
+                        start.y = start.y - moveby.y;
+
+                        $(this).css('background-position', /*start.x + 'px ' Usar isso para mover tbm horizontal*/ 'center ' + start.y + 'px');
+                    }
+
+                    origin.x = e.clientX;
+                    origin.y = e.clientY;
+
+                    e.stopPropagation();
+                    return false;
+                }
+
+                function handle (e){
+                    movecontinue = false;
+                    $bg.unbind('mousemove', move);
+
+                    if (e.type == 'mousedown') {
+                        origin.x = e.clientX;
+                        origin.y = e.clientY;
+                        movecontinue = true;
+                        $bg.bind('mousemove', move);
+                    } else {
+                        $(document.body).focus();
+                    }
+
+                    e.stopPropagation();
+                    return false;
+                }
+
+                function reset (){
+                    start = {x: 0, y: 0};
+                    $(this).css('backgroundPosition', '0 0');
+                }
+
+                $bg.bind('mousedown mouseup mouseleave', handle);
+                $bg.bind('dblclick', reset);
+            });
+        script.
+            $(window).on('popstate', function () {
+                $('.content-wrap').fadeOut();
+                $('body').css('overflow-y', 'auto');
+                $('#darken').css('display', 'none');
+                if($('#mainText').html() !== undefined){
+                    ga('send', 'pageview', '/'+window.location.href.replace('http://www.gueime.com.br/',''));
+                }
+                $('.content').empty().css('background', 'white');
+            });
+
+        script.
+            var thisUser = "#{user.name.loginName}";

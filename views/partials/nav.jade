@@ -1,0 +1,89 @@
+div#nav-sticky
+    div.nav
+        div.row
+            div.large-5.medium-9.small-10.medium-centered.columns.large-centered
+                div#suggestion
+                    input#mainInput(type="text", placeholder="Ache tudo sobre Games!", autocomplete="off")
+                    a(href="#").filtros filtros
+    div.filter.row
+        div.medium-8.medium-centered.small-12.small-centered.columns
+            div.row#gerenciarMenu.filterMenu
+                a.create(title="Gerenciar Conquistas", data-filter=".noticias") <span>Notícias</span>
+
+                a.create(title="Gerenciar Conquistas", data-filter=".artigos") <span>Artigos</span>
+
+                a.create(title="Gerenciar Conquistas", data-filter=".analises") <span>Análises</span>
+
+                a.create(title="Gerenciar Conquistas", data-filter=".videos") <span>Vídeos</span>
+
+    div.contain-to-grid
+        div.row
+            div.gueimeWhite
+                a(href="/"): img(src="/images/gueime-white.png", alt="white logo")
+            div.large-4.medium-4.small-8.columns
+                if (!user)
+                    a.facebook(href="#", data-dropdown="dropLogin") <i class="fa fa-sign-in"></i> Log In / Registrar
+                    ul#dropLogin.entrarLogin.f-dropdown(data-dropdown-content)
+                        li
+                            a.facebookLogin(href="/auth/facebook") <i class="fa fa-facebook"></i> Facebook
+                        li
+                            a.googleLogin(href="/auth/google") <i class="fa fa-google-plus"></i> Google+
+                        li
+                            a.twitterLogin(href="/auth/twitter") <i class="fa fa-twitter"></i> Twitter
+
+                else if(user.status == 'admin' || user.status == 'parceiro' || user.status == 'editor')
+                    a(href="/profile").user <i class="fa fa-dashboard"></i> #{user.name.first}
+                    a.create(href="#", data-dropdown="drop1") <i class="fa fa-pencil-square-o"></i> Criar
+                    ul#drop1.f-dropdown(data-dropdown-content)
+                        li
+                            a(href="/criar/noticia") Notícia
+                        li
+                            a(href="/criar/artigo") Artigo
+                        li
+                            a(href="/criar/analise") Análise
+                        li
+                            a(href="/criar/video") Vídeo
+                        if(user.status == 'admin' || user.status == 'editor')
+                            li
+                                a(href="/criar/novo/jogo") Jogo
+                            li
+                                a(href="/criar/novo/distribuidora") Distribuidora
+                            li
+                                a(href="/criar/novo/desenvolvedor") Desenvolvedor
+                            li
+                                a(href="/criar/novo/genero") Gênero
+                            li
+                                a(href="/criar/novo/console") Console
+                            li
+                                a(href="/criar/novo/troca") Troca
+                            
+                    if(criar == true)
+                        a.deletar <i class="fa fa-trash-o"></i> Deletar
+                        form#deletar(action="/deletar/#{id}", method="post")
+                    if(article)
+                        if(article.authors.main == user.id || user.status == 'admin')
+                            a(href="/editar/#{article._id}", title="#{article.slug}").editar <i class="fa fa-gears"></i> Editar
+                            a.deletar <i class="fa fa-trash-o"></i> Deletar
+                            form#deletar(action="/deletar/#{article.id}", method="post")
+
+
+                                
+                else
+                    a(href="/profile").user <i class="fa fa-dashboard"></i> #{user.name.first}
+                                    
+                                
+            if (!user)
+                div.show-for-small.small-4.columns
+            else if(user.status == 'admin' || user.status == 'parceiro')
+                div.show-for-small.small-4.columns
+                    a.logout(href="/logout") <i class="fa fa-sign-out"></i> sair
+                        
+                            
+            div.large-6.medium-6.columns.small-12#tagSelection
+                
+
+            if(user)
+                div.large-2.medium-2.show-for-medium-up.columns
+                        a.logout(href="/logout") <i class="fa fa-sign-out"></i> sair
+            else
+                div.large-2.medium-2.show-for-mediu-up.columns

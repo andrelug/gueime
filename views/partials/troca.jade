@@ -1,0 +1,15 @@
+div#trocaGrid.row
+    for product in products
+        div.product.item
+            div.gameAnalise(style="background: url(#{product.cover}) center center no-repeat; background-size:130%; margin:0px")
+                div.analisePattern(style="background-color:rgba(36, 50, 80, 0.6);")
+                    h3(title="#{product.about}") #{product.title} <span data-tooltip class="has-tip fa fa-info-circle infoProduct" title="#{product.about}" style="color:white"></span>
+                        if(user && user.status == 'admin')
+                            a(href="/troca/#{product.slug}/editar", style="color: white;padding:3px;") Editar
+                    div.row
+                        div.small-6.columns.amount
+                            span.productMany Quantidade: #{product.many}
+                        div.small-6.columns.amount
+                            span: img#gueimePoints.trocaLogoPoints(src="/images/gueime-white-small.png", alt="Gueime Points", title="Gueime Points")
+                            | #{product.much}
+                    a.button.pedir(href="#", data-title="#{product.slug}") Requesitar

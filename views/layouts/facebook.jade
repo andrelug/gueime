@@ -1,0 +1,17 @@
+script.
+    $(window).on('popstate', function () {
+        $('#myModal').foundation('reveal', 'close');
+    });
+    var facebookComments = $(".fb-comments");
+    var facebookLikes = $('.fb-like');
+
+    facebookLikes.attr("data-href", window.location.href);
+    facebookComments.attr("data-href", window.location.href);
+
+    if($(window).width() < 760){
+        facebookComments.attr('data-width', 550)
+    }
+    if($(window).width() < 595){
+        facebookComments.attr('data-width', 380)
+    }
+    FB.XFBML.parse();

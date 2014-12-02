@@ -1,0 +1,67 @@
+doctype html
+<!--[if IE 9]><html class="lt-ie10" lang="pt_BR" > <![endif]-->
+html.no-js(lang="pt_BR")
+    head
+        include head
+
+    body
+        include facebookInit 
+
+        div.outWrap(style="overflow:hidden;")
+            block content
+
+        include scripts
+        script.scriptLoad.
+            container.waitForImages(function () {
+                $("#spinning").hide();
+                $('body').css('overflow-y', 'auto');
+                container.animate({ 'opacity': 1 });
+
+                container.isotope({
+                    itemSelector: '.item',
+                    layoutMode: 'masonry',
+                    masonry:{
+                        gutter: 20,
+                        rowHeight: 10,
+                        columnWidth: 24
+                    }                    
+                    
+                });
+
+                n = $('.item').length;
+                if (n < 7) {
+                    $.ajax({
+                        type: "GET",
+                        url: "/pagination",
+                        data: {n: n},
+                        dataType: 'html'
+                    }).done(function (data) {
+                        container.isotope('insert', $(data));
+                    });
+                }
+
+                var nav = $('#nav-sticky');
+                nav_sticky = nav.offset().top; //get the Y-position of section
+
+                $(window).on({
+                    scroll: function () { // fires when user scrolls
+                        if ($(window).width() > 641) {
+                            var current_position = window.pageYOffset; // get the current window Y-Position
+                            if (current_position > nav_sticky) {
+                                nav.addClass('sticky');
+                                container.css('margin-top', 137); // add class to make the nav sticky using css
+                                if ($(window).width() > 1025){
+                                    $('.gueimeWhite').fadeIn();
+                                }
+                    
+                            } else {
+                                nav.removeClass('sticky');
+                                container.css('margin-top', 0); // remove sticky css class
+                                    $('.gueimeWhite').fadeOut();
+                            }
+                        }
+                    }
+                });
+            }, null, true);
+
+        include facebook

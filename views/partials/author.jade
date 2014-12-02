@@ -1,0 +1,133 @@
+if(tipo == 'analise')
+    div.row
+        div.medium-12.medium-centered.columns(style="padding:0")
+            div.row.reviewScore
+                div.large-3.medium-5.columns
+                    div.smallScore
+                        img(src="/images/nota_layout2.png")
+                        if(score == 10)
+                            h4(style="font-size: 60pt;top:37px;left:67px;") #{score}
+                        else
+                            h4 #{score}<span>.#{decimal}</span>
+                div.large-9.medium-7.columns
+                    h5 #{article.review.punchLine}
+                    div.row
+                        div.medium-6.columns
+                            if(good[0] != '')
+                                ul.good
+                                    for bom in good
+                                        li <span>+</span> #{bom}
+
+                        div.medium-6.columns
+                            if(bad[0] != '')
+                                ul
+                                    for ruim in bad
+                                        li <span>-</span> #{ruim}
+    if(game)
+        div.row#gamerStats(style="background-color:#27B899;")
+            div.medium-8.medium-centered.columns
+                div.row
+                    a(href="/jogos/#{article.slug}", title="#{article.title}"): h2 Informações do Jogo
+                    div.small-6.columns
+                        ul.gameLogo
+                            li.gameLogoStats <i class="fa fa-calendar"></i> #{date}
+                            li.gameLogoStats <i class="fa fa-gamepad"></i> 
+                                each console in game.graph.console
+                                    a(href="/consoles/#{console}") #{console} 
+                            li.gameLogoStats <i class="fa fa-gavel"></i> #{game.graph.esrb}
+
+                    div.small-6.columns
+                        ul.gameLogo
+                            li.gameLogoStats Gênero:  
+                                each genero in game.graph.genre
+                                    a(href="/generos/#{genero}") #{genero} 
+                            li.gameLogoStats Desenvolvedor: 
+                                each dev in game.graph.developer
+                                    a(href="/desenvolvedores/#{dev}") #{dev} 
+                            li.gameLogoStats Distribuidora:  
+                                each pub in game.graph.publisher
+                                    a(href="/distribuidoras/#{pub}") #{pub}  
+
+
+
+else
+    div.row#gamerStats(style="background-color:#27B899;")
+        div.medium-8.medium-centered.columns
+            div.row
+                div.small-6.columns
+                    ul.gameLogo
+                        li.gameLogoStats <i class="fa fa-calendar"></i> #{article.date}
+                        li.gameLogoStats <i class="fa fa-gamepad"></i> 
+                            each game in article.graph.games
+                                a(href="/jogos/#{game}") #{game} 
+                        li.gameLogoStats <i class="fa fa-tags"></i> 
+                            each tag in article.tags
+                                a(href="/?t=#{tag}") #{tag}
+
+                div.small-6.columns
+                    ul.gameLogo
+                        if(article.graph.genres.length == 1)
+                            li.gameLogoStats Gênero:  
+                                each genero in article.graph.genres
+                                    a(href="/generos/#{genero}") #{genero} 
+                        else
+                            li.gameLogoStats Gêneros:  
+                                each genero in article.graph.genres
+                                    a(href="/generos/#{genero}") #{genero} 
+                        if(article.graph.developers.length == 1)
+                            li.gameLogoStats Desenvolvedor: 
+                                each dev in article.graph.developers
+                                    a(href="/desenvolvedores/#{dev}") #{dev} 
+                        else
+                            li.gameLogoStats Desenvolvedores: 
+                                each dev in article.graph.developers
+                                    a(href="/desenvolvedores/#{dev}") #{dev} 
+                        if(article.graph.publishers.length == 1)
+                            li.gameLogoStats Distribuidora:  
+                                each pub in article.graph.publishers
+                                    a(href="/distribuidoras/#{pub}") #{pub}  
+
+                        else
+                            li.gameLogoStats Distribuidoras:  
+                                each pub in article.graph.publishers
+                                    a(href="/distribuidoras/#{pub}") #{pub}
+
+
+section#author.row
+    div.large-3.medium-6.columns.autImage
+        div.row
+            div.small-6.columns
+                span#authorImage
+                a(href="/profile/#{author.name.loginName}"): img(src="#{author.photo}")
+            div.small-6.columns
+                div#authorInfo
+                    div.row
+                        div.small-12.columns(style="margin-bottom: 20px;")
+                            a(href="/profile/#{author.name.loginName}") #{author.name.first} #{author.name.last}
+                        if(author.social.facebook.url)
+                            div.small-4.columns
+                                a(href="#{author.social.facebook.url}", title="facebook") <i class="fa fa-facebook"></i>
+                        else if(author.social.facebook.id)
+                            div.small-4.columns
+                                a(href="http://www.facebook.com/#{author.social.facebook.id}", title="facebook") <i class="fa fa-facebook"></i>
+                        if(author.social.twitter.url)
+                            div.small-4.columns
+                                a(href="#{author.social.twitter.url}", title="twitter") <i class="fa fa-twitter"></i>
+                        else if(author.social.twitter.username)
+                            div.small-4.columns
+                                a(href="http://www.twitter.com/#{author.social.twitter.username}", title="twitter") <i class="fa fa-twitter"></i>
+                        if(author.social.google.url)
+                            div.small-4.columns
+                                a(href="#{author.social.google.url}", title="google plus") <i class="fa fa-google-plus"></i>
+                        else if(author.social.google.id)
+                            div.small-4.columns
+                                a(href="https://plus.google.com/#{author.social.google.id}", title="google plus") <i class="fa fa-google-plus"></i>
+
+    div.large-9.medium-6.columns.autShare
+        div#share(style="background-color: rgb(71,158,205)", title="#{relate}", data-id="#{id}")
+            
+
+    div.large-7.columns#comments
+        div.fb-comments(data-href="", data-width="700", data-numposts="10", data-colorscheme="light")
+
+    div.large-5.columns

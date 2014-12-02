@@ -1,0 +1,85 @@
+doctype html
+<!--[if IE 9]><html class="lt-ie10" lang="pt_BR" > <![endif]-->
+html.no-js(lang="pt_BR")
+    head
+        include head
+        if(canonical == true)
+            link(rel="canonical", href="http://www.gueime.com.br/profile/#{profile.name.loginName}")
+        meta(name="description", content="#{profile.bio}")
+        meta(property="og:title", content="#{profile.name.first} #{profile.name.last}")
+        meta(property="og:type", content="user")
+        meta(property="og:image", content="#{profile.photo}")
+        meta(property="og:url", content="http://www.gueime.com.br/profile/#{profile.name.loginName}")
+        meta(property="og:description", content="#{profile.bio}")
+        meta(name="twitter:card", content="summary")
+        meta(name="twitter:url", content="http://www.gueime.com.br/profile/#{profile.name.loginName}")
+        meta(name="twitter:title", content="#{profile.name.first} #{profile.name.last}")
+        meta(name="twitter:description", content="#{profile.bio}")
+        meta(name="twitter:image", content="#{profile.photo}")
+
+    body(style="overflow-y: auto; background: url('../images/pattern.png') repeat #34495e")
+        include facebookInit
+
+        div.outWrap(style="overflow:hidden;")
+            block content
+
+        include scripts
+        script(src="/javascripts/profile.js")
+
+        include facebook
+        script.scriptLoad.
+            var b = "#{profile._id}";
+            profileContainer.waitForImages(function () {
+                $("#spinning").hide();
+                $('body').css('overflow-y', 'auto');
+                profileContainer.animate({ 'opacity': 1 });
+
+                profileContainer.isotope({
+                    itemSelector: '.item',
+                    layoutMode: 'masonry',
+                    masonry:{
+                        gutter: 20,
+                        rowHeight: 10,
+                        columnWidth: 24
+                    }                 
+                    
+                });
+
+                var n = $('.item').length;
+                
+                if (n < 7) {
+                    $.ajax({
+                        type: "GET",
+                        url: "/paginationProfile",
+                        data: {n: n, b: b},
+                        dataType: 'html'
+                    }).done(function (data) {
+                        profileContainer.isotope('insert', $(data));
+                    });
+                }
+            }, null, true);
+        script.
+            // LOAD MORE ARTICLES
+            $('#loadMoreProfile').on('click', function () {
+                n = $('.item').length;
+                $.ajax({
+                    type: "GET",
+                    url: "/paginationProfile",
+                    data: { n: n, b: b },
+                    dataType: 'html'
+                }).done(function (data) {
+                    container.isotope('insert', $(data));
+                });
+            });
+
+            $(window).on('popstate', function () {
+                $('.content-wrap').fadeOut();
+                $('body').css('overflow-y', 'auto');
+                $('#darken').css('display', 'none');
+                if($('#mainText').html() !== undefined){
+                    ga('send', 'pageview', '/'+window.location.href.replace('http://www.gueime.com.br/',''));
+                }
+                $('.content').empty().css('background', 'white');
+            });
+
+            

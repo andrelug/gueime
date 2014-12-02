@@ -1,0 +1,36 @@
+extends layouts/error
+
+block content
+    if(messages == 'true')
+        div.alert-box(data-alert, style="margin-bottom: 0; height: 60px")
+            p Aparentemente esse artigo que tentou acessar não existe mais...mas temos certeza que algo abaixo vai te agradar!
+            a#alertMessage(href="#", style="color: white; opacity: 1").close &times;
+    if(deletado == 'true')
+        div.alert-box(data-alert, style="margin-bottom: 0; height: 60px")
+            p Seu Artigo foi deletado, mas você ainda tem acesso a ele em sua página de peril.
+            a#alertMessage(href="#", style="color: white; opacity: 1").close &times;
+    if(onlyOne == 'true')
+        div.alert-box(data-alert, style="margin-bottom: 0; height: 60px")
+            p Você só pode ter um texto em edição por vez. Procure em sua página de perfil por algum artigo com status: rascunho.
+            a#alertMessage(href="#", style="color: white; opacity: 1").close &times;
+
+    div.content-wrap
+        div.content
+            
+    div#darken       
+    div.row(style="background-color: white;")
+        div.large-4.medium-6.medium-centered.large-centered.columns(style="height:8rem;")
+            span.vertical-align-helper
+            a(href="/"): img(src="/images/gueime.png", alt="Gueime Logo")
+
+    include partials/nav
+
+
+    div#gueimeError.row
+        h1 Huuummm....essa página não era para estar aqui...
+
+    include partials/footer
+
+    div#myModal.reveal-modal(data-reveal)
+        div#spinningContent
+            img(src="/images/spinning.gif")

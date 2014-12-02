@@ -1,0 +1,13 @@
+div.row#gridArticles
+    if(games != undefined && games.length > 0)
+        for game in games
+            a(href="/jogos/#{game.slug}").item
+                div.gameAnalise(style="#{game.cover}  margin:0px")
+                    div.analisePattern(style="background-color:rgba(36, 50, 80, 0.6);")
+                        h3(style="color:white;") #{game.title}
+
+    include partials/tiles
+
+
+style.
+    .autocomplete-suggestions{position:absolute !important;}

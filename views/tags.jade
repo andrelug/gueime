@@ -1,0 +1,65 @@
+div.row#gridArticles
+    if(games != undefined && games.length > 0)
+        for game in games
+            a(href="/jogos/#{game.slug}").item
+                div.gameAnalise(style="#{game.cover}  margin:0px")
+                    div.analisePattern(style="background-color:rgba(36, 50, 80, 0.6);")
+                        h3(style="color:white;") #{game.title}
+
+    include partials/tiles
+
+
+style.
+    .autocomplete-suggestions{position:absolute !important;}
+script.scriptLoad.
+    var container = $('#gridArticles');
+           
+    container.waitForImages(function () {
+        $("#spinning").hide();
+        $('body').css('overflow-y', 'auto');
+        container.animate({ 'opacity': 1 });
+        $('#specialLogo').remove();
+
+
+        container.isotope({ 
+            itemSelector: '.item',
+            layoutMode: 'masonry',
+            masonry:{
+                gutter: 20,
+                rowHeight: 10,
+                columnWidth: 24
+            }
+                    
+        });
+        $('.filtros').show();
+        // Autocomplete
+        $('#mainInput').autocomplete({
+            serviceUrl: '/autocomplete',
+            minChars: 3,
+            deferRequestBy: 400,
+            autoSelectFirst: true
+        });
+
+        var nav = $('#nav-sticky');
+        nav_sticky = 128; //get the Y-position of section
+
+        $(window).on({
+            scroll: function () { // fires when user scrolls
+                if ($(window).width() > 641) {
+                    var current_position = window.pageYOffset; // get the current window Y-Position
+                    if (current_position > nav_sticky) {
+                        nav.addClass('sticky');
+                        container.css('margin-top', 137); // add class to make the nav sticky using css
+                        if ($(window).width() > 1025){
+                            $('.gueimeWhite').fadeIn();
+                        }
+                    
+                    } else {
+                        nav.removeClass('sticky');
+                        container.css('margin-top', 0); // remove sticky css class
+                         $('.gueimeWhite').fadeOut();
+                    }
+                }
+            }
+        });
+    }, null, true);

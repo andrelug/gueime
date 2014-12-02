@@ -1,0 +1,45 @@
+doctype html
+<!--[if IE 9]><html class="lt-ie10" lang="pt_BR" > <![endif]-->
+html.no-js(lang="pt_BR")
+    head
+        include head
+        link(rel="stylesheet", href="/stylesheets/vendor/table.css")
+
+    body(style="overflow-y: auto; background: url('../images/pattern.png') repeat #34495e")
+        include facebookInit
+
+        div.outWrap(style="overflow:hidden;")
+            block content
+
+        include scripts
+        script(src="/javascripts/trivia.js")
+
+        include facebook
+
+        script.scriptLoad.
+            profileContainer.waitForImages(function () {
+                $("#spinning").hide();
+                $('body').css('overflow-y', 'auto');
+                profileContainer.animate({ 'opacity': 1 });
+
+                profileContainer.isotope({
+                    itemSelector: '.item',
+                    layoutMode: 'masonry',
+                    masonry:{
+                        gutter: 20,
+                        rowHeight: 10,
+                        columnWidth: 24
+                    }                    
+                    
+                });
+            }, null, true);
+        script.
+            $(window).on('popstate', function () {
+                $('.content-wrap').fadeOut();
+                $('body').css('overflow-y', 'auto');
+                $('#darken').css('display', 'none');
+                if($('#mainText').html() !== undefined){
+                    ga('send', 'pageview', '/'+window.location.href.replace('http://www.gueime.com.br/',''));
+                }
+                $('.content').empty().css('background', 'white');
+            });

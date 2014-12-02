@@ -1,0 +1,42 @@
+{
+  "name": "PortalGueime",
+  "version": "0.1.0",
+  "author": "Gueime",
+  "description": "O melhor site de Games do Brasil",
+  "contributors": [
+    {
+      "name": "Andre Lucas",
+      "email": "pamasway@gmail.com"
+    }
+  ],
+  "main": "./server.js",
+  "keywords": [
+    "azure",
+    "boilerplate",
+    "express"
+  ],
+  "dependencies": {
+    "jade": "*",
+    "express": "~3.5.2",
+    "mongoose": "*",
+    "passport": "*",
+    "stylus": "~0.44.0",
+    "passport-local": "*",
+    "passport-facebook": "*",
+    "passport-twitter": "*",
+    "passport-google-oauth": "*",
+    "connect-flash": "*",
+    "bcrypt-nodejs": "*",
+    "newrelic": "~1.5.3",
+    "ip": "*",
+    "connect-mongo": "*",
+    "node-transloadit": "*",
+    "nodemailer": "*",
+    "async": "~0.8.0"
+  },
+  "noAnalyze": true,
+  "license": "Apache",
+  "engines": {
+    "node": ">=0.6.14"
+  }
+}

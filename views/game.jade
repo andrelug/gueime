@@ -1,0 +1,153 @@
+extends layouts/gameLayout
+
+block content
+
+    div#check(style="display:none;") check
+    
+    header.header.row
+        div.content-wrap
+            div.content
+        div#darken
+        div.row#searchBack(style="background-color: white;display:none;")
+            div.large-4.medium-6.medium-centered.large-centered.columns(style="height:8rem;")
+                span.vertical-align-helper
+                a(href="/"): img(src="/images/gueime.png", alt="Gueime Logo")
+
+        div#specialLogo.gueimeWhite.show-for-large-up(style="display:block;right:30px;left:auto")
+            a(href="/"): img(src="/images/gueime-white.png", alt="white logo")
+
+        div#specialLogo.gueimeWhite.show-for-medium-down.smallLogo(style="display:block;left: auto; right:20px;position:absolute;")
+            a(href="/"): img(src="/images/gueime-white-small.png", alt="white logo")
+
+        include partials/nav
+
+    div#wrapper
+        section.mainImage#mainImageChange(style="#{game.cover}")
+            div.wrapImage
+                article.bloco
+
+        div.parallax(style="border-top:5px solid #479ECD;")
+            article#mainText
+                div.row#game
+                    div.large-3.medium-4.columns#imageAndOptGame
+                        div.row.show-for-small
+                            div.small-12.columns
+                                h1#userTitle(style="color: white") #{game.title}
+                        div.editingProf
+                            img#userGameImage(src="#{game.gameCover}")
+                            if(user && user.status == 'admin' || user && user.status == 'editor')
+                                a.hide-for-small.button.tiny#editButtonHover(href="/jogos/#{game.slug}/editar") Editar
+                        div#gameStats.row
+                            div.small-2.columns
+                                h3 <i class="fa fa-user" title="Gamers"></i>
+                            div.small-10.columns
+                                if(!game.graph.gamers)
+                                    h3 0
+                                else
+                                    h3 #{game.graph.gamers}
+                            div.small-2.columns
+                                h3 <i class="fa fa-eye" title="Visualizações"></i>
+                            div.small-10.columns
+                                h3 #{game.graph.views}
+                            if(user)
+                                div.medium-6.columns(style="padding:0px;")
+                                    - var gameIndex = game.title
+                                    if(user.graph.gamesCol.indexOf(gameIndex) > -1)
+                                        a.button#joguei.jogado <i class="fa fa-check"></i> Joguei
+                                    else
+                                        a.button#joguei Joguei
+                                div.medium-6.columns(style="padding:0px;")
+                                    if(user.graph.gamesLike.indexOf(gameIndex) > -1)
+                                        a.button#favorito.jogado <i class="fa fa-check"></i> Favorito
+                                    else
+                                        a.button#favorito Favorito
+
+                        div.row#gameMenu
+                            div.small-12.columns
+                                a Sobre
+
+                    div.large-8.large-offset-1.medium-7.medium-offset-1.columns
+                        h1#userTitle.show-for-medium-up #{game.title}
+                        div.row#gamerStats
+                            div.small-6.columns
+                                ul.gameLogo
+                                    li.gameLogoStats <i class="fa fa-calendar"></i> #{date}
+                                    li.gameLogoStats <i class="fa fa-gamepad"></i> 
+                                        each console in game.graph.console
+                                            a(href="/consoles/#{console}") #{console} 
+                                    li.gameLogoStats <i class="fa fa-gavel"></i> #{game.graph.esrb}
+
+                            div.small-6.columns
+                                ul.gameLogo
+                                    li.gameLogoStats Gênero:  
+                                        each genero in game.graph.genre
+                                            a(href="/generos/#{genero}") #{genero} 
+                                    li.gameLogoStats Desenvolvedor: 
+                                        each dev in game.graph.developer
+                                            a(href="/desenvolvedores/#{dev}") #{dev} 
+                                    li.gameLogoStats Distribuidora:  
+                                        each pub in game.graph.publisher
+                                            a(href="/distribuidoras/#{pub}") #{pub}                                     
+                                    
+
+                        include partials/gameView
+            // Para quando disponibilizar as funcionalidades
+                div.row
+                    div.medium-8.medium-centered.columns
+                        div.row#gameInformations
+                            a.create(href="/jogos/#{game.slug}") <i class="fa fa-globe"></i> <span>Geral</span>
+
+                            a.create(href="/jogos/#{game.slug}/wiki") <i class="fa fa-coffee"></i> <span>Wiki</span>
+
+                            a.create(href="/jogos/#{game.slug}/images") <i class="fa fa-picture-o"></i> <span>Imagens</span>
+
+                            a.create(href="/jogos/#{game.slug}/qa") <i class="fa fa-question"></i> <span>Q&A</span>
+
+                            a.create(href="/jogos/#{game.slug}/conquistas") <i class="fa fa-trophy"></i> <span>Conquistas</span>
+                    
+
+            
+        
+            if(analise != undefined)
+                div.row#gameReview
+                    div.medium-8.medium-centered.columns
+                        h2 Análise
+
+                div.row
+                    div.medium-8.medium-centered.columns
+                        a(href="/analises/#{analise[0].slug}", data-link="ajax")
+                            div.gameAnalise(style="#{game.cover}")
+                                div.analisePattern
+                                div.smallScoreGame
+                                    img(src="/images/nota_layout2.png")
+                                    div.scoreAlign
+                                        h4 #{score}<span>.#{decimal}</span>
+            
+            if(docs.length > 0)
+                div#profileTiles
+                    div.row#activityDivision
+                        div.medium-8.medium-centered.columns
+                            h2 Últimas Publicações
+                div#spinning
+                    img(src="/images/spinning.gif")
+                div.row#gridProfileArticles
+                    include partials/tiles
+                div.row#load
+                    div.medium-6.small-centered.columns
+                        a#loadMoreProfile.button Mais artigos
+            else
+                div#profileTiles
+                    div.row#activityDivision
+                        div.medium-8.medium-centered.columns
+                            h2 Não há publicações ainda sobre este jogo
+                                
+
+    div.row#load(style="display: none;")
+        div.medium-6.small-centered.columns
+            a#loadMore.button Mais artigos
+                     
+    include partials/footer
+
+    div#myModal.reveal-modal(data-reveal)
+        div#spinningContent
+            img(src="/images/spinning.gif")

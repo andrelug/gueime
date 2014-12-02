@@ -1,0 +1,169 @@
+extends layouts/profileEditLayout
+
+block content
+
+    div#check(style="display:none;") check
+    
+    header.header.row
+        div.content-wrap
+            div.content
+        div#darken
+        div.row#searchBack(style="background-color: white;display:none;")
+            div.large-4.medium-6.medium-centered.large-centered.columns(style="height:8rem;")
+                span.vertical-align-helper
+                a(href="/"): img(src="/images/gueime.png", alt="Gueime Logo")
+
+        div#specialLogo.gueimeWhite.show-for-large-up(style="display:block;right:30px;left:auto")
+            a(href="/"): img(src="/images/gueime-white.png", alt="white logo")
+
+        div#specialLogo.gueimeWhite.show-for-medium-down.smallLogo(style="display:block;left: auto; right:20px;position:absolute;")
+            a(href="/"): img(src="/images/gueime-white-small.png", alt="white logo")
+
+        include partials/nav
+
+    div#wrapper
+        if(edit == true)
+            section.mainImage(style="#{profile.cover}")
+                div#loadingAj(style="display:none;")
+                    img(src="/images/spinning.gif")
+                div.dropzone-previews
+                form#dropzoneProfileImage(action="/newProfileCover", class="dropzone", enctype="multipart/form-data", style="width:20%")
+                    input(type="file", name="file")
+                div.wrapImage
+                    article.bloco
+
+        else
+            section.mainImage
+                div#loadingAj(style="display:none;")
+                    img(src="/images/spinning.gif")
+                div.dropzone-previews
+                form#dropzoneProfileImage(action="/newProfileCover", class="dropzone", enctype="multipart/form-data")
+                    input(type="file", name="file")
+                div.wrapImage
+                    article.bloco
+                    
+
+        div.parallax(style="border-top:5px solid #E54C3C;")
+            article#mainText
+                div.row#profile
+                    div.large-3.medium-4.columns#imageAndOpt
+                        img#userGameImage(src="#{profile.photo}")
+                        div.editingProf
+                            form#dropzoneGameCover(action="/newGameCover", class="dropzone", enctype="multipart/form-data", style="border:none;")
+                                input(type="file", name="file", style="display: none;")
+
+                    div.large-8.large-offset-1.medium-7.medium-offset-1.columns
+                        form(action="/profileImage", method="POST")
+                            input(type="hidden", name="gameCover")
+                            input(type="hidden", name="position")
+                            input.button#profileImageSubmit(type="submit", value="Enviar", style="width: 100%")
+
+                        h1#userTitle.show-for-medium-up #{profile.name.first} #{profile.name.last}
+
+                        div.row#userStats.show-for-medium-up
+                            div.medium-6.columns
+                                ul
+                                    if(profile.graph.publications == undefined)
+                                        li Nenhum artigo publicado
+                                    else if(profile.graph.publications == 1)
+                                        li #{profile.graph.publications} Artigo publicado
+                                    else
+                                        li #{profile.graph.publications} Artigos publicados
+                                    li 10 Jogos na coleção
+                                    li Visitou #{profile.graph.visits} páginas
+
+                            div.medium-6.columns
+                                ul
+                                    li live: AndreLucas
+                                    li PSN: Andrelug
+                                    li Steam: pamasway
+
+                        if(user && profile.status == 'admin' && public == false) 
+
+                            div.row#contentEditing
+                                a.create(href="#", data-dropdown="drop2") <i class="fa fa-pencil-square-o"></i> <span>Criar</span>
+                                ul#drop2.f-dropdown(data-dropdown-content)
+                                    li
+                                        a(href="/criar/jogo") Jogo
+                                    li
+                                        a(href="/criar/publicadora") Publicadora
+                                    li
+                                        a(href="/criar/desenvolvedor") Desenvolvedor
+                                    li
+                                        a(href="/criar/genero") Gênero
+                                    li
+                                        a(href="/criar/usuario") Usuário
+
+                                a.create(href="#", data-dropdown="drop2") <i class="fa fa-coffee"></i> <span>Gerenciar</span>
+                                ul#drop2.f-dropdown(data-dropdown-content)
+                                    li
+                                        a(href="/gerenciar/jogos") Jogos
+                                    li
+                                        a(href="/gerenciar/publicadoras") Publicadoras
+                                    li
+                                        a(href="/gerenciar/desenvolvedores") Desenvolvedores
+                                    li
+                                        a(href="/gerenciar/generos") Gêneros
+                                    li
+                                        a(href="/gerenciar/usuarios") Usuários
+
+                                a.create(href="#", data-dropdown="drop3") <i class="fa fa-question"></i> <span>Trivia</span>
+                                ul#drop3.f-dropdown(data-dropdown-content)
+                                    li
+                                        a(href="/trivia/novo") Novo
+                                    li
+                                        a(href="/trivia/gerenciar") Gerenciar
+                                    li
+                                        a(href="/trivia/stats") Stats
+
+                                a.create(href="#", data-dropdown="drop4") <i class="fa fa-trophy"></i> <span>Conquistas</span>
+                                ul#drop4.f-dropdown(data-dropdown-content)
+                                    li
+                                        a(href="/conquistas/nova") Nova
+                                    li
+                                        a(href="/conquistas/gerenciar") Gerenciar
+                                    li
+                                        a(href="/conquistas/stats") Stats
+                        if(public == false)
+                            include partials/profileForms
+                        else
+                            include partials/profileView
+        
+                            
+            
+                
+            if(docs.length > 0)
+                div#profileTiles
+                    div.row#activityDivision
+                        div.medium-8.medium-centered.columns
+                            h2 Últimas Publicações
+                div#spinning
+                    img(src="/images/spinning.gif")
+                div.row#gridProfileArticles
+                    include partials/tiles
+                div.row#load
+                    div.medium-6.small-centered.columns
+                        a#loadMoreProfile.button Mais artigos
+            else
+                if(user && user.name.loginName == profile.name.loginName)
+                    div#profileTiles
+                        div.row#activityDivision
+                            div.medium-8.medium-centered.columns
+                                h2 Você ainda não publicou nenhum artigo
+
+                else
+                    div#profileTiles
+                        div.row#activityDivision
+                            div.medium-8.medium-centered.columns
+                                h2 #{profile.name.first} ainda não publicou nenhum artigo
+                                
+
+    div.row#load(style="display: none;")
+        div.medium-6.small-centered.columns
+            a#loadMore.button Mais artigos
+                     
+    include partials/footer
+
+    div#myModal.reveal-modal(data-reveal)
+        div#spinningContent
+            img(src="/images/spinning.gif")

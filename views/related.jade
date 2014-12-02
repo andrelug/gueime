@@ -1,0 +1,7 @@
+div.row(style="padding: 10px;")
+    each art in related
+        div.small-6.medium-3.columns.end
+            a(href="/#{art.type}s/#{art.slug}")
+                div.gameAnalise(style="margin:0;height:130px;#{art.cover.position}")
+                    div.analisePattern(style="background-color:rgba(36, 50, 80, 0.6);height:130px;")
+                        h3(style="color:white;font-size:16pt;") #{art.title}

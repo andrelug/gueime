@@ -1,0 +1,140 @@
+extends layouts/gameEditLayout
+
+block content
+
+    div#check(style="display:none;") check
+    
+    header.header.row
+        div.content-wrap
+            div.content
+        div#darken
+        div.row#searchBack(style="background-color: white;display:none;")
+            div.large-4.medium-6.medium-centered.large-centered.columns(style="height:8rem;")
+                span.vertical-align-helper
+                a(href="/"): img(src="/images/gueime.png", alt="Gueime Logo")
+
+        div#specialLogo.gueimeWhite.show-for-large-up(style="display:block;right:30px;left:auto")
+            a(href="/"): img(src="/images/gueime-white.png", alt="white logo")
+
+        div#specialLogo.gueimeWhite.show-for-medium-down.smallLogo(style="display:block;left: auto; right:20px;position:absolute;")
+            a(href="/"): img(src="/images/gueime-white-small.png", alt="white logo")
+
+        include partials/nav
+
+    div#wrapper
+        if(edit == true)
+            section.mainImage(style="#{game.cover}")
+                div#loadingAj(style="display:none;")
+                    img(src="/images/spinning.gif")
+                div.dropzone-previews
+                form#dropzoneGameImage(action="/newGameCapa", class="dropzone", enctype="multipart/form-data", style="width:20%")
+                    input(type="file", name="file")
+                div.wrapImage
+                    article.bloco
+
+        else
+            section.mainImage
+                div#loadingAj(style="display:none;")
+                    img(src="/images/spinning.gif")
+                div.dropzone-previews
+                form#dropzoneGameImage(action="/newGameCapa", class="dropzone", enctype="multipart/form-data")
+                    input(type="file", name="file")
+                div.wrapImage
+                    article.bloco
+
+        div.parallax(style="border-top:5px solid #479ECD;")
+            article#mainText
+                div.row#game
+                    div.large-3.medium-4.columns#imageAndOptGame
+                        if(edit == true)
+                            img#userGameImage(src="#{game.gameCover}")
+                            div.editingProf
+                                form#dropzoneGameCover(action="/newGameCover", class="dropzone", enctype="multipart/form-data", style="border:none;")
+                                    input(type="file", name="file", style="display: none;")
+                        else
+                            div.editingProf(style="height: 300px;background-color: white")
+                                form#dropzoneGameCover(action="/newGameCover", class="dropzone", enctype="multipart/form-data", style="border:none;")
+                                    input(type="file", name="file", style="display: none;")
+
+
+                    div.large-8.large-offset-1.medium-7.medium-offset-1.columns
+                        form(action="/newGame", method="POST", data-abide)
+                            input(type="hidden", name="gameCover")
+                            input(type="hidden", name="position")
+                            if(edit == true)
+                                input(type="hidden", name="editing", value="yes")
+                                input(type="hidden", name="lastSlug", value="#{game.slug}")
+                            else
+                                input(type="hidden", name="editing", value="no")
+                            
+                            if(edit == true)
+                                input.gameEditTitle(type="text", placeholder="Nome do Jogo", name="nomeJogo", value="#{game.title}", required)
+                                small.error Obrigatório
+                            else
+                                input.gameEditTitle(type="text", placeholder="Nome do Jogo", name="nomeJogo", required)
+                                small.error Obrigatório
+                            div.row#gamerStats
+                                div.large-6.columns
+                                    ul.gameLogo
+                                        li.gameLogoStats <i class="fa fa-calendar"></i> 
+                                            if(edit == true)
+                                                input(type="text", placeholder="Data de Lançamento (dd/mm/aaaa)", name="date", value="#{date}", required, pattern="(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)")
+                                                small.error Obrigatório
+                                            else
+                                                input(type="text", placeholder="Data de Lançamento (dd/mm/aaaa)", name="date", required, pattern="(0?[1-9]|[12][0-9]|3[01])/(0?[1-9]|1[012])/((19|20)\\d\\d)")
+                                                small.error Obrigatório
+                                        li.gameLogoStats <i class="fa fa-gamepad"></i> 
+                                            if(edit == true)
+                                                input(type="text", placeholder="Plataformas", name="plataformas", value="#{game.graph.console}", required)
+                                                small.error Obrigatório
+                                            else
+                                                input(type="text", placeholder="Plataformas", name="plataformas", required)
+                                                small.error Obrigatório
+                                        li.gameLogoStats <i class="fa fa-gavel"></i> 
+                                            if(edit == true)
+                                                input(type="text", placeholder="ESRB", name="esrb", value="#{game.graph.esrb}", required)
+                                                small.error Obrigatório
+                                            else
+                                                input(type="text", placeholder="ESRB", name="esrb", required)
+                                                small.error Obrigatório
+
+                                div.large-6.columns
+                                    ul.gameLogo
+                                        li.gameLogoStats Gênero: 
+                                            if(edit == true)
+                                                input(type="text", placeholder="Gênero", name="genero", value="#{game.graph.genre}", required)
+                                                small.error Obrigatório
+                                            else
+                                                input(type="text", placeholder="Gênero", name="genero", required)
+                                                small.error Obrigatório
+                                        li.gameLogoStats Desenvolvedor: 
+                                            if(edit == true)
+                                                input(type="text", placeholder="Desenvolvedor", name="desenvolvedor", value="#{game.graph.developer}", required)
+                                                small.error Obrigatório
+                                            else
+                                                input(type="text", placeholder="Desenvolvedor", name="desenvolvedor", required)
+                                                small.error Obrigatório
+                                        li.gameLogoStats Distribuidora: 
+                                            if(edit == true)
+                                                input(type="text", placeholder="Distribuidora", name="distribuidora", value="#{game.graph.publisher}", required)
+                                                small.error Obrigatório
+                                            else
+                                                input(type="text", placeholder="Distribuidora", name="distribuidora", required)
+                                                small.error Obrigatório
+
+                                div.large-12.columns
+                                    if(edit == true)
+                                        textarea(name="sobre", placeholder="Sobre o jogo", required)
+                                            !{game.about}
+                                    else
+                                        textarea(name="sobre", placeholder="Sobre o jogo", required)
+
+                                div.row
+                                    div.medium-6.medium-offset-3.columns
+                                        input.button#submitNewGame(type="submit")
+                     
+    include partials/footer
+
+    div#myModal.reveal-modal(data-reveal)
+        div#spinningContent
+            img(src="/images/spinning.gif")

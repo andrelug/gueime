@@ -1,0 +1,96 @@
+extends layouts/consoleLayout
+
+block content
+
+    div#check(style="display:none;") check
+    
+    header.header.row
+        div.content-wrap
+            div.content
+        div#darken
+        div.row#searchBack(style="background-color: white;display:none;")
+            div.large-4.medium-6.medium-centered.large-centered.columns(style="height:8rem;")
+                span.vertical-align-helper
+                a(href="/"): img(src="/images/gueime.png", alt="Gueime Logo")
+
+        div#specialLogo.gueimeWhite.show-for-large-up(style="display:block;right:30px;left:auto")
+            a(href="/"): img(src="/images/gueime-white.png", alt="white logo")
+
+        div#specialLogo.gueimeWhite.show-for-medium-down.smallLogo(style="display:block;left: auto; right:20px;position:absolute;")
+            a(href="/"): img(src="/images/gueime-white-small.png", alt="white logo")
+
+        include partials/nav
+
+    div#wrapper
+        section.mainImage#mainImageChange(style="#{dev.cover}")
+            div.wrapImage
+                article.bloco
+
+        div.parallax(style="border-top:5px solid #479ECD;")
+            article#mainText
+                div.row#game
+                    div.large-3.medium-4.columns#imageAndOptGen
+                        div.row.show-for-small
+                            div.small-12.columns
+                                h1#userTitle(style="color: white") #{dev.title}
+                        div.editingProf
+                            img#userGameImage(src="#{dev.genCover}")
+                            if(user && user.status == 'admin' || user && user.status == 'editor')
+                                a.hide-for-small.button.tiny#editButtonHover(href="/consoles/#{dev.slug}/editar") Editar
+                        div#gameStats.row
+                            div.small-2.columns
+                                h3 <i class="fa fa-eye" title="Visualizações"></i>
+                            div.small-10.columns
+                                h3 #{dev.graph.views}
+
+                    div.large-8.large-offset-1.medium-7.medium-offset-1.columns
+                        h1#userTitle.show-for-medium-up #{dev.title}
+                        div.row#gamerStats
+                            div.medium-12.columns
+                                div.row
+                                    div.small-6.columns
+                                        h3(style="margin-top:-8px") <i class="fa fa-info-circle" title="Sobre" style="color:white"></i>
+                                    div.small-3.columns 
+                                        span.gameLogoStats <i class="fa fa-calendar"></i> #{date}
+                                h5(style="color:white;padding-bottom:10px") #{dev.about}
+        
+            if(games != undefined)
+                div.row#gameReview
+                    div.medium-8.medium-centered.columns
+                        h2 Jogos
+                div.row
+                    for game in games
+                        div.medium-3.columns.end
+                            a(href="/jogos/#{game.slug}")
+                                div.gameAnalise(style="#{game.cover}")
+                                    div.analisePattern(style="background-color:rgba(36, 50, 80, 0.6);")
+                                        h3(style="color:white;") #{game.title}
+            
+            if(docs.length > 0)
+                div#profileTiles
+                    div.row#activityDivision
+                        div.medium-8.medium-centered.columns
+                            h2 Últimas Publicações
+                div#spinning
+                    img(src="/images/spinning.gif")
+                div.row#gridProfileArticles
+                    include partials/tiles
+                div.row#load
+                    div.medium-6.small-centered.columns
+                        a#loadMoreProfile.button Mais artigos
+            else
+                div#profileTiles
+                    div.row#activityDivision
+                        div.medium-8.medium-centered.columns
+                            h2 Não há publicações ainda com este console
+                                
+
+    div.row#load(style="display: none;")
+        div.medium-6.small-centered.columns
+            a#loadMore.button Mais artigos
+                     
+    include partials/footer
+
+    div#myModal.reveal-modal(data-reveal)
+        div#spinningContent
+            img(src="/images/spinning.gif")

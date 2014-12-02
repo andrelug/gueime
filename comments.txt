@@ -1,0 +1,124 @@
+
+SEARCH
+
+--> Todas as buscas serão feitas a partir dos Slugs OK
+
+--> Colocar o gif animado -> http://stackoverflow.com/questions/16881626/loading-gif-while-waiting-for-ajax-response OK
+
+--> A busca tem que ser async --> https://github.com/caolan/async CHANGED
+
+--> Usar método de Facet --> http://blog.mongodb.org/post/59757486344/faceted-search-with-mongodb OK
+
+--> Fazer paginação com botão para carregar mais por ajax OK
+
+
+WIKI
+
+--> https://github.com/nhoss2/nodewiki
+
+--> https://github.com/claudioc/jingo
+
+SAVE
+
+--> Transformar nomes em slugs OK
+
+--> Salvar o Facet para jogos e artigos OK
+
+
+
+HTML
+
+--> Usar estrutura isotope --> 3x para análises 1x para notícias 2x para artigos OK
+
+
+TEXT
+
+--> Usar SirTravor --> http://madebymany.github.io/sir-trevor-js/ CHANGED
+
+SEO
+
+--> Tenho que criar uma rota para puxar as url's em uma nova página OK
+
+
+
+
+
+BUGS
+
+--> Quando as tags vão pra linha de baixo ainda não há estilos
+
+--> Quando a pessoa entra no artigo pelo link e faz uma busca, ela não consegue voltar para o link (opção é http://stackoverflow.com/questions/3682805/javascript-load-a-page-on-button-click )
+
+--> Tem que impedir que o usuário crie uma pesquisa sem conteúdo OK
+
+--> Checar por imagens com nomes iguais antes de upload OK
+
+--> Quando o upload da erro, ele também anima
+
+--> Na hora de remover o arquivo, voltar com o width 100% do módulo de upload
+
+--> Adicionar validação do formulário de criação de artigos -> http://jqueryvalidation.org/
+
+--> Mudar pra $push na hora de colocar na db
+
+--> Array is not cleaning (facet) // acho que já corrigiu ...precisa de mais testes
+
+--> dar um trim() na array facet para tirar 'a', 'o', 'e' etc
+
+--> Quando busca, não está voltando devagar para o topo da página
+
+
+ACHIEVEMENTS AND CONSOLES
+
+--> XBOX LIVE
+    https://xboxapi.com/
+    https://www.npmjs.org/package/node-uxla
+    https://www.npmjs.org/package/xbox-live
+
+--> PSN
+    https://www.npmjs.org/package/psn-node
+    https://www.npmjs.org/package/PSNjs
+
+--> STEAM
+    https://www.npmjs.org/package/steam
+    https://www.npmjs.org/package/steam-web
+    https://www.npmjs.org/package/steam.js
+
+
+ANALYTICS
+
+--> https://segment.io/pricing
+
+--> http://nodetime.com/
+
+--> http://www.slideshare.net/innotech_conference/real-time-analytics-with-nodejs-and-azure
+
+
+
+NOTIFICATIONS
+
+--> Socket.io
+
+--> http://www.ibm.com/developerworks/library/wa-notify-app/
+
+--> http://wavded.github.io/humane-js/
+
+
+
+SELECT AND AUTOCOMPLETE
+
+--> typeahead
+
+--> http://brianreavis.github.io/selectize.js/
+
+
+
+PARA FAZER EASTER EGGS
+
+--> http://dmauro.github.io/Keypress/   
+
+
+
+SITEMAP
+
+--> http://www.hacksparrow.com/xml-sitemap-generator-in-node-js-sitemap-xml-gz.html
