@@ -52,7 +52,7 @@ $(document).on('click', '.deletarGen', function (event) {
     }
 });
 
-$('.deletarUser').on('click', function (event) {
+$(document).on('click', '.deletarUser', function (event) {
     event.preventDefault();
     var action = prompt("Você quer deletar (del) ou desabilitar (des)?");
     var esse = $(this);
@@ -140,7 +140,7 @@ $(document).ready(function () {
     });
 });
 
-$('.statusSelect').on('change', function () {
+$(document).on('change', '.statusSelect', function () {
     var esse = $(this);
     var status = $(this).find('option:selected').text();
     var user = $(this).attr('title');
@@ -155,7 +155,7 @@ $('.statusSelect').on('change', function () {
     });
 });
 
-$('.statusArticleSelect').on('change', function () {
+$(document).on('change', '.statusArticleSelect', function () {
     var esse = $(this);
     var status = $(this).find('option:selected').text();
     var art = $(this).attr('title');
