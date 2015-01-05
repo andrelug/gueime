@@ -20,7 +20,7 @@ $('.gerenciarTable').dataTable({
     }
 });
 
-$('.deletarGen').on('click', function (event) {
+$(document).on('click', '.deletarGen', function (event) {
     event.preventDefault();
     var action = prompt("Você quer deletar (del) ou desabilitar (des)?");
     var esse = $(this);
