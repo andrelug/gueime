@@ -30,7 +30,7 @@ for doc in docs
                             span.toRight <i class="fa fa-eye"></i> #{doc.graph.views}<i class="fa fa-comment", style="margin-left:10px;"></i> </i> <fb:comments-count href=http://www.gueime.com.br/analises/#{doc.slug} ></fb:comments-count>
             div.articleImage(style="background-image: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images#{doc.cover.image});")
             div.details
-                div.name
+                div.game
                     span#newsText
                         h2.ref #{doc.title}
 
@@ -47,7 +47,7 @@ for doc in docs
                             span.toRight <i class="fa fa-eye"></i> #{doc.graph.views}<i class="fa fa-comment", style="margin-left:10px;"></i> </i> <fb:comments-count href=http://www.gueime.com.br/artigos/#{doc.slug} ></fb:comments-count>
             div.articleImage(style="background-image: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images#{doc.cover.image});")
             div.details
-                div.name
+                div.article
                     span#newsText
                         h2.ref #{doc.title}
 
@@ -64,7 +64,7 @@ for doc in docs
                             span.toRight <i class="fa fa-eye"></i> #{doc.graph.views}<i class="fa fa-comment", style="margin-left:10px;"></i> <fb:comments-count href=http://www.gueime.com.br/videos/#{doc.slug} ></fb:comments-count>
             div.articleImage(style="background-image: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images#{doc.cover.image});")
             div.details
-                div.name
+                div.video
                     span#newsText
                         h2.ref #{doc.title}
             
