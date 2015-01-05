@@ -186,9 +186,6 @@ rgba(0,0,0,0.3)
   -o-transition: all 400ms ease;
   transition: all 400ms ease;
 }
-.w4 {
-  width: 50.5%;
-}
 .w6 {
   width: 100%;
 }
@@ -228,26 +225,16 @@ rgba(0,0,0,0.3)
   height: 65px;
 }
 .details .game {
-  padding: 1px 5px;
+  padding: 3px 14px 1px;
   width: 100%;
   background-color: #e54c3c;
   height: 65px;
 }
-.details .game h2 {
-  font-size: 16pt !important;
-  padding-top: 10px;
-  padding-left: 10px;
-}
 .details .article {
-  padding: 1px 5px;
+  padding: 3px 14px 1px;
   width: 100%;
   background-color: #479ecd;
   height: 65px;
-}
-.details .article h2 {
-  font-size: 16pt !important;
-  padding-top: 10px;
-  padding-left: 10px;
 }
 .details .video {
   padding: 3px 14px 1px;
@@ -338,7 +325,6 @@ rgba(0,0,0,0.3)
   }
   .mainImage {
     position: absolute !important;
-    top: -295px !important;
   }
   .articleImage {
     background: 0 0;
@@ -726,6 +712,7 @@ rgba(0,0,0,0.3)
 #profile #imageAndOptGen #userGameImage,
 #game #imageAndOptGen #userGameImage {
   max-height: 280px;
+  border: none;
 }
 #profile #imageAndOpt #profileStats,
 #game #imageAndOpt #profileStats,
