@@ -24,7 +24,7 @@ $('.deletarGen').on('click', function (event) {
     event.preventDefault();
     var action = prompt("Você quer deletar (del) ou desabilitar (des)?");
     var esse = $(this);
-    var href = $(this).attr('href');
+    var href = $(this).attr('data-href');
     if (action == 'del') {
         $.ajax({
             url: href,
