@@ -18,7 +18,7 @@ for doc in docs
                         h2.ref #{doc.title}
 
     else if(doc.type == 'analise')
-        a(href="/analises/#{doc.slug}", data-link="ajax", data-reveal-id="myModal").item.w4.analises
+        a(href="/analises/#{doc.slug}", data-link="ajax", data-reveal-id="myModal").item.analises
             div.hidden.infoGame.row
                 div.small-12.small-centered.columns.headline
                     p #{doc.description}
@@ -30,11 +30,12 @@ for doc in docs
                             span.toRight <i class="fa fa-eye"></i> #{doc.graph.views}<i class="fa fa-comment", style="margin-left:10px;"></i> </i> <fb:comments-count href=http://www.gueime.com.br/analises/#{doc.slug} ></fb:comments-count>
             div.articleImage(style="background-image: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images#{doc.cover.image});")
             div.details
-                div.game
-                    h2.ref #{doc.title}
+                div.name
+                    span#newsText
+                        h2.ref #{doc.title}
 
     else if(doc.type == 'artigo')
-        a(href="/artigos/#{doc.slug}", data-link="ajax", data-reveal-id="myModal").item.w4.artigos
+        a(href="/artigos/#{doc.slug}", data-link="ajax", data-reveal-id="myModal").item.artigos
             div.hidden.infoArticle.row
                 div.small-12.small-centered.columns.headline
                     p #{doc.description}
@@ -46,8 +47,9 @@ for doc in docs
                             span.toRight <i class="fa fa-eye"></i> #{doc.graph.views}<i class="fa fa-comment", style="margin-left:10px;"></i> </i> <fb:comments-count href=http://www.gueime.com.br/artigos/#{doc.slug} ></fb:comments-count>
             div.articleImage(style="background-image: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images#{doc.cover.image});")
             div.details
-                div.article
-                    h2.ref #{doc.title}
+                div.name
+                    span#newsText
+                        h2.ref #{doc.title}
 
     else
         a(href="/videos/#{doc.slug}", data-link="ajax", data-reveal-id="myModal").item.videos
@@ -62,7 +64,7 @@ for doc in docs
                             span.toRight <i class="fa fa-eye"></i> #{doc.graph.views}<i class="fa fa-comment", style="margin-left:10px;"></i> <fb:comments-count href=http://www.gueime.com.br/videos/#{doc.slug} ></fb:comments-count>
             div.articleImage(style="background-image: url(https://s3-sa-east-1.amazonaws.com/portalgueime/images#{doc.cover.image});")
             div.details
-                div.video
+                div.name
                     span#newsText
                         h2.ref #{doc.title}
             
