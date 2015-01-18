@@ -49,6 +49,10 @@ var plusView = function(user){
         addLevel = 8;
     } else if(points >= 5500 && points < 7000){
         addLevel = 9;
+    } else if(points >= 7000 && points < 10000){
+        addLevel = 10;
+    } else if(points >= 10000 && points < 15000){
+        addLevel = 11;
     } else{
         addLevel = user.gamification.level;
     }
