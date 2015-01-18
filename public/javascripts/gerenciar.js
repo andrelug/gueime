@@ -24,11 +24,11 @@ $('.gerenciarTable').dataTable({
     }
 });
 
-$('.deletarGen').on('click', function (event) {
+$(document).on('click', '.deletarGen', function (event) {
     event.preventDefault();
     var action = prompt("Você quer deletar (del) ou desabilitar (des)?");
     var esse = $(this);
-    var href = $(this).attr('href');
+    var href = $(this).attr('data-href');
     if (action == 'del') {
         $.ajax({
             url: href,
@@ -56,7 +56,7 @@ $('.deletarGen').on('click', function (event) {
     }
 });
 
-$('.deletarUser').on('click', function (event) {
+$(document).on('click', '.deletarUser', function (event) {
     event.preventDefault();
     var action = prompt("Você quer deletar (del) ou desabilitar (des)?");
     var esse = $(this);
@@ -146,7 +146,7 @@ varDocument.ready(function () {
     });
 });
 
-varStatusSelect.on('change', function () {
+$(document).on('change', varStatusSelect, function () {
     var esse = $(this);
     var status = $(this).find('option:selected').text();
     var user = $(this).attr('title');
@@ -161,7 +161,7 @@ varStatusSelect.on('change', function () {
     });
 });
 
-varStatusArticleSelect.on('change', function () {
+$(document).on('change', varStatusArticleSelect, function () {
     var esse = $(this);
     var status = $(this).find('option:selected').text();
     var art = $(this).attr('title');

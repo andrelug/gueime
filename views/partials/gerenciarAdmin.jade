@@ -149,7 +149,7 @@ div.row#gerenciarRow
                                 td #{article.date}
                                 td: a(href="/editar/#{article._id}") Editar
                                 if(user.status == 'admin')
-                                    td: a.deletarGen(href="/artigos/#{article._id}/deletar") Deletar
+                                    td: a.deletarGen(href="#", data-href="/artigos/#{article._id}/deletar") Deletar
 
                     else if(devs)
                         for dev in devs

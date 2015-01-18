@@ -3583,9 +3583,9 @@ module.exports = function (app, passport, mongoose) {
         var mailOptions = {
             from: b.email, // sender address
             to: "André Lucas <andre@gueime.com.br>", // list of receivers
-            subject: "Contato - Gueime (" + b.nome + ")", // Subject line
-            text: b.mensagem, // plaintext body
-            html: b.mensagem // html body
+            subject: "Contato - Gueime (" + b.nome + " " + b.email + ")", // Subject line
+            text: b.mensagem + " " + b.email, // plaintext body
+            html: b.mensagem + "<br>" + b.email // html body
         }
 
         // send mail with defined transport object
