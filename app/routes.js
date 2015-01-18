@@ -3123,7 +3123,7 @@ module.exports = function (app, passport, mongoose) {
         var mailOptions = {
             from: b.email, // sender address
             to: "André Lucas <andre@gueime.com.br>", // list of receivers
-            subject: "Contato - Gueime (" + b.nome + b.email + ")", // Subject line
+            subject: "Contato - Gueime (" + b.nome + " " + b.email + ")", // Subject line
             text: b.mensagem + b.email, // plaintext body
             html: b.mensagem + b.email // html body
         }
