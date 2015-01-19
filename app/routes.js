@@ -845,7 +845,7 @@ module.exports = function (app, passport, mongoose) {
                         url: 'http://www.gueime.com.br/uploads/' + sendImg
                     }
                 },
-                template_id: '7ecc48d0c00a11e3a4a6730cb0abb3d1'
+                template_id: '4d6889709f8911e48553eb5f0b551edf'
             };
             client.send(params, function(ok) {
                 // success callback [optional]
@@ -885,7 +885,7 @@ module.exports = function (app, passport, mongoose) {
                         url: 'http://www.gueime.com.br/uploads/' + sendImg
                     }
                 },
-                template_id: '430dcd60c00e11e38c7673670f8168f5'
+                template_id: '3cec90f09f8911e4b258515ca93bba8f'
             };
 
             client.send(params, function(ok) {
@@ -1317,7 +1317,7 @@ module.exports = function (app, passport, mongoose) {
                         url: 'http://www.gueime.com.br/uploads/' + sendImg
                     }
                 },
-                template_id: '7ecc48d0c00a11e3a4a6730cb0abb3d1'
+                template_id: '4d6889709f8911e48553eb5f0b551edf'
             };
             client.send(params, function(ok) {
                 // success callback [optional]
@@ -2401,7 +2401,7 @@ module.exports = function (app, passport, mongoose) {
                         url: 'http://www.gueime.com.br/uploads/' + sendImg
                     }
                 },
-                template_id: '7ecc48d0c00a11e3a4a6730cb0abb3d1'
+                template_id: '4d6889709f8911e48553eb5f0b551edf'
             };
             client.send(params, function(ok) {
                 // success callback [optional]
@@ -2439,7 +2439,7 @@ module.exports = function (app, passport, mongoose) {
                         url: 'http://www.gueime.com.br/uploads/' + sendImg
                     }
                 },
-                template_id: 'ab5cbfa0c74511e388575babe5776e3d'
+                template_id: '5dcf9a609f8911e482f9bfe5e714dbb8'
             };
             client.send(params, function(ok) {
                 // success callback [optional]
