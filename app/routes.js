@@ -3717,6 +3717,191 @@ module.exports = function (app, passport, mongoose) {
            
     });
 
+    // Sitemap Games
+    app.get('/sitemapgames.xml', function(req, res) {
+        Games.find({status: 'publicado'}).sort({ '_id': -1 }).exec(function (err, docs) {
+            var myArticles = [];
+
+            for (i = 0; i < docs.length; i++) {
+                myArticles.push("jogos/" + docs[i].slug);
+            }
+
+            var urls = myArticles;
+            // the root of your website - the protocol and the domain name with a trailing slash
+            var root_path = 'http://www.gueime.com.br/';
+            // XML sitemap generation starts here
+            var priority = 0.5;
+            var freq = 'monthly';
+            var xml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+            for (var i in urls) {
+                xml += '<url>';
+                xml += '<loc>'+ root_path + urls[i] + '</loc>';
+                xml += '<changefreq>'+ freq +'</changefreq>';
+                xml += '<priority>'+ priority +'</priority>';
+                xml += '</url>';
+                i++;
+            }
+            xml += '</urlset>';
+
+            res.header('Content-Type', 'text/xml');
+            res.send(xml);  
+        });
+    });
+
+    // Sitemap pub
+    app.get('/sitemappub.xml', function(req, res) {
+        DevPub.find({status: 'publicado', type: 'publisher'}).sort({ '_id': -1 }).exec(function (err, docs) {
+            var myArticles = [];
+
+            for (i = 0; i < docs.length; i++) {
+                myArticles.push("distribuidoras/" + docs[i].slug);
+            }
+
+            var urls = myArticles;
+            // the root of your website - the protocol and the domain name with a trailing slash
+            var root_path = 'http://www.gueime.com.br/';
+            // XML sitemap generation starts here
+            var priority = 0.5;
+            var freq = 'monthly';
+            var xml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+            for (var i in urls) {
+                xml += '<url>';
+                xml += '<loc>'+ root_path + urls[i] + '</loc>';
+                xml += '<changefreq>'+ freq +'</changefreq>';
+                xml += '<priority>'+ priority +'</priority>';
+                xml += '</url>';
+                i++;
+            }
+            xml += '</urlset>';
+
+            res.header('Content-Type', 'text/xml');
+            res.send(xml);  
+        });
+    });
+
+    // Sitemap dev
+    app.get('/sitemappub.xml', function(req, res) {
+        DevPub.find({status: 'publicado', type: 'developer'}).sort({ '_id': -1 }).exec(function (err, docs) {
+            var myArticles = [];
+
+            for (i = 0; i < docs.length; i++) {
+                myArticles.push("desenvolvedores/" + docs[i].slug);
+            }
+
+            var urls = myArticles;
+            // the root of your website - the protocol and the domain name with a trailing slash
+            var root_path = 'http://www.gueime.com.br/';
+            // XML sitemap generation starts here
+            var priority = 0.5;
+            var freq = 'monthly';
+            var xml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+            for (var i in urls) {
+                xml += '<url>';
+                xml += '<loc>'+ root_path + urls[i] + '</loc>';
+                xml += '<changefreq>'+ freq +'</changefreq>';
+                xml += '<priority>'+ priority +'</priority>';
+                xml += '</url>';
+                i++;
+            }
+            xml += '</urlset>';
+
+            res.header('Content-Type', 'text/xml');
+            res.send(xml);  
+        });
+    });
+
+     // Sitemap user
+    app.get('/sitemapusers.xml', function(req, res) {
+        Users.find({deleted: false}).sort({ '_id': -1 }).exec(function (err, docs) {
+            var myArticles = [];
+
+            for (i = 0; i < docs.length; i++) {
+                myArticles.push("profile/" + docs[i].name.loginName);
+            }
+
+            var urls = myArticles;
+            // the root of your website - the protocol and the domain name with a trailing slash
+            var root_path = 'http://www.gueime.com.br/';
+            // XML sitemap generation starts here
+            var priority = 0.5;
+            var freq = 'monthly';
+            var xml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+            for (var i in urls) {
+                xml += '<url>';
+                xml += '<loc>'+ root_path + urls[i] + '</loc>';
+                xml += '<changefreq>'+ freq +'</changefreq>';
+                xml += '<priority>'+ priority +'</priority>';
+                xml += '</url>';
+                i++;
+            }
+            xml += '</urlset>';
+
+            res.header('Content-Type', 'text/xml');
+            res.send(xml);  
+        });
+    });
+
+    // Sitemap genre
+    app.get('/sitemapgenero.xml', function(req, res) {
+        Genre.find({status: 'publicado'}).sort({ '_id': -1 }).exec(function (err, docs) {
+            var myArticles = [];
+
+            for (i = 0; i < docs.length; i++) {
+                myArticles.push("generos/" + docs[i].slug);
+            }
+
+            var urls = myArticles;
+            // the root of your website - the protocol and the domain name with a trailing slash
+            var root_path = 'http://www.gueime.com.br/';
+            // XML sitemap generation starts here
+            var priority = 0.5;
+            var freq = 'monthly';
+            var xml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+            for (var i in urls) {
+                xml += '<url>';
+                xml += '<loc>'+ root_path + urls[i] + '</loc>';
+                xml += '<changefreq>'+ freq +'</changefreq>';
+                xml += '<priority>'+ priority +'</priority>';
+                xml += '</url>';
+                i++;
+            }
+            xml += '</urlset>';
+
+            res.header('Content-Type', 'text/xml');
+            res.send(xml);  
+        });
+    });
+
+    // Sitemap console
+    app.get('/sitemapconsole.xml', function(req, res) {
+        Genre.find({status: 'publicado'}).sort({ '_id': -1 }).exec(function (err, docs) {
+            var myArticles = [];
+
+            for (i = 0; i < docs.length; i++) {
+                myArticles.push("consoles/" + docs[i].slug);
+            }
+
+            var urls = myArticles;
+            // the root of your website - the protocol and the domain name with a trailing slash
+            var root_path = 'http://www.gueime.com.br/';
+            // XML sitemap generation starts here
+            var priority = 0.5;
+            var freq = 'monthly';
+            var xml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+            for (var i in urls) {
+                xml += '<url>';
+                xml += '<loc>'+ root_path + urls[i] + '</loc>';
+                xml += '<changefreq>'+ freq +'</changefreq>';
+                xml += '<priority>'+ priority +'</priority>';
+                xml += '</url>';
+                i++;
+            }
+            xml += '</urlset>';
+
+            res.header('Content-Type', 'text/xml');
+            res.send(xml);  
+        });
+    });
 
     // =====================================
     // USER SIGNUP =========================
