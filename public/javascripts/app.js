@@ -135,12 +135,13 @@ varDocument.on('click', '.tag', function () {
 
 // Opening Overlay
 varDocument.on('click', 'a', function () {
-    
+
     if ($(this).data("link") == "ajax") {
         varLocation = window.location.href;
         var ajaxUrl = $(this).attr('href');
         ajaxPage(ajaxUrl);
         history.pushState(null, null, ajaxUrl);
+        document.title = "Gueime - " + $(this).find('.ref').text();
         ga('send', 'pageview', ajaxUrl + '/ajax');
         return false;
     }

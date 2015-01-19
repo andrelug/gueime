@@ -99,7 +99,7 @@ module.exports = function (app, passport, mongoose) {
                         Games.find({status: 'publicado', title: new RegExp(gameStr, 'i') }, cb);
                     }
                 ], function(err, result){
-                    res.render('index', { title: "Gueime - O melhor site de games do Brasil!", docs: result[0], games: result[1], searchTag: searchTag, status: status});
+                    res.render('index', { title: "O melhor site de games do Brasil!", docs: result[0], games: result[1], searchTag: searchTag, status: status});
                 });
             } else {
                 if(user.deleted == true){
@@ -119,7 +119,7 @@ module.exports = function (app, passport, mongoose) {
                             Users.update({'_id': user}, {$inc: {'graph.visits': 1}}, cb);
                         }
                     ], function(err, result){
-                        res.render('index', { user: user, title: "Gueime - O melhor site de games do Brasil!", docs: result[0], games: result[1], searchTag: searchTag, status: status});
+                        res.render('index', { user: user, title: "O melhor site de games do Brasil!", docs: result[0], games: result[1], searchTag: searchTag, status: status});
                     });
                 }
             }
@@ -127,7 +127,7 @@ module.exports = function (app, passport, mongoose) {
             if (!user) {
                 Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).exec(function (err, docs) {
 
-                    res.render('index', { title: "Gueime - O melhor site de games do Brasil!", docs: docs, status: status});
+                    res.render('index', { title: "O melhor site de games do Brasil!", docs: docs, status: status});
                 });
             } else {
                 if(user.deleted == true){
@@ -143,7 +143,7 @@ module.exports = function (app, passport, mongoose) {
                             Users.update({'_id': user}, {$inc: {'graph.visits': 1}}, cb);
                         }
                     ], function(err, result){
-                        res.render('index', { user: user, title: "Gueime - O melhor site de games do Brasil!", docs: result[0], status: status});
+                        res.render('index', { user: user, title: "O melhor site de games do Brasil!", docs: result[0], status: status});
                     });
                 }
             }
@@ -729,7 +729,7 @@ module.exports = function (app, passport, mongoose) {
                 }).save(function (err, docs) {
                     if (err)
                         throw err
-                    res.render('create', { user: user, title: "Gueime - Hora de criar um artigo sensacional!", id: docs._id, tipo: tipo, criar: true });
+                    res.render('create', { user: user, title: "Hora de criar um artigo sensacional!", id: docs._id, tipo: tipo, criar: true });
 
                 });
             }
@@ -1263,7 +1263,7 @@ module.exports = function (app, passport, mongoose) {
                     }
                     
                     plusView(user);
-                        res.render('profile',{user: user, title: "Gueime - " + user.name.first + ' ' + user.name.last, docs: docs, profile: user, canonical: true, date: date, public: false});
+                        res.render('profile',{user: user, title: "" + user.name.first + ' ' + user.name.last, docs: docs, profile: user, canonical: true, date: date, public: false});
                 });
             }
         }
@@ -1287,7 +1287,7 @@ module.exports = function (app, passport, mongoose) {
                         date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                     }
 
-                    res.render('profileEdit',{user: user, title: "Gueime - " + user.name.first + ' ' + user.name.last, docs: docs, profile: user, canonical: true, date: date, public: false, edit: true});
+                    res.render('profileEdit',{user: user, title: "" + user.name.first + ' ' + user.name.last, docs: docs, profile: user, canonical: true, date: date, public: false, edit: true});
                 });
             }
         }
@@ -1440,7 +1440,7 @@ module.exports = function (app, passport, mongoose) {
                             var date = profileUser.birthDate;
                             date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                         }
-                        res.render('profile',{title: "Gueime - " + profileUser.name.first + ' ' + profileUser.name.last, docs: docs, profile: profileUser, public: true, date: date});
+                        res.render('profile',{title: "" + profileUser.name.first + ' ' + profileUser.name.last, docs: docs, profile: profileUser, public: true, date: date});
                     });
                 }
             });
@@ -1461,7 +1461,7 @@ module.exports = function (app, passport, mongoose) {
                                 date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                             }
                         
-                            res.render('profile',{user: user, title: "Gueime - " + profileUser.name.first + ' ' + profileUser.name.last, docs: docs, profile: profileUser, public: true, date: date});
+                            res.render('profile',{user: user, title: "" + profileUser.name.first + ' ' + profileUser.name.last, docs: docs, profile: profileUser, public: true, date: date});
                         });
                     }
                 });
@@ -1510,7 +1510,7 @@ module.exports = function (app, passport, mongoose) {
                                 date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                             }
 
-                            res.render('console', {user: user, title: "Gueime - " + dev.title, dev: dev, docs: artigo, games: games, date: date, pub: true })
+                            res.render('console', {user: user, title: "" + dev.title, dev: dev, docs: artigo, games: games, date: date, pub: true })
                         });
                     });
                 }
@@ -1544,7 +1544,7 @@ module.exports = function (app, passport, mongoose) {
                                 }
 
                             
-                                    res.render('console', {user: user, title: "Gueime - " + dev.title, dev: dev, docs: artigo, games: games, date: date, pub: true });
+                                    res.render('console', {user: user, title: "" + dev.title, dev: dev, docs: artigo, games: games, date: date, pub: true });
                             });
                         });
                     }
@@ -1573,7 +1573,7 @@ module.exports = function (app, passport, mongoose) {
                         date = docs.startDate;
                         date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                     }
-                    res.render('consoleEdit',{user: user, title: "Gueime - " + docs.title, developer: docs, date: date, edit: true});
+                    res.render('consoleEdit',{user: user, title: "" + docs.title, developer: docs, date: date, edit: true});
                 });
             }
         }
@@ -1589,7 +1589,7 @@ module.exports = function (app, passport, mongoose) {
                 res.redirect('/users/restore');
             } else if(user.status == 'admin' || user.status == 'editor'){
                 // sessionReload(req, res, next);
-                res.render('consoleEdit',{user: user, title: "Gueime - Novo Console", edit: false});
+                res.render('consoleEdit',{user: user, title: "Novo Console", edit: false});
             } else{
                 res.redirect('/parceiros');
             }
@@ -1688,7 +1688,7 @@ module.exports = function (app, passport, mongoose) {
                                 games = undefined;
                             }
 
-                            res.render('genre', {user: user, title: "Gueime - " + dev.title, dev: dev, docs: artigo, games: games, pub: true })
+                            res.render('genre', {user: user, title: "" + dev.title, dev: dev, docs: artigo, games: games, pub: true })
                         });
                     });
                 }
@@ -1717,7 +1717,7 @@ module.exports = function (app, passport, mongoose) {
                                 }
 
                             
-                                res.render('genre', {user: user, title: "Gueime - " + dev.title, dev: dev, docs: artigo, games: games, pub: true });
+                                res.render('genre', {user: user, title: "" + dev.title, dev: dev, docs: artigo, games: games, pub: true });
                             });
                         });
                     }
@@ -1742,7 +1742,7 @@ module.exports = function (app, passport, mongoose) {
                     if(docs.status == 'publicado'){
                         managePoints(user._id, -10);
                     }
-                    res.render('genreEdit',{user: user, title: "Gueime - " + docs.title, developer: docs, edit: true});
+                    res.render('genreEdit',{user: user, title: "" + docs.title, developer: docs, edit: true});
                 });
             }
         }
@@ -1758,7 +1758,7 @@ module.exports = function (app, passport, mongoose) {
                 res.redirect('/users/restore');
             } else if(user.status == 'admin' || user.status == 'editor'){
                 // sessionReload(req, res, next);
-                res.render('genreEdit',{user: user, title: "Gueime - Novo Gênero", edit: false});
+                res.render('genreEdit',{user: user, title: "Novo Gênero", edit: false});
             } else{
                 res.redirect('/parceiros');
             }
@@ -1858,7 +1858,7 @@ module.exports = function (app, passport, mongoose) {
                                 date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                             }
 
-                            res.render('devPub', {user: user, title: "Gueime - " + dev.title, dev: dev, docs: artigo, games: games, date: date, pub: true })
+                            res.render('devPub', {user: user, title: "" + dev.title, dev: dev, docs: artigo, games: games, date: date, pub: true })
                         });
                     });
                 }
@@ -1891,7 +1891,7 @@ module.exports = function (app, passport, mongoose) {
                                     date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                                 }
 
-                                res.render('devPub', {user: user, title: "Gueime - " + dev.title, dev: dev, docs: artigo, games: games, date: date, pub: true });
+                                res.render('devPub', {user: user, title: "" + dev.title, dev: dev, docs: artigo, games: games, date: date, pub: true });
                             });
                         });
                     }
@@ -1932,7 +1932,7 @@ module.exports = function (app, passport, mongoose) {
                         date = docs.startDate;
                         date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                     }
-                    res.render('devPubEdit',{user: user, title: "Gueime - " + docs.title, developer: docs, edit: true, date: date, pub: true});
+                    res.render('devPubEdit',{user: user, title: "" + docs.title, developer: docs, edit: true, date: date, pub: true});
                 });
             }
         }
@@ -1948,7 +1948,7 @@ module.exports = function (app, passport, mongoose) {
                 res.redirect('/users/restore');
             } else if(user.status == 'admin' || user.status == 'editor'){
                 // sessionReload(req, res, next);
-                res.render('devPubEdit',{user: user, title: "Gueime - Nova Distribuidora", edit: false, pub: true});
+                res.render('devPubEdit',{user: user, title: "Nova Distribuidora", edit: false, pub: true});
             } else{
                 res.redirect('/parceiros');
             }
@@ -1985,7 +1985,7 @@ module.exports = function (app, passport, mongoose) {
                                 date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                             }
 
-                            res.render('devPub', {user: user, title: "Gueime - " + dev.title, dev: dev, docs: artigo, games: games, date: date, pub: false })
+                            res.render('devPub', {user: user, title: "" + dev.title, dev: dev, docs: artigo, games: games, date: date, pub: false })
                         });
                     });
                 }
@@ -2018,7 +2018,7 @@ module.exports = function (app, passport, mongoose) {
                                     date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                                 }
 
-                                res.render('devPub', {user: user, title: "Gueime - " + dev.title, dev: dev, docs: artigo, games: games, date: date, pub: false });
+                                res.render('devPub', {user: user, title: "" + dev.title, dev: dev, docs: artigo, games: games, date: date, pub: false });
                             });
                         });
                     }
@@ -2047,7 +2047,7 @@ module.exports = function (app, passport, mongoose) {
                         date = docs.startDate;
                         date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                     }
-                    res.render('devPubEdit',{user: user, title: "Gueime - " + docs.title, developer: docs, edit: true, date: date, dev: true});
+                    res.render('devPubEdit',{user: user, title: "" + docs.title, developer: docs, edit: true, date: date, dev: true});
                 });
             }
         }
@@ -2073,7 +2073,7 @@ module.exports = function (app, passport, mongoose) {
                 res.redirect('/users/restore');
             } else if(user.status == 'admin' || user.status == 'editor'){
                 // sessionReload(req, res, next);
-                res.render('devPubEdit',{user: user, title: "Gueime - Novo Desenvolvedor", edit: false, dev: true});
+                res.render('devPubEdit',{user: user, title: "Novo Desenvolvedor", edit: false, dev: true});
             } else{
                 res.redirect('/parceiros');
             }
@@ -2223,7 +2223,7 @@ module.exports = function (app, passport, mongoose) {
                                 date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                             }
 
-                        res.render('game', {title: "Gueime - " + game.title, game: game, docs: artigo, analise: analise, date: date, score: score, decimal: decimal })
+                        res.render('game', {title: "" + game.title, game: game, docs: artigo, analise: analise, date: date, score: score, decimal: decimal })
                     });
                 }
             });
@@ -2269,7 +2269,7 @@ module.exports = function (app, passport, mongoose) {
                                 date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                             }
 
-                            res.render('game', {user: user, title: "Gueime - " + game.title, game: game, docs: artigo, analise: analise, date: date, score: score, decimal: decimal });
+                            res.render('game', {user: user, title: "" + game.title, game: game, docs: artigo, analise: analise, date: date, score: score, decimal: decimal });
                         });
                     }
                 });
@@ -2354,7 +2354,7 @@ module.exports = function (app, passport, mongoose) {
                             date = docs.release;
                             date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                         }
-                        res.render('gameEdit',{user: user, title: "Gueime - " + docs.title, game: docs, edit: true, date: date});
+                        res.render('gameEdit',{user: user, title: "" + docs.title, game: docs, edit: true, date: date});
                     }
                 });
             }
@@ -2371,7 +2371,7 @@ module.exports = function (app, passport, mongoose) {
                 res.redirect('/users/restore');
             } else if(user.status == 'admin' || user.status == 'editor'){
                 // sessionReload(req, res, next);
-                res.render('gameEdit',{user: user, title: "Gueime - Novo Jogo", edit: false});
+                res.render('gameEdit',{user: user, title: "Novo Jogo", edit: false});
             } else{
                 res.redirect('/parceiros');
             }
@@ -2575,7 +2575,7 @@ module.exports = function (app, passport, mongoose) {
                                 var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
                                 docs[i].date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                             }
-                            res.render('gerenciar', {title: "Gueime - Gerenciar Jogos", user: user, games: docs});
+                            res.render('gerenciar', {title: "Gerenciar Jogos", user: user, games: docs});
                         });
                         break
 
@@ -2586,7 +2586,7 @@ module.exports = function (app, passport, mongoose) {
                                 var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
                                 docs[i].date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                             }
-                            res.render('gerenciar', {title: "Gueime - Gerenciar Artigos", user: user, articles: docs});
+                            res.render('gerenciar', {title: "Gerenciar Artigos", user: user, articles: docs});
                         });
                         break
 
@@ -2597,7 +2597,7 @@ module.exports = function (app, passport, mongoose) {
                                 var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
                                 docs[i].date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                             }
-                            res.render('gerenciar', {title: "Gueime - Gerenciar Desenvolvedores", user: user, devs: docs});
+                            res.render('gerenciar', {title: "Gerenciar Desenvolvedores", user: user, devs: docs});
                         });
                         break
 
@@ -2608,7 +2608,7 @@ module.exports = function (app, passport, mongoose) {
                                 var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
                                 docs[i].date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                             }
-                            res.render('gerenciar', {title: "Gueime - Gerenciar Distribuidoras", user: user, pubs: docs});
+                            res.render('gerenciar', {title: "Gerenciar Distribuidoras", user: user, pubs: docs});
                         });
                         break
 
@@ -2619,14 +2619,14 @@ module.exports = function (app, passport, mongoose) {
                                 var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
                                 docs[i].date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                             }
-                            res.render('gerenciar', {title: "Gueime - Gerenciar Gêneros", user: user, gens: docs});
+                            res.render('gerenciar', {title: "Gerenciar Gêneros", user: user, gens: docs});
                         });
                         break
 
                     case 'usuarios':
                         if(user.status == 'admin'){
                             Users.find({}, {name: 1, email: 1, graph: 1, deleted: 1, status: 1}).sort({_id: -1}).exec(function(err, docs){
-                                res.render('gerenciar', {title: "Gueime - Gerenciar Usuários", user: user, profile: docs});
+                                res.render('gerenciar', {title: "Gerenciar Usuários", user: user, profile: docs});
                             });
                             break
                         } else{
@@ -2642,7 +2642,7 @@ module.exports = function (app, passport, mongoose) {
                                 var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
                                 docs[i].date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                             }
-                            res.render('gerenciar', {title: "Gueime - Gerenciar Consoles", user: user, consoles: docs});
+                            res.render('gerenciar', {title: "Gerenciar Consoles", user: user, consoles: docs});
                         });
                         break
 
@@ -2671,7 +2671,7 @@ module.exports = function (app, passport, mongoose) {
                         var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
                         docs[i].date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                     }
-                    res.render('gerenciar', {title: "Gueime - Gerenciar Artigos", user: user, articles: docs});
+                    res.render('gerenciar', {title: "Gerenciar Artigos", user: user, articles: docs});
                 });
             } else {
                 res.redirect('/');
@@ -3332,7 +3332,7 @@ module.exports = function (app, passport, mongoose) {
     // =====================================
     app.get('/trivia', function(req, res, next){
         var user = req.user;
-        res.render('trivia', {user: user, title: "Gueime - Trivia"});
+        res.render('trivia', {user: user, title: "Trivia"});
     });
 
     // =====================================
@@ -3345,7 +3345,7 @@ module.exports = function (app, passport, mongoose) {
         var user = req.user;
 
         Product.find({status: 'publicado', many: {$gte: 1}}, function(err, docs){
-            res.render('troca', {user: user, title: 'Gueime - Troca de Pontos', products: docs});
+            res.render('troca', {user: user, title: 'Troca de Pontos', products: docs});
         });
     });
 
@@ -3359,7 +3359,7 @@ module.exports = function (app, passport, mongoose) {
                 res.redirect('/users/restore');
             } else if(user.status == 'admin'){
                 // sessionReload(req, res, next);
-                res.render('trocaEdit',{user: user, title: "Gueime - Nova Troca", edit: false});
+                res.render('trocaEdit',{user: user, title: "Nova Troca", edit: false});
             } else{
                 res.redirect('/parceiros');
             }
@@ -3378,7 +3378,7 @@ module.exports = function (app, passport, mongoose) {
             } else if(user.status == 'admin'){
                 // sessionReload(req, res, next);
                 Product.findOneAndUpdate({slug: troca}, {status: 'rascunho'}, {new: false}, function(err, docs){
-                    res.render('trocaEdit',{user: user, title: "Gueime - " + docs.title, developer: docs, edit: true});
+                    res.render('trocaEdit',{user: user, title: "" + docs.title, developer: docs, edit: true});
                 });
             } else{
                 res.redirect('/');
@@ -3392,7 +3392,7 @@ module.exports = function (app, passport, mongoose) {
             produto = req.pararms.prod;
 
         Product.findOneAndUpdate({slug: produto, status: 'publicado'}, {$inc: {'graph.views': 1}}, function(err, docs){
-            res.render('produto', {user: user, title: 'Gueime - ' + docs.title, product: docs});
+            res.render('produto', {user: user, title: '' + docs.title, product: docs});
         });
     });
 
@@ -3566,7 +3566,7 @@ module.exports = function (app, passport, mongoose) {
                 plusView(user);
             }
 
-            res.render('contato', {title: "Gueime - Contato", user: user});
+            res.render('contato', {title: "Contato", user: user});
         }
     });
 
@@ -3616,7 +3616,7 @@ module.exports = function (app, passport, mongoose) {
         if(user){
             plusView(user);
         }
-        res.render('parceiros', {title: "Gueime - Parceiros", user: user})
+        res.render('parceiros', {title: "Parceiros", user: user})
     });
 
     // PARCEIROS
@@ -3626,7 +3626,7 @@ module.exports = function (app, passport, mongoose) {
         if(user){
             plusView(user);
         }
-        res.render('quem', {title: "Gueime - Quem Somos", user: user})
+        res.render('quem', {title: "Quem Somos", user: user})
     });
 
 
