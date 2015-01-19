@@ -3683,8 +3683,8 @@ module.exports = function (app, passport, mongoose) {
     // =====================================
     // SITEMAP =============================
     // =====================================
-    function generate_xml_sitemap() {
-        // this is the source of the URLs on your site, in this case we use a simple array, actually it could come from the database
+
+    app.get('/sitemap.xml', function(req, res) {
         Artigos.find({status: 'publicado'}, {type: 1, slug: 1}).sort({ '_id': -1 }).exec(function (err, docs) {
             var myArticles = [];
 
@@ -3693,13 +3693,13 @@ module.exports = function (app, passport, mongoose) {
             }
 
             var urls = myArticles;
-            console.log(urls);
             // the root of your website - the protocol and the domain name with a trailing slash
             var root_path = 'http://www.gueime.com.br/';
             // XML sitemap generation starts here
             var priority = 0.5;
             var freq = 'monthly';
             var xml = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
+            xml += "<url><loc>http://www.gueime.com.br</loc><changefreq>daily</changefreq><priority>1.0</priority></url>"
             for (var i in urls) {
                 xml += '<url>';
                 xml += '<loc>'+ root_path + urls[i] + '</loc>';
@@ -3709,15 +3709,12 @@ module.exports = function (app, passport, mongoose) {
                 i++;
             }
             xml += '</urlset>';
-            console.log(xml)
-            return xml;
-        });
-    }
 
-    app.get('/sitemap.xml', function(req, res) {
-        var sitemap = generate_xml_sitemap(); // get the dynamically generated XML sitemap
-        res.header('Content-Type', 'text/xml');
-        res.send(sitemap);     
+            res.header('Content-Type', 'text/xml');
+            res.send(xml);  
+        });
+
+           
     });
 
 
