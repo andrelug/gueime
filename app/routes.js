@@ -3780,7 +3780,7 @@ module.exports = function (app, passport, mongoose) {
     });
 
     // Sitemap dev
-    app.get('/sitemappub.xml', function(req, res) {
+    app.get('/sitemapdev.xml', function(req, res) {
         DevPub.find({status: 'publicado', type: 'developer'}).sort({ '_id': -1 }).exec(function (err, docs) {
             var myArticles = [];
 
