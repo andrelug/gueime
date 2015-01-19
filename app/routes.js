@@ -1143,6 +1143,7 @@ module.exports = function (app, passport, mongoose) {
                     'cover.image': b.coverUrl,
                     'cover.position': b.position,
                     tags: sendTags,
+                    'graph.games': sendGames,
                     'review.score': b.nota,
                     'review.good': analiseBom,
                     'review.bad': analiseRuim,
