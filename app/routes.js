@@ -12,7 +12,8 @@ var Users = require('./models/user'),
     fs = require("fs"),
     transloadit = require('node-transloadit'),
     async = require('async'),
-    nodemailer = require("nodemailer");
+    nodemailer = require("nodemailer"),
+    Feed = require('feed');
 
 var client = new transloadit('195786e09f8911e495eae1be63259780', '360133efc358574ed2fef9c645c5fb62f65623af');
 
@@ -3626,6 +3627,58 @@ module.exports = function (app, passport, mongoose) {
         }
         res.render('quem', {title: "Gueime - Quem Somos", user: user})
     });
+
+
+    // =====================================
+    // FEED ================================
+    // =====================================
+    app.get('/rss', function(req, res){
+        // Setting the appropriate Content-Type
+        res.set('Content-Type', 'text/xml');
+
+        // Initializing feed object
+        var feed = new Feed({
+            title:          'Gueime',
+            description:    'O melhor site de games do Brasil',
+            link:           'http://www.gueime.com.br/',
+            image:          'http://www.gueime.com.br/images/gueime.png',
+            copyright:      'Copyright © 2015 - Gueime',
+
+            author: {
+                name:       'André Lucas',
+                email:      'andre@gueime.com.br',
+                link:       'https://www.gueime.com.br/profile/andrelug'
+            }
+        });
+
+        Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1 }).sort({ '_id': -1 }).limit(10).exec(function (err, docs) {
+
+            if(err)
+                res.send("404 Não encontrado");
+            else{
+                for (i = 0; i < docs.length; i++) {
+                    var timeStamp = docs[i]._id.toString().substring(0,8);
+                    var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                    docs[i].date = date;
+
+                    feed.item({
+                        title:          docs[i].title,
+                        link:           "http://www.gueime.com.br/" + docs[i].type + "s/" + docs[i].slug,
+                        description:    docs[i].description,
+                        date:           docs[i].date,
+                        image:          docs[i].cover.image
+                    });
+                }
+
+                
+
+                // Sending the feed as a response
+                res.send(feed.render('atom-1.0'));
+            }
+        });
+    });
+
+
     // =====================================
     // USER SIGNUP =========================
     // ===================================== I should later find a way to pass params to the jade file here and put values on the inputs

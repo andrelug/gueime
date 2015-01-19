@@ -32,7 +32,8 @@
     "connect-mongo": "*",
     "node-transloadit": "*",
     "nodemailer": "*",
-    "async": "~0.8.0"
+    "async": "~0.8.0",
+    "feed": "*"
   },
   "noAnalyze": true,
   "license": "Apache",
