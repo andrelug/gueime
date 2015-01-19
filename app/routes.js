@@ -3874,7 +3874,7 @@ module.exports = function (app, passport, mongoose) {
 
     // Sitemap console
     app.get('/sitemapconsole.xml', function(req, res) {
-        Genre.find({status: 'publicado'}).sort({ '_id': -1 }).exec(function (err, docs) {
+        Console.find({status: 'publicado'}).sort({ '_id': -1 }).exec(function (err, docs) {
             var myArticles = [];
 
             for (i = 0; i < docs.length; i++) {
