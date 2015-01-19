@@ -26,20 +26,4 @@ script.
     ga('require', 'displayfeatures', 'linkid', 'linkid.js');
     ga('send', 'pageview');
 
-script(type="text/javascript").
-    //<![CDATA[
-      (function() {
-        var shr = document.createElement('script');
-        shr.setAttribute('data-cfasync', 'false');
-        shr.src = '//dsms0mj1bbhn4.cloudfront.net/assets/pub/shareaholic.js';
-        shr.type = 'text/javascript'; shr.async = 'true';
-        shr.onload = shr.onreadystatechange = function() {
-          var rs = this.readyState;
-          if (rs && rs != 'complete' && rs != 'loaded') return;
-          var site_id = 'bdba2325830ad47985f84fb068390c7b';
-          try { Shareaholic.init(site_id); } catch (e) {}
-        };
-        var s = document.getElementsByTagName('script')[0];
-        s.parentNode.insertBefore(shr, s);
-      })();
-    //]]>
+script(type="text/javascript", src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-50fe332b305ab390", async="async")
