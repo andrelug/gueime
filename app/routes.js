@@ -150,8 +150,8 @@ module.exports = function (app, passport, mongoose) {
         }
     });
 
-
-    // Fix Route
+    /*
+    // Fix Route for publishDate
     app.get('/fix', function(req, res){
         Artigos.find({status: 'publicado'}).exec(function(err, docs){
             var number = 0;
@@ -168,7 +168,7 @@ module.exports = function (app, passport, mongoose) {
             
         });
     });
-
+    */
 
     // AUTOCOMPLETE
     app.get('/autocomplete', function(req, res){
@@ -2615,10 +2615,15 @@ module.exports = function (app, passport, mongoose) {
                         break
 
                     case 'artigos':
-                        Artigos.find({}, {title: 1, slug: 1, 'authors.name': 1, type: 1, 'graph.views': 1, status: 1}).sort({_id: -1}).exec(function(err, docs){
+                        Artigos.find({}, {title: 1, slug: 1, 'authors.name': 1, type: 1, 'graph.views': 1, status: 1, publishDate: 1}).sort({_id: -1}).exec(function(err, docs){
                             for(i=0;i < docs.length;i++){
-                                var timeStamp = docs[i]._id.toString().substring(0,8);
-                                var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                                if(docs[i].status == 'publicado'){
+                                    var date = docs[i].publishDate;
+                                } else {
+                                    var timeStamp = docs[i]._id.toString().substring(0,8);
+                                    var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                                }
+                                
                                 docs[i].date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                             }
                             res.render('checkContent', {title: "Gerenciar Artigos", user: user, articles: docs});
@@ -2659,10 +2664,15 @@ module.exports = function (app, passport, mongoose) {
                         break
 
                     case 'artigos':
-                        Artigos.find({}, {title: 1, slug: 1, 'authors.name': 1, type: 1, 'graph.views': 1, status: 1}).sort({_id: -1}).exec(function(err, docs){
+                        Artigos.find({}, {title: 1, slug: 1, 'authors.name': 1, type: 1, 'graph.views': 1, status: 1, publishDate: 1}).sort({_id: -1}).exec(function(err, docs){
                             for(i=0;i < docs.length;i++){
-                                var timeStamp = docs[i]._id.toString().substring(0,8);
-                                var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                                if(docs[i].status == 'publicado'){
+                                    var date = docs[i].publishDate;
+                                } else {
+                                    var timeStamp = docs[i]._id.toString().substring(0,8);
+                                    var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                                }
+                                
                                 docs[i].date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                             }
                             res.render('gerenciar', {title: "Gerenciar Artigos", user: user, articles: docs});
@@ -2744,10 +2754,15 @@ module.exports = function (app, passport, mongoose) {
             if(user.deleted == true){
                 res.redirect('/users/restore');
             }else if(user.status == 'admin' || user.status == 'editor' || user.status == 'parceiro'){
-                Artigos.find({'authors.main': user._id}, {title: 1, slug: 1, type: 1, 'graph.views': 1, status: 1}).sort({_id: -1}).exec(function(err, docs){
+                Artigos.find({'authors.main': user._id}, {title: 1, slug: 1, type: 1, 'graph.views': 1, status: 1, publishDate: 1}).sort({_id: -1}).exec(function(err, docs){
                     for(i=0;i < docs.length;i++){
-                        var timeStamp = docs[i]._id.toString().substring(0,8);
-                        var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                        if(docs[i].status == 'publicado'){
+                            var date = docs[i].publishDate;
+                        } else {
+                            var timeStamp = docs[i]._id.toString().substring(0,8);
+                            var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                        }
+                                
                         docs[i].date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                     }
                     res.render('gerenciar', {title: "Gerenciar Artigos", user: user, articles: docs});
