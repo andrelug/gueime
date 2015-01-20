@@ -331,11 +331,15 @@ module.exports = function (app, passport, mongoose) {
                 } else{
                     if(docs.status == 'publicado'){
                         var title = docs.title,
-                            body = decodeURIComponent(docs.text);
+                        body = decodeURIComponent(docs.text);
 
+                        if(docs.status == 'publicado'){
+                            var date = docs.publishDate;
+                        } else {
                             var timeStamp = docs._id.toString().substring(0,8);
                             var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
-                            docs.date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                        }
+                        docs.date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
 
                         Users.find({ _id: docs.authors.main },{'name.loginName': 1, 'name.first': 1, 'name.last': 1, photo: 1, 'social': 1}, function (err, author) {
                             if(!user){
@@ -360,9 +364,13 @@ module.exports = function (app, passport, mongoose) {
                     } else{
                         if(docs.status == 'publicado'){
                             var title = docs.title,
-                                body = decodeURIComponent(docs.text);
-                            var timeStamp = docs._id.toString().substring(0,8);
-                            var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                            body = decodeURIComponent(docs.text);
+                            if(docs.status == 'publicado'){
+                                var date = docs.publishDate;
+                            } else {
+                                var timeStamp = docs._id.toString().substring(0,8);
+                                var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                            }
                             docs.date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
 
                             Users.find({ _id: docs.authors.main }, {'name.loginName': 1, 'name.first': 1, 'name.last': 1, photo: 1, 'social': 1},function (err, author) {
@@ -388,8 +396,12 @@ module.exports = function (app, passport, mongoose) {
                                 var title = docs.title,
                                     body = decodeURIComponent(docs.text);
 
-                                var timeStamp = docs._id.toString().substring(0,8);
-                                var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                                if(docs.status == 'publicado'){
+                                    var date = docs.publishDate;
+                                } else {
+                                    var timeStamp = docs._id.toString().substring(0,8);
+                                    var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                                }
                                 docs.date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
 
                                 Users.find({ _id: docs.authors.main },{'name.loginName': 1, 'name.first': 1, 'name.last': 1, photo: 1, 'social': 1}, function (err, author) {                                    
@@ -419,8 +431,13 @@ module.exports = function (app, passport, mongoose) {
                     if(docs.status == 'publicado'){
                         var title = docs.title,
                             body = decodeURIComponent(docs.text);
-                        var timeStamp = docs._id.toString().substring(0,8);
-                        var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+
+                        if(docs.status == 'publicado'){
+                            var date = docs.publishDate;
+                        } else {
+                            var timeStamp = docs._id.toString().substring(0,8);
+                            var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                        }
                         docs.date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
 
                         Users.find({ _id: docs.authors.main },{'name.loginName': 1, 'name.first': 1, 'name.last': 1, photo: 1, 'social': 1}, function (err, author) {
@@ -447,8 +464,12 @@ module.exports = function (app, passport, mongoose) {
                             var title = docs.title,
                                 body = decodeURIComponent(docs.text);
 
-                            var timeStamp = docs._id.toString().substring(0,8);
-                            var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                            if(docs.status == 'publicado'){
+                                var date = docs.publishDate;
+                            } else {
+                                var timeStamp = docs._id.toString().substring(0,8);
+                                var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                            }
                             docs.date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
 
                             Users.find({ _id: docs.authors.main },{'name.loginName': 1, 'name.first': 1, 'name.last': 1, photo: 1, 'social': 1}, function (err, author) {
@@ -472,8 +493,12 @@ module.exports = function (app, passport, mongoose) {
                             if(docs.status == 'publicado'){
                                 var title = docs.title,
                                     body = decodeURIComponent(docs.text);
-                                var timeStamp = docs._id.toString().substring(0,8);
-                                var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                                if(docs.status == 'publicado'){
+                                    var date = docs.publishDate;
+                                } else {
+                                    var timeStamp = docs._id.toString().substring(0,8);
+                                    var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                                }
                                 docs.date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
 
                                 Users.find({ _id: docs.authors.main },{'name.loginName': 1, 'name.first': 1, 'name.last': 1, photo: 1, 'social': 1}, function (err, author) {
@@ -516,8 +541,12 @@ module.exports = function (app, passport, mongoose) {
                         var bad = docs.review.bad.split(','),
                             good = docs.review.good.split(',');
 
-                        var timeStamp = docs._id.toString().substring(0,8);
-                        var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                        if(docs.status == 'publicado'){
+                            var date = docs.publishDate;
+                        } else {
+                            var timeStamp = docs._id.toString().substring(0,8);
+                            var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                        }
                         docs.date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                         Users.find({ _id: docs.authors.main },{'name.loginName': 1, 'name.first': 1, 'name.last': 1, photo: 1, 'social': 1}, function (err, author) {
                             console.log('1');
@@ -572,8 +601,12 @@ module.exports = function (app, passport, mongoose) {
                             } else{
                                 decimal = scores[1];
                             }
-                            var timeStamp = docs._id.toString().substring(0,8);
-                            var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                            if(docs.status == 'publicado'){
+                                var date = docs.publishDate;
+                            } else {
+                                var timeStamp = docs._id.toString().substring(0,8);
+                                var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                            }
                             docs.date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                             Users.find({ _id: docs.authors.main },{'name.loginName': 1, 'name.first': 1, 'name.last': 1, photo: 1, 'social': 1}, function (err, author) {
                                 Games.findOne({slug: analise, status: 'publicado'}, function(err, game){
@@ -616,8 +649,12 @@ module.exports = function (app, passport, mongoose) {
                                 } else{
                                     decimal = scores[1];
                                 }
-                                var timeStamp = docs._id.toString().substring(0,8);
-                                var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                                if(docs.status == 'publicado'){
+                                    var date = docs.publishDate;
+                                } else {
+                                    var timeStamp = docs._id.toString().substring(0,8);
+                                    var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                                }
                                 docs.date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
 
                                 Users.find({ _id: docs.authors.main },{'name.loginName': 1, 'name.first': 1, 'name.last': 1, photo: 1, 'social': 1}, function (err, author) {
@@ -658,8 +695,12 @@ module.exports = function (app, passport, mongoose) {
                     if(docs.status == 'publicado'){
                         var title = docs.title,
                             body = decodeURIComponent(docs.text);
-                        var timeStamp = docs._id.toString().substring(0,8);
-                        var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                        if(docs.status == 'publicado'){
+                            var date = docs.publishDate;
+                        } else {
+                            var timeStamp = docs._id.toString().substring(0,8);
+                            var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                        }
                         docs.date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
 
                         Users.find({ _id: docs.authors.main }, {'name.loginName': 1, 'name.first': 1, 'name.last': 1, photo: 1, 'social': 1},function (err, author) {
@@ -686,8 +727,12 @@ module.exports = function (app, passport, mongoose) {
                             var title = docs.title,
                                 body = decodeURIComponent(docs.text);
 
-                            var timeStamp = docs._id.toString().substring(0,8);
-                            var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                            if(docs.status == 'publicado'){
+                                var date = docs.publishDate;
+                            } else {
+                                var timeStamp = docs._id.toString().substring(0,8);
+                                var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                            }
                             docs.date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
 
                             Users.find({ _id: docs.authors.main },{'name.loginName': 1, 'name.first': 1, 'name.last': 1, photo: 1, 'social': 1}, function (err, author) {
@@ -710,8 +755,12 @@ module.exports = function (app, passport, mongoose) {
                             if(docs.status == 'publicado'){
                                 var title = docs.title,
                                     body = decodeURIComponent(docs.text);
-                                var timeStamp = docs._id.toString().substring(0,8);
-                                var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                                if(docs.status == 'publicado'){
+                                    var date = docs.publishDate;
+                                } else {
+                                    var timeStamp = docs._id.toString().substring(0,8);
+                                    var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                                }
                                 docs.date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
 
                                 Users.find({ _id: docs.authors.main },{'name.loginName': 1, 'name.first': 1, 'name.last': 1, photo: 1, 'social': 1}, function (err, author) {
