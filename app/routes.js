@@ -93,7 +93,7 @@ module.exports = function (app, passport, mongoose) {
             if (!user) {
                 async.parallel([
                     function(cb){
-                        Artigos.find({ facet: { $all: searchStr}, status: 'publicado' }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).limit(6).exec(cb);
+                        Artigos.find({ facet: { $all: searchStr}, status: 'publicado' }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({publishDate: -1}).limit(6).exec(cb);
                     },
                     function(cb){
                         Games.find({status: 'publicado', title: new RegExp(gameStr, 'i') }, cb);
@@ -110,7 +110,7 @@ module.exports = function (app, passport, mongoose) {
                     
                     async.parallel([
                         function(cb){
-                            Artigos.find({ facet: { $all: searchStr}, status: 'publicado' }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).limit(6).exec(cb);
+                            Artigos.find({ facet: { $all: searchStr}, status: 'publicado' }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({publishDate: -1}).limit(6).exec(cb);
                         },
                         function(cb){
                             Games.find({status: 'publicado', title: new RegExp(gameStr, 'i') }, cb);
@@ -125,7 +125,7 @@ module.exports = function (app, passport, mongoose) {
             }
         } else {
             if (!user) {
-                Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).exec(function (err, docs) {
+                Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({publishDate: -1}).limit(6).exec(function (err, docs) {
 
                     res.render('index', { title: "O melhor site de games do Brasil!", docs: docs, status: status});
                 });
@@ -137,7 +137,7 @@ module.exports = function (app, passport, mongoose) {
 
                     async.parallel([
                         function(cb){
-                            Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).exec(cb);
+                            Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({publishDate: -1}).limit(6).exec(cb);
                         },
                         function(cb){
                             Users.update({'_id': user}, {$inc: {'graph.visits': 1}}, cb);
@@ -148,6 +148,25 @@ module.exports = function (app, passport, mongoose) {
                 }
             }
         }
+    });
+
+
+    // Fix Route
+    app.get('/fix', function(req, res){
+        Artigos.find({status: 'publicado'}).exec(function(err, docs){
+            var number = 0;
+            for(i=0; i < docs.length; i++){
+                Artigos.findOneAndUpdate({ '_id': docs[i].id }, { $set: {
+                    publishDate: new Date()
+                }}, function (err, docs) {
+                    number = number + 1;
+                    if (number >= 215){
+                        res.send('ok');
+                    }
+                });
+            }
+            
+        });
     });
 
 
@@ -211,7 +230,7 @@ module.exports = function (app, passport, mongoose) {
         var searchStr = [];
 
         if (!req.query.str) {
-            Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ '_id': -1 }).limit(6).skip(n).exec(function (err, docs) {
+            Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({publishDate: -1}).limit(6).skip(n).exec(function (err, docs) {
 
                 res.render('loadMore', { docs: docs });
             });
@@ -224,7 +243,7 @@ module.exports = function (app, passport, mongoose) {
             }
             searchStr = searchStr.toString().split(',');
 
-            Artigos.find({ facet: { $all: searchStr}, status: 'publicado' }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).limit(6).skip(n).exec(function (err, docs) {
+            Artigos.find({ facet: { $all: searchStr}, status: 'publicado' }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({publishDate: -1}).limit(6).skip(n).exec(function (err, docs) {
 
                 res.render('loadMore', { docs: docs });
             });
@@ -1023,14 +1042,6 @@ module.exports = function (app, passport, mongoose) {
             if (analiseRuim != undefined) { if (analiseRuim.indexOf(',') > -1) { analiseRuim = analiseRuim.split(','); } }
 
             facet.push(b.serieArtigo, b.tipoVideo, b.canalVideo);
-            console.log('ate aqui');
-            
-            var status;
-            if(user.status == 'admin' || user.status == 'editor'){
-                status = 'publicado';
-            } else {
-                status = 'revisao';
-            }
 
             facet = func.cleanArray(facet);
 
@@ -1045,194 +1056,220 @@ module.exports = function (app, passport, mongoose) {
                 criador = user._id;
             }
 
-            if (b.tipo == 'noticia') {
-                Artigos.findOneAndUpdate({_id: id}, { $set: {
+            Artigos.findOne({_id: id}, function(err, publishD){
+                var status;
+                var publishDate;
 
-                    description: b.descricao,
-                    status: status,
-                    'cover.image': b.coverUrl,
-                    'cover.position': b.position,
-                    tags: sendTags,
-                    'graph.games': sendGames,
-                    'graph.consoles': sendConsoles,
-                    'graph.genres': sendGeneros,
-                    'graph.developers': sendDesenvolvedores,
-                    'graph.publishers': sendPublicadoras,
-                    'news.story': b.continuacaoHistoria,
-                    slug: slug,
-                    'authors.revision': user._id
-
-                }, $addToSet: {
-                    facet: { $each: sendFacet }
-                }
-                }, function (err, art) {
-                    if (err)
-                        throw err
-                    if(user.status == 'admin' || user.status == 'editor'){
-                        // Atribuição de pontuação
-                        Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 10}}, function(err){
-                            // Ganha pontos por revisão
-                            if(criador != user._id){
-                                if(user.graph.revisionCol.indexOf(art._id) > -1){
-                                    res.redirect('/' + b.tipo + 's/' + slug);
-                                } else {
-                                    Users.update({_id: user._id}, {$inc: {'gamification.points': 30, 'graph.revisions': 1}, $addToSet: {'graph.revisionCol': art._id}}, function(err){
-                                        res.redirect('/' + b.tipo + 's/' + slug);
-                                    });
-                                }
-                            } else {
-                                res.redirect('/' + b.tipo + 's/' + slug);
-                            }
-                        });
-                    } else{
-                        // Manda pra revisão
-                        res.redirect('/?status=revision');
+                if(user.status == 'admin' || user.status == 'editor'){
+                    status = 'publicado';
+                    if(publishD.publishDate == undefined){
+                        publishDate = new Date();
+                    } else {
+                        publishDate = publishD.publishDate;
                     }
-                });
-            } else if (b.tipo == 'artigo') {
-                Artigos.findOneAndUpdate({_id: id}, { $set: {
-
-                    description: b.descricao,
-                    status: status,
-                    'cover.image': b.coverUrl,
-                    'cover.position': b.position,
-                    tags: sendTags,
-                    'graph.games': sendGames,
-                    'graph.consoles': sendConsoles,
-                    'graph.genres': sendGeneros,
-                    'graph.developers': sendDesenvolvedores,
-                    'graph.publishers': sendPublicadoras,
-                    'article.category': sendCategoriaArtigo,
-                    'article.serie': b.serieArtigo,
-                    slug: slug,
-                    'authors.revision': user._id
-
-                }, $addToSet: {
-                    facet: { $each: sendFacet }
+                } else {
+                    status = 'revisao';
                 }
-                }, function (err, art) {
-                    if (err)
-                        throw err
-                    if(user.status == 'admin' || user.status == 'editor'){
-                        // Atribuição de pontuação
-                        Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 30}}, function(err){
-                            // Ganha pontos por revisão
-                            if(criador != user._id){
-                                if(user.graph.revisionCol.indexOf(art._id) > -1){
-                                    res.redirect('/' + b.tipo + 's/' + slug);
-                                } else {
-                                    Users.update({_id: user._id}, {$inc: {'gamification.points': 30, 'graph.revisions': 1}, $addToSet: {'graph.revisionCol': art._id}}, function(err){
-                                        res.redirect('/' + b.tipo + 's/' + slug);
-                                    });
-                                }
-                            } else {
-                                res.redirect('/' + b.tipo + 's/' + slug);
-                            }
-                        });
-                    } else{
-                        // Manda pra revisão
-                        res.redirect('/?status=revision');
+
+
+                if (b.tipo == 'noticia') {
+                    Artigos.findOneAndUpdate({_id: id}, { $set: {
+
+                        description: b.descricao,
+                        status: status,
+                        publishDate: publishDate,   
+                        'cover.image': b.coverUrl,
+                        'cover.position': b.position,
+                        tags: sendTags,
+                        'graph.games': sendGames,
+                        'graph.consoles': sendConsoles,
+                        'graph.genres': sendGeneros,
+                        'graph.developers': sendDesenvolvedores,
+                        'graph.publishers': sendPublicadoras,
+                        'news.story': b.continuacaoHistoria,
+                        slug: slug,
+                        'authors.revision': user._id
+
+                    }, $addToSet: {
+                        facet: { $each: sendFacet }
                     }
-                });
-            } else if (b.tipo == 'analise') {
-                console.log('mais aqui');
-                Artigos.findOneAndUpdate({_id: id}, { $set: {
-
-                    description: b.descricao,
-                    status: status,
-                    'cover.image': b.coverUrl,
-                    'cover.position': b.position,
-                    tags: sendTags,
-                    'graph.games': sendGames,
-                    'review.score': b.nota,
-                    'review.good': analiseBom,
-                    'review.bad': analiseRuim,
-                    'review.punchLine': b.analiseEfeito,
-                    slug: slug,
-                    'authors.revision': user._id
-
-
-                }, $addToSet: {
-                    facet: { $each: sendFacet }
-                }
-                }, function (err, art) {
-                    if (err)
-                        throw err
-                    if(user.status == 'admin' || user.status == 'editor'){
-                        // Atribuição de pontuação
-                        Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 50}}, function(err){
-                            // Ganha pontos por revisão
-                            if(criador != user._id){
-                                if(user.graph.revisionCol.indexOf(art._id) > -1){
-                                    res.redirect('/' + b.tipo + 's/' + slug);
-                                } else {
-                                    Users.update({_id: user._id}, {$inc: {'gamification.points': 30, 'graph.revisions': 1}, $addToSet: {'graph.revisionCol': art._id}}, function(err){
+                    }, function (err, art) {
+                        if (err)
+                            throw err
+                        if(user.status == 'admin' || user.status == 'editor'){
+                            // Atribuição de pontuação
+                            Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 10}}, function(err){
+                                // Ganha pontos por revisão
+                                if(criador != user._id){
+                                    if(user.graph.revisionCol.indexOf(art._id) > -1){
                                         res.redirect('/' + b.tipo + 's/' + slug);
-                                    });
+                                    } else {
+                                        Users.update({_id: user._id}, {$inc: {'gamification.points': 30, 'graph.revisions': 1}, $addToSet: {'graph.revisionCol': art._id}}, function(err){
+                                            res.redirect('/' + b.tipo + 's/' + slug);
+                                        });
+                                    }
+                                } else {
+                                    res.redirect('/' + b.tipo + 's/' + slug);
                                 }
-                            } else {
-                                res.redirect('/' + b.tipo + 's/' + slug);
-                            }
-                        });
-                    } else{
-                        // Manda pra revisão
-                        res.redirect('/?status=revision');
-                    }
-                });
-            } else {
-                Artigos.findOneAndUpdate({_id: id}, { $set: {
-
-                    description: b.descricao,
-                    status: status,
-                    'cover.image': b.coverUrl,
-                    'cover.position': b.position,
-                    tags: sendTags,
-                    'graph.games': sendGames,
-                    'graph.consoles': sendConsoles,
-                    'graph.genres': sendGeneros,
-                    'graph.developers': sendDesenvolvedores,
-                    'graph.publishers': sendPublicadoras,
-                    'video.tipo': b.tipoVideo,
-                    'video.canal': b.canalVideo,
-                    'video.url': b.urlVideo,
-                    slug: slug,
-                    'authors.revision': user._id,
-                    'video.autoral': autoral
-
-                }, $addToSet: {
-                    facet: { $each: sendFacet }
-                }
-                }, function (err, art) {
-                    if (err)
-                        throw err
-                    if(user.status == 'admin' || user.status == 'editor'){
-                        var videoPoints;
-                        if(autoral == 'true'){
-                            videoPoints = 50;
-                        } else {
-                            videoPoints = 5;
+                            });
+                        } else{
+                            // Manda pra revisão
+                            res.redirect('/?status=revision');
                         }
-                        // Atribuição de pontuação
-                        Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': videoPoints}}, function(err){
-                            // Ganha pontos por revisão
-                            if(criador != user._id){
-                                if(user.graph.revisionCol.indexOf(art._id) > -1){
-                                    res.redirect('/' + b.tipo + 's/' + slug);
-                                } else {
-                                    Users.update({_id: user._id}, {$inc: {'gamification.points': 30, 'graph.revisions': 1}, $addToSet: {'graph.revisionCol': art._id}}, function(err){
-                                        res.redirect('/' + b.tipo + 's/' + slug);
-                                    });
-                                }
-                            } else {
-                                res.redirect('/' + b.tipo + 's/' + slug);
-                            }
-                        });
-                    } else{
-                        // Manda pra revisão
-                        res.redirect('/?status=revision');
+                    });
+                } else if (b.tipo == 'artigo') {
+                    Artigos.findOneAndUpdate({_id: id}, { $set: {
+
+                        description: b.descricao,
+                        status: status,
+                        publishDate: publishDate,
+                        'cover.image': b.coverUrl,
+                        'cover.position': b.position,
+                        tags: sendTags,
+                        'graph.games': sendGames,
+                        'graph.consoles': sendConsoles,
+                        'graph.genres': sendGeneros,
+                        'graph.developers': sendDesenvolvedores,
+                        'graph.publishers': sendPublicadoras,
+                        'article.category': sendCategoriaArtigo,
+                        'article.serie': b.serieArtigo,
+                        slug: slug,
+                        'authors.revision': user._id
+
+                    }, $addToSet: {
+                        facet: { $each: sendFacet }
                     }
-                });
-            }
+                    }, function (err, art) {
+                        if (err)
+                            throw err
+                        if(user.status == 'admin' || user.status == 'editor'){
+                            // Atribuição de pontuação
+                            Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 30}}, function(err){
+                                // Ganha pontos por revisão
+                                if(criador != user._id){
+                                    if(user.graph.revisionCol.indexOf(art._id) > -1){
+                                        res.redirect('/' + b.tipo + 's/' + slug);
+                                    } else {
+                                        Users.update({_id: user._id}, {$inc: {'gamification.points': 30, 'graph.revisions': 1}, $addToSet: {'graph.revisionCol': art._id}}, function(err){
+                                            res.redirect('/' + b.tipo + 's/' + slug);
+                                        });
+                                    }
+                                } else {
+                                    res.redirect('/' + b.tipo + 's/' + slug);
+                                }
+                            });
+                        } else{
+                            // Manda pra revisão
+                            res.redirect('/?status=revision');
+                        }
+                    });
+                } else if (b.tipo == 'analise') {
+                    console.log('mais aqui');
+                    Artigos.findOneAndUpdate({_id: id}, { $set: {
+
+                        description: b.descricao,
+                        status: status,
+                        publishDate: publishDate,
+                        'cover.image': b.coverUrl,
+                        'cover.position': b.position,
+                        tags: sendTags,
+                        'graph.games': sendGames,
+                        'review.score': b.nota,
+                        'review.good': analiseBom,
+                        'review.bad': analiseRuim,
+                        'review.punchLine': b.analiseEfeito,
+                        slug: slug,
+                        'authors.revision': user._id
+
+
+                    }, $addToSet: {
+                        facet: { $each: sendFacet }
+                    }
+                    }, function (err, art) {
+                        if (err)
+                            throw err
+                        if(user.status == 'admin' || user.status == 'editor'){
+                            // Atribuição de pontuação
+                            Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 50}}, function(err){
+                                // Ganha pontos por revisão
+                                if(criador != user._id){
+                                    if(user.graph.revisionCol.indexOf(art._id) > -1){
+                                        res.redirect('/' + b.tipo + 's/' + slug);
+                                    } else {
+                                        Users.update({_id: user._id}, {$inc: {'gamification.points': 30, 'graph.revisions': 1}, $addToSet: {'graph.revisionCol': art._id}}, function(err){
+                                            res.redirect('/' + b.tipo + 's/' + slug);
+                                        });
+                                    }
+                                } else {
+                                    res.redirect('/' + b.tipo + 's/' + slug);
+                                }
+                            });
+                        } else{
+                            // Manda pra revisão
+                            res.redirect('/?status=revision');
+                        }
+                    });
+                } else {
+                    Artigos.findOneAndUpdate({_id: id}, { $set: {
+
+                        description: b.descricao,
+                        status: status,
+                        publishDate: publishDate,
+                        'cover.image': b.coverUrl,
+                        'cover.position': b.position,
+                        tags: sendTags,
+                        'graph.games': sendGames,
+                        'graph.consoles': sendConsoles,
+                        'graph.genres': sendGeneros,
+                        'graph.developers': sendDesenvolvedores,
+                        'graph.publishers': sendPublicadoras,
+                        'video.tipo': b.tipoVideo,
+                        'video.canal': b.canalVideo,
+                        'video.url': b.urlVideo,
+                        slug: slug,
+                        'authors.revision': user._id,
+                        'video.autoral': autoral
+
+                    }, $addToSet: {
+                        facet: { $each: sendFacet }
+                    }
+                    }, function (err, art) {
+                        if (err)
+                            throw err
+                        if(user.status == 'admin' || user.status == 'editor'){
+                            var videoPoints;
+                            if(autoral == 'true'){
+                                videoPoints = 50;
+                            } else {
+                                videoPoints = 5;
+                            }
+                            // Atribuição de pontuação
+                            Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': videoPoints}}, function(err){
+                                // Ganha pontos por revisão
+                                if(criador != user._id){
+                                    if(user.graph.revisionCol.indexOf(art._id) > -1){
+                                        res.redirect('/' + b.tipo + 's/' + slug);
+                                    } else {
+                                        Users.update({_id: user._id}, {$inc: {'gamification.points': 30, 'graph.revisions': 1}, $addToSet: {'graph.revisionCol': art._id}}, function(err){
+                                            res.redirect('/' + b.tipo + 's/' + slug);
+                                        });
+                                    }
+                                } else {
+                                    res.redirect('/' + b.tipo + 's/' + slug);
+                                }
+                            });
+                        } else{
+                            // Manda pra revisão
+                            res.redirect('/?status=revision');
+                        }
+                    });
+                }
+
+            });
+
+            
+
+            
         } else {
             res.redirect('/parceiros');
         }
@@ -2552,6 +2589,48 @@ module.exports = function (app, passport, mongoose) {
         }
     });
 
+    // =====================================
+    // CHECAR CONTEÚDO =====================
+    // ===================================== 
+    app.get('/checkContent/:tipo', function(req, res, next){
+        var user = req.user;
+        var tipo = req.params.tipo;
+
+        if(!user){
+            res.redirect('/');
+        }else{
+            if(user.deleted == true){
+                res.redirect('/users/restore');
+            }else if(user.status == 'admin' || user.status == 'editor'){
+                switch(tipo){
+                    case 'jogos':
+                        Games.find({}).sort({_id: -1}).exec(function(err, docs){
+                            for(i=0;i < docs.length;i++){
+                                var timeStamp = docs[i]._id.toString().substring(0,8);
+                                var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                                docs[i].date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                            }
+                            res.render('checkContent', {title: "Gerenciar Jogos", user: user, games: docs});
+                        });
+                        break
+
+                    case 'artigos':
+                        Artigos.find({}, {title: 1, slug: 1, 'authors.name': 1, type: 1, 'graph.views': 1, status: 1}).sort({_id: -1}).exec(function(err, docs){
+                            for(i=0;i < docs.length;i++){
+                                var timeStamp = docs[i]._id.toString().substring(0,8);
+                                var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
+                                docs[i].date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+                            }
+                            res.render('checkContent', {title: "Gerenciar Artigos", user: user, articles: docs});
+                        });
+                        break
+                }
+
+            } else{
+                res.redirect('/');
+            }
+        }
+    });
 
 
     // =====================================

@@ -34,6 +34,8 @@ var imageCover,
         minHeight: 300,
         imageUpload: '/artigoImage',
         convertImageLinks: true,
+        toolbarFixed: true,
+        toolbarFixedTopOffset: 98,
         convertVideoLinks: true,
         imageUploadCallback: function (image, json) {
             window.setTimeout(function () {

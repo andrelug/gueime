@@ -10,6 +10,7 @@ var ArticleSchema = new mongoose.Schema({
         image: String,
         position: String
     },
+    publishDate: Date,
     subtitle: String,
     text: String,
     authors: {

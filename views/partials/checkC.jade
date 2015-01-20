@@ -1,0 +1,60 @@
+div.row#gerenciarRow
+    div.medium-10.medium-centered.columns
+        if(games)
+            h1 Checar Jogos
+        else if(articles)
+            h1 Checar Artigos
+
+    div.row
+        div.medium-10.medium-centered.columns
+            div.row#gerenciarMenu
+                a.create(href="/checkContent/artigos", title="Gerenciar Conquistas") <i class="fa fa-pencil"></i> <span>Artigos</span>
+                        
+                a.create(href="/checkContent/jogos", title="Gerenciar Jogos") <i class="fa fa-gamepad"></i> <span>Jogos</span>
+
+
+        div.medium-10.medium-centered.columns
+            table.gerenciarTable
+                thead
+                    tr
+                        if(games)
+                            th Nome
+                            th Views
+                            th Gamers
+                            th Status
+                            th Data
+
+                        else if(articles)
+                            th Título
+                            th Autor
+                            th Tipo
+                            th Views
+                            th Status
+                            th Data
+                tbody
+                    if(games)
+                        for game in games
+                            tr
+                                td: a(href="/jogos/#{game.slug}") #{game.title}
+                                td #{game.graph.views}
+                                td #{game.graph.gamers}
+                                td.status #{game.status}
+                                td #{game.date}
+
+                    else if(articles)
+                        for article in articles
+                            tr
+                                if(article.type == 'analise')
+                                    td: a(href="/analises/#{article.slug}") #{article.title}
+                                else if(article.type == 'artigo')
+                                    td: a(href="/artigos/#{article.slug}") #{article.title}
+                                else if(article.type == 'noticia')
+                                    td: a(href="/noticias/#{article.slug}") #{article.title}
+                                else if(article.type == 'video')
+                                    td: a(href="/videos/#{article.slug}") #{article.title}
+                                td #{article.authors.name}
+                                td #{article.type}
+                                td #{article.graph.views}
+                                td.status #{article.status}
+
+                                td #{article.date}

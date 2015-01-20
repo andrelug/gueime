@@ -43,6 +43,15 @@ div#nav-sticky
                             a(href="/criar/analise") Análise
                         li
                             a(href="/criar/video") Vídeo
+                        li.has-dropdown
+                            a(href="#") Checar Conteúdo
+                            ul
+                                li
+                                    a(href="/checkContent/artigos") Artigos
+                                li
+                                    a(href="/checkContent/jogos") Jogos
+
+
                         if(user.status == 'admin' || user.status == 'editor')
                             li
                                 a(href="/criar/novo/jogo") Jogo
