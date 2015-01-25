@@ -1111,13 +1111,15 @@ module.exports = function (app, passport, mongoose) {
 
                 if(user.status == 'admin' || user.status == 'editor'){
                     status = 'publicado';
-                    if(publishD.publishDate == undefined){
+                    if(publishD.publishDate == undefined || publishD.publishDate.getFullYear() == "1988"){
                         publishDate = new Date();
                     } else {
                         publishDate = publishD.publishDate;
                     }
                 } else {
                     status = 'revisao';
+                    publishDate = new Date();
+                    publishDate.setFullYear(1988);
                 }
 
 

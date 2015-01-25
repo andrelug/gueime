@@ -53,7 +53,8 @@ div.row#gerenciarRow
                             th Tipo
                             th Views
                             th Status
-                            th Mudar Status
+                            if(user.status == 'admin')
+                                th Mudar Status
                             th Data
                             th Editar
                             if(user.status == 'admin')
@@ -139,13 +140,13 @@ div.row#gerenciarRow
                                     td.status #{article.status} (<a href="/artigos/#{article.slug}/restore" class="restore">Restore</a>)
                                 else
                                     td.status #{article.status}
-
-                                td
-                                    select.statusArticleSelect(title="#{article.slug}")
-                                        option(value="rascunho") rascunho
-                                        option(value="revisao") revisao
-                                        option(value="publicado") publicado
-                                        option(value="deletado") deletado
+                                if(user.status == 'admin')
+                                    td
+                                        select.statusArticleSelect(title="#{article.slug}")
+                                            option(value="rascunho") rascunho
+                                            option(value="revisao") revisao
+                                            option(value="publicado") publicado
+                                            option(value="deletado") deletado
                                 td #{article.date}
                                 td: a(href="/editar/#{article._id}") Editar
                                 if(user.status == 'admin')
