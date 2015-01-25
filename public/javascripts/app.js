@@ -79,9 +79,11 @@ tagSearch = function (str) {
             FB.XFBML.parse();
             if (searchStr.length < 1) {
                 history.pushState(null, null, '/');
-                analytics.page('/');
+                analytics.track('Exit Search');
             } else {
-                analytics.page('/?t=' + searchStr.toString().split(/[ ,]+/).join('-'));
+                analytics.track('Search', {
+                    page: '/?t=' + searchStr.toString().split(/[ ,]+/).join('-')
+                });
             }
             n = $('.item').length;
             if (n < 7) {
@@ -135,14 +137,15 @@ varDocument.on('click', '.tag', function () {
 
 // Opening Overlay
 varDocument.on('click', 'a', function () {
-
     if ($(this).data("link") == "ajax") {
         varLocation = window.location.href;
         var ajaxUrl = $(this).attr('href');
         ajaxPage(ajaxUrl);
+        analytics.track('Load Page Ajax', {
+            page: ajaxUrl
+        });
         history.pushState(null, null, ajaxUrl);
         document.title = "Gueime - " + $(this).find('.ref').text();
-        analytics.page(ajaxUrl + '/ajax');
         return false;
     }
 });
@@ -202,7 +205,6 @@ $(document).on('close', '[data-reveal]', function () {
     if (window.location.href != varLocation) {
         window.history.go(-1);
     }
-    analytics.page('/');
     varMyModal.fadeOut(function () {
         $(this).html('<div id="spinningContent"><img src="/images/spinning.gif" /></div>').css('background', 'white');
     });
