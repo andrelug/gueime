@@ -1,6 +1,4 @@
-var varDocument = $(document),
-    varStatusSelect = $('.statusSelect'),
-    varStatusArticleSelect = $('.statusArticleSelect');
+var varDocument = $(document);
 
 // DataTable
 $('.gerenciarTable').dataTable({
@@ -135,18 +133,18 @@ varDocument.on('click', '.restoreUser', function (event) {
 
 
 varDocument.ready(function () {
-    varStatusSelect.each(function () {
+    $('.statusSelect').each(function () {
         var status = $(this).parent().siblings('.profStatus').text();
         $(this).find('option[value="' + status + '"]').attr('selected', 'selected');
     });
 
-   varStatusArticleSelect.each(function () {
+   $('.statusArticleSelect').each(function () {
         var status = $(this).parent().siblings('.status').text();
         $(this).find('option[value="' + status + '"]').attr('selected', 'selected');
     });
 });
 
-$(document).on('change', varStatusSelect, function () {
+$(document).on('change', '.statusSelect', function () {
     var esse = $(this);
     var status = $(this).find('option:selected').text();
     var user = $(this).attr('title');
@@ -161,7 +159,7 @@ $(document).on('change', varStatusSelect, function () {
     });
 });
 
-$(document).on('change', varStatusArticleSelect, function () {
+$(document).on('change', '.statusArticleSelect', function () {
     var esse = $(this);
     var status = $(this).find('option:selected').text();
     var art = $(this).attr('title');

@@ -1147,23 +1147,115 @@ module.exports = function (app, passport, mongoose) {
                             throw err
                         if(user.status == 'admin' || user.status == 'editor'){
                             // Atribuição de pontuação
-                            Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 10}}, function(err){
+                            Users.findOneAndUpdate({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 10}}, function(err, thisCreator){
                                 // Ganha pontos por revisão
                                 if(criador != user._id){
                                     if(user.graph.revisionCol.indexOf(art._id) > -1){
                                         res.redirect('/' + b.tipo + 's/' + slug);
                                     } else {
                                         Users.update({_id: user._id}, {$inc: {'gamification.points': 30, 'graph.revisions': 1}, $addToSet: {'graph.revisionCol': art._id}}, function(err){
-                                            res.redirect('/' + b.tipo + 's/' + slug);
+                                            // Evio de Email
+                                            var smtpTransport = nodemailer.createTransport("SMTP",{
+                                                service: "Hotmail",
+                                                auth: {
+                                                    user: "parceiros@gueime.com.br",
+                                                    pass: "gueime123"
+                                                }
+                                            });
+
+                                            // setup e-mail data with unicode symbols
+                                            var mailOptions = {
+                                                from: "Gueime <parceiros@gueime.com.br>", // sender address
+                                                to: "André Lucas <parceiros@gueime.com.br>, " + thisCreator.email, // list of receivers
+                                                subject: "Artigo Revisado e Publicado", // Subject line
+                                                text: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi revisado por " + user.name.first + " " + user.name.last + ". Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!", // plaintext body
+                                                html: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi revisado por " + user.name.first + " " + user.name.last + ". Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!" // html body
+                                            }
+
+                                            // send mail with defined transport object
+                                            smtpTransport.sendMail(mailOptions, function(error, response){
+                                                if(error){
+                                                    console.log(error);
+                                                }else{
+                                                    console.log("Message sent: " + response.message);
+                                                }
+
+
+                                                smtpTransport.close(); // shut down the connection pool, no more messages
+
+                                                // Direciona pro artigo
+                                                res.redirect('/' + b.tipo + 's/' + slug);
+                                            });
                                         });
                                     }
                                 } else {
-                                    res.redirect('/' + b.tipo + 's/' + slug);
+                                    // Evio de Email
+                                    var smtpTransport = nodemailer.createTransport("SMTP",{
+                                        service: "Hotmail",
+                                        auth: {
+                                            user: "parceiros@gueime.com.br",
+                                            pass: "gueime123"
+                                        }
+                                    });
+
+                                    // setup e-mail data with unicode symbols
+                                    var mailOptions = {
+                                        from: "Gueime <parceiros@gueime.com.br>", // sender address
+                                        to: "André Lucas <parceiros@gueime.com.br>, " + thisCreator.email, // list of receivers
+                                        subject: "Artigo Publicado", // Subject line
+                                        text: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi publicado. Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!", // plaintext body
+                                        html: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi publicado. Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!" // html body
+                                    }
+
+                                    // send mail with defined transport object
+                                    smtpTransport.sendMail(mailOptions, function(error, response){
+                                        if(error){
+                                            console.log(error);
+                                        }else{
+                                            console.log("Message sent: " + response.message);
+                                        }
+
+
+                                        smtpTransport.close(); // shut down the connection pool, no more messages
+
+                                        // Direciona pro artigo
+                                        res.redirect('/' + b.tipo + 's/' + slug);
+                                    });
                                 }
                             });
                         } else{
-                            // Manda pra revisão
-                            res.redirect('/?status=revision');
+                            // Evio de Email
+                            var smtpTransport = nodemailer.createTransport("SMTP",{
+                                service: "Hotmail",
+                                auth: {
+                                    user: "parceiros@gueime.com.br",
+                                    pass: "gueime123"
+                                }
+                            });
+
+                            // setup e-mail data with unicode symbols
+                            var mailOptions = {
+                                from: "Gueime <parceiros@gueime.com.br>", // sender address
+                                to: "André Lucas <parceiros@gueime.com.br>, " + user.email, // list of receivers
+                                subject: "Artigo enviado para revisão", // Subject line
+                                text: "Obrigado pelo envio do texto " + b.docTitle.replace('<p>', '').replace('</p>', '') + ". Em breve um de nossos editores irá avaliá-lo e ou o publicará ou retornará com comentários e correções. Enquanto isso, aproveite para ler mais alguns textos excelentes do Gueime!", // plaintext body
+                                html: "Obrigado pelo envio do texto " + b.docTitle.replace('<p>', '').replace('</p>', '') + ". Em breve um de nossos editores irá avaliá-lo e ou o publicará ou retornará com comentários e correções. Enquanto isso, aproveite para ler mais alguns textos excelentes do Gueime!" // html body
+                            }
+
+                            // send mail with defined transport object
+                            smtpTransport.sendMail(mailOptions, function(error, response){
+                                if(error){
+                                    console.log(error);
+                                }else{
+                                    console.log("Message sent: " + response.message);
+                                }
+
+
+                                smtpTransport.close(); // shut down the connection pool, no more messages
+
+                                // Manda pra revisão
+                                res.redirect('/?status=revision');
+                            });
                         }
                     });
                 } else if (b.tipo == 'artigo') {
@@ -1193,23 +1285,115 @@ module.exports = function (app, passport, mongoose) {
                             throw err
                         if(user.status == 'admin' || user.status == 'editor'){
                             // Atribuição de pontuação
-                            Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 30}}, function(err){
+                            Users.findOneAndUpdate({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 30}}, function(err, thisCreator){
                                 // Ganha pontos por revisão
                                 if(criador != user._id){
                                     if(user.graph.revisionCol.indexOf(art._id) > -1){
                                         res.redirect('/' + b.tipo + 's/' + slug);
                                     } else {
                                         Users.update({_id: user._id}, {$inc: {'gamification.points': 30, 'graph.revisions': 1}, $addToSet: {'graph.revisionCol': art._id}}, function(err){
-                                            res.redirect('/' + b.tipo + 's/' + slug);
+                                             // Evio de Email
+                                            var smtpTransport = nodemailer.createTransport("SMTP",{
+                                                service: "Hotmail",
+                                                auth: {
+                                                    user: "parceiros@gueime.com.br",
+                                                    pass: "gueime123"
+                                                }
+                                            });
+
+                                            // setup e-mail data with unicode symbols
+                                            var mailOptions = {
+                                                from: "Gueime <parceiros@gueime.com.br>", // sender address
+                                                to: "André Lucas <parceiros@gueime.com.br>, " + thisCreator.email, // list of receivers
+                                                subject: "Artigo Revisado e Publicado", // Subject line
+                                                text: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi revisado por " + user.name.first + " " + user.name.last + ". Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!", // plaintext body
+                                                html: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi revisado por " + user.name.first + " " + user.name.last + ". Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!" // html body
+                                            }
+
+                                            // send mail with defined transport object
+                                            smtpTransport.sendMail(mailOptions, function(error, response){
+                                                if(error){
+                                                    console.log(error);
+                                                }else{
+                                                    console.log("Message sent: " + response.message);
+                                                }
+
+
+                                                smtpTransport.close(); // shut down the connection pool, no more messages
+
+                                                // Direciona pro artigo
+                                                res.redirect('/' + b.tipo + 's/' + slug);
+                                            });
                                         });
                                     }
                                 } else {
-                                    res.redirect('/' + b.tipo + 's/' + slug);
+                                    // Evio de Email
+                                    var smtpTransport = nodemailer.createTransport("SMTP",{
+                                        service: "Hotmail",
+                                        auth: {
+                                            user: "parceiros@gueime.com.br",
+                                            pass: "gueime123"
+                                        }
+                                    });
+
+                                    // setup e-mail data with unicode symbols
+                                    var mailOptions = {
+                                        from: "Gueime <parceiros@gueime.com.br>", // sender address
+                                        to: "André Lucas <parceiros@gueime.com.br>, " + thisCreator.email, // list of receivers
+                                        subject: "Artigo Publicado", // Subject line
+                                        text: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi publicado. Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!", // plaintext body
+                                        html: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi publicado. Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!" // html body
+                                    }
+
+                                    // send mail with defined transport object
+                                    smtpTransport.sendMail(mailOptions, function(error, response){
+                                        if(error){
+                                            console.log(error);
+                                        }else{
+                                            console.log("Message sent: " + response.message);
+                                        }
+
+
+                                        smtpTransport.close(); // shut down the connection pool, no more messages
+
+                                        // Direciona pro artigo
+                                        res.redirect('/' + b.tipo + 's/' + slug);
+                                    });
                                 }
                             });
                         } else{
-                            // Manda pra revisão
-                            res.redirect('/?status=revision');
+                            // Evio de Email
+                            var smtpTransport = nodemailer.createTransport("SMTP",{
+                                service: "Hotmail",
+                                auth: {
+                                    user: "parceiros@gueime.com.br",
+                                    pass: "gueime123"
+                                }
+                            });
+
+                            // setup e-mail data with unicode symbols
+                            var mailOptions = {
+                                from: "Gueime <parceiros@gueime.com.br>", // sender address
+                                to: "André Lucas <parceiros@gueime.com.br>, " + user.email, // list of receivers
+                                subject: "Artigo enviado para revisão", // Subject line
+                                text: "Obrigado pelo envio do texto " + b.docTitle.replace('<p>', '').replace('</p>', '') + ". Em breve um de nossos editores irá avaliá-lo e ou o publicará ou retornará com comentários e correções. Enquanto isso, aproveite para ler mais alguns textos excelentes do Gueime!", // plaintext body
+                                html: "Obrigado pelo envio do texto " + b.docTitle.replace('<p>', '').replace('</p>', '') + ". Em breve um de nossos editores irá avaliá-lo e ou o publicará ou retornará com comentários e correções. Enquanto isso, aproveite para ler mais alguns textos excelentes do Gueime!" // html body
+                            }
+
+                            // send mail with defined transport object
+                            smtpTransport.sendMail(mailOptions, function(error, response){
+                                if(error){
+                                    console.log(error);
+                                }else{
+                                    console.log("Message sent: " + response.message);
+                                }
+
+
+                                smtpTransport.close(); // shut down the connection pool, no more messages
+
+                                // Manda pra revisão
+                                res.redirect('/?status=revision');
+                            });
                         }
                     });
                 } else if (b.tipo == 'analise') {
@@ -1239,23 +1423,115 @@ module.exports = function (app, passport, mongoose) {
                             throw err
                         if(user.status == 'admin' || user.status == 'editor'){
                             // Atribuição de pontuação
-                            Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 50}}, function(err){
+                            Users.findOneAndUpdate({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': 50}}, function(err, thisCreator){
                                 // Ganha pontos por revisão
                                 if(criador != user._id){
                                     if(user.graph.revisionCol.indexOf(art._id) > -1){
                                         res.redirect('/' + b.tipo + 's/' + slug);
                                     } else {
                                         Users.update({_id: user._id}, {$inc: {'gamification.points': 30, 'graph.revisions': 1}, $addToSet: {'graph.revisionCol': art._id}}, function(err){
-                                            res.redirect('/' + b.tipo + 's/' + slug);
+                                             // Evio de Email
+                                            var smtpTransport = nodemailer.createTransport("SMTP",{
+                                                service: "Hotmail",
+                                                auth: {
+                                                    user: "parceiros@gueime.com.br",
+                                                    pass: "gueime123"
+                                                }
+                                            });
+
+                                            // setup e-mail data with unicode symbols
+                                            var mailOptions = {
+                                                from: "Gueime <parceiros@gueime.com.br>", // sender address
+                                                to: "André Lucas <parceiros@gueime.com.br>, " + thisCreator.email, // list of receivers
+                                                subject: "Artigo Revisado e Publicado", // Subject line
+                                                text: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi revisado por " + user.name.first + " " + user.name.last + ". Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!", // plaintext body
+                                                html: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi revisado por " + user.name.first + " " + user.name.last + ". Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!" // html body
+                                            }
+
+                                            // send mail with defined transport object
+                                            smtpTransport.sendMail(mailOptions, function(error, response){
+                                                if(error){
+                                                    console.log(error);
+                                                }else{
+                                                    console.log("Message sent: " + response.message);
+                                                }
+
+
+                                                smtpTransport.close(); // shut down the connection pool, no more messages
+
+                                                // Direciona pro artigo
+                                                res.redirect('/' + b.tipo + 's/' + slug);
+                                            });
                                         });
                                     }
                                 } else {
-                                    res.redirect('/' + b.tipo + 's/' + slug);
+                                    // Evio de Email
+                                    var smtpTransport = nodemailer.createTransport("SMTP",{
+                                        service: "Hotmail",
+                                        auth: {
+                                            user: "parceiros@gueime.com.br",
+                                            pass: "gueime123"
+                                        }
+                                    });
+
+                                    // setup e-mail data with unicode symbols
+                                    var mailOptions = {
+                                        from: "Gueime <parceiros@gueime.com.br>", // sender address
+                                        to: "André Lucas <parceiros@gueime.com.br>, " + thisCreator.email, // list of receivers
+                                        subject: "Artigo Publicado", // Subject line
+                                        text: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi publicado. Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!", // plaintext body
+                                        html: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi publicado. Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!" // html body
+                                    }
+
+                                    // send mail with defined transport object
+                                    smtpTransport.sendMail(mailOptions, function(error, response){
+                                        if(error){
+                                            console.log(error);
+                                        }else{
+                                            console.log("Message sent: " + response.message);
+                                        }
+
+
+                                        smtpTransport.close(); // shut down the connection pool, no more messages
+
+                                        // Direciona pro artigo
+                                        res.redirect('/' + b.tipo + 's/' + slug);
+                                    });
                                 }
                             });
                         } else{
-                            // Manda pra revisão
-                            res.redirect('/?status=revision');
+                            // Evio de Email
+                            var smtpTransport = nodemailer.createTransport("SMTP",{
+                                service: "Hotmail",
+                                auth: {
+                                    user: "parceiros@gueime.com.br",
+                                    pass: "gueime123"
+                                }
+                            });
+
+                            // setup e-mail data with unicode symbols
+                            var mailOptions = {
+                                from: "Gueime <parceiros@gueime.com.br>", // sender address
+                                to: "André Lucas <parceiros@gueime.com.br>, " + user.email, // list of receivers
+                                subject: "Artigo enviado para revisão", // Subject line
+                                text: "Obrigado pelo envio do texto " + b.docTitle.replace('<p>', '').replace('</p>', '') + ". Em breve um de nossos editores irá avaliá-lo e ou o publicará ou retornará com comentários e correções. Enquanto isso, aproveite para ler mais alguns textos excelentes do Gueime!", // plaintext body
+                                html: "Obrigado pelo envio do texto " + b.docTitle.replace('<p>', '').replace('</p>', '') + ". Em breve um de nossos editores irá avaliá-lo e ou o publicará ou retornará com comentários e correções. Enquanto isso, aproveite para ler mais alguns textos excelentes do Gueime!" // html body
+                            }
+
+                            // send mail with defined transport object
+                            smtpTransport.sendMail(mailOptions, function(error, response){
+                                if(error){
+                                    console.log(error);
+                                }else{
+                                    console.log("Message sent: " + response.message);
+                                }
+
+
+                                smtpTransport.close(); // shut down the connection pool, no more messages
+
+                                // Manda pra revisão
+                                res.redirect('/?status=revision');
+                            });
                         }
                     });
                 } else {
@@ -1293,32 +1569,121 @@ module.exports = function (app, passport, mongoose) {
                                 videoPoints = 5;
                             }
                             // Atribuição de pontuação
-                            Users.update({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': videoPoints}}, function(err){
+                            Users.findOneAndUpdate({_id: criador}, {$inc: {'graph.publications': 1, 'gamification.points': videoPoints}}, function(err, thisCreator){
                                 // Ganha pontos por revisão
                                 if(criador != user._id){
                                     if(user.graph.revisionCol.indexOf(art._id) > -1){
                                         res.redirect('/' + b.tipo + 's/' + slug);
                                     } else {
                                         Users.update({_id: user._id}, {$inc: {'gamification.points': 30, 'graph.revisions': 1}, $addToSet: {'graph.revisionCol': art._id}}, function(err){
-                                            res.redirect('/' + b.tipo + 's/' + slug);
+                                             // Evio de Email
+                                            var smtpTransport = nodemailer.createTransport("SMTP",{
+                                                service: "Hotmail",
+                                                auth: {
+                                                    user: "parceiros@gueime.com.br",
+                                                    pass: "gueime123"
+                                                }
+                                            });
+
+                                            // setup e-mail data with unicode symbols
+                                            var mailOptions = {
+                                                from: "Gueime <parceiros@gueime.com.br>", // sender address
+                                                to: "André Lucas <parceiros@gueime.com.br>, " + thisCreator.email, // list of receivers
+                                                subject: "Artigo Revisado e Publicado", // Subject line
+                                                text: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi revisado por " + user.name.first + " " + user.name.last + ". Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!", // plaintext body
+                                                html: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi revisado por " + user.name.first + " " + user.name.last + ". Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!" // html body
+                                            }
+
+                                            // send mail with defined transport object
+                                            smtpTransport.sendMail(mailOptions, function(error, response){
+                                                if(error){
+                                                    console.log(error);
+                                                }else{
+                                                    console.log("Message sent: " + response.message);
+                                                }
+
+
+                                                smtpTransport.close(); // shut down the connection pool, no more messages
+
+                                                // Direciona pro artigo
+                                                res.redirect('/' + b.tipo + 's/' + slug);
+                                            });
                                         });
                                     }
                                 } else {
-                                    res.redirect('/' + b.tipo + 's/' + slug);
+                                    // Evio de Email
+                                    var smtpTransport = nodemailer.createTransport("SMTP",{
+                                        service: "Hotmail",
+                                        auth: {
+                                            user: "parceiros@gueime.com.br",
+                                            pass: "gueime123"
+                                        }
+                                    });
+
+                                    // setup e-mail data with unicode symbols
+                                    var mailOptions = {
+                                        from: "Gueime <parceiros@gueime.com.br>", // sender address
+                                        to: "André Lucas <parceiros@gueime.com.br>, " + thisCreator.email, // list of receivers
+                                        subject: "Artigo Publicado", // Subject line
+                                        text: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi publicado. Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!", // plaintext body
+                                        html: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi publicado. Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!" // html body
+                                    }
+
+                                    // send mail with defined transport object
+                                    smtpTransport.sendMail(mailOptions, function(error, response){
+                                        if(error){
+                                            console.log(error);
+                                        }else{
+                                            console.log("Message sent: " + response.message);
+                                        }
+
+
+                                        smtpTransport.close(); // shut down the connection pool, no more messages
+
+                                        // Direciona pro artigo
+                                        res.redirect('/' + b.tipo + 's/' + slug);
+                                    });
                                 }
                             });
                         } else{
-                            // Manda pra revisão
-                            res.redirect('/?status=revision');
+                            // Evio de Email
+                            var smtpTransport = nodemailer.createTransport("SMTP",{
+                                service: "Hotmail",
+                                auth: {
+                                    user: "parceiros@gueime.com.br",
+                                    pass: "gueime123"
+                                }
+                            });
+
+                            // setup e-mail data with unicode symbols
+                            var mailOptions = {
+                                from: "Gueime <parceiros@gueime.com.br>", // sender address
+                                to: "André Lucas <parceiros@gueime.com.br>, " + user.email, // list of receivers
+                                subject: "Artigo enviado para revisão", // Subject line
+                                text: "Obrigado pelo envio do texto " + b.docTitle.replace('<p>', '').replace('</p>', '') + ". Em breve um de nossos editores irá avaliá-lo e ou o publicará ou retornará com comentários e correções. Enquanto isso, aproveite para ler mais alguns textos excelentes do Gueime!", // plaintext body
+                                html: "Obrigado pelo envio do texto " + b.docTitle.replace('<p>', '').replace('</p>', '') + ". Em breve um de nossos editores irá avaliá-lo e ou o publicará ou retornará com comentários e correções. Enquanto isso, aproveite para ler mais alguns textos excelentes do Gueime!" // html body
+                            }
+
+                            // send mail with defined transport object
+                            smtpTransport.sendMail(mailOptions, function(error, response){
+                                if(error){
+                                    console.log(error);
+                                }else{
+                                    console.log("Message sent: " + response.message);
+                                }
+
+
+                                smtpTransport.close(); // shut down the connection pool, no more messages
+
+                                // Manda pra revisão
+                                res.redirect('/?status=revision');
+                            });
                         }
                     });
                 }
 
             });
 
-            
-
-            
         } else {
             res.redirect('/parceiros');
         }
