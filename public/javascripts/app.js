@@ -79,9 +79,9 @@ tagSearch = function (str) {
             FB.XFBML.parse();
             if (searchStr.length < 1) {
                 history.pushState(null, null, '/');
-                ga('send', 'pageview', '/');
+                analytics.page('/');
             } else {
-                ga('send', 'pageview', '/?t=' + searchStr.toString().split(/[ ,]+/).join('-'));
+                analytics.page('/?t=' + searchStr.toString().split(/[ ,]+/).join('-'));
             }
             n = $('.item').length;
             if (n < 7) {
@@ -142,7 +142,7 @@ varDocument.on('click', 'a', function () {
         ajaxPage(ajaxUrl);
         history.pushState(null, null, ajaxUrl);
         document.title = "Gueime - " + $(this).find('.ref').text();
-        ga('send', 'pageview', ajaxUrl + '/ajax');
+        analytics.page(ajaxUrl + '/ajax');
         return false;
     }
 });
@@ -202,7 +202,7 @@ $(document).on('close', '[data-reveal]', function () {
     if (window.location.href != varLocation) {
         window.history.go(-1);
     }
-    ga('send', 'pageview', '/');
+    analytics.page('/');
     varMyModal.fadeOut(function () {
         $(this).html('<div id="spinningContent"><img src="/images/spinning.gif" /></div>').css('background', 'white');
     });
@@ -389,42 +389,62 @@ $('.pedir').on('click', function (event) {
 });
 
 // Analytics specific
-/* Page Exit */
-window.onbeforeunload = sendView;
-function sendView(){
-    ga('send', 'event', 'time', 'exit', '/'+window.location.href.replace('http://www.gueime.com.br/', ''));
-}
 //filters
 $('a[data-filter!=""]').on('click', function () {
     var action = $(this).attr('data-filter');
     if(action == undefined){
-        ga('send', 'event', 'button', 'filter', 'openFilter');
+        analytics.track('Open Filter', {
+            referrer: document.referrer
+        });
     } else{
-        ga('send', 'event', 'button', 'filter', action);
+        analytics.track('Click Filter', {
+            referrer: document.referrer,
+            filter: action
+        });
     } 
 });
 
 // Login/Registrer
 $('.facebookLogin').on('click', function(){
-    ga('send', 'event', 'button', 'loginFacebook', '/'+window.location.href.replace('http://www.gueime.com.br/', ''));
+    analytics.track('loginFacebook', {
+        referrer: document.referrer
+    });
 });
 $('.twitterLogin').on('click', function(){
-    ga('send', 'event', 'button', 'loginTwitter', '/'+window.location.href.replace('http://www.gueime.com.br/', ''));
+    analytics.track('loginTwitter', {
+        referrer: document.referrer
+    });
 });
 $('.googleLogin').on('click', function(){
-    ga('send', 'event', 'button', 'loginGoogle', '/'+window.location.href.replace('http://www.gueime.com.br/', ''));
+    analytics.track('loginGoogle', {
+        referrer: document.referrer
+    });
 });
 //LoadMore
 $('#loadMore').on('click', function(){
-    ga('send', 'event', 'button', 'click', 'loadMore');
+    analytics.track('loadMore', {
+        referrer: document.referrer
+    });
 });
 
 $('#profileMenu').find('a').on('click', function(){
     var item = $(this).text();
-    ga('send', 'event', 'button', 'click','profile/'+ item);
+    analytics.track('Click Profile Menu', {
+        referrer: document.referrer,
+        item: item
+    });
 });
 
 $('#gameMenu').find('a').on('click', function(){
     var item = $(this).text();
-    ga('send', 'event', 'button', 'click', 'etc/' + item);
+    analytics.track('Game Menu', {
+        referrer: document.referrer,
+        item: item
+    });
+});
+
+$('#share').find('a').on('click', function(){
+    analytics.track('Click Relacionados', {
+        referrer: document.referrer
+    });
 });

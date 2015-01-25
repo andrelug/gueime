@@ -269,14 +269,6 @@ $('#semSerie').find('a').on('click', function () {
     $('#serieSimNao').slideDown();
 });
 
-// Analytics specific
-/* Page Exit */
-window.onbeforeunload = sendView;
-function sendView(){
-    ga('send', 'event', 'time', 'exit', '/'+window.location.href.replace('http://www.gueime.com.br/'));
-}
-
-
 // AUTOCOMPLETES
 
 function split( val ) {
