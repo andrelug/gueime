@@ -391,19 +391,11 @@ $('.pedir').on('click', function (event) {
 });
 
 // Analytics specific
-//filters
-$('a[data-filter!=""]').on('click', function () {
-    var action = $(this).attr('data-filter');
-    if(action == undefined){
-        analytics.track('Open Filter', {
-            referrer: document.referrer
-        });
-    } else{
-        analytics.track('Click Filter', {
-            referrer: document.referrer,
-            filter: action
-        });
-    } 
+//filter
+$('.filtros').on('click', function () {
+    analytics.track('Open Filter', {
+        referrer: document.referrer
+    });
 });
 
 // Login/Registrer
