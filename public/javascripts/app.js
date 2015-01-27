@@ -79,11 +79,13 @@ tagSearch = function (str) {
             FB.XFBML.parse();
             if (searchStr.length < 1) {
                 history.pushState(null, null, '/');
-                analytics.track('Exit Search');
+                if(thereIsAdmin != true) analytics.track('Exit Search');
             } else {
-                analytics.track('Search', {
-                    page: '/?t=' + searchStr.toString().split(/[ ,]+/).join('-')
-                });
+                if(thereIsAdmin != true) {
+                    analytics.track('Search', {
+                        page: '/?t=' + searchStr.toString().split(/[ ,]+/).join('-')
+                    });
+                }
             }
             n = $('.item').length;
             if (n < 7) {
@@ -141,9 +143,12 @@ varDocument.on('click', 'a', function () {
         varLocation = window.location.href;
         var ajaxUrl = $(this).attr('href');
         ajaxPage(ajaxUrl);
-        analytics.track('Load Page Ajax', {
-            page: ajaxUrl
-        });
+        if(thereIsAdmin != true) {
+            analytics.track('Load Page Ajax', {
+                page: ajaxUrl
+            });
+        }
+        
         history.pushState(null, null, ajaxUrl);
         document.title = "Gueime - " + $(this).find('.ref').text();
         return false;
@@ -218,7 +223,6 @@ $('#loadMore').on('click', function () {
         data: { n: n, str: searchStr },
         dataType: 'html'
     }).done(function (data) {
-        container.isotope('insert', $(data));
         console.log(data)
         FB.XFBML.parse();
         if (data == '<div id="gridArticles" class="row"></div><style>.autocomplete-suggestions{position:absolute !important;}</style>') {
@@ -228,6 +232,7 @@ $('#loadMore').on('click', function () {
                 });
             });
         }
+        container.isotope('insert', $(data));
     });
 });
 
@@ -390,55 +395,58 @@ $('.pedir').on('click', function (event) {
     }
 });
 
-// Analytics specific
-//filter
-$('.filtros').on('click', function () {
-    analytics.track('Open Filter', {
-        referrer: document.referrer
-    });
-});
 
-// Login/Registrer
-$('.facebookLogin').on('click', function(){
-    analytics.track('loginFacebook', {
-        referrer: document.referrer
+if(thereIsAdmin != true) {
+    // Analytics specific
+    //filter
+    $('.filtros').on('click', function () {
+        analytics.track('Open Filter', {
+            referrer: document.referrer
+        });
     });
-});
-$('.twitterLogin').on('click', function(){
-    analytics.track('loginTwitter', {
-        referrer: document.referrer
-    });
-});
-$('.googleLogin').on('click', function(){
-    analytics.track('loginGoogle', {
-        referrer: document.referrer
-    });
-});
-//LoadMore
-$('#loadMore').on('click', function(){
-    analytics.track('loadMore', {
-        referrer: document.referrer
-    });
-});
 
-$('#profileMenu').find('a').on('click', function(){
-    var item = $(this).text();
-    analytics.track('Click Profile Menu', {
-        referrer: document.referrer,
-        item: item
+    // Login/Registrer
+    $('.facebookLogin').on('click', function(){
+        analytics.track('loginFacebook', {
+            referrer: document.referrer
+        });
     });
-});
+    $('.twitterLogin').on('click', function(){
+        analytics.track('loginTwitter', {
+            referrer: document.referrer
+        });
+    });
+    $('.googleLogin').on('click', function(){
+        analytics.track('loginGoogle', {
+            referrer: document.referrer
+        });
+    });
+    //LoadMore
+    $('#loadMore').on('click', function(){
+        analytics.track('loadMore', {
+            referrer: document.referrer
+        });
+    });
 
-$('#gameMenu').find('a').on('click', function(){
-    var item = $(this).text();
-    analytics.track('Game Menu', {
-        referrer: document.referrer,
-        item: item
+    $('#profileMenu').find('a').on('click', function(){
+        var item = $(this).text();
+        analytics.track('Click Profile Menu', {
+            referrer: document.referrer,
+            item: item
+        });
     });
-});
 
-$('#share').find('a').on('click', function(){
-    analytics.track('Click Relacionados', {
-        referrer: document.referrer
+    $('#gameMenu').find('a').on('click', function(){
+        var item = $(this).text();
+        analytics.track('Game Menu', {
+            referrer: document.referrer,
+            item: item
+        });
     });
-});
+
+    $('#share').find('a').on('click', function(){
+        analytics.track('Click Relacionados', {
+            referrer: document.referrer
+        });
+    });
+}
