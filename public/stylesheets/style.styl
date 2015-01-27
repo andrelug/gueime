@@ -117,13 +117,17 @@ input[type="text"], textarea
     height 250px
     margin-bottom 20px
     overflow hidden
-    width 24.5%
+    width 32%
     background-color gBlue
     box-shadow 0 1px 3px rgba(0,0,0,0.3)
     -0-box-shadow 0 1px 3px rgba(0,0,0,0.3)
     -webkit-box-shadow 0 1px 3px rgba(0,0,0,0.3)
     -ms-box-shadow 0 1px 3px rgba(0,0,0,0.3)
     -moz-box-shadow 0 1px 3px rgba(0,0,0,0.3)
+
+@media only screen and (max-width: 1350px)
+    .item
+        width:30%
 
 .hidden
     position absolute
@@ -188,8 +192,9 @@ input[type="text"], textarea
     background-position center center
 
 #gridArticles, #gridProfileArticles, #trocaGrid
-    max-width 100%
-    margin-left 12%
+    width 80%
+    max-width 80%
+    margin-left 10%
     opacity 0
 
 #trocaGrid
@@ -248,7 +253,9 @@ input[type="text"], textarea
 
 @media only screen and (max-width: 64.063em)
     #gridArticles, #gridProfileArticles
-        margin-left 1%
+        margin-left 3%
+        width 98%
+        max-width 98%
 
     .item, .w4
         width 47%

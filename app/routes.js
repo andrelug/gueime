@@ -3670,7 +3670,21 @@ module.exports = function (app, passport, mongoose) {
 
             sendArray = sendArray.toString().toLowerCase().split(',');
 
-            res.send(JSON.stringify(sendArray));
+            var uniqueArray = sendArray.filter(function(elem, pos) {
+                return sendArray.indexOf(elem) == pos;
+            });
+
+            var filtered = (function(pattern){
+                var filtered = [], i = uniqueArray.length, re = new RegExp(pattern, 'i');
+                while (i--) {
+                    if (re.test(uniqueArray[i])) {
+                        filtered.push(uniqueArray[i]);
+                    }
+                }
+                return filtered;
+            })(query);
+
+            res.end(JSON.stringify(filtered));
         });
     });
 
@@ -3688,7 +3702,21 @@ module.exports = function (app, passport, mongoose) {
 
             sendArray = sendArray.toString().toLowerCase().split(',');
 
-            res.send(JSON.stringify(sendArray));
+            var uniqueArray = sendArray.filter(function(elem, pos) {
+                return sendArray.indexOf(elem) == pos;
+            });
+
+            var filtered = (function(pattern){
+                var filtered = [], i = uniqueArray.length, re = new RegExp(pattern, 'i');
+                while (i--) {
+                    if (re.test(uniqueArray[i])) {
+                        filtered.push(uniqueArray[i]);
+                    }
+                }
+                return filtered;
+            })(query);
+
+            res.end(JSON.stringify(filtered));
         });
     });
 
@@ -3707,7 +3735,21 @@ module.exports = function (app, passport, mongoose) {
 
             sendArray = sendArray.toString().toLowerCase().split(',');
 
-            res.send(JSON.stringify(sendArray));
+            var uniqueArray = sendArray.filter(function(elem, pos) {
+                return sendArray.indexOf(elem) == pos;
+            });
+
+            var filtered = (function(pattern){
+                var filtered = [], i = uniqueArray.length, re = new RegExp(pattern, 'i');
+                while (i--) {
+                    if (re.test(uniqueArray[i])) {
+                        filtered.push(uniqueArray[i]);
+                    }
+                }
+                return filtered;
+            })(query);
+
+            res.end(JSON.stringify(filtered));
         });
     });
     
@@ -3725,7 +3767,21 @@ module.exports = function (app, passport, mongoose) {
 
             sendArray = sendArray.toString().toLowerCase().split(',');
 
-            res.send(JSON.stringify(sendArray));
+            var uniqueArray = sendArray.filter(function(elem, pos) {
+                return sendArray.indexOf(elem) == pos;
+            });
+
+            var filtered = (function(pattern){
+                var filtered = [], i = uniqueArray.length, re = new RegExp(pattern, 'i');
+                while (i--) {
+                    if (re.test(uniqueArray[i])) {
+                        filtered.push(uniqueArray[i]);
+                    }
+                }
+                return filtered;
+            })(query);
+
+            res.end(JSON.stringify(filtered));
         });
     });
 
@@ -3743,7 +3799,21 @@ module.exports = function (app, passport, mongoose) {
 
             sendArray = sendArray.toString().toLowerCase().split(',');
 
-            res.send(JSON.stringify(sendArray));
+            var uniqueArray = sendArray.filter(function(elem, pos) {
+                return sendArray.indexOf(elem) == pos;
+            });
+
+            var filtered = (function(pattern){
+                var filtered = [], i = uniqueArray.length, re = new RegExp(pattern, 'i');
+                while (i--) {
+                    if (re.test(uniqueArray[i])) {
+                        filtered.push(uniqueArray[i]);
+                    }
+                }
+                return filtered;
+            })(query);
+
+            res.end(JSON.stringify(filtered));
         });
     });
 
@@ -3761,7 +3831,21 @@ module.exports = function (app, passport, mongoose) {
 
             sendArray = sendArray.toString().toLowerCase().split(',');
 
-            res.send(JSON.stringify(sendArray));
+            var uniqueArray = sendArray.filter(function(elem, pos) {
+                return sendArray.indexOf(elem) == pos;
+            });
+
+            var filtered = (function(pattern){
+                var filtered = [], i = uniqueArray.length, re = new RegExp(pattern, 'i');
+                while (i--) {
+                    if (re.test(uniqueArray[i])) {
+                        filtered.push(uniqueArray[i]);
+                    }
+                }
+                return filtered;
+            })(query);
+
+            res.end(JSON.stringify(filtered));
         });
     });
 
@@ -3779,7 +3863,21 @@ module.exports = function (app, passport, mongoose) {
 
             sendArray = sendArray.toString().toLowerCase().split(',');
 
-            res.send(JSON.stringify(sendArray));
+            var uniqueArray = sendArray.filter(function(elem, pos) {
+                return sendArray.indexOf(elem) == pos;
+            });
+
+            var filtered = (function(pattern){
+                var filtered = [], i = uniqueArray.length, re = new RegExp(pattern, 'i');
+                while (i--) {
+                    if (re.test(uniqueArray[i])) {
+                        filtered.push(uniqueArray[i]);
+                    }
+                }
+                return filtered;
+            })(query);
+
+            res.end(JSON.stringify(filtered));
         });
     });
 
@@ -3797,7 +3895,21 @@ module.exports = function (app, passport, mongoose) {
 
             sendArray = sendArray.toString().toLowerCase().split(',');
 
-            res.send(JSON.stringify(sendArray));
+            var uniqueArray = sendArray.filter(function(elem, pos) {
+                return sendArray.indexOf(elem) == pos;
+            });
+
+            var filtered = (function(pattern){
+                var filtered = [], i = uniqueArray.length, re = new RegExp(pattern, 'i');
+                while (i--) {
+                    if (re.test(uniqueArray[i])) {
+                        filtered.push(uniqueArray[i]);
+                    }
+                }
+                return filtered;
+            })(query);
+
+            res.end(JSON.stringify(filtered));
         });
     });
 
@@ -3815,7 +3927,21 @@ module.exports = function (app, passport, mongoose) {
 
             sendArray = sendArray.toString().toLowerCase().split(',');
 
-            res.send(JSON.stringify(sendArray));
+            var uniqueArray = sendArray.filter(function(elem, pos) {
+                return sendArray.indexOf(elem) == pos;
+            });
+
+            var filtered = (function(pattern){
+                var filtered = [], i = uniqueArray.length, re = new RegExp(pattern, 'i');
+                while (i--) {
+                    if (re.test(uniqueArray[i])) {
+                        filtered.push(uniqueArray[i]);
+                    }
+                }
+                return filtered;
+            })(query);
+
+            res.end(JSON.stringify(filtered));
         });
     });
 
@@ -3833,7 +3959,21 @@ module.exports = function (app, passport, mongoose) {
 
             sendArray = sendArray.toString().toLowerCase().split(',');
 
-            res.send(JSON.stringify(sendArray));
+            var uniqueArray = sendArray.filter(function(elem, pos) {
+                return sendArray.indexOf(elem) == pos;
+            });
+
+            var filtered = (function(pattern){
+                var filtered = [], i = uniqueArray.length, re = new RegExp(pattern, 'i');
+                while (i--) {
+                    if (re.test(uniqueArray[i])) {
+                        filtered.push(uniqueArray[i]);
+                    }
+                }
+                return filtered;
+            })(query);
+
+            res.end(JSON.stringify(filtered));
         });
     });
 
