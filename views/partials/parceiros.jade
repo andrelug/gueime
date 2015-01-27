@@ -28,6 +28,7 @@ div.row
         h3 Notícias
 
         p Informações concisas para fácil leitura. As notícias devem ser simples, diretas e conter fontes, fazendo delas um tipo de texto menos relaxado que os artigos e menos detalhado que as análises.
+div.row
     div.medium-6.columns
         h3 Artigos
 
@@ -81,5 +82,29 @@ br
 p Gostou? Está com alguma dúvida? Então não perca tempo e entre em contato com nossos administradores através do email:
 
 p: b: big parceiros@gueime.com.br
+
+p Ou pelo formulário abaixo
+
+div.row
+    div.large-12.columns
+        form#infoContato(action="/sendContato", method="POST", data-abide="ajax")
+            div.row
+                div.medium-6.columns.name-field
+                    label Nome <small>obrigatório</small>
+                        input(type="text", placeholder="Nome", required, pattern="[a-zA-Z]+", name="nome")
+                    small.error Por favor digite seu nome
+                div.medium-6.columns
+                    label Seu email <small>obrigatório</small>
+                        input(type="text", placeholder="Seu email", name="email", required)
+
+            div.row
+                div.medium-12.columns
+                    label Mensagem <small>obrigatório</small>
+                        textarea(placeholder="Sua mensagem", name="mensagem", style="box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);border: 1px solid #ccc", required)
+                    small.error Por favor digite uma mensagem
+
+            div.row
+                div.small-12.medium-5.medium-centered.columns
+                    a.button#enviarContato Enviar
 
 p Estamos ansiosos para publicar suas produções no Gueime e continuar com nosso maior objetivo: <b>Ser o melhor site de games do Brasil!!</b>
