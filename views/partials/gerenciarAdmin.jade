@@ -51,7 +51,7 @@ div.row#gerenciarRow
                             th Título
                             th Autor
                             th Tipo
-                            th Views
+                            th Views / Comments
                             th Status
                             if(user.status == 'admin')
                                 th Mudar Status
@@ -135,7 +135,7 @@ div.row#gerenciarRow
                                     td: a(href="/videos/#{article.slug}") #{article.title}
                                 td #{article.authors.name}
                                 td #{article.type}
-                                td #{article.graph.views}
+                                td #{article.graph.views} / #{article.totalComments}
                                 if(article.status == 'deletado')
                                     td.status #{article.status} (<a href="/artigos/#{article.slug}/restore" class="restore">Restore</a>)
                                 else

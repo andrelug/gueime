@@ -53,6 +53,7 @@ var ArticleSchema = new mongoose.Schema({
         publishers: [String],
         views: Number
     },
+    totalComments: Number,
     comments: [{
         sectionId: Number,
         comments: [{

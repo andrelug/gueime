@@ -334,6 +334,8 @@ module.exports = function (app, passport, mongoose) {
 
                 Artigos.update({_id: id}, {$addToSet: {
                     comments: newComments
+                }, $inc: {
+                    'totalComments': 1
                 }}, function(err){
                     res.send("OK");
                 });
@@ -344,6 +346,8 @@ module.exports = function (app, passport, mongoose) {
 
                 Artigos.update({_id: id}, {$set: {
                     comments: oldComments
+                }, $inc: {
+                    'totalComments': 1
                 }}, function(err){
                     res.send("OK");
                 });
@@ -3114,7 +3118,7 @@ module.exports = function (app, passport, mongoose) {
                         break
 
                     case 'artigos':
-                        Artigos.find({}, {title: 1, slug: 1, 'authors.name': 1, type: 1, 'graph.views': 1, status: 1, publishDate: 1}).sort({_id: -1}).exec(function(err, docs){
+                        Artigos.find({}, {title: 1, slug: 1, 'authors.name': 1, type: 1, 'graph.views': 1, status: 1, publishDate: 1, totalComments: 1}).sort({_id: -1}).exec(function(err, docs){
                             for(i=0;i < docs.length;i++){
                                 if(docs[i].status == 'publicado'){
                                     var date = docs[i].publishDate;
