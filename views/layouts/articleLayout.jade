@@ -22,6 +22,33 @@ html.no-js(lang="pt_BR")
 
         div.outWrap(style="overflow:hidden;")
             block content
+        if(user)
+            script.
+                var articleId = '#{id}';
+                var currentUser = {
+                    id: '#{user.id}',
+                    avatarUrl: '#{user.photo}',
+                    name: '#{user.name.first}'
+                };
+                var existingComments = [!{article.comments}];
+                for (i=0;i<existingComments.length;i++){
+                    existingComments[i].sectionId = existingComments[i].sectionId.toString();
+                }
+                    
+        else
+            script.
+                var articleId = '#{id}';
+                var currentUser = {
+                    id: "anon",
+                    avatarUrl: "http://www.gueime.com.br/images/avatar.jpg",
+                    name: "Amigo Gueimer"
+                }
+                var existingComments = [!{article.comments}];
+                for (i=0;i<existingComments.length;i++){
+                    existingComments[i].sectionId = existingComments[i].sectionId.toString();
+                }
+                   
+
 
         include scripts
 
@@ -37,5 +64,4 @@ html.no-js(lang="pt_BR")
                     $('#share').html(data2);
                 });
             });
-
             

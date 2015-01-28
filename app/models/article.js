@@ -53,6 +53,14 @@ var ArticleSchema = new mongoose.Schema({
         publishers: [String],
         views: Number
     },
+    comments: [{
+        sectionId: Number,
+        comments: [{
+            authorAvatarUrl: String,
+            authorName: String,
+            comment: String
+        }]
+    }],
     highlight: {type: Boolean, default: false},
     status: {type: String, index: true, default: 'rascunho'},
     facet: {type: [String], index: true}

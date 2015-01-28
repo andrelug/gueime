@@ -313,9 +313,43 @@ module.exports = function (app, passport, mongoose) {
     //Load Related ajax
     app.get('/loadRelated', function(req, res){
         Artigos.find({ facet: { $all: req.query.related.split(',')}, status: 'publicado', _id: {$ne: req.query.id} }, {_id: -1, title: 1, 'graph.views': 1, 'cover.position': 1,slug: 1, type: 1}).sort({'graph.views': -1}).limit(4).exec(function(err, related){
-            console.log(related);
             res.render('related', {related: related})
         });
+    });
+
+
+    // INLINE COMMENTS
+    app.post('/comments/:id', function(req,res, next){
+        var id = req.params.id;
+        var user = req.user;
+        var comment = req.body;
+
+        Artigos.findOne({ _id: id}, function(err, docs){
+            var newComments;
+            if(!docs.comments[comment.sectionId]){
+
+                newComments = {sectionId: comment.sectionId, comments: [
+                    {authorAvatarUrl: comment.authorAvatarUrl, authorName: comment.authorName, comment: comment.comment, _id: -1}
+                ], _id: -1}
+
+                Artigos.update({_id: id}, {$addToSet: {
+                    comments: newComments
+                }}, function(err){
+                    res.send("OK");
+                });
+            } else {
+                var oldComments = docs.comments;
+
+                oldComments[comment.sectionId].comments.push({authorAvatarUrl: comment.authorAvatarUrl, authorName: comment.authorName, comment: comment.comment, _id: -1});
+
+                Artigos.update({_id: id}, {$set: {
+                    comments: oldComments
+                }}, function(err){
+                    res.send("OK");
+                });
+            }
+        });
+        
     });
     
     // AJAX E FALLBACK PARA NOTICIAS
@@ -404,7 +438,7 @@ module.exports = function (app, passport, mongoose) {
                                 }
                                 docs.date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
 
-                                Users.find({ _id: docs.authors.main },{'name.loginName': 1, 'name.first': 1, 'name.last': 1, photo: 1, 'social': 1}, function (err, author) {                                    
+                                Users.find({ _id: docs.authors.main },{'name.loginName': 1, 'name.first': 1, 'name.last': 1, photo: 1, 'social': 1}, function (err, author) {
                                     res.render('artigo', { tipo: 'noticia', article: docs, title: title, body: body, user: user, author: author[0], date: date, relate: docs.facet, id: docs._id });
                                 });
                             } else {

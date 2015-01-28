@@ -450,3 +450,51 @@ if(thereIsAdmin != true) {
         });
     });
 }
+
+
+$(document).ready(function () {
+    $("#mainText").find('p').each(function (i, obj) {
+        $(this).attr('data-section-id', i);
+        $(this).attr('class', 'commentable-section');
+    });
+
+    var SideComments = require('side-comments');
+    sideComments = new SideComments('#mainText', currentUser, existingComments);
+
+    sideComments.on('commentPosted', function (comment) {
+        console.log(comment.comment);
+        if (comment.comment != "") {
+            $.ajax({
+                url: '/comments/' + articleId,
+                type: 'POST',
+                data: comment,
+                success: function (savedComment) {
+                    // Once the comment is saved, you can insert the comment into the comment stream with "insertComment(comment)".
+                    sideComments.insertComment(comment);
+                    console.log(savedComment);
+                }
+            });
+        } else {
+            $('.comment-box').attr('style', 'outline: 2px solid #E54C3C;').attr('placeholder', 'ops, cadê o texto?')
+            setTimeout(function () {
+                $('.comment-box').removeAttr('style').attr('placeholder', 'Diga lá...');
+            }, 2000);
+
+        }
+
+    });
+
+    // Listen to "commentDeleted" and send a request to your backend to delete the comment.
+    // More about this event in the "docs" section.
+    sideComments.on('commentDeleted', function (commentId) {
+        $.ajax({
+            url: '/comments/' + commentId,
+            type: 'DELETE',
+            success: function (success) {
+                // Do something.
+            }
+        });
+    });
+
+
+});

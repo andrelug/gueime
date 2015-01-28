@@ -126,22 +126,6 @@ section#author.row
     div.large-9.medium-6.columns.autShare
         div#share(style="background-color: rgb(71,158,205)", title="#{relate}", data-id="#{id}")
             
-
+div.row
     div.large-7.small-centered.columns#comments
-        div#livefyre-comments
-        script(type="text/javascript", src="http://zor.livefyre.com/wjs/v3.0/javascripts/livefyre.js")
-        script(type="text/javascript").
-            (function () {
-                var articleId = fyre.conv.load.makeArticleId(null);
-                fyre.conv.load({}, [{
-                    el: 'livefyre-comments',
-                    network: "livefyre.com",
-                    siteId: "370661",
-                    articleId: articleId,
-                    signed: false,
-                    collectionMeta: {
-                        articleId: articleId,
-                        url: fyre.conv.load.makeCollectionUrl(),
-                    }
-                }], function() {});
-            }());
+        div.fb-comments(data-href="", data-width="700", data-numposts="10", data-colorscheme="light")

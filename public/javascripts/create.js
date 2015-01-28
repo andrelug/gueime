@@ -63,9 +63,11 @@ var imageCover,
         autosaveInterval: 5, // seconds
         pastePlainText: true,
         deniedTags: ['blockquote', 'div', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'span', 'img', 'a', 'ul', 'li', 'code', 'pre'],
-        autosaveCallback: function (json) {
+        autosaveCallback: function (name, json) {
             nJson = decodeURIComponent(json.content);
+            
             docTitle = decodeURIComponent(json.content);
+            console.log(json.content);
             $('.teste').html(nJson);
 
         }

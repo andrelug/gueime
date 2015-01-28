@@ -27,7 +27,7 @@ block content
             div.parallax(style="border-top:5px solid #27b899;")
                 div.articleStatsView(style="background-color:#27b899")
                     p <i class="fa fa-eye"></i> #{article.graph.views} <i class="fa fa-comment", style="margin-left:10px;"></i> <fb:comments-count href=http://www.gueime.com.br/noticias/#{article.slug} ></fb:comments-count> <i class="fa fa-calendar" style="margin-left:10px"></i> #{article.date}
-                article#mainText
+                article#mainText.commentable-container
                     include partials/noticia
                     div.fb-like(data-href="", data-layout="button_count", data-action="like", data-show-faces="true", data-share="true")
                 include partials/author
