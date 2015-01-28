@@ -79,4 +79,3 @@ $.Redactor.opts.langs['pt_br'] = {
 	center: 'Center'
 };
 })( jQuery );
-

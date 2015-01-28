@@ -29,7 +29,7 @@ var imageCover,
 
     $('#createContent').redactor({
         lang: 'pt_br',
-        plugins: ['fontcolor', 'awesome', 'fontsize', 'fontfamily'],
+        plugins: ['fontcolor', 'fontsize', 'fontfamily'],
         placeholder: 'Texto sensacional',
         minHeight: 300,
         imageUpload: '/artigoImage',

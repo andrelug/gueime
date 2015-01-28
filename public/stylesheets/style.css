@@ -453,13 +453,13 @@ textarea {
   outline: none;
   box-shadow: none;
 }
-#mainText .redactor_box:first-child p {
+#mainText .redactor-box:first-child p {
   font-size: 2.75rem;
   font-family: 'Nexa';
   font-weight: bold;
   color: #2c3e50;
 }
-#mainText .redactor_box:first-child p inline {
+#mainText .redactor-box:first-child p inline {
   font-size: auto;
 }
 .dropzone-previews {

@@ -1,5 +1,4 @@
 for doc in docs
-    
     if(doc.type == 'noticia')
         a(href="/noticias/#{doc.slug}", data-link="ajax", data-reveal-id="myModal").item.noticias
             div.hidden.infoNews.row
@@ -67,4 +66,11 @@ for doc in docs
                 div.video
                     span#newsText
                         h2.ref #{doc.title}
-            
+if(docs.length < 1)
+    style.
+        #gridArticles{
+            height: 200px !important;
+        }
+    div.row
+        div.small-centered.columns(style="text-align:center;")
+            h2 Oops...Aparentemente não há artigos para sua pesquisa :(
