@@ -83,7 +83,8 @@ tagSearch = function (str) {
             } else {
                 if(thereIsAdmin != true) {
                     analytics.track('Search', {
-                        page: '/?t=' + searchStr.toString().split(/[ ,]+/).join('-')
+                        page: '/?t=' + searchStr.toString().split(/[ ,]+/).join('-'),
+                        pesquisa: searchStr.toString().split(/[ ,]+/).join('-')
                     });
                 }
             }
