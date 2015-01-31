@@ -1,0 +1,39 @@
+doctype html
+<!--[if IE 9]><html class="lt-ie10" lang="pt_BR" > <![endif]-->
+html.no-js(lang="pt_BR")
+    head
+        include head
+        if(article)
+            meta(name="description", content="#{article.description}")
+            meta(property="og:title", content="#{title}")
+            meta(property="og:type", content="article")
+            meta(property="og:image", content="http://www.gueime.com.br#{article.cover.image}")
+            meta(property="og:url", content="http://www.gueime.com.br/#{article.type}s/#{article.slug}")
+            meta(property="og:description", content="#{article.description}")
+            meta(name="twitter:card", content="summary")
+            meta(name="twitter:url", content="http://www.gueime.com.br/#{article.type}s/#{article.slug}")
+            meta(name="twitter:title", content="#{title}")
+            meta(name="twitter:description", content="#{article.description}")
+            meta(name="twitter:image", content="http://www.gueime.com.br#{article.cover.image}")
+
+    body(style="overflow-y: auto; background: url('../images/pattern.png') repeat #34495e")
+
+        include facebookInit
+
+        div.outWrap(style="overflow:hidden;")
+            block content
+
+        include scripts
+
+        include facebook
+
+        script.
+            $(document).ready(function(){
+                $.ajax({
+                    url: '/loadRelated',
+                    type: 'GET',
+                    data: { related: $('#share').attr('title'), id: $('#share').attr('data-id') }
+                }).done(function (data2) {
+                    $('#share').html(data2);
+                });
+            });           
