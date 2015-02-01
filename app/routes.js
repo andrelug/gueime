@@ -12,7 +12,8 @@ var Users = require('./models/user'),
     fs = require("fs"),
     transloadit = require('node-transloadit'),
     async = require('async'),
-    nodemailer = require("nodemailer"),
+    mandrill = require('mandrill-api/mandrill'),
+    mandrill_client = new mandrill.Mandrill('9OnGzepS5J_rDmLYVSjWnQ')
     Feed = require('feed');
 
 var client = new transloadit('195786e09f8911e495eae1be63259780', '360133efc358574ed2fef9c645c5fb62f65623af');
@@ -1194,108 +1195,156 @@ module.exports = function (app, passport, mongoose) {
                                         res.redirect('/' + b.tipo + 's/' + slug);
                                     } else {
                                         Users.update({_id: user._id}, {$inc: {'gamification.points': 30, 'graph.revisions': 1}, $addToSet: {'graph.revisionCol': art._id}}, function(err){
+                                            // Email enviado para artigos revisados e publicados
+                                            var pubMessage = {
+                                                "html": "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta content='text/html; charset=utf-8' http-equiv='Content-Type' /><title></title><style type='text/css'>@media only screen and (max-width:480px){body,table,td,p,a,li,blockquote{-webkit-text-size-adjust:none !important}body{width:100% !important;min-width:100% !important}td[id=bodyCell]{padding:10px !important}table.kmMobileHide{display:none !important}table[class=kmTextContentContainer]{width:100% !important}table[class=kmBoxedTextContentContainer]{width:100% !important}td[class=kmImageContent]{padding-left:0 !important;padding-right:0 !important}img[class=kmImage]{width:100% !important}table[class=kmSplitContentLeftContentContainer],table[class=kmSplitContentRightContentContainer],table[class=kmColumnContainer],td[class=kmVerticalButtonBarContentOuter] table[class=kmButtonBarContent],td[class=kmVerticalButtonCollectionContentOuter] table[class=kmButtonCollectionContent],table[class=kmVerticalButton],table[class=kmVerticalButtonContent]{width:100% !important}td[class=kmButtonCollectionInner]{padding-left:9px !important;padding-right:9px !important;padding-top:9px !important;padding-bottom:0 !important;background-color:transparent !important}td[class=kmVerticalButtonIconContent],td[class=kmVerticalButtonTextContent],td[class=kmVerticalButtonContentOuter]{padding-left:0 !important;padding-right:0 !important;padding-bottom:9px !important}table[class=kmSplitContentLeftContentContainer] td[class=kmTextContent],table[class=kmSplitContentRightContentContainer] td[class=kmTextContent],table[class=kmColumnContainer] td[class=kmTextContent],table[class=kmSplitContentLeftContentContainer] td[class=kmImageContent],table[class=kmSplitContentRightContentContainer] td[class=kmImageContent]{padding-top:9px !important}td[class='rowContainer kmFloatLeft'],td[class='rowContainer kmFloatLeft firstColumn'],td[class='rowContainer kmFloatLeft lastColumn']{float:left;clear:both;width:100% !important}table[id=templateContainer],table[class=templateRow]{max-width:600px !important;width:100% !important}h1{font-size:24px !important;line-height:130% !important}h2{font-size:20px !important;line-height:130% !important}h3{font-size:18px !important;line-height:130% !important}h4{font-size:16px !important;line-height:130% !important}td[class=kmTextContent]{font-size:14px !important;line-height:130% !important}td[class=kmTextBlockInner] td[class=kmTextContent]{padding-right:18px !important;padding-left:18px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner]{padding-left:9px !important;padding-right:9px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner] [class=kmTextContent]{font-size:14px !important;line-height:130% !important;padding-left:4px !important;padding-right:4px !important}}</style></head><body style='margin:0;padding:0;background-color:#c7c7c7'><center><table align='center' border='0' cellpadding='0' cellspacing='0' id='bodyTable' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;background-color:#c7c7c7;height:100%;margin:0;width:100%'><tbody><tr><td align='center' id='bodyCell' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding-top:50px;padding-left:20px;padding-bottom:20px;padding-right:20px;border-top:0;height:100%;margin:0;width:100%'><table border='0' cellpadding='0' cellspacing='0' id='templateContainer' width='600' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;border:1px solid #aaa;background-color:#f4f4f4;border-radius:0'><tbody><tr><td id='templateContainerInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0'><table border='0' cellpadding='0' cellspacing='0' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmImageBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmImageBlockOuter'><tr><td class='kmImageBlockInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:9px;' valign='top'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmImageContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmImageContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;padding-top:0px;padding-bottom:0;padding-left:9px;padding-right:9px;'><img align='left' alt='' class='kmImage' src='https://d3k81ch9hvuctc.cloudfront.net/company%2Fb674Zj%2Fimages%2Fheader_email.jpg' width='564' style='border:0;height:auto;line-height:100%;outline:none;text-decoration:none;padding-bottom:0;display:inline;vertical-align:bottom;margin-right:0;max-width:800px;' /></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmTextBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmTextBlockOuter'><tr><td class='kmTextBlockInner' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmTextContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmTextContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;color:#505050;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;padding-top:9px;padding-bottom:9px;padding-left:18px;padding-right:18px;'><h1 style='color:#222;display:block;font-family:Helvetica, Arial;font-size:26px;font-style:normal;font-weight:bold;line-height:110%;letter-spacing:normal;margin:0;margin-bottom:9px;text-align:left'>Artigo Revisado e Publicado!</h1><p style='margin:0;padding-bottom:1em'> </p><p style='margin:0;padding-bottom:1em'>O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi revisado por " + user.name.first + " " + user.name.last + ". Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!</p><p style='margin:0;padding-bottom:1em'>Abraços,</p><p style='margin:0;padding-bottom:0'>Equipe Gueime</p></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></table></td></tr></tbody></table></td></tr></tbody></table></center></body></html>",
+                                                "text": "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi revisado por " + user.name.first + " " + user.name.last + ". Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!",
+                                                "subject": "Gueime - Artigo Revisado e Publicado",
+                                                "from_email": "parceiros@gueime.com.br",
+                                                "from_name": "Gueime - Parceiros",
+                                                "to": [{
+                                                        "email": user.email,
+                                                        "name": user.name.first,
+                                                        "type": "to"
+                                                    },
+                                                    {
+                                                        "email": criador.email,
+                                                        "name": criador.name.first,
+                                                        "type": "to"
+                                                    },
+                                                    {
+                                                        "email": "parceiros@gueime.com.br",
+                                                        "name": "Parceiros",
+                                                        "type": "bcc"
+                                                    }],
+                                                "headers": {
+                                                    "Reply-To": "parceiros@gueime.com.br"
+                                                },
+                                                "important": false,
+                                                "track_opens": true,
+                                                "track_clicks": true,
+                                                "auto_text": null,
+                                                "auto_html": true,
+                                                "inline_css": null,
+                                                "url_strip_qs": null,
+                                                "preserve_recipients": null,
+                                                "view_content_link": null,
+                                                "return_path_domain": null,
+                                                "tags": [
+                                                    "pubMessage"
+                                                ]
+                                            };
+                                            var async = false;
+                                            var ip_pool = "Main Pool";
                                             // Evio de Email
-                                            var smtpTransport = nodemailer.createTransport("SMTP",{
-                                                service: "Hotmail",
-                                                auth: {
-                                                    user: "parceiros@gueime.com.br",
-                                                    pass: "gueime123"
-                                                }
-                                            });
-
-                                            // setup e-mail data with unicode symbols
-                                            var mailOptions = {
-                                                from: "Gueime <parceiros@gueime.com.br>", // sender address
-                                                to: "André Lucas <parceiros@gueime.com.br>, " + thisCreator.email, // list of receivers
-                                                subject: "Artigo Revisado e Publicado", // Subject line
-                                                text: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi revisado por " + user.name.first + " " + user.name.last + ". Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!", // plaintext body
-                                                html: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi revisado por " + user.name.first + " " + user.name.last + ". Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!" // html body
-                                            }
-
-                                            // send mail with defined transport object
-                                            smtpTransport.sendMail(mailOptions, function(error, response){
-                                                if(error){
-                                                    console.log(error);
-                                                }else{
-                                                    console.log("Message sent: " + response.message);
-                                                }
-
-
-                                                smtpTransport.close(); // shut down the connection pool, no more messages
-
+                                            mandrill_client.messages.send({"message": pubMessage, "async": async, "ip_pool": ip_pool}, function(result) {
+                                                console.log(result);
+                                                // Direciona pro artigo
+                                                res.redirect('/' + b.tipo + 's/' + slug);
+                                            }, function(e) {
+                                                console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
                                                 // Direciona pro artigo
                                                 res.redirect('/' + b.tipo + 's/' + slug);
                                             });
                                         });
                                     }
                                 } else {
+                                    // Email para artigos publicados diretametne
+                                    var dirMessage = {
+                                        "html": "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta content='text/html; charset=utf-8' http-equiv='Content-Type' /><title></title><style type='text/css'>@media only screen and (max-width:480px){body,table,td,p,a,li,blockquote{-webkit-text-size-adjust:none !important}body{width:100% !important;min-width:100% !important}td[id=bodyCell]{padding:10px !important}table.kmMobileHide{display:none !important}table[class=kmTextContentContainer]{width:100% !important}table[class=kmBoxedTextContentContainer]{width:100% !important}td[class=kmImageContent]{padding-left:0 !important;padding-right:0 !important}img[class=kmImage]{width:100% !important}table[class=kmSplitContentLeftContentContainer],table[class=kmSplitContentRightContentContainer],table[class=kmColumnContainer],td[class=kmVerticalButtonBarContentOuter] table[class=kmButtonBarContent],td[class=kmVerticalButtonCollectionContentOuter] table[class=kmButtonCollectionContent],table[class=kmVerticalButton],table[class=kmVerticalButtonContent]{width:100% !important}td[class=kmButtonCollectionInner]{padding-left:9px !important;padding-right:9px !important;padding-top:9px !important;padding-bottom:0 !important;background-color:transparent !important}td[class=kmVerticalButtonIconContent],td[class=kmVerticalButtonTextContent],td[class=kmVerticalButtonContentOuter]{padding-left:0 !important;padding-right:0 !important;padding-bottom:9px !important}table[class=kmSplitContentLeftContentContainer] td[class=kmTextContent],table[class=kmSplitContentRightContentContainer] td[class=kmTextContent],table[class=kmColumnContainer] td[class=kmTextContent],table[class=kmSplitContentLeftContentContainer] td[class=kmImageContent],table[class=kmSplitContentRightContentContainer] td[class=kmImageContent]{padding-top:9px !important}td[class='rowContainer kmFloatLeft'],td[class='rowContainer kmFloatLeft firstColumn'],td[class='rowContainer kmFloatLeft lastColumn']{float:left;clear:both;width:100% !important}table[id=templateContainer],table[class=templateRow]{max-width:600px !important;width:100% !important}h1{font-size:24px !important;line-height:130% !important}h2{font-size:20px !important;line-height:130% !important}h3{font-size:18px !important;line-height:130% !important}h4{font-size:16px !important;line-height:130% !important}td[class=kmTextContent]{font-size:14px !important;line-height:130% !important}td[class=kmTextBlockInner] td[class=kmTextContent]{padding-right:18px !important;padding-left:18px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner]{padding-left:9px !important;padding-right:9px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner] [class=kmTextContent]{font-size:14px !important;line-height:130% !important;padding-left:4px !important;padding-right:4px !important}}</style></head><body style='margin:0;padding:0;background-color:#c7c7c7'><center><table align='center' border='0' cellpadding='0' cellspacing='0' id='bodyTable' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;background-color:#c7c7c7;height:100%;margin:0;width:100%'><tbody><tr><td align='center' id='bodyCell' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding-top:50px;padding-left:20px;padding-bottom:20px;padding-right:20px;border-top:0;height:100%;margin:0;width:100%'><table border='0' cellpadding='0' cellspacing='0' id='templateContainer' width='600' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;border:1px solid #aaa;background-color:#f4f4f4;border-radius:0'><tbody><tr><td id='templateContainerInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0'><table border='0' cellpadding='0' cellspacing='0' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmImageBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmImageBlockOuter'><tr><td class='kmImageBlockInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:9px;' valign='top'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmImageContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmImageContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;padding-top:0px;padding-bottom:0;padding-left:9px;padding-right:9px;'><img align='left' alt='' class='kmImage' src='https://d3k81ch9hvuctc.cloudfront.net/company%2Fb674Zj%2Fimages%2Fheader_email.jpg' width='564' style='border:0;height:auto;line-height:100%;outline:none;text-decoration:none;padding-bottom:0;display:inline;vertical-align:bottom;margin-right:0;max-width:800px;' /></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmTextBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmTextBlockOuter'><tr><td class='kmTextBlockInner' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmTextContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmTextContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;color:#505050;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;padding-top:9px;padding-bottom:9px;padding-left:18px;padding-right:18px;'><h1 style='color:#222;display:block;font-family:Helvetica, Arial;font-size:26px;font-style:normal;font-weight:bold;line-height:110%;letter-spacing:normal;margin:0;margin-bottom:9px;text-align:left'>Artigo Publicado!</h1><p style='margin:0;padding-bottom:1em'> </p><p style='margin:0;padding-bottom:1em'>O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi publicado. Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!</p><p style='margin:0;padding-bottom:1em'>Abraços,</p><p style='margin:0;padding-bottom:0'>Equipe Gueime</p></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></table></td></tr></tbody></table></td></tr></tbody></table></center></body></html>",
+                                        "text": "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi publicado. Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!",
+                                        "subject": "Gueime - Artigo Publicado",
+                                        "from_email": "parceiros@gueime.com.br",
+                                        "from_name": "Gueime - Parceiros",
+                                        "to": [{
+                                                "email": user.email,
+                                                "name": user.name.first,
+                                                "type": "to"
+                                            },
+                                            {
+                                                "email": "parceiros@gueime.com.br",
+                                                "name": "Parceiros",
+                                                "type": "bcc"
+                                            }],
+                                        "headers": {
+                                            "Reply-To": "parceiros@gueime.com.br"
+                                        },
+                                        "important": false,
+                                        "track_opens": true,
+                                        "track_clicks": true,
+                                        "auto_text": null,
+                                        "auto_html": true,
+                                        "inline_css": null,
+                                        "url_strip_qs": null,
+                                        "preserve_recipients": null,
+                                        "view_content_link": null,
+                                        "return_path_domain": null,
+                                        "tags": [
+                                            "dirMessage"
+                                        ]
+                                    };
+                                    var async = false;
+                                    var ip_pool = "Main Pool";
                                     // Evio de Email
-                                    var smtpTransport = nodemailer.createTransport("SMTP",{
-                                        service: "Hotmail",
-                                        auth: {
-                                            user: "parceiros@gueime.com.br",
-                                            pass: "gueime123"
-                                        }
-                                    });
-
-                                    // setup e-mail data with unicode symbols
-                                    var mailOptions = {
-                                        from: "Gueime <parceiros@gueime.com.br>", // sender address
-                                        to: "André Lucas <parceiros@gueime.com.br>, " + thisCreator.email, // list of receivers
-                                        subject: "Artigo Publicado", // Subject line
-                                        text: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi publicado. Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!", // plaintext body
-                                        html: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi publicado. Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!" // html body
-                                    }
-
-                                    // send mail with defined transport object
-                                    smtpTransport.sendMail(mailOptions, function(error, response){
-                                        if(error){
-                                            console.log(error);
-                                        }else{
-                                            console.log("Message sent: " + response.message);
-                                        }
-
-
-                                        smtpTransport.close(); // shut down the connection pool, no more messages
-
+                                    mandrill_client.messages.send({"message": dirMessage, "async": async, "ip_pool": ip_pool}, function(result) {
+                                        console.log(result);
+                                        // Direciona pro artigo
+                                        res.redirect('/' + b.tipo + 's/' + slug);
+                                    }, function(e) {
+                                        console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
                                         // Direciona pro artigo
                                         res.redirect('/' + b.tipo + 's/' + slug);
                                     });
                                 }
                             });
                         } else{
+                            // Email para artigos enviados para revisão
+                            var revMessage = {
+                                "html": "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta content='text/html; charset=utf-8' http-equiv='Content-Type' /><title></title><style type='text/css'>@media only screen and (max-width:480px){body,table,td,p,a,li,blockquote{-webkit-text-size-adjust:none !important}body{width:100% !important;min-width:100% !important}td[id=bodyCell]{padding:10px !important}table.kmMobileHide{display:none !important}table[class=kmTextContentContainer]{width:100% !important}table[class=kmBoxedTextContentContainer]{width:100% !important}td[class=kmImageContent]{padding-left:0 !important;padding-right:0 !important}img[class=kmImage]{width:100% !important}table[class=kmSplitContentLeftContentContainer],table[class=kmSplitContentRightContentContainer],table[class=kmColumnContainer],td[class=kmVerticalButtonBarContentOuter] table[class=kmButtonBarContent],td[class=kmVerticalButtonCollectionContentOuter] table[class=kmButtonCollectionContent],table[class=kmVerticalButton],table[class=kmVerticalButtonContent]{width:100% !important}td[class=kmButtonCollectionInner]{padding-left:9px !important;padding-right:9px !important;padding-top:9px !important;padding-bottom:0 !important;background-color:transparent !important}td[class=kmVerticalButtonIconContent],td[class=kmVerticalButtonTextContent],td[class=kmVerticalButtonContentOuter]{padding-left:0 !important;padding-right:0 !important;padding-bottom:9px !important}table[class=kmSplitContentLeftContentContainer] td[class=kmTextContent],table[class=kmSplitContentRightContentContainer] td[class=kmTextContent],table[class=kmColumnContainer] td[class=kmTextContent],table[class=kmSplitContentLeftContentContainer] td[class=kmImageContent],table[class=kmSplitContentRightContentContainer] td[class=kmImageContent]{padding-top:9px !important}td[class='rowContainer kmFloatLeft'],td[class='rowContainer kmFloatLeft firstColumn'],td[class='rowContainer kmFloatLeft lastColumn']{float:left;clear:both;width:100% !important}table[id=templateContainer],table[class=templateRow]{max-width:600px !important;width:100% !important}h1{font-size:24px !important;line-height:130% !important}h2{font-size:20px !important;line-height:130% !important}h3{font-size:18px !important;line-height:130% !important}h4{font-size:16px !important;line-height:130% !important}td[class=kmTextContent]{font-size:14px !important;line-height:130% !important}td[class=kmTextBlockInner] td[class=kmTextContent]{padding-right:18px !important;padding-left:18px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner]{padding-left:9px !important;padding-right:9px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner] [class=kmTextContent]{font-size:14px !important;line-height:130% !important;padding-left:4px !important;padding-right:4px !important}}</style></head><body style='margin:0;padding:0;background-color:#c7c7c7'><center><table align='center' border='0' cellpadding='0' cellspacing='0' id='bodyTable' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;background-color:#c7c7c7;height:100%;margin:0;width:100%'><tbody><tr><td align='center' id='bodyCell' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding-top:50px;padding-left:20px;padding-bottom:20px;padding-right:20px;border-top:0;height:100%;margin:0;width:100%'><table border='0' cellpadding='0' cellspacing='0' id='templateContainer' width='600' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;border:1px solid #aaa;background-color:#f4f4f4;border-radius:0'><tbody><tr><td id='templateContainerInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0'><table border='0' cellpadding='0' cellspacing='0' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmImageBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmImageBlockOuter'><tr><td class='kmImageBlockInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:9px;' valign='top'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmImageContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmImageContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;padding-top:0px;padding-bottom:0;padding-left:9px;padding-right:9px;'><img align='left' alt='' class='kmImage' src='https://d3k81ch9hvuctc.cloudfront.net/company%2Fb674Zj%2Fimages%2Fheader_email.jpg' width='564' style='border:0;height:auto;line-height:100%;outline:none;text-decoration:none;padding-bottom:0;display:inline;vertical-align:bottom;margin-right:0;max-width:800px;' /></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmTextBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmTextBlockOuter'><tr><td class='kmTextBlockInner' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmTextContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmTextContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;color:#505050;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;padding-top:9px;padding-bottom:9px;padding-left:18px;padding-right:18px;'><h1 style='color:#222;display:block;font-family:Helvetica, Arial;font-size:26px;font-style:normal;font-weight:bold;line-height:110%;letter-spacing:normal;margin:0;margin-bottom:9px;text-align:left'>Artigo em Revisão!</h1><p style='margin:0;padding-bottom:1em'> </p><p style='margin:0;padding-bottom:1em'>Obrigado pelo envio do texto " + b.docTitle.replace('<p>', '').replace('</p>', '') + ". Em breve um de nossos editores irá avaliá-lo e ou o publicará ou retornará com comentários e correções. Enquanto isso, aproveite para ler mais alguns textos excelentes do Gueime!</p><p style='margin:0;padding-bottom:1em'>Abraços,</p><p style='margin:0;padding-bottom:0'>Equipe Gueime</p></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></table></td></tr></tbody></table></td></tr></tbody></table></center></body></html>",
+                                "text": "Obrigado pelo envio do texto " + b.docTitle.replace('<p>', '').replace('</p>', '') + ". Em breve um de nossos editores irá avaliá-lo e ou o publicará ou retornará com comentários e correções. Enquanto isso, aproveite para ler mais alguns textos excelentes do Gueime!",
+                                "subject": "Gueime - Artigo em Revisão",
+                                "from_email": "parceiros@gueime.com.br",
+                                "from_name": "Gueime - Parceiros",
+                                "to": [{
+                                        "email": user.email,
+                                        "name": user.name.first,
+                                        "type": "to"
+                                    },
+                                    {
+                                        "email": "parceiros@gueime.com.br",
+                                        "name": "Parceiros",
+                                        "type": "bcc"
+                                    }],
+                                "headers": {
+                                    "Reply-To": "parceiros@gueime.com.br"
+                                },
+                                "important": false,
+                                "track_opens": true,
+                                "track_clicks": true,
+                                "auto_text": null,
+                                "auto_html": true,
+                                "inline_css": null,
+                                "url_strip_qs": null,
+                                "preserve_recipients": null,
+                                "view_content_link": null,
+                                "return_path_domain": null,
+                                "tags": [
+                                    "revMessage"
+                                ]
+                            };
+                            var async = false;
+                            var ip_pool = "Main Pool";
                             // Evio de Email
-                            var smtpTransport = nodemailer.createTransport("SMTP",{
-                                service: "Hotmail",
-                                auth: {
-                                    user: "parceiros@gueime.com.br",
-                                    pass: "gueime123"
-                                }
-                            });
-
-                            // setup e-mail data with unicode symbols
-                            var mailOptions = {
-                                from: "Gueime <parceiros@gueime.com.br>", // sender address
-                                to: "André Lucas <parceiros@gueime.com.br>, " + user.email, // list of receivers
-                                subject: "Artigo enviado para revisão", // Subject line
-                                text: "Obrigado pelo envio do texto " + b.docTitle.replace('<p>', '').replace('</p>', '') + ". Em breve um de nossos editores irá avaliá-lo e ou o publicará ou retornará com comentários e correções. Enquanto isso, aproveite para ler mais alguns textos excelentes do Gueime!", // plaintext body
-                                html: "Obrigado pelo envio do texto " + b.docTitle.replace('<p>', '').replace('</p>', '') + ". Em breve um de nossos editores irá avaliá-lo e ou o publicará ou retornará com comentários e correções. Enquanto isso, aproveite para ler mais alguns textos excelentes do Gueime!" // html body
-                            }
-
-                            // send mail with defined transport object
-                            smtpTransport.sendMail(mailOptions, function(error, response){
-                                if(error){
-                                    console.log(error);
-                                }else{
-                                    console.log("Message sent: " + response.message);
-                                }
-
-
-                                smtpTransport.close(); // shut down the connection pool, no more messages
-
+                            mandrill_client.messages.send({"message": revMessage, "async": async, "ip_pool": ip_pool}, function(result) {
+                                console.log(result);
+                                // Direciona pro artigo
+                                res.redirect('/' + b.tipo + 's/' + slug);
+                            }, function(e) {
+                                console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
                                 // Manda pra revisão
                                 res.redirect('/?status=revision');
                             });
+                            
                         }
                     });
                 } else if (b.tipo == 'artigo') {
@@ -1332,105 +1381,152 @@ module.exports = function (app, passport, mongoose) {
                                         res.redirect('/' + b.tipo + 's/' + slug);
                                     } else {
                                         Users.update({_id: user._id}, {$inc: {'gamification.points': 30, 'graph.revisions': 1}, $addToSet: {'graph.revisionCol': art._id}}, function(err){
-                                             // Evio de Email
-                                            var smtpTransport = nodemailer.createTransport("SMTP",{
-                                                service: "Hotmail",
-                                                auth: {
-                                                    user: "parceiros@gueime.com.br",
-                                                    pass: "gueime123"
-                                                }
-                                            });
-
-                                            // setup e-mail data with unicode symbols
-                                            var mailOptions = {
-                                                from: "Gueime <parceiros@gueime.com.br>", // sender address
-                                                to: "André Lucas <parceiros@gueime.com.br>, " + thisCreator.email, // list of receivers
-                                                subject: "Artigo Revisado e Publicado", // Subject line
-                                                text: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi revisado por " + user.name.first + " " + user.name.last + ". Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!", // plaintext body
-                                                html: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi revisado por " + user.name.first + " " + user.name.last + ". Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!" // html body
-                                            }
-
-                                            // send mail with defined transport object
-                                            smtpTransport.sendMail(mailOptions, function(error, response){
-                                                if(error){
-                                                    console.log(error);
-                                                }else{
-                                                    console.log("Message sent: " + response.message);
-                                                }
-
-
-                                                smtpTransport.close(); // shut down the connection pool, no more messages
-
+                                            // Email enviado para artigos revisados e publicados
+                                            var pubMessage = {
+                                                "html": "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta content='text/html; charset=utf-8' http-equiv='Content-Type' /><title></title><style type='text/css'>@media only screen and (max-width:480px){body,table,td,p,a,li,blockquote{-webkit-text-size-adjust:none !important}body{width:100% !important;min-width:100% !important}td[id=bodyCell]{padding:10px !important}table.kmMobileHide{display:none !important}table[class=kmTextContentContainer]{width:100% !important}table[class=kmBoxedTextContentContainer]{width:100% !important}td[class=kmImageContent]{padding-left:0 !important;padding-right:0 !important}img[class=kmImage]{width:100% !important}table[class=kmSplitContentLeftContentContainer],table[class=kmSplitContentRightContentContainer],table[class=kmColumnContainer],td[class=kmVerticalButtonBarContentOuter] table[class=kmButtonBarContent],td[class=kmVerticalButtonCollectionContentOuter] table[class=kmButtonCollectionContent],table[class=kmVerticalButton],table[class=kmVerticalButtonContent]{width:100% !important}td[class=kmButtonCollectionInner]{padding-left:9px !important;padding-right:9px !important;padding-top:9px !important;padding-bottom:0 !important;background-color:transparent !important}td[class=kmVerticalButtonIconContent],td[class=kmVerticalButtonTextContent],td[class=kmVerticalButtonContentOuter]{padding-left:0 !important;padding-right:0 !important;padding-bottom:9px !important}table[class=kmSplitContentLeftContentContainer] td[class=kmTextContent],table[class=kmSplitContentRightContentContainer] td[class=kmTextContent],table[class=kmColumnContainer] td[class=kmTextContent],table[class=kmSplitContentLeftContentContainer] td[class=kmImageContent],table[class=kmSplitContentRightContentContainer] td[class=kmImageContent]{padding-top:9px !important}td[class='rowContainer kmFloatLeft'],td[class='rowContainer kmFloatLeft firstColumn'],td[class='rowContainer kmFloatLeft lastColumn']{float:left;clear:both;width:100% !important}table[id=templateContainer],table[class=templateRow]{max-width:600px !important;width:100% !important}h1{font-size:24px !important;line-height:130% !important}h2{font-size:20px !important;line-height:130% !important}h3{font-size:18px !important;line-height:130% !important}h4{font-size:16px !important;line-height:130% !important}td[class=kmTextContent]{font-size:14px !important;line-height:130% !important}td[class=kmTextBlockInner] td[class=kmTextContent]{padding-right:18px !important;padding-left:18px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner]{padding-left:9px !important;padding-right:9px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner] [class=kmTextContent]{font-size:14px !important;line-height:130% !important;padding-left:4px !important;padding-right:4px !important}}</style></head><body style='margin:0;padding:0;background-color:#c7c7c7'><center><table align='center' border='0' cellpadding='0' cellspacing='0' id='bodyTable' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;background-color:#c7c7c7;height:100%;margin:0;width:100%'><tbody><tr><td align='center' id='bodyCell' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding-top:50px;padding-left:20px;padding-bottom:20px;padding-right:20px;border-top:0;height:100%;margin:0;width:100%'><table border='0' cellpadding='0' cellspacing='0' id='templateContainer' width='600' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;border:1px solid #aaa;background-color:#f4f4f4;border-radius:0'><tbody><tr><td id='templateContainerInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0'><table border='0' cellpadding='0' cellspacing='0' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmImageBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmImageBlockOuter'><tr><td class='kmImageBlockInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:9px;' valign='top'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmImageContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmImageContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;padding-top:0px;padding-bottom:0;padding-left:9px;padding-right:9px;'><img align='left' alt='' class='kmImage' src='https://d3k81ch9hvuctc.cloudfront.net/company%2Fb674Zj%2Fimages%2Fheader_email.jpg' width='564' style='border:0;height:auto;line-height:100%;outline:none;text-decoration:none;padding-bottom:0;display:inline;vertical-align:bottom;margin-right:0;max-width:800px;' /></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmTextBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmTextBlockOuter'><tr><td class='kmTextBlockInner' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmTextContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmTextContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;color:#505050;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;padding-top:9px;padding-bottom:9px;padding-left:18px;padding-right:18px;'><h1 style='color:#222;display:block;font-family:Helvetica, Arial;font-size:26px;font-style:normal;font-weight:bold;line-height:110%;letter-spacing:normal;margin:0;margin-bottom:9px;text-align:left'>Artigo Revisado e Publicado!</h1><p style='margin:0;padding-bottom:1em'> </p><p style='margin:0;padding-bottom:1em'>O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi revisado por " + user.name.first + " " + user.name.last + ". Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!</p><p style='margin:0;padding-bottom:1em'>Abraços,</p><p style='margin:0;padding-bottom:0'>Equipe Gueime</p></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></table></td></tr></tbody></table></td></tr></tbody></table></center></body></html>",
+                                                "text": "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi revisado por " + user.name.first + " " + user.name.last + ". Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!",
+                                                "subject": "Gueime - Artigo Revisado e Publicado",
+                                                "from_email": "parceiros@gueime.com.br",
+                                                "from_name": "Gueime - Parceiros",
+                                                "to": [{
+                                                        "email": user.email,
+                                                        "name": user.name.first,
+                                                        "type": "to"
+                                                    },
+                                                    {
+                                                        "email": criador.email,
+                                                        "name": criador.name.first,
+                                                        "type": "to"
+                                                    },
+                                                    {
+                                                        "email": "parceiros@gueime.com.br",
+                                                        "name": "Parceiros",
+                                                        "type": "bcc"
+                                                    }],
+                                                "headers": {
+                                                    "Reply-To": "parceiros@gueime.com.br"
+                                                },
+                                                "important": false,
+                                                "track_opens": true,
+                                                "track_clicks": true,
+                                                "auto_text": null,
+                                                "auto_html": true,
+                                                "inline_css": null,
+                                                "url_strip_qs": null,
+                                                "preserve_recipients": null,
+                                                "view_content_link": null,
+                                                "return_path_domain": null,
+                                                "tags": [
+                                                    "pubMessage"
+                                                ]
+                                            };
+                                            var async = false;
+                                            var ip_pool = "Main Pool";
+                                            // Evio de Email
+                                            mandrill_client.messages.send({"message": pubMessage, "async": async, "ip_pool": ip_pool}, function(result) {
+                                                console.log(result);
+                                                // Direciona pro artigo
+                                                res.redirect('/' + b.tipo + 's/' + slug);
+                                            }, function(e) {
+                                                console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
                                                 // Direciona pro artigo
                                                 res.redirect('/' + b.tipo + 's/' + slug);
                                             });
                                         });
                                     }
                                 } else {
+                                    // Email para artigos publicados diretametne
+                                    var dirMessage = {
+                                        "html": "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta content='text/html; charset=utf-8' http-equiv='Content-Type' /><title></title><style type='text/css'>@media only screen and (max-width:480px){body,table,td,p,a,li,blockquote{-webkit-text-size-adjust:none !important}body{width:100% !important;min-width:100% !important}td[id=bodyCell]{padding:10px !important}table.kmMobileHide{display:none !important}table[class=kmTextContentContainer]{width:100% !important}table[class=kmBoxedTextContentContainer]{width:100% !important}td[class=kmImageContent]{padding-left:0 !important;padding-right:0 !important}img[class=kmImage]{width:100% !important}table[class=kmSplitContentLeftContentContainer],table[class=kmSplitContentRightContentContainer],table[class=kmColumnContainer],td[class=kmVerticalButtonBarContentOuter] table[class=kmButtonBarContent],td[class=kmVerticalButtonCollectionContentOuter] table[class=kmButtonCollectionContent],table[class=kmVerticalButton],table[class=kmVerticalButtonContent]{width:100% !important}td[class=kmButtonCollectionInner]{padding-left:9px !important;padding-right:9px !important;padding-top:9px !important;padding-bottom:0 !important;background-color:transparent !important}td[class=kmVerticalButtonIconContent],td[class=kmVerticalButtonTextContent],td[class=kmVerticalButtonContentOuter]{padding-left:0 !important;padding-right:0 !important;padding-bottom:9px !important}table[class=kmSplitContentLeftContentContainer] td[class=kmTextContent],table[class=kmSplitContentRightContentContainer] td[class=kmTextContent],table[class=kmColumnContainer] td[class=kmTextContent],table[class=kmSplitContentLeftContentContainer] td[class=kmImageContent],table[class=kmSplitContentRightContentContainer] td[class=kmImageContent]{padding-top:9px !important}td[class='rowContainer kmFloatLeft'],td[class='rowContainer kmFloatLeft firstColumn'],td[class='rowContainer kmFloatLeft lastColumn']{float:left;clear:both;width:100% !important}table[id=templateContainer],table[class=templateRow]{max-width:600px !important;width:100% !important}h1{font-size:24px !important;line-height:130% !important}h2{font-size:20px !important;line-height:130% !important}h3{font-size:18px !important;line-height:130% !important}h4{font-size:16px !important;line-height:130% !important}td[class=kmTextContent]{font-size:14px !important;line-height:130% !important}td[class=kmTextBlockInner] td[class=kmTextContent]{padding-right:18px !important;padding-left:18px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner]{padding-left:9px !important;padding-right:9px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner] [class=kmTextContent]{font-size:14px !important;line-height:130% !important;padding-left:4px !important;padding-right:4px !important}}</style></head><body style='margin:0;padding:0;background-color:#c7c7c7'><center><table align='center' border='0' cellpadding='0' cellspacing='0' id='bodyTable' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;background-color:#c7c7c7;height:100%;margin:0;width:100%'><tbody><tr><td align='center' id='bodyCell' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding-top:50px;padding-left:20px;padding-bottom:20px;padding-right:20px;border-top:0;height:100%;margin:0;width:100%'><table border='0' cellpadding='0' cellspacing='0' id='templateContainer' width='600' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;border:1px solid #aaa;background-color:#f4f4f4;border-radius:0'><tbody><tr><td id='templateContainerInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0'><table border='0' cellpadding='0' cellspacing='0' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmImageBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmImageBlockOuter'><tr><td class='kmImageBlockInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:9px;' valign='top'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmImageContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmImageContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;padding-top:0px;padding-bottom:0;padding-left:9px;padding-right:9px;'><img align='left' alt='' class='kmImage' src='https://d3k81ch9hvuctc.cloudfront.net/company%2Fb674Zj%2Fimages%2Fheader_email.jpg' width='564' style='border:0;height:auto;line-height:100%;outline:none;text-decoration:none;padding-bottom:0;display:inline;vertical-align:bottom;margin-right:0;max-width:800px;' /></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmTextBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmTextBlockOuter'><tr><td class='kmTextBlockInner' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmTextContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmTextContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;color:#505050;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;padding-top:9px;padding-bottom:9px;padding-left:18px;padding-right:18px;'><h1 style='color:#222;display:block;font-family:Helvetica, Arial;font-size:26px;font-style:normal;font-weight:bold;line-height:110%;letter-spacing:normal;margin:0;margin-bottom:9px;text-align:left'>Artigo Publicado!</h1><p style='margin:0;padding-bottom:1em'> </p><p style='margin:0;padding-bottom:1em'>O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi publicado. Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!</p><p style='margin:0;padding-bottom:1em'>Abraços,</p><p style='margin:0;padding-bottom:0'>Equipe Gueime</p></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></table></td></tr></tbody></table></td></tr></tbody></table></center></body></html>",
+                                        "text": "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi publicado. Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!",
+                                        "subject": "Gueime - Artigo Publicado",
+                                        "from_email": "parceiros@gueime.com.br",
+                                        "from_name": "Gueime - Parceiros",
+                                        "to": [{
+                                                "email": user.email,
+                                                "name": user.name.first,
+                                                "type": "to"
+                                            },
+                                            {
+                                                "email": "parceiros@gueime.com.br",
+                                                "name": "Parceiros",
+                                                "type": "bcc"
+                                            }],
+                                        "headers": {
+                                            "Reply-To": "parceiros@gueime.com.br"
+                                        },
+                                        "important": false,
+                                        "track_opens": true,
+                                        "track_clicks": true,
+                                        "auto_text": null,
+                                        "auto_html": true,
+                                        "inline_css": null,
+                                        "url_strip_qs": null,
+                                        "preserve_recipients": null,
+                                        "view_content_link": null,
+                                        "return_path_domain": null,
+                                        "tags": [
+                                            "dirMessage"
+                                        ]
+                                    };
+                                    var async = false;
+                                    var ip_pool = "Main Pool";
                                     // Evio de Email
-                                    var smtpTransport = nodemailer.createTransport("SMTP",{
-                                        service: "Hotmail",
-                                        auth: {
-                                            user: "parceiros@gueime.com.br",
-                                            pass: "gueime123"
-                                        }
-                                    });
-
-                                    // setup e-mail data with unicode symbols
-                                    var mailOptions = {
-                                        from: "Gueime <parceiros@gueime.com.br>", // sender address
-                                        to: "André Lucas <parceiros@gueime.com.br>, " + thisCreator.email, // list of receivers
-                                        subject: "Artigo Publicado", // Subject line
-                                        text: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi publicado. Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!", // plaintext body
-                                        html: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi publicado. Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!" // html body
-                                    }
-
-                                    // send mail with defined transport object
-                                    smtpTransport.sendMail(mailOptions, function(error, response){
-                                        if(error){
-                                            console.log(error);
-                                        }else{
-                                            console.log("Message sent: " + response.message);
-                                        }
-
-
-                                        smtpTransport.close(); // shut down the connection pool, no more messages
-
+                                    mandrill_client.messages.send({"message": dirMessage, "async": async, "ip_pool": ip_pool}, function(result) {
+                                        console.log(result);
+                                        // Direciona pro artigo
+                                        res.redirect('/' + b.tipo + 's/' + slug);
+                                    }, function(e) {
+                                        console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
                                         // Direciona pro artigo
                                         res.redirect('/' + b.tipo + 's/' + slug);
                                     });
                                 }
                             });
                         } else{
+                            // Email para artigos enviados para revisão
+                            var revMessage = {
+                                "html": "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta content='text/html; charset=utf-8' http-equiv='Content-Type' /><title></title><style type='text/css'>@media only screen and (max-width:480px){body,table,td,p,a,li,blockquote{-webkit-text-size-adjust:none !important}body{width:100% !important;min-width:100% !important}td[id=bodyCell]{padding:10px !important}table.kmMobileHide{display:none !important}table[class=kmTextContentContainer]{width:100% !important}table[class=kmBoxedTextContentContainer]{width:100% !important}td[class=kmImageContent]{padding-left:0 !important;padding-right:0 !important}img[class=kmImage]{width:100% !important}table[class=kmSplitContentLeftContentContainer],table[class=kmSplitContentRightContentContainer],table[class=kmColumnContainer],td[class=kmVerticalButtonBarContentOuter] table[class=kmButtonBarContent],td[class=kmVerticalButtonCollectionContentOuter] table[class=kmButtonCollectionContent],table[class=kmVerticalButton],table[class=kmVerticalButtonContent]{width:100% !important}td[class=kmButtonCollectionInner]{padding-left:9px !important;padding-right:9px !important;padding-top:9px !important;padding-bottom:0 !important;background-color:transparent !important}td[class=kmVerticalButtonIconContent],td[class=kmVerticalButtonTextContent],td[class=kmVerticalButtonContentOuter]{padding-left:0 !important;padding-right:0 !important;padding-bottom:9px !important}table[class=kmSplitContentLeftContentContainer] td[class=kmTextContent],table[class=kmSplitContentRightContentContainer] td[class=kmTextContent],table[class=kmColumnContainer] td[class=kmTextContent],table[class=kmSplitContentLeftContentContainer] td[class=kmImageContent],table[class=kmSplitContentRightContentContainer] td[class=kmImageContent]{padding-top:9px !important}td[class='rowContainer kmFloatLeft'],td[class='rowContainer kmFloatLeft firstColumn'],td[class='rowContainer kmFloatLeft lastColumn']{float:left;clear:both;width:100% !important}table[id=templateContainer],table[class=templateRow]{max-width:600px !important;width:100% !important}h1{font-size:24px !important;line-height:130% !important}h2{font-size:20px !important;line-height:130% !important}h3{font-size:18px !important;line-height:130% !important}h4{font-size:16px !important;line-height:130% !important}td[class=kmTextContent]{font-size:14px !important;line-height:130% !important}td[class=kmTextBlockInner] td[class=kmTextContent]{padding-right:18px !important;padding-left:18px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner]{padding-left:9px !important;padding-right:9px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner] [class=kmTextContent]{font-size:14px !important;line-height:130% !important;padding-left:4px !important;padding-right:4px !important}}</style></head><body style='margin:0;padding:0;background-color:#c7c7c7'><center><table align='center' border='0' cellpadding='0' cellspacing='0' id='bodyTable' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;background-color:#c7c7c7;height:100%;margin:0;width:100%'><tbody><tr><td align='center' id='bodyCell' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding-top:50px;padding-left:20px;padding-bottom:20px;padding-right:20px;border-top:0;height:100%;margin:0;width:100%'><table border='0' cellpadding='0' cellspacing='0' id='templateContainer' width='600' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;border:1px solid #aaa;background-color:#f4f4f4;border-radius:0'><tbody><tr><td id='templateContainerInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0'><table border='0' cellpadding='0' cellspacing='0' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmImageBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmImageBlockOuter'><tr><td class='kmImageBlockInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:9px;' valign='top'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmImageContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmImageContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;padding-top:0px;padding-bottom:0;padding-left:9px;padding-right:9px;'><img align='left' alt='' class='kmImage' src='https://d3k81ch9hvuctc.cloudfront.net/company%2Fb674Zj%2Fimages%2Fheader_email.jpg' width='564' style='border:0;height:auto;line-height:100%;outline:none;text-decoration:none;padding-bottom:0;display:inline;vertical-align:bottom;margin-right:0;max-width:800px;' /></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmTextBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmTextBlockOuter'><tr><td class='kmTextBlockInner' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmTextContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmTextContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;color:#505050;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;padding-top:9px;padding-bottom:9px;padding-left:18px;padding-right:18px;'><h1 style='color:#222;display:block;font-family:Helvetica, Arial;font-size:26px;font-style:normal;font-weight:bold;line-height:110%;letter-spacing:normal;margin:0;margin-bottom:9px;text-align:left'>Artigo em Revisão!</h1><p style='margin:0;padding-bottom:1em'> </p><p style='margin:0;padding-bottom:1em'>Obrigado pelo envio do texto " + b.docTitle.replace('<p>', '').replace('</p>', '') + ". Em breve um de nossos editores irá avaliá-lo e ou o publicará ou retornará com comentários e correções. Enquanto isso, aproveite para ler mais alguns textos excelentes do Gueime!</p><p style='margin:0;padding-bottom:1em'>Abraços,</p><p style='margin:0;padding-bottom:0'>Equipe Gueime</p></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></table></td></tr></tbody></table></td></tr></tbody></table></center></body></html>",
+                                "text": "Obrigado pelo envio do texto " + b.docTitle.replace('<p>', '').replace('</p>', '') + ". Em breve um de nossos editores irá avaliá-lo e ou o publicará ou retornará com comentários e correções. Enquanto isso, aproveite para ler mais alguns textos excelentes do Gueime!",
+                                "subject": "Gueime - Artigo em Revisão",
+                                "from_email": "parceiros@gueime.com.br",
+                                "from_name": "Gueime - Parceiros",
+                                "to": [{
+                                        "email": user.email,
+                                        "name": user.name.first,
+                                        "type": "to"
+                                    },
+                                    {
+                                        "email": "parceiros@gueime.com.br",
+                                        "name": "Parceiros",
+                                        "type": "bcc"
+                                    }],
+                                "headers": {
+                                    "Reply-To": "parceiros@gueime.com.br"
+                                },
+                                "important": false,
+                                "track_opens": true,
+                                "track_clicks": true,
+                                "auto_text": null,
+                                "auto_html": true,
+                                "inline_css": null,
+                                "url_strip_qs": null,
+                                "preserve_recipients": null,
+                                "view_content_link": null,
+                                "return_path_domain": null,
+                                "tags": [
+                                    "revMessage"
+                                ]
+                            };
+                            var async = false;
+                            var ip_pool = "Main Pool";
                             // Evio de Email
-                            var smtpTransport = nodemailer.createTransport("SMTP",{
-                                service: "Hotmail",
-                                auth: {
-                                    user: "parceiros@gueime.com.br",
-                                    pass: "gueime123"
-                                }
-                            });
-
-                            // setup e-mail data with unicode symbols
-                            var mailOptions = {
-                                from: "Gueime <parceiros@gueime.com.br>", // sender address
-                                to: "André Lucas <parceiros@gueime.com.br>, " + user.email, // list of receivers
-                                subject: "Artigo enviado para revisão", // Subject line
-                                text: "Obrigado pelo envio do texto " + b.docTitle.replace('<p>', '').replace('</p>', '') + ". Em breve um de nossos editores irá avaliá-lo e ou o publicará ou retornará com comentários e correções. Enquanto isso, aproveite para ler mais alguns textos excelentes do Gueime!", // plaintext body
-                                html: "Obrigado pelo envio do texto " + b.docTitle.replace('<p>', '').replace('</p>', '') + ". Em breve um de nossos editores irá avaliá-lo e ou o publicará ou retornará com comentários e correções. Enquanto isso, aproveite para ler mais alguns textos excelentes do Gueime!" // html body
-                            }
-
-                            // send mail with defined transport object
-                            smtpTransport.sendMail(mailOptions, function(error, response){
-                                if(error){
-                                    console.log(error);
-                                }else{
-                                    console.log("Message sent: " + response.message);
-                                }
-
-
-                                smtpTransport.close(); // shut down the connection pool, no more messages
-
+                            mandrill_client.messages.send({"message": revMessage, "async": async, "ip_pool": ip_pool}, function(result) {
+                                console.log(result);
+                                // Direciona pro artigo
+                                res.redirect('/' + b.tipo + 's/' + slug);
+                            }, function(e) {
+                                console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
                                 // Manda pra revisão
                                 res.redirect('/?status=revision');
                             });
@@ -1470,105 +1566,152 @@ module.exports = function (app, passport, mongoose) {
                                         res.redirect('/' + b.tipo + 's/' + slug);
                                     } else {
                                         Users.update({_id: user._id}, {$inc: {'gamification.points': 30, 'graph.revisions': 1}, $addToSet: {'graph.revisionCol': art._id}}, function(err){
-                                             // Evio de Email
-                                            var smtpTransport = nodemailer.createTransport("SMTP",{
-                                                service: "Hotmail",
-                                                auth: {
-                                                    user: "parceiros@gueime.com.br",
-                                                    pass: "gueime123"
-                                                }
-                                            });
-
-                                            // setup e-mail data with unicode symbols
-                                            var mailOptions = {
-                                                from: "Gueime <parceiros@gueime.com.br>", // sender address
-                                                to: "André Lucas <parceiros@gueime.com.br>, " + thisCreator.email, // list of receivers
-                                                subject: "Artigo Revisado e Publicado", // Subject line
-                                                text: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi revisado por " + user.name.first + " " + user.name.last + ". Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!", // plaintext body
-                                                html: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi revisado por " + user.name.first + " " + user.name.last + ". Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!" // html body
-                                            }
-
-                                            // send mail with defined transport object
-                                            smtpTransport.sendMail(mailOptions, function(error, response){
-                                                if(error){
-                                                    console.log(error);
-                                                }else{
-                                                    console.log("Message sent: " + response.message);
-                                                }
-
-
-                                                smtpTransport.close(); // shut down the connection pool, no more messages
-
+                                            // Email enviado para artigos revisados e publicados
+                                            var pubMessage = {
+                                                "html": "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta content='text/html; charset=utf-8' http-equiv='Content-Type' /><title></title><style type='text/css'>@media only screen and (max-width:480px){body,table,td,p,a,li,blockquote{-webkit-text-size-adjust:none !important}body{width:100% !important;min-width:100% !important}td[id=bodyCell]{padding:10px !important}table.kmMobileHide{display:none !important}table[class=kmTextContentContainer]{width:100% !important}table[class=kmBoxedTextContentContainer]{width:100% !important}td[class=kmImageContent]{padding-left:0 !important;padding-right:0 !important}img[class=kmImage]{width:100% !important}table[class=kmSplitContentLeftContentContainer],table[class=kmSplitContentRightContentContainer],table[class=kmColumnContainer],td[class=kmVerticalButtonBarContentOuter] table[class=kmButtonBarContent],td[class=kmVerticalButtonCollectionContentOuter] table[class=kmButtonCollectionContent],table[class=kmVerticalButton],table[class=kmVerticalButtonContent]{width:100% !important}td[class=kmButtonCollectionInner]{padding-left:9px !important;padding-right:9px !important;padding-top:9px !important;padding-bottom:0 !important;background-color:transparent !important}td[class=kmVerticalButtonIconContent],td[class=kmVerticalButtonTextContent],td[class=kmVerticalButtonContentOuter]{padding-left:0 !important;padding-right:0 !important;padding-bottom:9px !important}table[class=kmSplitContentLeftContentContainer] td[class=kmTextContent],table[class=kmSplitContentRightContentContainer] td[class=kmTextContent],table[class=kmColumnContainer] td[class=kmTextContent],table[class=kmSplitContentLeftContentContainer] td[class=kmImageContent],table[class=kmSplitContentRightContentContainer] td[class=kmImageContent]{padding-top:9px !important}td[class='rowContainer kmFloatLeft'],td[class='rowContainer kmFloatLeft firstColumn'],td[class='rowContainer kmFloatLeft lastColumn']{float:left;clear:both;width:100% !important}table[id=templateContainer],table[class=templateRow]{max-width:600px !important;width:100% !important}h1{font-size:24px !important;line-height:130% !important}h2{font-size:20px !important;line-height:130% !important}h3{font-size:18px !important;line-height:130% !important}h4{font-size:16px !important;line-height:130% !important}td[class=kmTextContent]{font-size:14px !important;line-height:130% !important}td[class=kmTextBlockInner] td[class=kmTextContent]{padding-right:18px !important;padding-left:18px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner]{padding-left:9px !important;padding-right:9px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner] [class=kmTextContent]{font-size:14px !important;line-height:130% !important;padding-left:4px !important;padding-right:4px !important}}</style></head><body style='margin:0;padding:0;background-color:#c7c7c7'><center><table align='center' border='0' cellpadding='0' cellspacing='0' id='bodyTable' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;background-color:#c7c7c7;height:100%;margin:0;width:100%'><tbody><tr><td align='center' id='bodyCell' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding-top:50px;padding-left:20px;padding-bottom:20px;padding-right:20px;border-top:0;height:100%;margin:0;width:100%'><table border='0' cellpadding='0' cellspacing='0' id='templateContainer' width='600' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;border:1px solid #aaa;background-color:#f4f4f4;border-radius:0'><tbody><tr><td id='templateContainerInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0'><table border='0' cellpadding='0' cellspacing='0' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmImageBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmImageBlockOuter'><tr><td class='kmImageBlockInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:9px;' valign='top'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmImageContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmImageContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;padding-top:0px;padding-bottom:0;padding-left:9px;padding-right:9px;'><img align='left' alt='' class='kmImage' src='https://d3k81ch9hvuctc.cloudfront.net/company%2Fb674Zj%2Fimages%2Fheader_email.jpg' width='564' style='border:0;height:auto;line-height:100%;outline:none;text-decoration:none;padding-bottom:0;display:inline;vertical-align:bottom;margin-right:0;max-width:800px;' /></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmTextBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmTextBlockOuter'><tr><td class='kmTextBlockInner' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmTextContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmTextContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;color:#505050;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;padding-top:9px;padding-bottom:9px;padding-left:18px;padding-right:18px;'><h1 style='color:#222;display:block;font-family:Helvetica, Arial;font-size:26px;font-style:normal;font-weight:bold;line-height:110%;letter-spacing:normal;margin:0;margin-bottom:9px;text-align:left'>Artigo Revisado e Publicado!</h1><p style='margin:0;padding-bottom:1em'> </p><p style='margin:0;padding-bottom:1em'>O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi revisado por " + user.name.first + " " + user.name.last + ". Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!</p><p style='margin:0;padding-bottom:1em'>Abraços,</p><p style='margin:0;padding-bottom:0'>Equipe Gueime</p></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></table></td></tr></tbody></table></td></tr></tbody></table></center></body></html>",
+                                                "text": "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi revisado por " + user.name.first + " " + user.name.last + ". Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!",
+                                                "subject": "Gueime - Artigo Revisado e Publicado",
+                                                "from_email": "parceiros@gueime.com.br",
+                                                "from_name": "Gueime - Parceiros",
+                                                "to": [{
+                                                        "email": user.email,
+                                                        "name": user.name.first,
+                                                        "type": "to"
+                                                    },
+                                                    {
+                                                        "email": criador.email,
+                                                        "name": criador.name.first,
+                                                        "type": "to"
+                                                    },
+                                                    {
+                                                        "email": "parceiros@gueime.com.br",
+                                                        "name": "Parceiros",
+                                                        "type": "bcc"
+                                                    }],
+                                                "headers": {
+                                                    "Reply-To": "parceiros@gueime.com.br"
+                                                },
+                                                "important": false,
+                                                "track_opens": true,
+                                                "track_clicks": true,
+                                                "auto_text": null,
+                                                "auto_html": true,
+                                                "inline_css": null,
+                                                "url_strip_qs": null,
+                                                "preserve_recipients": null,
+                                                "view_content_link": null,
+                                                "return_path_domain": null,
+                                                "tags": [
+                                                    "pubMessage"
+                                                ]
+                                            };
+                                            var async = false;
+                                            var ip_pool = "Main Pool";
+                                            // Evio de Email
+                                            mandrill_client.messages.send({"message": pubMessage, "async": async, "ip_pool": ip_pool}, function(result) {
+                                                console.log(result);
+                                                // Direciona pro artigo
+                                                res.redirect('/' + b.tipo + 's/' + slug);
+                                            }, function(e) {
+                                                console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
                                                 // Direciona pro artigo
                                                 res.redirect('/' + b.tipo + 's/' + slug);
                                             });
                                         });
                                     }
                                 } else {
+                                    // Email para artigos publicados diretametne
+                                    var dirMessage = {
+                                        "html": "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta content='text/html; charset=utf-8' http-equiv='Content-Type' /><title></title><style type='text/css'>@media only screen and (max-width:480px){body,table,td,p,a,li,blockquote{-webkit-text-size-adjust:none !important}body{width:100% !important;min-width:100% !important}td[id=bodyCell]{padding:10px !important}table.kmMobileHide{display:none !important}table[class=kmTextContentContainer]{width:100% !important}table[class=kmBoxedTextContentContainer]{width:100% !important}td[class=kmImageContent]{padding-left:0 !important;padding-right:0 !important}img[class=kmImage]{width:100% !important}table[class=kmSplitContentLeftContentContainer],table[class=kmSplitContentRightContentContainer],table[class=kmColumnContainer],td[class=kmVerticalButtonBarContentOuter] table[class=kmButtonBarContent],td[class=kmVerticalButtonCollectionContentOuter] table[class=kmButtonCollectionContent],table[class=kmVerticalButton],table[class=kmVerticalButtonContent]{width:100% !important}td[class=kmButtonCollectionInner]{padding-left:9px !important;padding-right:9px !important;padding-top:9px !important;padding-bottom:0 !important;background-color:transparent !important}td[class=kmVerticalButtonIconContent],td[class=kmVerticalButtonTextContent],td[class=kmVerticalButtonContentOuter]{padding-left:0 !important;padding-right:0 !important;padding-bottom:9px !important}table[class=kmSplitContentLeftContentContainer] td[class=kmTextContent],table[class=kmSplitContentRightContentContainer] td[class=kmTextContent],table[class=kmColumnContainer] td[class=kmTextContent],table[class=kmSplitContentLeftContentContainer] td[class=kmImageContent],table[class=kmSplitContentRightContentContainer] td[class=kmImageContent]{padding-top:9px !important}td[class='rowContainer kmFloatLeft'],td[class='rowContainer kmFloatLeft firstColumn'],td[class='rowContainer kmFloatLeft lastColumn']{float:left;clear:both;width:100% !important}table[id=templateContainer],table[class=templateRow]{max-width:600px !important;width:100% !important}h1{font-size:24px !important;line-height:130% !important}h2{font-size:20px !important;line-height:130% !important}h3{font-size:18px !important;line-height:130% !important}h4{font-size:16px !important;line-height:130% !important}td[class=kmTextContent]{font-size:14px !important;line-height:130% !important}td[class=kmTextBlockInner] td[class=kmTextContent]{padding-right:18px !important;padding-left:18px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner]{padding-left:9px !important;padding-right:9px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner] [class=kmTextContent]{font-size:14px !important;line-height:130% !important;padding-left:4px !important;padding-right:4px !important}}</style></head><body style='margin:0;padding:0;background-color:#c7c7c7'><center><table align='center' border='0' cellpadding='0' cellspacing='0' id='bodyTable' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;background-color:#c7c7c7;height:100%;margin:0;width:100%'><tbody><tr><td align='center' id='bodyCell' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding-top:50px;padding-left:20px;padding-bottom:20px;padding-right:20px;border-top:0;height:100%;margin:0;width:100%'><table border='0' cellpadding='0' cellspacing='0' id='templateContainer' width='600' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;border:1px solid #aaa;background-color:#f4f4f4;border-radius:0'><tbody><tr><td id='templateContainerInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0'><table border='0' cellpadding='0' cellspacing='0' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmImageBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmImageBlockOuter'><tr><td class='kmImageBlockInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:9px;' valign='top'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmImageContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmImageContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;padding-top:0px;padding-bottom:0;padding-left:9px;padding-right:9px;'><img align='left' alt='' class='kmImage' src='https://d3k81ch9hvuctc.cloudfront.net/company%2Fb674Zj%2Fimages%2Fheader_email.jpg' width='564' style='border:0;height:auto;line-height:100%;outline:none;text-decoration:none;padding-bottom:0;display:inline;vertical-align:bottom;margin-right:0;max-width:800px;' /></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmTextBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmTextBlockOuter'><tr><td class='kmTextBlockInner' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmTextContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmTextContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;color:#505050;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;padding-top:9px;padding-bottom:9px;padding-left:18px;padding-right:18px;'><h1 style='color:#222;display:block;font-family:Helvetica, Arial;font-size:26px;font-style:normal;font-weight:bold;line-height:110%;letter-spacing:normal;margin:0;margin-bottom:9px;text-align:left'>Artigo Publicado!</h1><p style='margin:0;padding-bottom:1em'> </p><p style='margin:0;padding-bottom:1em'>O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi publicado. Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!</p><p style='margin:0;padding-bottom:1em'>Abraços,</p><p style='margin:0;padding-bottom:0'>Equipe Gueime</p></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></table></td></tr></tbody></table></td></tr></tbody></table></center></body></html>",
+                                        "text": "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi publicado. Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!",
+                                        "subject": "Gueime - Artigo Publicado",
+                                        "from_email": "parceiros@gueime.com.br",
+                                        "from_name": "Gueime - Parceiros",
+                                        "to": [{
+                                                "email": user.email,
+                                                "name": user.name.first,
+                                                "type": "to"
+                                            },
+                                            {
+                                                "email": "parceiros@gueime.com.br",
+                                                "name": "Parceiros",
+                                                "type": "bcc"
+                                            }],
+                                        "headers": {
+                                            "Reply-To": "parceiros@gueime.com.br"
+                                        },
+                                        "important": false,
+                                        "track_opens": true,
+                                        "track_clicks": true,
+                                        "auto_text": null,
+                                        "auto_html": true,
+                                        "inline_css": null,
+                                        "url_strip_qs": null,
+                                        "preserve_recipients": null,
+                                        "view_content_link": null,
+                                        "return_path_domain": null,
+                                        "tags": [
+                                            "dirMessage"
+                                        ]
+                                    };
+                                    var async = false;
+                                    var ip_pool = "Main Pool";
                                     // Evio de Email
-                                    var smtpTransport = nodemailer.createTransport("SMTP",{
-                                        service: "Hotmail",
-                                        auth: {
-                                            user: "parceiros@gueime.com.br",
-                                            pass: "gueime123"
-                                        }
-                                    });
-
-                                    // setup e-mail data with unicode symbols
-                                    var mailOptions = {
-                                        from: "Gueime <parceiros@gueime.com.br>", // sender address
-                                        to: "André Lucas <parceiros@gueime.com.br>, " + thisCreator.email, // list of receivers
-                                        subject: "Artigo Publicado", // Subject line
-                                        text: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi publicado. Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!", // plaintext body
-                                        html: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi publicado. Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!" // html body
-                                    }
-
-                                    // send mail with defined transport object
-                                    smtpTransport.sendMail(mailOptions, function(error, response){
-                                        if(error){
-                                            console.log(error);
-                                        }else{
-                                            console.log("Message sent: " + response.message);
-                                        }
-
-
-                                        smtpTransport.close(); // shut down the connection pool, no more messages
-
+                                    mandrill_client.messages.send({"message": dirMessage, "async": async, "ip_pool": ip_pool}, function(result) {
+                                        console.log(result);
+                                        // Direciona pro artigo
+                                        res.redirect('/' + b.tipo + 's/' + slug);
+                                    }, function(e) {
+                                        console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
                                         // Direciona pro artigo
                                         res.redirect('/' + b.tipo + 's/' + slug);
                                     });
                                 }
                             });
                         } else{
+                            // Email para artigos enviados para revisão
+                            var revMessage = {
+                                "html": "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta content='text/html; charset=utf-8' http-equiv='Content-Type' /><title></title><style type='text/css'>@media only screen and (max-width:480px){body,table,td,p,a,li,blockquote{-webkit-text-size-adjust:none !important}body{width:100% !important;min-width:100% !important}td[id=bodyCell]{padding:10px !important}table.kmMobileHide{display:none !important}table[class=kmTextContentContainer]{width:100% !important}table[class=kmBoxedTextContentContainer]{width:100% !important}td[class=kmImageContent]{padding-left:0 !important;padding-right:0 !important}img[class=kmImage]{width:100% !important}table[class=kmSplitContentLeftContentContainer],table[class=kmSplitContentRightContentContainer],table[class=kmColumnContainer],td[class=kmVerticalButtonBarContentOuter] table[class=kmButtonBarContent],td[class=kmVerticalButtonCollectionContentOuter] table[class=kmButtonCollectionContent],table[class=kmVerticalButton],table[class=kmVerticalButtonContent]{width:100% !important}td[class=kmButtonCollectionInner]{padding-left:9px !important;padding-right:9px !important;padding-top:9px !important;padding-bottom:0 !important;background-color:transparent !important}td[class=kmVerticalButtonIconContent],td[class=kmVerticalButtonTextContent],td[class=kmVerticalButtonContentOuter]{padding-left:0 !important;padding-right:0 !important;padding-bottom:9px !important}table[class=kmSplitContentLeftContentContainer] td[class=kmTextContent],table[class=kmSplitContentRightContentContainer] td[class=kmTextContent],table[class=kmColumnContainer] td[class=kmTextContent],table[class=kmSplitContentLeftContentContainer] td[class=kmImageContent],table[class=kmSplitContentRightContentContainer] td[class=kmImageContent]{padding-top:9px !important}td[class='rowContainer kmFloatLeft'],td[class='rowContainer kmFloatLeft firstColumn'],td[class='rowContainer kmFloatLeft lastColumn']{float:left;clear:both;width:100% !important}table[id=templateContainer],table[class=templateRow]{max-width:600px !important;width:100% !important}h1{font-size:24px !important;line-height:130% !important}h2{font-size:20px !important;line-height:130% !important}h3{font-size:18px !important;line-height:130% !important}h4{font-size:16px !important;line-height:130% !important}td[class=kmTextContent]{font-size:14px !important;line-height:130% !important}td[class=kmTextBlockInner] td[class=kmTextContent]{padding-right:18px !important;padding-left:18px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner]{padding-left:9px !important;padding-right:9px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner] [class=kmTextContent]{font-size:14px !important;line-height:130% !important;padding-left:4px !important;padding-right:4px !important}}</style></head><body style='margin:0;padding:0;background-color:#c7c7c7'><center><table align='center' border='0' cellpadding='0' cellspacing='0' id='bodyTable' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;background-color:#c7c7c7;height:100%;margin:0;width:100%'><tbody><tr><td align='center' id='bodyCell' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding-top:50px;padding-left:20px;padding-bottom:20px;padding-right:20px;border-top:0;height:100%;margin:0;width:100%'><table border='0' cellpadding='0' cellspacing='0' id='templateContainer' width='600' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;border:1px solid #aaa;background-color:#f4f4f4;border-radius:0'><tbody><tr><td id='templateContainerInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0'><table border='0' cellpadding='0' cellspacing='0' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmImageBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmImageBlockOuter'><tr><td class='kmImageBlockInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:9px;' valign='top'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmImageContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmImageContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;padding-top:0px;padding-bottom:0;padding-left:9px;padding-right:9px;'><img align='left' alt='' class='kmImage' src='https://d3k81ch9hvuctc.cloudfront.net/company%2Fb674Zj%2Fimages%2Fheader_email.jpg' width='564' style='border:0;height:auto;line-height:100%;outline:none;text-decoration:none;padding-bottom:0;display:inline;vertical-align:bottom;margin-right:0;max-width:800px;' /></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmTextBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmTextBlockOuter'><tr><td class='kmTextBlockInner' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmTextContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmTextContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;color:#505050;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;padding-top:9px;padding-bottom:9px;padding-left:18px;padding-right:18px;'><h1 style='color:#222;display:block;font-family:Helvetica, Arial;font-size:26px;font-style:normal;font-weight:bold;line-height:110%;letter-spacing:normal;margin:0;margin-bottom:9px;text-align:left'>Artigo em Revisão!</h1><p style='margin:0;padding-bottom:1em'> </p><p style='margin:0;padding-bottom:1em'>Obrigado pelo envio do texto " + b.docTitle.replace('<p>', '').replace('</p>', '') + ". Em breve um de nossos editores irá avaliá-lo e ou o publicará ou retornará com comentários e correções. Enquanto isso, aproveite para ler mais alguns textos excelentes do Gueime!</p><p style='margin:0;padding-bottom:1em'>Abraços,</p><p style='margin:0;padding-bottom:0'>Equipe Gueime</p></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></table></td></tr></tbody></table></td></tr></tbody></table></center></body></html>",
+                                "text": "Obrigado pelo envio do texto " + b.docTitle.replace('<p>', '').replace('</p>', '') + ". Em breve um de nossos editores irá avaliá-lo e ou o publicará ou retornará com comentários e correções. Enquanto isso, aproveite para ler mais alguns textos excelentes do Gueime!",
+                                "subject": "Gueime - Artigo em Revisão",
+                                "from_email": "parceiros@gueime.com.br",
+                                "from_name": "Gueime - Parceiros",
+                                "to": [{
+                                        "email": user.email,
+                                        "name": user.name.first,
+                                        "type": "to"
+                                    },
+                                    {
+                                        "email": "parceiros@gueime.com.br",
+                                        "name": "Parceiros",
+                                        "type": "bcc"
+                                    }],
+                                "headers": {
+                                    "Reply-To": "parceiros@gueime.com.br"
+                                },
+                                "important": false,
+                                "track_opens": true,
+                                "track_clicks": true,
+                                "auto_text": null,
+                                "auto_html": true,
+                                "inline_css": null,
+                                "url_strip_qs": null,
+                                "preserve_recipients": null,
+                                "view_content_link": null,
+                                "return_path_domain": null,
+                                "tags": [
+                                    "revMessage"
+                                ]
+                            };
+                            var async = false;
+                            var ip_pool = "Main Pool";
                             // Evio de Email
-                            var smtpTransport = nodemailer.createTransport("SMTP",{
-                                service: "Hotmail",
-                                auth: {
-                                    user: "parceiros@gueime.com.br",
-                                    pass: "gueime123"
-                                }
-                            });
-
-                            // setup e-mail data with unicode symbols
-                            var mailOptions = {
-                                from: "Gueime <parceiros@gueime.com.br>", // sender address
-                                to: "André Lucas <parceiros@gueime.com.br>, " + user.email, // list of receivers
-                                subject: "Artigo enviado para revisão", // Subject line
-                                text: "Obrigado pelo envio do texto " + b.docTitle.replace('<p>', '').replace('</p>', '') + ". Em breve um de nossos editores irá avaliá-lo e ou o publicará ou retornará com comentários e correções. Enquanto isso, aproveite para ler mais alguns textos excelentes do Gueime!", // plaintext body
-                                html: "Obrigado pelo envio do texto " + b.docTitle.replace('<p>', '').replace('</p>', '') + ". Em breve um de nossos editores irá avaliá-lo e ou o publicará ou retornará com comentários e correções. Enquanto isso, aproveite para ler mais alguns textos excelentes do Gueime!" // html body
-                            }
-
-                            // send mail with defined transport object
-                            smtpTransport.sendMail(mailOptions, function(error, response){
-                                if(error){
-                                    console.log(error);
-                                }else{
-                                    console.log("Message sent: " + response.message);
-                                }
-
-
-                                smtpTransport.close(); // shut down the connection pool, no more messages
-
+                            mandrill_client.messages.send({"message": revMessage, "async": async, "ip_pool": ip_pool}, function(result) {
+                                console.log(result);
+                                // Direciona pro artigo
+                                res.redirect('/' + b.tipo + 's/' + slug);
+                            }, function(e) {
+                                console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
                                 // Manda pra revisão
                                 res.redirect('/?status=revision');
                             });
@@ -1616,105 +1759,152 @@ module.exports = function (app, passport, mongoose) {
                                         res.redirect('/' + b.tipo + 's/' + slug);
                                     } else {
                                         Users.update({_id: user._id}, {$inc: {'gamification.points': 30, 'graph.revisions': 1}, $addToSet: {'graph.revisionCol': art._id}}, function(err){
-                                             // Evio de Email
-                                            var smtpTransport = nodemailer.createTransport("SMTP",{
-                                                service: "Hotmail",
-                                                auth: {
-                                                    user: "parceiros@gueime.com.br",
-                                                    pass: "gueime123"
-                                                }
-                                            });
-
-                                            // setup e-mail data with unicode symbols
-                                            var mailOptions = {
-                                                from: "Gueime <parceiros@gueime.com.br>", // sender address
-                                                to: "André Lucas <parceiros@gueime.com.br>, " + thisCreator.email, // list of receivers
-                                                subject: "Artigo Revisado e Publicado", // Subject line
-                                                text: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi revisado por " + user.name.first + " " + user.name.last + ". Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!", // plaintext body
-                                                html: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi revisado por " + user.name.first + " " + user.name.last + ". Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!" // html body
-                                            }
-
-                                            // send mail with defined transport object
-                                            smtpTransport.sendMail(mailOptions, function(error, response){
-                                                if(error){
-                                                    console.log(error);
-                                                }else{
-                                                    console.log("Message sent: " + response.message);
-                                                }
-
-
-                                                smtpTransport.close(); // shut down the connection pool, no more messages
-
+                                            // Email enviado para artigos revisados e publicados
+                                            var pubMessage = {
+                                                "html": "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta content='text/html; charset=utf-8' http-equiv='Content-Type' /><title></title><style type='text/css'>@media only screen and (max-width:480px){body,table,td,p,a,li,blockquote{-webkit-text-size-adjust:none !important}body{width:100% !important;min-width:100% !important}td[id=bodyCell]{padding:10px !important}table.kmMobileHide{display:none !important}table[class=kmTextContentContainer]{width:100% !important}table[class=kmBoxedTextContentContainer]{width:100% !important}td[class=kmImageContent]{padding-left:0 !important;padding-right:0 !important}img[class=kmImage]{width:100% !important}table[class=kmSplitContentLeftContentContainer],table[class=kmSplitContentRightContentContainer],table[class=kmColumnContainer],td[class=kmVerticalButtonBarContentOuter] table[class=kmButtonBarContent],td[class=kmVerticalButtonCollectionContentOuter] table[class=kmButtonCollectionContent],table[class=kmVerticalButton],table[class=kmVerticalButtonContent]{width:100% !important}td[class=kmButtonCollectionInner]{padding-left:9px !important;padding-right:9px !important;padding-top:9px !important;padding-bottom:0 !important;background-color:transparent !important}td[class=kmVerticalButtonIconContent],td[class=kmVerticalButtonTextContent],td[class=kmVerticalButtonContentOuter]{padding-left:0 !important;padding-right:0 !important;padding-bottom:9px !important}table[class=kmSplitContentLeftContentContainer] td[class=kmTextContent],table[class=kmSplitContentRightContentContainer] td[class=kmTextContent],table[class=kmColumnContainer] td[class=kmTextContent],table[class=kmSplitContentLeftContentContainer] td[class=kmImageContent],table[class=kmSplitContentRightContentContainer] td[class=kmImageContent]{padding-top:9px !important}td[class='rowContainer kmFloatLeft'],td[class='rowContainer kmFloatLeft firstColumn'],td[class='rowContainer kmFloatLeft lastColumn']{float:left;clear:both;width:100% !important}table[id=templateContainer],table[class=templateRow]{max-width:600px !important;width:100% !important}h1{font-size:24px !important;line-height:130% !important}h2{font-size:20px !important;line-height:130% !important}h3{font-size:18px !important;line-height:130% !important}h4{font-size:16px !important;line-height:130% !important}td[class=kmTextContent]{font-size:14px !important;line-height:130% !important}td[class=kmTextBlockInner] td[class=kmTextContent]{padding-right:18px !important;padding-left:18px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner]{padding-left:9px !important;padding-right:9px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner] [class=kmTextContent]{font-size:14px !important;line-height:130% !important;padding-left:4px !important;padding-right:4px !important}}</style></head><body style='margin:0;padding:0;background-color:#c7c7c7'><center><table align='center' border='0' cellpadding='0' cellspacing='0' id='bodyTable' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;background-color:#c7c7c7;height:100%;margin:0;width:100%'><tbody><tr><td align='center' id='bodyCell' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding-top:50px;padding-left:20px;padding-bottom:20px;padding-right:20px;border-top:0;height:100%;margin:0;width:100%'><table border='0' cellpadding='0' cellspacing='0' id='templateContainer' width='600' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;border:1px solid #aaa;background-color:#f4f4f4;border-radius:0'><tbody><tr><td id='templateContainerInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0'><table border='0' cellpadding='0' cellspacing='0' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmImageBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmImageBlockOuter'><tr><td class='kmImageBlockInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:9px;' valign='top'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmImageContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmImageContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;padding-top:0px;padding-bottom:0;padding-left:9px;padding-right:9px;'><img align='left' alt='' class='kmImage' src='https://d3k81ch9hvuctc.cloudfront.net/company%2Fb674Zj%2Fimages%2Fheader_email.jpg' width='564' style='border:0;height:auto;line-height:100%;outline:none;text-decoration:none;padding-bottom:0;display:inline;vertical-align:bottom;margin-right:0;max-width:800px;' /></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmTextBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmTextBlockOuter'><tr><td class='kmTextBlockInner' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmTextContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmTextContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;color:#505050;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;padding-top:9px;padding-bottom:9px;padding-left:18px;padding-right:18px;'><h1 style='color:#222;display:block;font-family:Helvetica, Arial;font-size:26px;font-style:normal;font-weight:bold;line-height:110%;letter-spacing:normal;margin:0;margin-bottom:9px;text-align:left'>Artigo Revisado e Publicado!</h1><p style='margin:0;padding-bottom:1em'> </p><p style='margin:0;padding-bottom:1em'>O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi revisado por " + user.name.first + " " + user.name.last + ". Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!</p><p style='margin:0;padding-bottom:1em'>Abraços,</p><p style='margin:0;padding-bottom:0'>Equipe Gueime</p></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></table></td></tr></tbody></table></td></tr></tbody></table></center></body></html>",
+                                                "text": "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi revisado por " + user.name.first + " " + user.name.last + ". Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!",
+                                                "subject": "Gueime - Artigo Revisado e Publicado",
+                                                "from_email": "parceiros@gueime.com.br",
+                                                "from_name": "Gueime - Parceiros",
+                                                "to": [{
+                                                        "email": user.email,
+                                                        "name": user.name.first,
+                                                        "type": "to"
+                                                    },
+                                                    {
+                                                        "email": criador.email,
+                                                        "name": criador.name.first,
+                                                        "type": "to"
+                                                    },
+                                                    {
+                                                        "email": "parceiros@gueime.com.br",
+                                                        "name": "Parceiros",
+                                                        "type": "bcc"
+                                                    }],
+                                                "headers": {
+                                                    "Reply-To": "parceiros@gueime.com.br"
+                                                },
+                                                "important": false,
+                                                "track_opens": true,
+                                                "track_clicks": true,
+                                                "auto_text": null,
+                                                "auto_html": true,
+                                                "inline_css": null,
+                                                "url_strip_qs": null,
+                                                "preserve_recipients": null,
+                                                "view_content_link": null,
+                                                "return_path_domain": null,
+                                                "tags": [
+                                                    "pubMessage"
+                                                ]
+                                            };
+                                            var async = false;
+                                            var ip_pool = "Main Pool";
+                                            // Evio de Email
+                                            mandrill_client.messages.send({"message": pubMessage, "async": async, "ip_pool": ip_pool}, function(result) {
+                                                console.log(result);
+                                                // Direciona pro artigo
+                                                res.redirect('/' + b.tipo + 's/' + slug);
+                                            }, function(e) {
+                                                console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
                                                 // Direciona pro artigo
                                                 res.redirect('/' + b.tipo + 's/' + slug);
                                             });
                                         });
                                     }
                                 } else {
+                                    // Email para artigos publicados diretametne
+                                    var dirMessage = {
+                                        "html": "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta content='text/html; charset=utf-8' http-equiv='Content-Type' /><title></title><style type='text/css'>@media only screen and (max-width:480px){body,table,td,p,a,li,blockquote{-webkit-text-size-adjust:none !important}body{width:100% !important;min-width:100% !important}td[id=bodyCell]{padding:10px !important}table.kmMobileHide{display:none !important}table[class=kmTextContentContainer]{width:100% !important}table[class=kmBoxedTextContentContainer]{width:100% !important}td[class=kmImageContent]{padding-left:0 !important;padding-right:0 !important}img[class=kmImage]{width:100% !important}table[class=kmSplitContentLeftContentContainer],table[class=kmSplitContentRightContentContainer],table[class=kmColumnContainer],td[class=kmVerticalButtonBarContentOuter] table[class=kmButtonBarContent],td[class=kmVerticalButtonCollectionContentOuter] table[class=kmButtonCollectionContent],table[class=kmVerticalButton],table[class=kmVerticalButtonContent]{width:100% !important}td[class=kmButtonCollectionInner]{padding-left:9px !important;padding-right:9px !important;padding-top:9px !important;padding-bottom:0 !important;background-color:transparent !important}td[class=kmVerticalButtonIconContent],td[class=kmVerticalButtonTextContent],td[class=kmVerticalButtonContentOuter]{padding-left:0 !important;padding-right:0 !important;padding-bottom:9px !important}table[class=kmSplitContentLeftContentContainer] td[class=kmTextContent],table[class=kmSplitContentRightContentContainer] td[class=kmTextContent],table[class=kmColumnContainer] td[class=kmTextContent],table[class=kmSplitContentLeftContentContainer] td[class=kmImageContent],table[class=kmSplitContentRightContentContainer] td[class=kmImageContent]{padding-top:9px !important}td[class='rowContainer kmFloatLeft'],td[class='rowContainer kmFloatLeft firstColumn'],td[class='rowContainer kmFloatLeft lastColumn']{float:left;clear:both;width:100% !important}table[id=templateContainer],table[class=templateRow]{max-width:600px !important;width:100% !important}h1{font-size:24px !important;line-height:130% !important}h2{font-size:20px !important;line-height:130% !important}h3{font-size:18px !important;line-height:130% !important}h4{font-size:16px !important;line-height:130% !important}td[class=kmTextContent]{font-size:14px !important;line-height:130% !important}td[class=kmTextBlockInner] td[class=kmTextContent]{padding-right:18px !important;padding-left:18px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner]{padding-left:9px !important;padding-right:9px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner] [class=kmTextContent]{font-size:14px !important;line-height:130% !important;padding-left:4px !important;padding-right:4px !important}}</style></head><body style='margin:0;padding:0;background-color:#c7c7c7'><center><table align='center' border='0' cellpadding='0' cellspacing='0' id='bodyTable' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;background-color:#c7c7c7;height:100%;margin:0;width:100%'><tbody><tr><td align='center' id='bodyCell' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding-top:50px;padding-left:20px;padding-bottom:20px;padding-right:20px;border-top:0;height:100%;margin:0;width:100%'><table border='0' cellpadding='0' cellspacing='0' id='templateContainer' width='600' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;border:1px solid #aaa;background-color:#f4f4f4;border-radius:0'><tbody><tr><td id='templateContainerInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0'><table border='0' cellpadding='0' cellspacing='0' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmImageBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmImageBlockOuter'><tr><td class='kmImageBlockInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:9px;' valign='top'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmImageContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmImageContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;padding-top:0px;padding-bottom:0;padding-left:9px;padding-right:9px;'><img align='left' alt='' class='kmImage' src='https://d3k81ch9hvuctc.cloudfront.net/company%2Fb674Zj%2Fimages%2Fheader_email.jpg' width='564' style='border:0;height:auto;line-height:100%;outline:none;text-decoration:none;padding-bottom:0;display:inline;vertical-align:bottom;margin-right:0;max-width:800px;' /></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmTextBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmTextBlockOuter'><tr><td class='kmTextBlockInner' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmTextContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmTextContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;color:#505050;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;padding-top:9px;padding-bottom:9px;padding-left:18px;padding-right:18px;'><h1 style='color:#222;display:block;font-family:Helvetica, Arial;font-size:26px;font-style:normal;font-weight:bold;line-height:110%;letter-spacing:normal;margin:0;margin-bottom:9px;text-align:left'>Artigo Publicado!</h1><p style='margin:0;padding-bottom:1em'> </p><p style='margin:0;padding-bottom:1em'>O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi publicado. Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!</p><p style='margin:0;padding-bottom:1em'>Abraços,</p><p style='margin:0;padding-bottom:0'>Equipe Gueime</p></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></table></td></tr></tbody></table></td></tr></tbody></table></center></body></html>",
+                                        "text": "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi publicado. Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!",
+                                        "subject": "Gueime - Artigo Publicado",
+                                        "from_email": "parceiros@gueime.com.br",
+                                        "from_name": "Gueime - Parceiros",
+                                        "to": [{
+                                                "email": user.email,
+                                                "name": user.name.first,
+                                                "type": "to"
+                                            },
+                                            {
+                                                "email": "parceiros@gueime.com.br",
+                                                "name": "Parceiros",
+                                                "type": "bcc"
+                                            }],
+                                        "headers": {
+                                            "Reply-To": "parceiros@gueime.com.br"
+                                        },
+                                        "important": false,
+                                        "track_opens": true,
+                                        "track_clicks": true,
+                                        "auto_text": null,
+                                        "auto_html": true,
+                                        "inline_css": null,
+                                        "url_strip_qs": null,
+                                        "preserve_recipients": null,
+                                        "view_content_link": null,
+                                        "return_path_domain": null,
+                                        "tags": [
+                                            "dirMessage"
+                                        ]
+                                    };
+                                    var async = false;
+                                    var ip_pool = "Main Pool";
                                     // Evio de Email
-                                    var smtpTransport = nodemailer.createTransport("SMTP",{
-                                        service: "Hotmail",
-                                        auth: {
-                                            user: "parceiros@gueime.com.br",
-                                            pass: "gueime123"
-                                        }
-                                    });
-
-                                    // setup e-mail data with unicode symbols
-                                    var mailOptions = {
-                                        from: "Gueime <parceiros@gueime.com.br>", // sender address
-                                        to: "André Lucas <parceiros@gueime.com.br>, " + thisCreator.email, // list of receivers
-                                        subject: "Artigo Publicado", // Subject line
-                                        text: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi publicado. Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!", // plaintext body
-                                        html: "O artigo " + b.docTitle.replace('<p>', '').replace('</p>', '') + " foi publicado. Você poderá acessá-lo pelo link: http://www.gueime.com.br/" + b.tipo + "s/" + slug + " . Agradecemos muito e esperamos muitos mais artigos excelentes pela frente!" // html body
-                                    }
-
-                                    // send mail with defined transport object
-                                    smtpTransport.sendMail(mailOptions, function(error, response){
-                                        if(error){
-                                            console.log(error);
-                                        }else{
-                                            console.log("Message sent: " + response.message);
-                                        }
-
-
-                                        smtpTransport.close(); // shut down the connection pool, no more messages
-
+                                    mandrill_client.messages.send({"message": dirMessage, "async": async, "ip_pool": ip_pool}, function(result) {
+                                        console.log(result);
+                                        // Direciona pro artigo
+                                        res.redirect('/' + b.tipo + 's/' + slug);
+                                    }, function(e) {
+                                        console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
                                         // Direciona pro artigo
                                         res.redirect('/' + b.tipo + 's/' + slug);
                                     });
                                 }
                             });
                         } else{
+                            // Email para artigos enviados para revisão
+                            var revMessage = {
+                                "html": "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta content='text/html; charset=utf-8' http-equiv='Content-Type' /><title></title><style type='text/css'>@media only screen and (max-width:480px){body,table,td,p,a,li,blockquote{-webkit-text-size-adjust:none !important}body{width:100% !important;min-width:100% !important}td[id=bodyCell]{padding:10px !important}table.kmMobileHide{display:none !important}table[class=kmTextContentContainer]{width:100% !important}table[class=kmBoxedTextContentContainer]{width:100% !important}td[class=kmImageContent]{padding-left:0 !important;padding-right:0 !important}img[class=kmImage]{width:100% !important}table[class=kmSplitContentLeftContentContainer],table[class=kmSplitContentRightContentContainer],table[class=kmColumnContainer],td[class=kmVerticalButtonBarContentOuter] table[class=kmButtonBarContent],td[class=kmVerticalButtonCollectionContentOuter] table[class=kmButtonCollectionContent],table[class=kmVerticalButton],table[class=kmVerticalButtonContent]{width:100% !important}td[class=kmButtonCollectionInner]{padding-left:9px !important;padding-right:9px !important;padding-top:9px !important;padding-bottom:0 !important;background-color:transparent !important}td[class=kmVerticalButtonIconContent],td[class=kmVerticalButtonTextContent],td[class=kmVerticalButtonContentOuter]{padding-left:0 !important;padding-right:0 !important;padding-bottom:9px !important}table[class=kmSplitContentLeftContentContainer] td[class=kmTextContent],table[class=kmSplitContentRightContentContainer] td[class=kmTextContent],table[class=kmColumnContainer] td[class=kmTextContent],table[class=kmSplitContentLeftContentContainer] td[class=kmImageContent],table[class=kmSplitContentRightContentContainer] td[class=kmImageContent]{padding-top:9px !important}td[class='rowContainer kmFloatLeft'],td[class='rowContainer kmFloatLeft firstColumn'],td[class='rowContainer kmFloatLeft lastColumn']{float:left;clear:both;width:100% !important}table[id=templateContainer],table[class=templateRow]{max-width:600px !important;width:100% !important}h1{font-size:24px !important;line-height:130% !important}h2{font-size:20px !important;line-height:130% !important}h3{font-size:18px !important;line-height:130% !important}h4{font-size:16px !important;line-height:130% !important}td[class=kmTextContent]{font-size:14px !important;line-height:130% !important}td[class=kmTextBlockInner] td[class=kmTextContent]{padding-right:18px !important;padding-left:18px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner]{padding-left:9px !important;padding-right:9px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner] [class=kmTextContent]{font-size:14px !important;line-height:130% !important;padding-left:4px !important;padding-right:4px !important}}</style></head><body style='margin:0;padding:0;background-color:#c7c7c7'><center><table align='center' border='0' cellpadding='0' cellspacing='0' id='bodyTable' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;background-color:#c7c7c7;height:100%;margin:0;width:100%'><tbody><tr><td align='center' id='bodyCell' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding-top:50px;padding-left:20px;padding-bottom:20px;padding-right:20px;border-top:0;height:100%;margin:0;width:100%'><table border='0' cellpadding='0' cellspacing='0' id='templateContainer' width='600' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;border:1px solid #aaa;background-color:#f4f4f4;border-radius:0'><tbody><tr><td id='templateContainerInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0'><table border='0' cellpadding='0' cellspacing='0' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmImageBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmImageBlockOuter'><tr><td class='kmImageBlockInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:9px;' valign='top'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmImageContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmImageContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;padding-top:0px;padding-bottom:0;padding-left:9px;padding-right:9px;'><img align='left' alt='' class='kmImage' src='https://d3k81ch9hvuctc.cloudfront.net/company%2Fb674Zj%2Fimages%2Fheader_email.jpg' width='564' style='border:0;height:auto;line-height:100%;outline:none;text-decoration:none;padding-bottom:0;display:inline;vertical-align:bottom;margin-right:0;max-width:800px;' /></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmTextBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmTextBlockOuter'><tr><td class='kmTextBlockInner' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmTextContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmTextContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;color:#505050;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;padding-top:9px;padding-bottom:9px;padding-left:18px;padding-right:18px;'><h1 style='color:#222;display:block;font-family:Helvetica, Arial;font-size:26px;font-style:normal;font-weight:bold;line-height:110%;letter-spacing:normal;margin:0;margin-bottom:9px;text-align:left'>Artigo em Revisão!</h1><p style='margin:0;padding-bottom:1em'> </p><p style='margin:0;padding-bottom:1em'>Obrigado pelo envio do texto " + b.docTitle.replace('<p>', '').replace('</p>', '') + ". Em breve um de nossos editores irá avaliá-lo e ou o publicará ou retornará com comentários e correções. Enquanto isso, aproveite para ler mais alguns textos excelentes do Gueime!</p><p style='margin:0;padding-bottom:1em'>Abraços,</p><p style='margin:0;padding-bottom:0'>Equipe Gueime</p></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></table></td></tr></tbody></table></td></tr></tbody></table></center></body></html>",
+                                "text": "Obrigado pelo envio do texto " + b.docTitle.replace('<p>', '').replace('</p>', '') + ". Em breve um de nossos editores irá avaliá-lo e ou o publicará ou retornará com comentários e correções. Enquanto isso, aproveite para ler mais alguns textos excelentes do Gueime!",
+                                "subject": "Gueime - Artigo em Revisão",
+                                "from_email": "parceiros@gueime.com.br",
+                                "from_name": "Gueime - Parceiros",
+                                "to": [{
+                                        "email": user.email,
+                                        "name": user.name.first,
+                                        "type": "to"
+                                    },
+                                    {
+                                        "email": "parceiros@gueime.com.br",
+                                        "name": "Parceiros",
+                                        "type": "bcc"
+                                    }],
+                                "headers": {
+                                    "Reply-To": "parceiros@gueime.com.br"
+                                },
+                                "important": false,
+                                "track_opens": true,
+                                "track_clicks": true,
+                                "auto_text": null,
+                                "auto_html": true,
+                                "inline_css": null,
+                                "url_strip_qs": null,
+                                "preserve_recipients": null,
+                                "view_content_link": null,
+                                "return_path_domain": null,
+                                "tags": [
+                                    "revMessage"
+                                ]
+                            };
+                            var async = false;
+                            var ip_pool = "Main Pool";
                             // Evio de Email
-                            var smtpTransport = nodemailer.createTransport("SMTP",{
-                                service: "Hotmail",
-                                auth: {
-                                    user: "parceiros@gueime.com.br",
-                                    pass: "gueime123"
-                                }
-                            });
-
-                            // setup e-mail data with unicode symbols
-                            var mailOptions = {
-                                from: "Gueime <parceiros@gueime.com.br>", // sender address
-                                to: "André Lucas <parceiros@gueime.com.br>, " + user.email, // list of receivers
-                                subject: "Artigo enviado para revisão", // Subject line
-                                text: "Obrigado pelo envio do texto " + b.docTitle.replace('<p>', '').replace('</p>', '') + ". Em breve um de nossos editores irá avaliá-lo e ou o publicará ou retornará com comentários e correções. Enquanto isso, aproveite para ler mais alguns textos excelentes do Gueime!", // plaintext body
-                                html: "Obrigado pelo envio do texto " + b.docTitle.replace('<p>', '').replace('</p>', '') + ". Em breve um de nossos editores irá avaliá-lo e ou o publicará ou retornará com comentários e correções. Enquanto isso, aproveite para ler mais alguns textos excelentes do Gueime!" // html body
-                            }
-
-                            // send mail with defined transport object
-                            smtpTransport.sendMail(mailOptions, function(error, response){
-                                if(error){
-                                    console.log(error);
-                                }else{
-                                    console.log("Message sent: " + response.message);
-                                }
-
-
-                                smtpTransport.close(); // shut down the connection pool, no more messages
-
+                            mandrill_client.messages.send({"message": revMessage, "async": async, "ip_pool": ip_pool}, function(result) {
+                                console.log(result);
+                                // Direciona pro artigo
+                                res.redirect('/' + b.tipo + 's/' + slug);
+                            }, function(e) {
+                                console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
                                 // Manda pra revisão
                                 res.redirect('/?status=revision');
                             });
@@ -4196,40 +4386,54 @@ module.exports = function (app, passport, mongoose) {
              } else {
                  Product.findOne({slug: prod, status: 'publicado'}, function(err, docs){
 
-                    var smtpTransport = nodemailer.createTransport("SMTP",{
-                        service: "Hotmail",
-                        auth: {
-                            user: "andre@gueime.com.br",
-                            pass: "Watashiwa1"
-                        }
-                    });
+                    // Email para troca
+                    var troMessage = {
+                        "html": "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta content='text/html; charset=utf-8' http-equiv='Content-Type' /><title></title><style type='text/css'>@media only screen and (max-width:480px){body,table,td,p,a,li,blockquote{-webkit-text-size-adjust:none !important}body{width:100% !important;min-width:100% !important}td[id=bodyCell]{padding:10px !important}table.kmMobileHide{display:none !important}table[class=kmTextContentContainer]{width:100% !important}table[class=kmBoxedTextContentContainer]{width:100% !important}td[class=kmImageContent]{padding-left:0 !important;padding-right:0 !important}img[class=kmImage]{width:100% !important}table[class=kmSplitContentLeftContentContainer],table[class=kmSplitContentRightContentContainer],table[class=kmColumnContainer],td[class=kmVerticalButtonBarContentOuter] table[class=kmButtonBarContent],td[class=kmVerticalButtonCollectionContentOuter] table[class=kmButtonCollectionContent],table[class=kmVerticalButton],table[class=kmVerticalButtonContent]{width:100% !important}td[class=kmButtonCollectionInner]{padding-left:9px !important;padding-right:9px !important;padding-top:9px !important;padding-bottom:0 !important;background-color:transparent !important}td[class=kmVerticalButtonIconContent],td[class=kmVerticalButtonTextContent],td[class=kmVerticalButtonContentOuter]{padding-left:0 !important;padding-right:0 !important;padding-bottom:9px !important}table[class=kmSplitContentLeftContentContainer] td[class=kmTextContent],table[class=kmSplitContentRightContentContainer] td[class=kmTextContent],table[class=kmColumnContainer] td[class=kmTextContent],table[class=kmSplitContentLeftContentContainer] td[class=kmImageContent],table[class=kmSplitContentRightContentContainer] td[class=kmImageContent]{padding-top:9px !important}td[class='rowContainer kmFloatLeft'],td[class='rowContainer kmFloatLeft firstColumn'],td[class='rowContainer kmFloatLeft lastColumn']{float:left;clear:both;width:100% !important}table[id=templateContainer],table[class=templateRow]{max-width:600px !important;width:100% !important}h1{font-size:24px !important;line-height:130% !important}h2{font-size:20px !important;line-height:130% !important}h3{font-size:18px !important;line-height:130% !important}h4{font-size:16px !important;line-height:130% !important}td[class=kmTextContent]{font-size:14px !important;line-height:130% !important}td[class=kmTextBlockInner] td[class=kmTextContent]{padding-right:18px !important;padding-left:18px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner]{padding-left:9px !important;padding-right:9px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner] [class=kmTextContent]{font-size:14px !important;line-height:130% !important;padding-left:4px !important;padding-right:4px !important}}</style></head><body style='margin:0;padding:0;background-color:#c7c7c7'><center><table align='center' border='0' cellpadding='0' cellspacing='0' id='bodyTable' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;background-color:#c7c7c7;height:100%;margin:0;width:100%'><tbody><tr><td align='center' id='bodyCell' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding-top:50px;padding-left:20px;padding-bottom:20px;padding-right:20px;border-top:0;height:100%;margin:0;width:100%'><table border='0' cellpadding='0' cellspacing='0' id='templateContainer' width='600' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;border:1px solid #aaa;background-color:#f4f4f4;border-radius:0'><tbody><tr><td id='templateContainerInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0'><table border='0' cellpadding='0' cellspacing='0' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmImageBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmImageBlockOuter'><tr><td class='kmImageBlockInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:9px;' valign='top'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmImageContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmImageContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;padding-top:0px;padding-bottom:0;padding-left:9px;padding-right:9px;'><img align='left' alt='' class='kmImage' src='https://d3k81ch9hvuctc.cloudfront.net/company%2Fb674Zj%2Fimages%2Fheader_email.jpg' width='564' style='border:0;height:auto;line-height:100%;outline:none;text-decoration:none;padding-bottom:0;display:inline;vertical-align:bottom;margin-right:0;max-width:800px;' /></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmTextBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmTextBlockOuter'><tr><td class='kmTextBlockInner' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmTextContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmTextContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;color:#505050;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;padding-top:9px;padding-bottom:9px;padding-left:18px;padding-right:18px;'><h1 style='color:#222;display:block;font-family:Helvetica, Arial;font-size:26px;font-style:normal;font-weight:bold;line-height:110%;letter-spacing:normal;margin:0;margin-bottom:9px;text-align:left'>Seu novo presente está a caminho!</h1><p style='margin:0;padding-bottom:1em'> </p><p style='margin:0;padding-bottom:1em'>Parabéns!! Você ganhou um: " + docs.title + "! Algum de nossos administradores irá te enviar o prêmio em breve.</p><p style='margin:0;padding-bottom:1em'>Abraços,</p><p style='margin:0;padding-bottom:0'>Equipe Gueime</p></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></table></td></tr></tbody></table></td></tr></tbody></table></center></body></html>",
+                        "text": "Parabéns!! Você ganhou um: " + docs.title + "! Algum de nossos administradores irá te enviar o prêmio em breve.",
+                        "subject": "Gueime - Troca Realizada",
+                        "from_email": "parceiros@gueime.com.br",
+                        "from_name": "Gueime - Parceiros",
+                        "to": [{
+                                "email": user.email,
+                                "name": user.name.first,
+                                "type": "to"
+                            },
+                            {
+                                "email": "parceiros@gueime.com.br",
+                                "name": "Parceiros",
+                                "type": "bcc"
+                            }],
+                        "headers": {
+                            "Reply-To": "parceiros@gueime.com.br"
+                        },
+                        "important": false,
+                        "track_opens": true,
+                        "track_clicks": true,
+                        "auto_text": null,
+                        "auto_html": true,
+                        "inline_css": null,
+                        "url_strip_qs": null,
+                        "preserve_recipients": null,
+                        "view_content_link": null,
+                        "return_path_domain": null,
+                        "tags": [
+                            "troMessage"
+                        ]
+                    };
+                    var async = false;
+                    var ip_pool = "Main Pool";
 
-                    // setup e-mail data with unicode symbols
-                    var mailOptions = {
-                        from: 'parceiros@gueime.com.br', // sender address
-                        to: user.email + ', parceiros@gueime.com.br', // list of receivers
-                        subject: "Troca - Gueime", // Subject line
-                        text: "Parabéns!! Você ganhou um: " + docs.title + "! Algum de nossos administradores irá te enviar o prêmio em breve."
-                    }
-
-                    // send mail with defined transport object
-                    smtpTransport.sendMail(mailOptions, function(error, response){
-                        if(error){
-                            console.log(error);
-                        }else{
-                            console.log("Message sent: " + response.message);
-                        }
-
-
-                        smtpTransport.close(); // shut down the connection pool, no more messages
+                    // Evio de Email
+                    mandrill_client.messages.send({"message": troMessage, "async": async, "ip_pool": ip_pool}, function(result) {
+                        console.log(result);
+                        res.send('OK');
+                    }, function(e) {
+                        console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
                         res.send('OK');
                     });
-
                 });
-             
              }
          }
-        
     });
 
     // PAGINAÇÃO TROCA
@@ -4259,42 +4463,54 @@ module.exports = function (app, passport, mongoose) {
     });
 
     // SEND EMAIL
-    
-
     app.post('/contatoSend', function(req, res){
         var user = req.user;
         var b = req.body;
 
-        var smtpTransport = nodemailer.createTransport("SMTP",{
-            service: "Hotmail",
-            auth: {
-                user: "andre@gueime.com.br",
-                pass: "Watashiwa1"
-            }
-        });
-
-        // setup e-mail data with unicode symbols
-        var mailOptions = {
-            from: b.email, // sender address
-            to: "André Lucas <andre@gueime.com.br>", // list of receivers
-            subject: "Contato - Gueime (" + b.nome + " " + b.email + ")", // Subject line
-            text: b.mensagem + " " + b.email, // plaintext body
-            html: b.mensagem + "<br>" + b.email // html body
-        }
-
-        // send mail with defined transport object
-        smtpTransport.sendMail(mailOptions, function(error, response){
-            if(error){
-                console.log(error);
-            }else{
-                console.log("Message sent: " + response.message);
-            }
-
-
-            smtpTransport.close(); // shut down the connection pool, no more messages
+        // Email para Contato
+        var conMessage = {
+            "html": "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta content='text/html; charset=utf-8' http-equiv='Content-Type' /><title></title><style type='text/css'>@media only screen and (max-width:480px){body,table,td,p,a,li,blockquote{-webkit-text-size-adjust:none !important}body{width:100% !important;min-width:100% !important}td[id=bodyCell]{padding:10px !important}table.kmMobileHide{display:none !important}table[class=kmTextContentContainer]{width:100% !important}table[class=kmBoxedTextContentContainer]{width:100% !important}td[class=kmImageContent]{padding-left:0 !important;padding-right:0 !important}img[class=kmImage]{width:100% !important}table[class=kmSplitContentLeftContentContainer],table[class=kmSplitContentRightContentContainer],table[class=kmColumnContainer],td[class=kmVerticalButtonBarContentOuter] table[class=kmButtonBarContent],td[class=kmVerticalButtonCollectionContentOuter] table[class=kmButtonCollectionContent],table[class=kmVerticalButton],table[class=kmVerticalButtonContent]{width:100% !important}td[class=kmButtonCollectionInner]{padding-left:9px !important;padding-right:9px !important;padding-top:9px !important;padding-bottom:0 !important;background-color:transparent !important}td[class=kmVerticalButtonIconContent],td[class=kmVerticalButtonTextContent],td[class=kmVerticalButtonContentOuter]{padding-left:0 !important;padding-right:0 !important;padding-bottom:9px !important}table[class=kmSplitContentLeftContentContainer] td[class=kmTextContent],table[class=kmSplitContentRightContentContainer] td[class=kmTextContent],table[class=kmColumnContainer] td[class=kmTextContent],table[class=kmSplitContentLeftContentContainer] td[class=kmImageContent],table[class=kmSplitContentRightContentContainer] td[class=kmImageContent]{padding-top:9px !important}td[class='rowContainer kmFloatLeft'],td[class='rowContainer kmFloatLeft firstColumn'],td[class='rowContainer kmFloatLeft lastColumn']{float:left;clear:both;width:100% !important}table[id=templateContainer],table[class=templateRow]{max-width:600px !important;width:100% !important}h1{font-size:24px !important;line-height:130% !important}h2{font-size:20px !important;line-height:130% !important}h3{font-size:18px !important;line-height:130% !important}h4{font-size:16px !important;line-height:130% !important}td[class=kmTextContent]{font-size:14px !important;line-height:130% !important}td[class=kmTextBlockInner] td[class=kmTextContent]{padding-right:18px !important;padding-left:18px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner]{padding-left:9px !important;padding-right:9px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner] [class=kmTextContent]{font-size:14px !important;line-height:130% !important;padding-left:4px !important;padding-right:4px !important}}</style></head><body style='margin:0;padding:0;background-color:#c7c7c7'><center><table align='center' border='0' cellpadding='0' cellspacing='0' id='bodyTable' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;background-color:#c7c7c7;height:100%;margin:0;width:100%'><tbody><tr><td align='center' id='bodyCell' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding-top:50px;padding-left:20px;padding-bottom:20px;padding-right:20px;border-top:0;height:100%;margin:0;width:100%'><table border='0' cellpadding='0' cellspacing='0' id='templateContainer' width='600' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;border:1px solid #aaa;background-color:#f4f4f4;border-radius:0'><tbody><tr><td id='templateContainerInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0'><table border='0' cellpadding='0' cellspacing='0' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmImageBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmImageBlockOuter'><tr><td class='kmImageBlockInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:9px;' valign='top'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmImageContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmImageContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;padding-top:0px;padding-bottom:0;padding-left:9px;padding-right:9px;'><img align='left' alt='' class='kmImage' src='https://d3k81ch9hvuctc.cloudfront.net/company%2Fb674Zj%2Fimages%2Fheader_email.jpg' width='564' style='border:0;height:auto;line-height:100%;outline:none;text-decoration:none;padding-bottom:0;display:inline;vertical-align:bottom;margin-right:0;max-width:800px;' /></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmTextBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmTextBlockOuter'><tr><td class='kmTextBlockInner' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmTextContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmTextContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;color:#505050;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;padding-top:9px;padding-bottom:9px;padding-left:18px;padding-right:18px;'><h1 style='color:#222;display:block;font-family:Helvetica, Arial;font-size:26px;font-style:normal;font-weight:bold;line-height:110%;letter-spacing:normal;margin:0;margin-bottom:9px;text-align:left'>Contato de " + b.nome + "!</h1><p style='margin:0;padding-bottom:1em'> </p><p style='margin:0;padding-bottom:1em'>" + b.mensagem + "</p><p style='margin:0;padding-bottom:1em'> " + b.email + "</p></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></table></td></tr></tbody></table></td></tr></tbody></table></center></body></html>",
+            "text": b.mensagem + " " + b.email,
+            "subject": "Gueime - Contato de " + b.nome,
+            "from_email": "parceiros@gueime.com.br",
+            "from_name": "Gueime - Parceiros",
+            "to": [{
+                    "email": b.email,
+                    "name": b.nome,
+                    "type": "to"
+                },
+                {
+                    "email": "parceiros@gueime.com.br",
+                    "name": "Parceiros",
+                    "type": "bcc"
+                }],
+            "headers": {
+                "Reply-To": b.email
+            },
+            "important": false,
+            "track_opens": true,
+            "track_clicks": true,
+            "auto_text": null,
+            "auto_html": true,
+            "inline_css": null,
+            "url_strip_qs": null,
+            "preserve_recipients": null,
+            "view_content_link": null,
+            "return_path_domain": null,
+            "tags": [
+                "conMessage"
+            ]
+        };
+        var async = false;
+        var ip_pool = "Main Pool";
+        // Evio de Email
+        mandrill_client.messages.send({"message": conMessage, "async": async, "ip_pool": ip_pool}, function(result) {
+            console.log(result);
+            res.send('OK');
+        }, function(e) {
+            console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
             res.send('OK');
         });
-
     });
 
     // PARCEIROS
@@ -4772,16 +4988,69 @@ module.exports = function (app, passport, mongoose) {
     // delete USER =========================
     // =====================================
     app.put('/users/delete', function (req, res) {
-        Users.update(
-            { 'name.loginName': req.user.name.loginName },
-            { $set: {
-                deleted: true
-            }
+        // Email para artigos publicados diretametne
+        var delMessage = {
+            "html": "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta content='text/html; charset=utf-8' http-equiv='Content-Type' /><title></title><style type='text/css'>@media only screen and (max-width:480px){body,table,td,p,a,li,blockquote{-webkit-text-size-adjust:none !important}body{width:100% !important;min-width:100% !important}td[id=bodyCell]{padding:10px !important}table.kmMobileHide{display:none !important}table[class=kmTextContentContainer]{width:100% !important}table[class=kmBoxedTextContentContainer]{width:100% !important}td[class=kmImageContent]{padding-left:0 !important;padding-right:0 !important}img[class=kmImage]{width:100% !important}table[class=kmSplitContentLeftContentContainer],table[class=kmSplitContentRightContentContainer],table[class=kmColumnContainer],td[class=kmVerticalButtonBarContentOuter] table[class=kmButtonBarContent],td[class=kmVerticalButtonCollectionContentOuter] table[class=kmButtonCollectionContent],table[class=kmVerticalButton],table[class=kmVerticalButtonContent]{width:100% !important}td[class=kmButtonCollectionInner]{padding-left:9px !important;padding-right:9px !important;padding-top:9px !important;padding-bottom:0 !important;background-color:transparent !important}td[class=kmVerticalButtonIconContent],td[class=kmVerticalButtonTextContent],td[class=kmVerticalButtonContentOuter]{padding-left:0 !important;padding-right:0 !important;padding-bottom:9px !important}table[class=kmSplitContentLeftContentContainer] td[class=kmTextContent],table[class=kmSplitContentRightContentContainer] td[class=kmTextContent],table[class=kmColumnContainer] td[class=kmTextContent],table[class=kmSplitContentLeftContentContainer] td[class=kmImageContent],table[class=kmSplitContentRightContentContainer] td[class=kmImageContent]{padding-top:9px !important}td[class='rowContainer kmFloatLeft'],td[class='rowContainer kmFloatLeft firstColumn'],td[class='rowContainer kmFloatLeft lastColumn']{float:left;clear:both;width:100% !important}table[id=templateContainer],table[class=templateRow]{max-width:600px !important;width:100% !important}h1{font-size:24px !important;line-height:130% !important}h2{font-size:20px !important;line-height:130% !important}h3{font-size:18px !important;line-height:130% !important}h4{font-size:16px !important;line-height:130% !important}td[class=kmTextContent]{font-size:14px !important;line-height:130% !important}td[class=kmTextBlockInner] td[class=kmTextContent]{padding-right:18px !important;padding-left:18px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner]{padding-left:9px !important;padding-right:9px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner] [class=kmTextContent]{font-size:14px !important;line-height:130% !important;padding-left:4px !important;padding-right:4px !important}}</style></head><body style='margin:0;padding:0;background-color:#c7c7c7'><center><table align='center' border='0' cellpadding='0' cellspacing='0' id='bodyTable' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;background-color:#c7c7c7;height:100%;margin:0;width:100%'><tbody><tr><td align='center' id='bodyCell' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding-top:50px;padding-left:20px;padding-bottom:20px;padding-right:20px;border-top:0;height:100%;margin:0;width:100%'><table border='0' cellpadding='0' cellspacing='0' id='templateContainer' width='600' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;border:1px solid #aaa;background-color:#f4f4f4;border-radius:0'><tbody><tr><td id='templateContainerInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0'><table border='0' cellpadding='0' cellspacing='0' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmImageBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmImageBlockOuter'><tr><td class='kmImageBlockInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:9px;' valign='top'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmImageContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmImageContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;padding-top:0px;padding-bottom:0;padding-left:9px;padding-right:9px;'><img align='left' alt='' class='kmImage' src='https://d3k81ch9hvuctc.cloudfront.net/company%2Fb674Zj%2Fimages%2Fheader_email.jpg' width='564' style='border:0;height:auto;line-height:100%;outline:none;text-decoration:none;padding-bottom:0;display:inline;vertical-align:bottom;margin-right:0;max-width:800px;' /></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmTextBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmTextBlockOuter'><tr><td class='kmTextBlockInner' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmTextContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmTextContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;color:#505050;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;padding-top:9px;padding-bottom:9px;padding-left:18px;padding-right:18px;'><h1 style='color:#222;display:block;font-family:Helvetica, Arial;font-size:26px;font-style:normal;font-weight:bold;line-height:110%;letter-spacing:normal;margin:0;margin-bottom:9px;text-align:left'>Lamentamos sua saída!</h1><p style='margin:0;padding-bottom:1em'> </p><p style='margin:0;padding-bottom:1em'>É uma pena que você já deletou sua conta. Mas Gostaríamos muito de te continuar vendo em nosso site! Lembre-se: Você sempre será bem vindo novamente em nosso grupo de usuários.</p><p style='margin:0;padding-bottom:1em'>Abraços,</p><p style='margin:0;padding-bottom:0'>Equipe Gueime</p></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></table></td></tr></tbody></table></td></tr></tbody></table></center></body></html>",
+            "text": "É uma pena que você já deletou sua conta. Mas Gostaríamos muito de te continuar vendo em nosso site! Lembre-se: Você sempre será bem vindo novamente em nosso grupo de usuários.",
+            "subject": "Gueime - Conta Desativada",
+            "from_email": "parceiros@gueime.com.br",
+            "from_name": "Gueime - Parceiros",
+            "to": [{
+                    "email": user.email,
+                    "name": user.name.first,
+                    "type": "to"
+                },
+                {
+                    "email": "parceiros@gueime.com.br",
+                    "name": "Parceiros",
+                    "type": "bcc"
+                }],
+            "headers": {
+                "Reply-To": "parceiros@gueime.com.br"
             },
-            function (err) {
-                res.redirect('/logout')
-            }
-        );
+            "important": false,
+            "track_opens": true,
+            "track_clicks": true,
+            "auto_text": null,
+            "auto_html": true,
+            "inline_css": null,
+            "url_strip_qs": null,
+            "preserve_recipients": null,
+            "view_content_link": null,
+            "return_path_domain": null,
+            "tags": [
+                "delMessage"
+            ]
+        };
+        var async = false;
+        var ip_pool = "Main Pool";
+        // Evio de Email
+        mandrill_client.messages.send({"message": delMessage, "async": async, "ip_pool": ip_pool}, function(result) {
+            console.log(result);
+            Users.update(
+                { 'name.loginName': req.user.name.loginName },
+                { $set: {
+                    deleted: true
+                }
+                },
+                function (err) {
+                    res.redirect('/logout')
+                }
+            );
+        }, function(e) {
+            console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
+            
+            Users.update(
+                { 'name.loginName': req.user.name.loginName },
+                { $set: {
+                    deleted: true
+                }
+                },
+                function (err) {
+                    res.redirect('/logout')
+                }
+            );
+        });
     });
 
     // =====================================
