@@ -142,7 +142,7 @@ html.no-js(lang="pt_BR")
                         $.ajax({
                             type: "GET",
                             url: "/pagination/#{type}",
-                            data: {n: n, type: type},
+                            data: {n: n},
                             dataType: 'html'
                         }).done(function (data) {
                             container.isotope('insert', $(data));
