@@ -35,7 +35,10 @@ block content
 
     div.row#load
         div.medium-6.small-centered.columns
-            a#loadMore.button Mais artigos
+            if(type == undefined)
+                a#loadMore.button Mais artigos
+            else
+                a#loadMoreRelated.button Mais artigos
 
     include partials/footer
 

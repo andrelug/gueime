@@ -121,6 +121,26 @@ html.no-js(lang="pt_BR")
                             container.isotope('insert', $(data));
                         });
                     }
+                    $('#loadMoreRelated').on('click', function () {
+                        n = $('.item').length;
+                        $.ajax({
+                            type: "GET",
+                            url: "/pagination/#{type}",
+                            data: { n: n, str: searchStr },
+                            dataType: 'html'
+                        }).done(function (data) {
+                            console.log(data)
+                            FB.XFBML.parse();
+                            if (data == '<div id="gridArticles" class="row"></div><style>.autocomplete-suggestions{position:absolute !important;}</style>') {
+                                $("#loadMore").fadeOut(300, function () {
+                                    $(this).text("Aparentemente não há mais artigos").fadeIn(300).delay(1500).fadeOut(300, function () {
+                                        $(this).text('Mais Artigos').fadeIn(300);
+                                    });
+                                });
+                            }
+                            container.isotope('insert', $(data));
+                        });
+                    });
         else
             if(type == undefined)
                 script.
@@ -148,3 +168,23 @@ html.no-js(lang="pt_BR")
                             container.isotope('insert', $(data));
                         });
                     }
+                    $('#loadMoreRelated').on('click', function () {
+                        n = $('.item').length;
+                        $.ajax({
+                            type: "GET",
+                            url: "/pagination/#{type}",
+                            data: { n: n, str: searchStr },
+                            dataType: 'html'
+                        }).done(function (data) {
+                            console.log(data)
+                            FB.XFBML.parse();
+                            if (data == '<div id="gridArticles" class="row"></div><style>.autocomplete-suggestions{position:absolute !important;}</style>') {
+                                $("#loadMore").fadeOut(300, function () {
+                                    $(this).text("Aparentemente não há mais artigos").fadeIn(300).delay(1500).fadeOut(300, function () {
+                                        $(this).text('Mais Artigos').fadeIn(300);
+                                    });
+                                });
+                            }
+                            container.isotope('insert', $(data));
+                        });
+                    });
