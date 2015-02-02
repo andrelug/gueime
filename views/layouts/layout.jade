@@ -93,7 +93,7 @@ html.no-js(lang="pt_BR")
                     if (n < 7) {
                         $.ajax({
                             type: "GET",
-                            url: "/pagination/" + #{type},
+                            url: "/pagination",
                             data: { n: n, str: searchStr },
                             dataType: 'html'
                         }).done(function (data) {
@@ -141,7 +141,7 @@ html.no-js(lang="pt_BR")
                     if (n < 7) {
                         $.ajax({
                             type: "GET",
-                            url: "/pagination",
+                            url: "/pagination/" + #{type},
                             data: {n: n, type: type},
                             dataType: 'html'
                         }).done(function (data) {
