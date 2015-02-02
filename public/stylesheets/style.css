@@ -1270,14 +1270,18 @@ rgba(0,0,0,0.3)
     top: 20px !important;
   }
 }
-.filtros {
+.filtros,
+.menuTop {
   position: absolute;
   top: 12px;
   right: -33px;
   color: #fff;
-  display: none;
 }
-.filtros:hover {
+.menuTop {
+  left: -53px;
+}
+.filtros:hover,
+.menuTop:hover {
   color: #fff;
   text-decoration: underline;
 }

@@ -76,6 +76,7 @@ app.locals.newrelic = newrelic;
 
 // routes ======================================================================
 require('./app/routes.js')(app, passport, mongoose); // load our routes and pass in our app and fully configured passport
+require('./app/personalized.js')(app, passport, mongoose); // load our routes and pass in our app and fully configured passport
 
 
 

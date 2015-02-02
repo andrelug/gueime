@@ -3,6 +3,16 @@ div#nav-sticky
         div.row
             div.large-5.medium-9.small-10.medium-centered.columns.large-centered
                 div#suggestion
+                    a.menuTop(href="#", data-dropdown="dropMenu") <i class="fa fa-gear"></i> Menu
+                    ul#dropMenu.entrarLogin.f-dropdown(data-dropdown-content)
+                        li
+                            a(href="/noticias") Notícias
+                        li
+                            a(href="/artigos") Artigos
+                        li
+                            a(href="/analises") Análises
+                        li
+                            a(href="/videos") Vídeos
                     input#mainInput(type="text", placeholder="Ache tudo sobre Games!", autocomplete="off")
                     a(href="#").filtros filtros
     div.filter.row
