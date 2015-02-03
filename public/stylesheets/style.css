@@ -678,7 +678,8 @@ rgba(0,0,0,0.3)
   display: block !important;
 }
 #loadMore,
-#loadMoreProfile {
+#loadMoreProfile,
+#loadMoreRelated {
   width: 100%;
 }
 #profile #imageAndOpt,
@@ -1279,6 +1280,7 @@ rgba(0,0,0,0.3)
 }
 .menuTop {
   left: -53px;
+  z-index: 0;
 }
 .filtros:hover,
 .menuTop:hover {
@@ -1314,6 +1316,8 @@ a.create:active {
 }
 #mainInput {
   font-size: 12pt;
+  position: relative;
+  z-index: 1;
 }
 .autocomplete-suggestions .autocomplete-selected {
   background: #f0f0f0;

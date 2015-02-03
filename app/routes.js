@@ -94,7 +94,7 @@ module.exports = function (app, passport, mongoose) {
             if (!user) {
                 async.parallel([
                     function(cb){
-                        Artigos.find({ facet: { $all: searchStr}, status: 'publicado' }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({publishDate: -1}).limit(6).exec(cb);
+                        Artigos.find({$or: [{ facet: { $all: searchStr}, status: 'publicado' }, {title: new RegExp(gameStr, 'i'), status: 'publicado'}]}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({publishDate: -1}).limit(6).exec(cb);
                     },
                     function(cb){
                         Games.find({status: 'publicado', title: new RegExp(gameStr, 'i') }, cb);
@@ -111,7 +111,7 @@ module.exports = function (app, passport, mongoose) {
                     
                     async.parallel([
                         function(cb){
-                            Artigos.find({ facet: { $all: searchStr}, status: 'publicado' }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({publishDate: -1}).limit(6).exec(cb);
+                            Artigos.find({$or: [{ facet: { $all: searchStr}, status: 'publicado' }, {title: new RegExp(gameStr, 'i'), status: 'publicado'}]}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({publishDate: -1}).limit(6).exec(cb);
                         },
                         function(cb){
                             Games.find({status: 'publicado', title: new RegExp(gameStr, 'i') }, cb);
@@ -283,7 +283,7 @@ module.exports = function (app, passport, mongoose) {
 
                 async.parallel([
                     function(cb){
-                        Artigos.find({ facet: { $all: searchStr}, status: 'publicado' }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).limit(6).exec(cb);
+                        Artigos.find({$or: [{ facet: { $all: searchStr}, status: 'publicado' }, {title: new RegExp(gameStr, 'i'), status: 'publicado'}]}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).limit(6).exec(cb);
                     },
                     function(cb){
                         Games.find({status: 'publicado', title: new RegExp(gameStr, 'i') }, cb);
@@ -296,7 +296,7 @@ module.exports = function (app, passport, mongoose) {
 
                 async.parallel([
                     function(cb){
-                        Artigos.find({ facet: { $all: searchStr}, status: 'publicado' }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).limit(6).exec(cb);
+                        Artigos.find({$or: [{ facet: { $all: searchStr}, status: 'publicado' }, {title: new RegExp(gameStr, 'i'), status: 'publicado'}]}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).limit(6).exec(cb);
                     },
                     function(cb){
                         Games.find({status: 'publicado', title: new RegExp(gameStr, 'i') }, cb);
