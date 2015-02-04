@@ -256,22 +256,22 @@ module.exports = function (app, passport, mongoose) {
         var user = req.user;
         if(!user){
             if (req.xhr === true) {
-                Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ 'graph.views': -1 }).limit(10).exec(function (err, docs) {
+                Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ 'graph.views': -1 }).limit(12).exec(function (err, docs) {
                     res.render('tags', { docs: docs});
                 });
             } else {
-                Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ 'graph.views': -1 }).limit(10).exec(function (err, docs) {
+                Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ 'graph.views': -1 }).limit(12).exec(function (err, docs) {
                     res.render('index', { user: user, title: "O melhor site de games do Brasil!", docs: docs});
                 });
             
             }
         } else {
             if (req.xhr === true) {
-                Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ 'graph.views': -1 }).limit(10).exec(function (err, docs) {
+                Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ 'graph.views': -1 }).limit(12).exec(function (err, docs) {
                     res.render('tags', { docs: docs});
                 });
             } else {
-                Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ 'graph.views': -1 }).limit(10).exec(function (err, docs) {
+                Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ 'graph.views': -1 }).limit(12).exec(function (err, docs) {
                     res.render('index', { title: "O melhor site de games do Brasil!", docs: docs});
                 });
             
