@@ -105,6 +105,66 @@ tagSearch = function (str) {
     });
 }
 
+$('.trending').on('click', function () {
+    $.ajax({
+        url: '/trending',
+        type: 'GET',
+        dataType: 'html',
+        beforeSend: function () {
+            $('#spinning').show();
+            varBody.css('overflow-y', 'hidden');
+            container.animate({ 'opacity': 0 }).remove();
+            varHtmlBody.animate({ scrollTop: 0 }, "slow");
+            varFooter.hide();
+            varLoad.hide();
+            if (varCheck.html() == 'check') {
+                varBody.css('background', 'none').css('background-color', '#ecf0f1');
+                $('#wrapper').empty();
+                $('.editar').remove();
+                $('#searchBack').slideDown();
+                $('#profileTiles').remove();
+                $('#spinning').remove();
+                varLoad.before('<div id="spinning"><img src="/images/spinning.gif" /></div>');
+                varDeletar.remove();
+            }
+            $('.scriptLoad').remove();
+        }
+    }).done(function (data) {
+        varLoad.before(data);
+        history.pushState(null, null, '/trending');
+        analytics.track('Trending', {
+            page: 'trending'
+        });
+        container.waitForImages(function () {
+            varLoad.show();
+            $('#spinning').hide();
+            varBody.css('overflow-y', 'auto');
+            container.animate({ 'opacity': 1 });
+            varFooter.show();
+            varLoad.show();
+            if (varCheck.html() == 'check') {
+                $('header').removeClass('header row');
+                $('#check').remove();
+                $('.smallLogo').remove();
+            }
+            FB.XFBML.parse();
+            n = $('.item').length;
+            if (n < 7) {
+                $.ajax({
+                    type: "GET",
+                    url: "/pagination",
+                    data: { n: n, str: searchStr },
+                    dataType: 'html'
+                }).done(function (data) {
+                    container.isotope('insert', $(data));
+                    FB.XFBML.parse();
+                });
+            }
+        }, null, true);
+    });
+    return false
+});
+
 // Autocomplete
 varMainInput.autocomplete({
     serviceUrl: '/autocomplete',
@@ -395,6 +455,9 @@ $('.pedir').on('click', function (event) {
         });
     }
 });
+
+
+
 
 
 if(thereIsAdmin != true) {
