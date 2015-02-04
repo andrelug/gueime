@@ -13,7 +13,7 @@ var Users = require('./models/user'),
     transloadit = require('node-transloadit'),
     async = require('async'),
     mandrill = require('mandrill-api/mandrill'),
-    mandrill_client = new mandrill.Mandrill('9OnGzepS5J_rDmLYVSjWnQ')
+    mandrill_client = new mandrill.Mandrill('9OnGzepS5J_rDmLYVSjWnQ'),
     Feed = require('feed');
 
 var client = new transloadit('195786e09f8911e495eae1be63259780', '360133efc358574ed2fef9c645c5fb62f65623af');
