@@ -31,22 +31,27 @@ if(tipo == 'analise')
                     div.small-6.columns
                         ul.gameLogo
                             li.gameLogoStats <i class="fa fa-calendar"></i> #{date}
-                            li.gameLogoStats <i class="fa fa-gamepad"></i> 
-                                each console in game.graph.console
-                                    a(href="/consoles/#{console}") #{console} 
-                            li.gameLogoStats <i class="fa fa-gavel"></i> #{game.graph.esrb}
+                            if(game.graph.console != '')
+                                li.gameLogoStats <i class="fa fa-gamepad"></i> 
+                                    each console in game.graph.console
+                                        a(href="/consoles/#{console}") #{console} 
+                            if(game.graph.esrb != '')
+                                li.gameLogoStats <i class="fa fa-gavel"></i> #{game.graph.esrb}
 
                     div.small-6.columns
                         ul.gameLogo
-                            li.gameLogoStats Gênero:  
-                                each genero in game.graph.genre
-                                    a(href="/generos/#{genero}") #{genero} 
-                            li.gameLogoStats Desenvolvedor: 
-                                each dev in game.graph.developer
-                                    a(href="/desenvolvedores/#{dev}") #{dev} 
-                            li.gameLogoStats Distribuidora:  
-                                each pub in game.graph.publisher
-                                    a(href="/distribuidoras/#{pub}") #{pub}  
+                            if(game.graph.genre != '')
+                                li.gameLogoStats Gênero:  
+                                    each genero in game.graph.genre
+                                        a(href="/generos/#{genero}") #{genero} 
+                            if(game.graph.developer != '')
+                                li.gameLogoStats Desenvolvedor: 
+                                    each dev in game.graph.developer
+                                        a(href="/desenvolvedores/#{dev}") #{dev} 
+                            if(game.graph.publisher != '')
+                                li.gameLogoStats Distribuidora:  
+                                    each pub in game.graph.publisher
+                                        a(href="/distribuidoras/#{pub}") #{pub}  
 
 
 
@@ -57,40 +62,45 @@ else
                 div.small-6.columns
                     ul.gameLogo
                         li.gameLogoStats <i class="fa fa-calendar"></i> #{article.date}
-                        li.gameLogoStats <i class="fa fa-gamepad"></i> 
-                            each game in article.graph.games
-                                a(href="/jogos/#{game}") #{game} 
-                        li.gameLogoStats <i class="fa fa-tags"></i> 
-                            each tag in article.tags
-                                a(href="/?t=#{tag}") #{tag}
+                        if(article.graph.games != '')
+                            li.gameLogoStats <i class="fa fa-gamepad"></i> 
+                                each game in article.graph.games
+                                    a(href="/jogos/#{game}") #{game} 
+                        if(article.tags != '')
+                            li.gameLogoStats <i class="fa fa-tags"></i> 
+                                each tag in article.tags
+                                    a(href="/?t=#{tag}") #{tag}
 
                 div.small-6.columns
                     ul.gameLogo
-                        if(article.graph.genres.length == 1)
-                            li.gameLogoStats Gênero:  
-                                each genero in article.graph.genres
-                                    a(href="/generos/#{genero}") #{genero} 
-                        else
-                            li.gameLogoStats Gêneros:  
-                                each genero in article.graph.genres
-                                    a(href="/generos/#{genero}") #{genero} 
-                        if(article.graph.developers.length == 1)
-                            li.gameLogoStats Desenvolvedor: 
-                                each dev in article.graph.developers
-                                    a(href="/desenvolvedores/#{dev}") #{dev} 
-                        else
-                            li.gameLogoStats Desenvolvedores: 
-                                each dev in article.graph.developers
-                                    a(href="/desenvolvedores/#{dev}") #{dev} 
-                        if(article.graph.publishers.length == 1)
-                            li.gameLogoStats Distribuidora:  
-                                each pub in article.graph.publishers
-                                    a(href="/distribuidoras/#{pub}") #{pub}  
+                        if(article.graph.genres != '')
+                            if(article.graph.genres.length == 1)
+                                li.gameLogoStats Gênero:  
+                                    each genero in article.graph.genres
+                                        a(href="/generos/#{genero}") #{genero} 
+                            else
+                                li.gameLogoStats Gêneros:  
+                                    each genero in article.graph.genres
+                                        a(href="/generos/#{genero}") #{genero} 
+                        if(article.graph.developers != '')
+                            if(article.graph.developers.length == 1)
+                                li.gameLogoStats Desenvolvedor: 
+                                    each dev in article.graph.developers
+                                        a(href="/desenvolvedores/#{dev}") #{dev} 
+                            else
+                                li.gameLogoStats Desenvolvedores: 
+                                    each dev in article.graph.developers
+                                        a(href="/desenvolvedores/#{dev}") #{dev} 
+                        if(article.graph.publishers != '')
+                            if(article.graph.publishers.length == 1)
+                                li.gameLogoStats Distribuidora:  
+                                    each pub in article.graph.publishers
+                                        a(href="/distribuidoras/#{pub}") #{pub}  
 
-                        else
-                            li.gameLogoStats Distribuidoras:  
-                                each pub in article.graph.publishers
-                                    a(href="/distribuidoras/#{pub}") #{pub}
+                            else
+                                li.gameLogoStats Distribuidoras:  
+                                    each pub in article.graph.publishers
+                                        a(href="/distribuidoras/#{pub}") #{pub}
 
 
 section#author.row
