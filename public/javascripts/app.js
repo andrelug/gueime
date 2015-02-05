@@ -82,9 +82,11 @@ tagSearch = function (str) {
                 if(thereIsAdmin != true) analytics.track('Exit Search');
             } else {
                 if(thereIsAdmin != true) {
-                    analytics.track('Search', {
-                        page: '/?t=' + searchStr.toString().split(/[ ,]+/).join('-'),
-                        pesquisa: searchStr.toString().split(/[ ,]+/).join('-')
+                    analytics.page('Trending', {
+                        title: 'Trending',
+                        url: 'http://www.gueime.com.br/trending',
+                        path: '/trending',
+                        referrer: document.referrer
                     });
                 }
             }
@@ -132,8 +134,11 @@ $('.trending').on('click', function () {
     }).done(function (data) {
         varLoad.before(data);
         history.pushState(null, null, '/trending');
-        analytics.track('Trending', {
-            page: 'trending'
+        analytics.page('Search', {
+            title: 'Busca ' + searchStr.toString().split(/[ ,]+/).join('-'),
+            url: 'http://www.gueime.com.br/?t=' + searchStr.toString().split(/[ ,]+/).join('-'),
+            path: '/?t=' + searchStr.toString().split(/[ ,]+/).join('-'),
+            referrer: document.referrer
         });
         container.waitForImages(function () {
             varLoad.show();
@@ -205,8 +210,11 @@ varDocument.on('click', 'a', function () {
         var ajaxUrl = $(this).attr('href');
         ajaxPage(ajaxUrl);
         if(thereIsAdmin != true) {
-            analytics.track('Load Page Ajax', {
-                page: ajaxUrl
+            analytics.page('AjaxUrl', {
+                title: 'AjaxUrl',
+                url: 'http://www.gueime.com.br/' + ajaxUrl,
+                path: '/' + ajaxUrl,
+                referrer: document.referrer
             });
         }
         
