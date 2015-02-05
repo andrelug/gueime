@@ -83,7 +83,7 @@ tagSearch = function (str) {
             } else {
                 if(thereIsAdmin != true) {
                     analytics.page('Search', {
-                        title: 'Busca ' + searchStr.toString().split(/[ ,]+/).join('-'),
+                        title: 'Busca',
                         url: 'http://www.gueime.com.br/?t=' + searchStr.toString().split(/[ ,]+/).join('-'),
                         path: '/?t=' + searchStr.toString().split(/[ ,]+/).join('-'),
                         referrer: document.referrer
