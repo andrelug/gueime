@@ -82,10 +82,10 @@ tagSearch = function (str) {
                 if(thereIsAdmin != true) analytics.track('Exit Search');
             } else {
                 if(thereIsAdmin != true) {
-                    analytics.page('Trending', {
-                        title: 'Trending',
-                        url: 'http://www.gueime.com.br/trending',
-                        path: '/trending',
+                    analytics.page('Search', {
+                        title: 'Busca ' + searchStr.toString().split(/[ ,]+/).join('-'),
+                        url: 'http://www.gueime.com.br/?t=' + searchStr.toString().split(/[ ,]+/).join('-'),
+                        path: '/?t=' + searchStr.toString().split(/[ ,]+/).join('-'),
                         referrer: document.referrer
                     });
                 }
@@ -134,10 +134,10 @@ $('.trending').on('click', function () {
     }).done(function (data) {
         varLoad.before(data);
         history.pushState(null, null, '/trending');
-        analytics.page('Search', {
-            title: 'Busca ' + searchStr.toString().split(/[ ,]+/).join('-'),
-            url: 'http://www.gueime.com.br/?t=' + searchStr.toString().split(/[ ,]+/).join('-'),
-            path: '/?t=' + searchStr.toString().split(/[ ,]+/).join('-'),
+        analytics.page('Trending', {
+            title: 'Trending',
+            url: 'http://www.gueime.com.br/trending',
+            path: '/trending',
             referrer: document.referrer
         });
         container.waitForImages(function () {
