@@ -82,9 +82,11 @@ tagSearch = function (str) {
                 if(thereIsAdmin != true) analytics.track('Exit Search');
             } else {
                 if(thereIsAdmin != true) {
-                    analytics.track('Search', {
-                        page: '/?t=' + searchStr.toString().split(/[ ,]+/).join('-'),
-                        pesquisa: searchStr.toString().split(/[ ,]+/).join('-')
+                    analytics.page('Search', {
+                        title: 'Busca',
+                        url: 'http://www.gueime.com.br/?t=' + searchStr.toString().split(/[ ,]+/).join('-'),
+                        path: '/?t=' + searchStr.toString().split(/[ ,]+/).join('-'),
+                        referrer: document.referrer
                     });
                 }
             }
@@ -104,6 +106,69 @@ tagSearch = function (str) {
 
     });
 }
+
+$('.trending').on('click', function () {
+    $.ajax({
+        url: '/trending',
+        type: 'GET',
+        dataType: 'html',
+        beforeSend: function () {
+            $('#spinning').show();
+            varBody.css('overflow-y', 'hidden');
+            container.animate({ 'opacity': 0 }).remove();
+            varHtmlBody.animate({ scrollTop: 0 }, "slow");
+            varFooter.hide();
+            varLoad.hide();
+            if (varCheck.html() == 'check') {
+                varBody.css('background', 'none').css('background-color', '#ecf0f1');
+                $('#wrapper').empty();
+                $('.editar').remove();
+                $('#searchBack').slideDown();
+                $('#profileTiles').remove();
+                $('#spinning').remove();
+                varLoad.before('<div id="spinning"><img src="/images/spinning.gif" /></div>');
+                varDeletar.remove();
+            }
+            $('.scriptLoad').remove();
+        }
+    }).done(function (data) {
+        varLoad.before(data);
+        history.pushState(null, null, '/trending');
+        analytics.page('Trending', {
+            title: 'Trending',
+            url: 'http://www.gueime.com.br/trending',
+            path: '/trending',
+            referrer: document.referrer
+        });
+        container.waitForImages(function () {
+            varLoad.show();
+            $('#spinning').hide();
+            varBody.css('overflow-y', 'auto');
+            container.animate({ 'opacity': 1 });
+            varFooter.show();
+            varLoad.show();
+            if (varCheck.html() == 'check') {
+                $('header').removeClass('header row');
+                $('#check').remove();
+                $('.smallLogo').remove();
+            }
+            FB.XFBML.parse();
+            n = $('.item').length;
+            if (n < 7) {
+                $.ajax({
+                    type: "GET",
+                    url: "/pagination",
+                    data: { n: n, str: searchStr },
+                    dataType: 'html'
+                }).done(function (data) {
+                    container.isotope('insert', $(data));
+                    FB.XFBML.parse();
+                });
+            }
+        }, null, true);
+    });
+    return false
+});
 
 // Autocomplete
 varMainInput.autocomplete({
@@ -145,8 +210,11 @@ varDocument.on('click', 'a', function () {
         var ajaxUrl = $(this).attr('href');
         ajaxPage(ajaxUrl);
         if(thereIsAdmin != true) {
-            analytics.track('Load Page Ajax', {
-                page: ajaxUrl
+            analytics.page('AjaxUrl', {
+                title: 'AjaxUrl',
+                url: 'http://www.gueime.com.br/' + ajaxUrl,
+                path: '/' + ajaxUrl,
+                referrer: document.referrer
             });
         }
         
@@ -395,6 +463,9 @@ $('.pedir').on('click', function (event) {
         });
     }
 });
+
+
+
 
 
 if(thereIsAdmin != true) {

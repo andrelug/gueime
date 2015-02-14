@@ -2,6 +2,8 @@ var LocalStrategy   = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
 var TwitterStrategy  = require('passport-twitter').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
+var mandrill = require('mandrill-api/mandrill'),
+    mandrill_client = new mandrill.Mandrill('9OnGzepS5J_rDmLYVSjWnQ');
 
 // load up helper functions
 var func = require('./functions');
@@ -240,13 +242,64 @@ module.exports = function (passport) {
                             newUser.name.parsed = func.string_to_slug(profile.name.givenName);
                             newUser.photo = "http://graph.facebook.com/" + profile.username + "/picture?type=large";
 
-                            // save our user to the database
-                            newUser.save(function (err) {
-                                if (err)
-                                    throw err;
 
-                                // if successful, return the new user
-                                return done(null, newUser);
+                            // Email para Contato
+                            var newMessage = {
+                                "html": "<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.0 Transitional//EN' 'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd'><html xmlns='http://www.w3.org/1999/xhtml'><head><meta content='text/html; charset=utf-8' http-equiv='Content-Type' /><title></title><style type='text/css'>@media only screen and (max-width:480px){body,table,td,p,a,li,blockquote{-webkit-text-size-adjust:none !important}body{width:100% !important;min-width:100% !important}td[id=bodyCell]{padding:10px !important}table.kmMobileHide{display:none !important}table[class=kmTextContentContainer]{width:100% !important}table[class=kmBoxedTextContentContainer]{width:100% !important}td[class=kmImageContent]{padding-left:0 !important;padding-right:0 !important}img[class=kmImage]{width:100% !important}table[class=kmSplitContentLeftContentContainer],table[class=kmSplitContentRightContentContainer],table[class=kmColumnContainer],td[class=kmVerticalButtonBarContentOuter] table[class=kmButtonBarContent],td[class=kmVerticalButtonCollectionContentOuter] table[class=kmButtonCollectionContent],table[class=kmVerticalButton],table[class=kmVerticalButtonContent]{width:100% !important}td[class=kmButtonCollectionInner]{padding-left:9px !important;padding-right:9px !important;padding-top:9px !important;padding-bottom:0 !important;background-color:transparent !important}td[class=kmVerticalButtonIconContent],td[class=kmVerticalButtonTextContent],td[class=kmVerticalButtonContentOuter]{padding-left:0 !important;padding-right:0 !important;padding-bottom:9px !important}table[class=kmSplitContentLeftContentContainer] td[class=kmTextContent],table[class=kmSplitContentRightContentContainer] td[class=kmTextContent],table[class=kmColumnContainer] td[class=kmTextContent],table[class=kmSplitContentLeftContentContainer] td[class=kmImageContent],table[class=kmSplitContentRightContentContainer] td[class=kmImageContent]{padding-top:9px !important}td[class='rowContainer kmFloatLeft'],td[class='rowContainer kmFloatLeft firstColumn'],td[class='rowContainer kmFloatLeft lastColumn']{float:left;clear:both;width:100% !important}table[id=templateContainer],table[class=templateRow]{max-width:600px !important;width:100% !important}h1{font-size:24px !important;line-height:130% !important}h2{font-size:20px !important;line-height:130% !important}h3{font-size:18px !important;line-height:130% !important}h4{font-size:16px !important;line-height:130% !important}td[class=kmTextContent]{font-size:14px !important;line-height:130% !important}td[class=kmTextBlockInner] td[class=kmTextContent]{padding-right:18px !important;padding-left:18px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner]{padding-left:9px !important;padding-right:9px !important}table[class='kmTableBlock kmTableMobile'] td[class=kmTableBlockInner] [class=kmTextContent]{font-size:14px !important;line-height:130% !important;padding-left:4px !important;padding-right:4px !important}}</style></head><body style='margin:0;padding:0;background-color:#c7c7c7'><center><table align='center' border='0' cellpadding='0' cellspacing='0' id='bodyTable' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;background-color:#c7c7c7;height:100%;margin:0;width:100%'><tbody><tr><td align='center' id='bodyCell' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding-top:50px;padding-left:20px;padding-bottom:20px;padding-right:20px;border-top:0;height:100%;margin:0;width:100%'><table border='0' cellpadding='0' cellspacing='0' id='templateContainer' width='600' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;border:1px solid #aaa;background-color:#f4f4f4;border-radius:0'><tbody><tr><td id='templateContainerInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0'><table border='0' cellpadding='0' cellspacing='0' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmImageBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmImageBlockOuter'><tr><td class='kmImageBlockInner' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:9px;' valign='top'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmImageContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmImageContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;padding:0;padding-top:0px;padding-bottom:0;padding-left:9px;padding-right:9px;'><img align='left' alt='' class='kmImage' src='https://d3k81ch9hvuctc.cloudfront.net/company%2Fb674Zj%2Fimages%2Fheader_email.jpg' width='564' style='border:0;height:auto;line-height:100%;outline:none;text-decoration:none;padding-bottom:0;display:inline;vertical-align:bottom;margin-right:0;max-width:800px;' /></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr><tr><td align='center' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='templateRow' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='rowContainer kmFloatLeft' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><table border='0' cellpadding='0' cellspacing='0' class='kmTextBlock' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody class='kmTextBlockOuter'><tr><td class='kmTextBlockInner' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;'><table align='left' border='0' cellpadding='0' cellspacing='0' class='kmTextContentContainer' width='100%' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0'><tbody><tr><td class='kmTextContent' valign='top' style='border-collapse:collapse;mso-table-lspace:0;mso-table-rspace:0;color:#505050;font-family:Helvetica, Arial;font-size:14px;line-height:150%;text-align:left;padding-top:9px;padding-bottom:9px;padding-left:18px;padding-right:18px;'><h1 style='color:#222;display:block;font-family:Helvetica, Arial;font-size:26px;font-style:normal;font-weight:bold;line-height:110%;letter-spacing:normal;margin:0;margin-bottom:9px;text-align:left'>Bem Vindo(a)!</h1><p style='margin:0;padding-bottom:1em'> </p><p style='margin:0;padding-bottom:1em'>Olá " + profile.name.givenName + "! Ficamos muito felizes com seu registro em nosso site. Esperamos que tenha uma excelente experiência e aproveitamos para lhe pedir feedback sempre que achar algum problema no site, tiver uma sugestão ou qualquer outro comentário.</p><p style='margin:0;padding-bottom:1em'>Conduzimos um programa de parceiros para aqueles usuários que quiserem escrever aqui no Gueime.com.br. Se este for seu caso, saiba mais em <a href='http://www.gueime.com.br/parceiros'>nossa página de parceiros</a>.</p><p style='margin:0;padding-bottom:1em'>Um abraço</p><p style='margin:0;padding-bottom:1em'>Equipe Gueime</p></td></tr></tbody></table></td></tr></tbody></table></td></tr></tbody></table></td></tr></table></td></tr></tbody></table></td></tr></tbody></table></center></body></html>",
+                                "text": "Olá " + profile.name.givenName + "! Ficamos muito felizes com seu registro em nosso site. Esperamos que tenha uma excelente experiência e aproveitamos para lhe pedir feedback sempre que achar algum problema no site, tiver uma sugestão ou qualquer outro comentário.</p><p style='margin:0;padding-bottom:1em'>Conduzimos um programa de parceiros para aqueles usuários que quiserem escrever aqui no Gueime.com.br. Se este for seu caso, saiba mais em <a href='http://www.gueime.com.br/parceiros'>nossa página de parceiros",
+                                "subject": "Gueime - Bem Vindo(a)",
+                                "from_email": "parceiros@gueime.com.br",
+                                "from_name": "Gueime - Parceiros",
+                                "to": [{
+                                        "email": profile.emails[0].value,
+                                        "name": profile.name.givenName,
+                                        "type": "to"
+                                    },
+                                    {
+                                        "email": "parceiros@gueime.com.br",
+                                        "name": "Parceiros",
+                                        "type": "bcc"
+                                    }],
+                                "headers": {
+                                    "Reply-To": "parceiros@gueime.com.br"
+                                },
+                                "important": false,
+                                "track_opens": true,
+                                "track_clicks": true,
+                                "auto_text": null,
+                                "auto_html": true,
+                                "inline_css": null,
+                                "url_strip_qs": null,
+                                "preserve_recipients": null,
+                                "view_content_link": null,
+                                "return_path_domain": null,
+                                "tags": [
+                                    "conMessage"
+                                ]
+                            };
+                            var async = false;
+                            var ip_pool = "Main Pool";
+                            // Evio de Email
+                            mandrill_client.messages.send({"message": newMessage, "async": async, "ip_pool": ip_pool}, function(result) {
+                                console.log(result);
+                                // save our user to the database
+                                newUser.save(function (err) {
+                                    if (err)
+                                        throw err;
+
+                                    // if successful, return the new user
+                                    return done(null, newUser);
+                                });
+                            }, function(e) {
+                                console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
+                                // save our user to the database
+                                newUser.save(function (err) {
+                                    if (err)
+                                        throw err;
+
+                                    // if successful, return the new user
+                                    return done(null, newUser);
+                                });
                             });
                         });
                     }

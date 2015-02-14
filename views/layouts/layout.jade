@@ -79,36 +79,112 @@ html.no-js(lang="pt_BR")
             });
 
         if(searchTag != undefined)
-            script.
-                var searchTag = '#{searchTag}';
-                searchTag = searchTag.split('-');
-                for(i=0; i < searchTag.length; i++){
-                    console.log(searchTag[i]);
-                    $('#tagSelection').append('<span>' + searchTag[i] + '<a class="tag" id="' + searchTag[i] + '">x</a></span>');
-                    searchStr.push(searchTag[i]);
-                }
+            if(type == undefined)
+                script.
+                    var searchTag = '#{searchTag}';
+                    searchTag = searchTag.split('-');
+                    for(i=0; i < searchTag.length; i++){
+                        console.log(searchTag[i]);
+                        $('#tagSelection').append('<span>' + searchTag[i] + '<a class="tag" id="' + searchTag[i] + '">x</a></span>');
+                        searchStr.push(searchTag[i]);
+                    }
                 
-                n = $('.item').length;
-                if (n < 7) {
-                    $.ajax({
-                        type: "GET",
-                        url: "/pagination",
-                        data: { n: n, str: searchStr },
-                        dataType: 'html'
-                    }).done(function (data) {
-                        container.isotope('insert', $(data));
+                    n = $('.item').length;
+                    if (n < 7) {
+                        $.ajax({
+                            type: "GET",
+                            url: "/pagination",
+                            data: { n: n, str: searchStr },
+                            dataType: 'html'
+                        }).done(function (data) {
+                            container.isotope('insert', $(data));
+                        });
+                    }
+            else
+                script.
+                    var searchTag = '#{searchTag}';
+                    searchTag = searchTag.split('-');
+                    for(i=0; i < searchTag.length; i++){
+                        console.log(searchTag[i]);
+                        $('#tagSelection').append('<span>' + searchTag[i] + '<a class="tag" id="' + searchTag[i] + '">x</a></span>');
+                        searchStr.push(searchTag[i]);
+                    }
+                
+                    n = $('.item').length;
+                    if (n < 7) {
+                        $.ajax({
+                            type: "GET",
+                            url: "/pagination/#{type}",
+                            data: { n: n, str: searchStr },
+                            dataType: 'html'
+                        }).done(function (data) {
+                            container.isotope('insert', $(data));
+                        });
+                    }
+                    $('#loadMoreRelated').on('click', function () {
+                        n = $('.item').length;
+                        $.ajax({
+                            type: "GET",
+                            url: "/pagination/#{type}",
+                            data: { n: n, str: searchStr },
+                            dataType: 'html'
+                        }).done(function (data) {
+                            console.log(data)
+                            FB.XFBML.parse();
+                            if (data == '<div id="gridArticles" class="row"></div><style>.autocomplete-suggestions{position:absolute !important;}</style>') {
+                                $("#loadMore").fadeOut(300, function () {
+                                    $(this).text("Aparentemente não há mais artigos").fadeIn(300).delay(1500).fadeOut(300, function () {
+                                        $(this).text('Mais Artigos').fadeIn(300);
+                                    });
+                                });
+                            }
+                            container.isotope('insert', $(data));
+                        });
                     });
-                }
         else
-            script.
-                n = $('.item').length;
-                if (n < 7) {
-                    $.ajax({
-                        type: "GET",
-                        url: "/pagination",
-                        data: {n: n},
-                        dataType: 'html'
-                    }).done(function (data) {
-                        container.isotope('insert', $(data));
+            if(type == undefined)
+                script.
+                    n = $('.item').length;
+                    if (n < 7) {
+                        $.ajax({
+                            type: "GET",
+                            url: "/pagination",
+                            data: {n: n},
+                            dataType: 'html'
+                        }).done(function (data) {
+                            container.isotope('insert', $(data));
+                        });
+                    }
+            else
+                script.
+                    n = $('.item').length;
+                    if (n < 7) {
+                        $.ajax({
+                            type: "GET",
+                            url: "/pagination/#{type}",
+                            data: {n: n},
+                            dataType: 'html'
+                        }).done(function (data) {
+                            container.isotope('insert', $(data));
+                        });
+                    }
+                    $('#loadMoreRelated').on('click', function () {
+                        n = $('.item').length;
+                        $.ajax({
+                            type: "GET",
+                            url: "/pagination/#{type}",
+                            data: { n: n, str: searchStr },
+                            dataType: 'html'
+                        }).done(function (data) {
+                            console.log(data)
+                            FB.XFBML.parse();
+                            if (data == '<div id="gridArticles" class="row"></div><style>.autocomplete-suggestions{position:absolute !important;}</style>') {
+                                $("#loadMore").fadeOut(300, function () {
+                                    $(this).text("Aparentemente não há mais artigos").fadeIn(300).delay(1500).fadeOut(300, function () {
+                                        $(this).text('Mais Artigos').fadeIn(300);
+                                    });
+                                });
+                            }
+                            container.isotope('insert', $(data));
+                        });
                     });
-                }

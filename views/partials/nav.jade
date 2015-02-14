@@ -3,8 +3,19 @@ div#nav-sticky
         div.row
             div.large-5.medium-9.small-10.medium-centered.columns.large-centered
                 div#suggestion
+                    a.trending(href="#") <i class="fa fa-line-chart"></i> Trending
+                    a.menuTop(href="#", data-dropdown="dropMenu") <i class="fa fa-globe"></i> Menu
+                    ul#dropMenu.entrarLogin.f-dropdown(data-dropdown-content)
+                        li
+                            a(href="/noticias") Notícias
+                        li
+                            a(href="/artigos") Artigos
+                        li
+                            a(href="/analises") Análises
+                        li
+                            a(href="/videos") Vídeos
                     input#mainInput(type="text", placeholder="Ache tudo sobre Games!", autocomplete="off")
-                    a(href="#").filtros filtros
+                    a(href="#").filtros <i class="fa fa-filter"></i>
     div.filter.row
         div.medium-8.medium-centered.small-12.small-centered.columns
             div.row#gerenciarMenu.filterMenu

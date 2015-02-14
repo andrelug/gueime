@@ -640,7 +640,7 @@ textarea
     margin-top 20px
     display block !important
 
-#loadMore, #loadMoreProfile
+#loadMore, #loadMoreProfile, #loadMoreRelated
     width 100%
 
 
@@ -1112,14 +1112,21 @@ textarea
         top 20px !important
 
 
-.filtros
+.filtros, .menuTop, .trending
     position absolute
     top 12px
-    right -33px
+    right -15px
     color white
-    display none
 
-.filtros:hover
+.menuTop
+    left -60px
+    z-index 0
+
+.trending
+    left -160px
+    z-index 0
+
+.filtros:hover, .menuTop:hover
     color white
     text-decoration underline
 
@@ -1149,6 +1156,8 @@ textarea
 
 #mainInput
     font-size 12pt
+    position relative
+    z-index 1
 .autocomplete-suggestions .autocomplete-selected
     background #F0F0F0 
 .autocomplete-suggestions div
