@@ -191,13 +191,13 @@ input[type="text"], textarea
     height 100%
     background-position center center
 
-#gridArticles, #gridProfileArticles, #trocaGrid
+#gridArticles, #gridProfileArticles, #trocaGrid, #gridDash
     width 80%
     max-width 80%
     margin-left 10%
     opacity 0
 
-#trocaGrid
+#trocaGrid, #gridDash
     opacity 1
 
 .details
@@ -252,7 +252,7 @@ input[type="text"], textarea
         display table-cell
 
 @media only screen and (max-width: 64.063em)
-    #gridArticles, #gridProfileArticles
+    #gridArticles, #gridProfileArticles, #gridDash
         margin-left 3%
         width 98%
         max-width 98%
@@ -1268,3 +1268,36 @@ textarea
         -ms-transition all 400ms ease
         -o-transition all 400ms ease
         transition all 400ms ease
+
+.gridster ul
+    width 100% !important
+    background #ccc
+    list-style-type none
+
+.gridster span i
+    display inline
+    padding 6px
+    color gAsphalt
+    box-shadow 0px 0px 1px black
+    float right
+    border-radius 3px
+    cursor pointer
+    margin-right 8px
+    background-color white
+    margin-top 10px
+    
+
+.panel
+    height 100%
+    background-color white
+    margin 0
+    padding 0
+    border none
+
+    h5
+        background-color gBlue
+        width 100%
+        color white
+        padding 15px 10px
+        text-transform uppercase
+        font-weight bold

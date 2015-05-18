@@ -32,7 +32,7 @@ app.configure(function () {
     app.use(passport.initialize());
     app.use(passport.session()); // persistent login sessions
     app.use(flash()); // use connect-flash for flash messages stored in session
-    app.use(function(req, res, next) { // make sure no trailing slashes
+    app.use(function (req, res, next) { // make sure no trailing slashes
         if (req.path.substr(-1) == '/' && req.path.length > 1) {
             var query = req.url.slice(req.path.length);
             res.redirect(301, req.path.slice(0, -1) + query);
@@ -42,27 +42,29 @@ app.configure(function () {
     });
     app.use(app.router);
     app.use(require('stylus').middleware(path.join(__dirname, 'public')));
-    app.use(express.static(path.join(__dirname, 'public'), {maxAge: 86400000}));
-    app.use(function(req, res) {
-      var user = req.user;
-      res.status(400);
-      if(!user){
-          res.render('404', {title: '404: File Not Found'});
-      } else{
-          res.render('404', {title: '404: File Not Found', user: user});
-      }
-      
-    });
-    app.use(function(error, req, res, next) {
-      var user = req.user;
-      res.status(500);
-      if(!user){
-          res.render('500', {title:'500: Internal Server Error', error: error});
-      } else{
-          res.render('500', {title:'500: Internal Server Error', error: error, user: user});
-      }
-      
-    });
+    app.use(express.static(path.join(__dirname, 'public'), { maxAge: 86400000 }));
+    if ('development' != app.get('env')) {
+        app.use(function (req, res) {
+            var user = req.user;
+            res.status(400);
+            if (!user) {
+                res.render('404', { title: '404: File Not Found' });
+            } else {
+                res.render('404', { title: '404: File Not Found', user: user });
+            }
+
+        });
+        app.use(function (error, req, res, next) {
+            var user = req.user;
+            res.status(500);
+            if (!user) {
+                res.render('500', { title: '500: Internal Server Error', error: error });
+            } else {
+                res.render('500', { title: '500: Internal Server Error', error: error, user: user });
+            }
+
+        });
+    }
     app.enable('trust proxy');
 });
 

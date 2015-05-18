@@ -203,13 +203,15 @@ rgba(0,0,0,0.3)
 }
 #gridArticles,
 #gridProfileArticles,
-#trocaGrid {
+#trocaGrid,
+#gridDash {
   width: 80%;
   max-width: 80%;
   margin-left: 10%;
   opacity: 0;
 }
-#trocaGrid {
+#trocaGrid,
+#gridDash {
   opacity: 1;
 }
 .details {
@@ -265,7 +267,8 @@ rgba(0,0,0,0.3)
 }
 @media only screen and (max-width: 64.063em) {
   #gridArticles,
-  #gridProfileArticles {
+  #gridProfileArticles,
+  #gridDash {
     margin-left: 3%;
     width: 98%;
     max-width: 98%;
@@ -1444,4 +1447,36 @@ a.create:active {
   -ms-transition: all 400ms ease;
   -o-transition: all 400ms ease;
   transition: all 400ms ease;
+}
+.gridster ul {
+  width: 100% !important;
+  background: #ccc;
+  list-style-type: none;
+}
+.gridster span i {
+  display: inline;
+  padding: 6px;
+  color: #34495e;
+  box-shadow: 0px 0px 1px #000;
+  float: right;
+  border-radius: 3px;
+  cursor: pointer;
+  margin-right: 8px;
+  background-color: #fff;
+  margin-top: 10px;
+}
+.panel {
+  height: 100%;
+  background-color: #fff;
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+.panel h5 {
+  background-color: #479ecd;
+  width: 100%;
+  color: #fff;
+  padding: 15px 10px;
+  text-transform: uppercase;
+  font-weight: bold;
 }

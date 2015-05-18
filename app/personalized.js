@@ -6,6 +6,7 @@ var Users = require('./models/user'),
     Product = require('./models/product'),
     DevPub = require('./models/devPub'),
     Genre = require('./models/genre'),
+    Grid = require('./models/grid'),
     func = require('../config/functions'),
     facebook = require('../config/facebook.js'),
     ip = require('ip'),
@@ -230,4 +231,48 @@ module.exports = function (app, passport, mongoose) {
     });
 
 
+
+
+    // NEW DASHBOARD
+    app.get('/dashboard', function (req, res) {
+        var user = req.user;
+
+        if (!user) {
+            Grid.findOne({ name: "1" }, function (err, docs) {
+                res.render('dash/index', { grid: docs.grid });
+            });
+        } else {
+            var widgets = [];
+            console.log('primeiro ' + user.dashboard.widget[0].split(','))
+            console.log('segundo ' + user.dashboard.widget)
+            for (i = 0; i < user.dashboard.widget.length; i++) {
+                console.log('esse é ' + user.dashboard.widget[i])
+                switch (user.dashboard.widget[i]) {
+                    case 'top':
+                        Artigos.find({ status: 'publicado' }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ 'graph.views': -1 }).limit(10).exec(function (err, docs) {
+                            widgets[i] = docs;
+                            res.render('dash/index', { user: user, widget: widgets })
+                        });
+                }
+            }
+
+        }
+
+
+
+    });
+
+    app.post('/grid', function (req, res) {
+        var thisGrid = req.body.grid;
+
+        new Grid({
+            grid: thisGrid
+        }).save(function (err, docs) {
+            if (err)
+                throw err
+
+            res.send('OK');
+        });
+
+    });
 }
