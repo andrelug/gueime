@@ -16,7 +16,7 @@ var Users = require('./models/user'),
     mandrill_client = new mandrill.Mandrill('9OnGzepS5J_rDmLYVSjWnQ'),
     Feed = require('feed');
 
-var client = new transloadit('195786e09f8911e495eae1be63259780', '360133efc358574ed2fef9c645c5fb62f65623af');
+var client = new transloadit('6a960970bff411e38b2aefa7e162a72d', '293a0ad266df65f8e8396cb6d972da8d14f2e608');
 
 // Session check function
 /*
