@@ -101,7 +101,7 @@ module.exports = function (app, passport, mongoose) {
                         Games.find({status: 'publicado', title: new RegExp(gameStr, 'i') }, cb);
                     }
                 ], function(err, result){
-                    res.render('index', { title: "O melhor site de games do Brasil!", docs: result[0], games: result[1], searchTag: searchTag, status: status});
+                    res.render('index', { title: "O melhor site de games do Brasil!", docs: result[0], games: result[1], searchTag: searchTag, status: status, type: 'inicio'});
                 });
             } else {
                 if(user.deleted == true){
@@ -121,7 +121,7 @@ module.exports = function (app, passport, mongoose) {
                             Users.update({'_id': user}, {$inc: {'graph.visits': 1}}, cb);
                         }
                     ], function(err, result){
-                        res.render('index', { user: user, title: "O melhor site de games do Brasil!", docs: result[0], games: result[1], searchTag: searchTag, status: status});
+                        res.render('index', { user: user, title: "O melhor site de games do Brasil!", docs: result[0], games: result[1], searchTag: searchTag, status: status, type: 'inicio'});
                     });
                 }
             }
@@ -129,7 +129,7 @@ module.exports = function (app, passport, mongoose) {
             if (!user) {
                 Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({publishDate: -1}).limit(6).exec(function (err, docs) {
 
-                    res.render('index', { title: "O melhor site de games do Brasil!", docs: docs, status: status});
+                    res.render('index', { title: "O melhor site de games do Brasil!", docs: docs, status: status, type: 'inicio'});
                 });
             } else {
                 if(user.deleted == true){
@@ -145,7 +145,7 @@ module.exports = function (app, passport, mongoose) {
                             Users.update({'_id': user}, {$inc: {'graph.visits': 1}}, cb);
                         }
                     ], function(err, result){
-                        res.render('index', { user: user, title: "O melhor site de games do Brasil!", docs: result[0], status: status});
+                        res.render('index', { user: user, title: "O melhor site de games do Brasil!", docs: result[0], status: status, type: 'inicio'});
                     });
                 }
             }
