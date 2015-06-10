@@ -79,7 +79,7 @@ html.no-js(lang="pt_BR")
             });
 
         if(searchTag != undefined)
-            if(type == undefined)
+            if(type == 'inicio')
                 script.
                     var searchTag = '#{searchTag}';
                     searchTag = searchTag.split('-');
@@ -132,7 +132,7 @@ html.no-js(lang="pt_BR")
                             console.log(data)
                             FB.XFBML.parse();
                             if (data == '<div id="gridArticles" class="row"></div><style>.autocomplete-suggestions{position:absolute !important;}</style>') {
-                                $("#loadMore").fadeOut(300, function () {
+                                $("#loadMoreRelated").fadeOut(300, function () {
                                     $(this).text("Aparentemente não há mais artigos").fadeIn(300).delay(1500).fadeOut(300, function () {
                                         $(this).text('Mais Artigos').fadeIn(300);
                                     });
@@ -142,7 +142,7 @@ html.no-js(lang="pt_BR")
                         });
                     });
         else
-            if(type == undefined)
+            if(type == 'inicio')
                 script.
                     n = $('.item').length;
                     if (n < 7) {
@@ -179,7 +179,7 @@ html.no-js(lang="pt_BR")
                             console.log(data)
                             FB.XFBML.parse();
                             if (data == '<div id="gridArticles" class="row"></div><style>.autocomplete-suggestions{position:absolute !important;}</style>') {
-                                $("#loadMore").fadeOut(300, function () {
+                                $("#loadMoreRelated").fadeOut(300, function () {
                                     $(this).text("Aparentemente não há mais artigos").fadeIn(300).delay(1500).fadeOut(300, function () {
                                         $(this).text('Mais Artigos').fadeIn(300);
                                     });
