@@ -39,6 +39,7 @@
     "passport-strategy": "^1.0.0",
     "passport-twitter": "*",
     "stylus": "~0.44.0",
+    "uid2": "0.0.3",
     "utils-merge": "^1.0.0"
   },
   "noAnalyze": true,
