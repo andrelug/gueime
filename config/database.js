@@ -9,7 +9,7 @@ if('development' == app.get('env')) {
     }
 }else{
     module.exports = {
-        'url': process.env.CUSTOMCONNSTR_MONGOLAB_URI,
-        'url2': process.env.CUSTOMCONNSTR_MONGOLAB_URIA
+        'url': 'mongodb://gueime:Watashiwa1!@ds027748.mongolab.com:27748/gueimeProd',
+        'url2': 'mongodb://gueime:Watashiwa1!@ds027748.mongolab.com:27748/gueimeProdSessions'
     }
 }
