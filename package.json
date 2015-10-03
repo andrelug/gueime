@@ -28,6 +28,7 @@
     "mongoose": "*",
     "node-transloadit": "*",
     "nodemailer": "*",
+    "oauth": "^0.9.14",
     "passport": "*",
     "passport-facebook": "*",
     "passport-google-oauth": "*",
