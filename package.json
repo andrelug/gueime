@@ -21,6 +21,7 @@
     "connect-flash": "*",
     "connect-mongo": "*",
     "express": "^3.5.3",
+    "passport-oauth": "*",
     "feed": "*",
     "ip": "^1.0.1",
     "mandrill-api": "*",
