@@ -36,7 +36,8 @@
     "passport-oauth1": "^1.0.1",
     "passport-strategy": "^1.0.0",
     "passport-twitter": "*",
-    "stylus": "~0.44.0"
+    "stylus": "~0.44.0",
+    "utils-merge": "^1.0.0"
   },
   "noAnalyze": true,
   "license": "Apache",
