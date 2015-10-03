@@ -25,7 +25,7 @@
     "ip": "^1.0.1",
     "mandrill-api": "*",
     "jade": "^1.11.0",
-    "mongoose": "*",
+    "mongoose": "4.1.9",
     "node-transloadit": "*",
     "nodemailer": "^1.5.0",
     "passport": "^0.3.0",
