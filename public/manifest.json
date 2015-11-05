@@ -1,0 +1,34 @@
+{
+  "lang": "pt_BR",
+  "name": "Gueime",
+  "short_name": "Gueime",
+  "icons": [{
+        "src": "http://www.gueime.com.br/images/gueime-transparente.png",
+        "sizes": "64x64",
+        "type": "image/webp"
+      }, {
+        "src": "http://www.gueime.com.br/images/gueime-transparente.png",
+        "sizes": "64x64"
+      }, {
+        "src": "http://www.gueime.com.br/images/gueime-transparente.png",
+        "sizes": "128x128",
+        "density": 2
+      }],
+  "splash_screens": [{
+        "src": "http://www.gueime.com.br/images/avatar.jpg",
+        "sizes": "320x240"
+      }, {
+        "src": "http://www.gueime.com.br/images/avatar.jpg",
+        "sizes": "1334x750"
+      }, {
+        "src": "http://www.gueime.com.br/images/avatar.jpg",
+        "sizes": "1920x1080",
+        "density": 3
+      }],
+  "scope": "/",
+  "start_url": "/",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "theme_color": "aliceblue",
+  "background_color": "white"
+}
