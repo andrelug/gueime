@@ -5,6 +5,8 @@ var express = require('express')
   , flash = require('connect-flash')
   , configDB = require('./config/database.js')
   , MongoStore = require('connect-mongo')(express)
+  , https = require('https')
+  , fs = require("fs")
   , path = require('path');
 
 var app = express();
@@ -15,6 +17,12 @@ mongoose.connect(configDB.url); // connect to our database
 var gueimesessions = mongoose.createConnection(configDB.url2);
 
 require('./config/passport')(passport); // pass passport for configuration
+
+// This line is from the Node.js HTTPS documentation.
+var options = {
+  key: fs.readFileSync('privkey.pem'),
+  cert: fs.readFileSync('cert.pem')
+};
 
 app.configure(function () {
     app.set('port', process.env.PORT || 3000);
@@ -84,5 +92,8 @@ app.use(function(error, req, res, next) {
 
 
 http.createServer(app).listen(app.get('port'), function(){
+  console.log("Express server listening on port " + app.get('port'));
+});
+https.createServer(options, app).listen(443, function(){
   console.log("Express server listening on port " + app.get('port'));
 });
