@@ -74,7 +74,7 @@ module.exports = function (app, passport, mongoose) {
 
     // SSL
     app.get('/.well-known/acme-challenge/kYiBCLdcXZpyA71igv8tNew-zj1TAY7LJ8eGvtwFVdg', function(req, res){
-        res.send('kYiBCLdcXZpyA71igv8tNew-zj1TAY7LJ8eGvtwFVdg.2vZDavkigD2NRsfb7qwyQRgYGOjyCt8E9niuwb8ye2g');
+        res.write('kYiBCLdcXZpyA71igv8tNew-zj1TAY7LJ8eGvtwFVdg.2vZDavkigD2NRsfb7qwyQRgYGOjyCt8E9niuwb8ye2g');
     });
 
     // =====================================
