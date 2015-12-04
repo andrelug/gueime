@@ -73,8 +73,8 @@ var managePoints = function(userId, points){
 module.exports = function (app, passport, mongoose) {
 
         // SSL
-        app.get('/.well-known/acme-challenge/Z3bRpfYiS_OTadOhFRLGUfZ0Gs4ab4RXn9wZ6cw_PgY', function(req, res){
-            res.send('Z3bRpfYiS_OTadOhFRLGUfZ0Gs4ab4RXn9wZ6cw_PgY.2vZDavkigD2NRsfb7qwyQRgYGOjyCt8E9niuwb8ye2g');
+        app.get('/.well-known/acme-challenge/ZzgFukZOlm8X06GbCtGWl24gsVBDEWpGeNE_WF2PGLU', function(req, res){
+            res.send('ZzgFukZOlm8X06GbCtGWl24gsVBDEWpGeNE_WF2PGLU.2vZDavkigD2NRsfb7qwyQRgYGOjyCt8E9niuwb8ye2g');
         });
 
 
