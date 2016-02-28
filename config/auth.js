@@ -8,7 +8,7 @@ if('development' == app.get('env')) {
 	    'facebookAuth' : {
 		    'clientID' 		: '561543940541408', // your App ID
 		    'clientSecret' 	: 'd550945b38741f8f0dde17027270218e', // your App Secret
-		    'callbackURL' 	: 'http://localhost:55345/auth/facebook/callback'
+		    'callbackURL' 	: 'http://localhost:3000/auth/facebook/callback'
 	    },
 
 	    'twitterAuth' : {

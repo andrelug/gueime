@@ -39,17 +39,11 @@ app.configure(function () {
             next();
         }
     });
-    app.get('/*', function(req, res, next) {
-      if (req.headers.host.match(/^www/) === null ) {
-        res.redirect(301, 'http://' + "www.gueime.com.br" + req.url);
-      } else {
-        next();
-      }
-  });
+
     app.use(app.router);
     app.use(require('stylus').middleware(path.join(__dirname, 'public')));
     app.use(express.static(path.join(__dirname, 'public'), { maxAge: 86400000 }));
-    if ('development' != app.get('env')) {
+    if ('development' !== app.get('env')) {
         app.use(function (req, res) {
             var user = req.user;
             res.status(400);
@@ -70,6 +64,13 @@ app.configure(function () {
             }
 
         });
+        app.get('/*', function(req, res, next) {
+              if (req.headers.host.match(/^www/) === null ) {
+                res.redirect(301, 'http://' + "www.gueime.com.br" + req.url);
+              } else {
+                next();
+              }
+          });
     }
     app.enable('trust proxy');
 });

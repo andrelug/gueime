@@ -35,7 +35,7 @@ var plusView = function(user){
     //check level
     var addLevel,
         points = user.gamification.points;
-    
+
     if (points >= 100 && points < 300){
         addLevel = 2;
     } else if(points >= 300 && points < 600){
@@ -60,13 +60,13 @@ var plusView = function(user){
         addLevel = user.gamification.level;
     }
     Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}, $set: {'gamification.level': addLevel}}, function(err){
-        
+
     });
 }
 
 var managePoints = function(userId, points){
     Users.update({_id: userId},{$inc: {'gamification.points': points}}, function(err){
-        
+
     });
 }
 
@@ -83,7 +83,7 @@ module.exports = function (app, passport, mongoose) {
         if (!user) {
             Artigos.find({ status: 'publicado', type: 'artigo' }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ publishDate: -1 }).limit(6).exec(function (err, docs) {
 
-                res.render('index', { title: "O melhor site de games do Brasil!", docs: docs, status: status, type: 'artigo' });
+                res.render('index', { title: "Os mais novos artigos", docs: docs, status: status, type: 'artigo' });
             });
         } else {
             if (user.deleted == true) {
@@ -99,7 +99,7 @@ module.exports = function (app, passport, mongoose) {
                             Users.update({ '_id': user }, { $inc: { 'graph.visits': 1} }, cb);
                         }
                     ], function (err, result) {
-                        res.render('index', { user: user, title: "O melhor site de games do Brasil!", docs: result[0], status: status, type: 'artigo' });
+                        res.render('index', { user: user, title: "Os mais novos artigos", docs: result[0], status: status, type: 'artigo' });
                     });
             }
         }
@@ -115,7 +115,7 @@ module.exports = function (app, passport, mongoose) {
         if (!user) {
             Artigos.find({ status: 'publicado', type: 'noticia' }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ publishDate: -1 }).limit(6).exec(function (err, docs) {
 
-                res.render('index', { title: "O melhor site de games do Brasil!", docs: docs, status: status, type: 'noticia' });
+                res.render('index', { title: "As mais novas notícias", docs: docs, status: status, type: 'noticia' });
             });
         } else {
             if (user.deleted == true) {
@@ -131,7 +131,7 @@ module.exports = function (app, passport, mongoose) {
                             Users.update({ '_id': user }, { $inc: { 'graph.visits': 1} }, cb);
                         }
                     ], function (err, result) {
-                        res.render('index', { user: user, title: "O melhor site de games do Brasil!", docs: result[0], status: status, type: 'noticia' });
+                        res.render('index', { user: user, title: "As mais novas notícias", docs: result[0], status: status, type: 'noticia' });
                     });
             }
         }
@@ -147,7 +147,7 @@ module.exports = function (app, passport, mongoose) {
         if (!user) {
             Artigos.find({ status: 'publicado', type: 'analise' }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ publishDate: -1 }).limit(6).exec(function (err, docs) {
 
-                res.render('index', { title: "O melhor site de games do Brasil!", docs: docs, status: status, type: 'analise' });
+                res.render('index', { title: "As mais novas análises", docs: docs, status: status, type: 'analise' });
             });
         } else {
             if (user.deleted == true) {
@@ -163,7 +163,7 @@ module.exports = function (app, passport, mongoose) {
                             Users.update({ '_id': user }, { $inc: { 'graph.visits': 1} }, cb);
                         }
                     ], function (err, result) {
-                        res.render('index', { user: user, title: "O melhor site de games do Brasil!", docs: result[0], status: status, type: 'analise' });
+                        res.render('index', { user: user, title: "As mais novas análises", docs: result[0], status: status, type: 'analise' });
                     });
             }
         }
@@ -179,7 +179,7 @@ module.exports = function (app, passport, mongoose) {
         if (!user) {
             Artigos.find({ status: 'publicado', type: 'video' }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ publishDate: -1 }).limit(6).exec(function (err, docs) {
 
-                res.render('index', { title: "O melhor site de games do Brasil!", docs: docs, status: status, type: 'video' });
+                res.render('index', { title: "Mais novos vídeos", docs: docs, status: status, type: 'video' });
             });
         } else {
             if (user.deleted == true) {
@@ -195,7 +195,7 @@ module.exports = function (app, passport, mongoose) {
                             Users.update({ '_id': user }, { $inc: { 'graph.visits': 1} }, cb);
                         }
                     ], function (err, result) {
-                        res.render('index', { user: user, title: "O melhor site de games do Brasil!", docs: result[0], status: status, type: 'video' });
+                        res.render('index', { user: user, title: "Mais novos vídeos", docs: result[0], status: status, type: 'video' });
                     });
             }
         }
