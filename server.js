@@ -40,8 +40,8 @@ app.configure(function () {
         }
     });
     app.get('/*', function(req, res, next) {
-      if (req.headers.host.match(/^www/) !== null ) {
-        res.redirect('http://' + req.headers.host.replace(/^www\./, '') + req.url);
+      if (req.headers.host.match(/^www/) === null ) {
+        res.redirect(req.headers.host.replace('http://', 'http://' + /^www\./) + req.url);
       } else {
         next();
       }
