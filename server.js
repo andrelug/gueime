@@ -39,6 +39,13 @@ app.configure(function () {
             next();
         }
     });
+    app.get('/*', function(req, res, next) {
+      if (req.headers.host.match(/^www/) !== null ) {
+        res.redirect('http://' + req.headers.host.replace(/^www\./, '') + req.url);
+      } else {
+        next();
+      }
+  });
     app.use(app.router);
     app.use(require('stylus').middleware(path.join(__dirname, 'public')));
     app.use(express.static(path.join(__dirname, 'public'), { maxAge: 86400000 }));

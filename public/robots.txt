@@ -1,2 +1,10 @@
 User-agent: *
-Disallow: 
+Disallow:
+
+Sitemap: http://www.gueime.com.br/sitemap.xml
+Sitemap: http://www.gueime.com.br/sitemapconsole.xml
+Sitemap: http://www.gueime.com.br/sitemapdev.xml
+Sitemap: http://www.gueime.com.br/sitemapgames.xml
+Sitemap: http://www.gueime.com.br/sitemapgenero.xml
+Sitemap: http://www.gueime.com.br/sitemappub.xml
+Sitemap: http://www.gueime.com.br/sitemapusers.xml
