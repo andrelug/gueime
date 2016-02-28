@@ -35,7 +35,7 @@ var plusView = function(user){
     //check level
     var addLevel,
         points = user.gamification.points;
-    
+
     if (points >= 100 && points < 300){
         addLevel = 2;
     } else if(points >= 300 && points < 600){
@@ -60,15 +60,15 @@ var plusView = function(user){
         addLevel = user.gamification.level;
     }
     Users.update({'_id': user._id}, {$inc: {'graph.visits': 1}, $set: {'gamification.level': addLevel}}, function(err){
-        
+
     });
-}
+};
 
 var managePoints = function(userId, points){
     Users.update({_id: userId},{$inc: {'gamification.points': points}}, function(err){
-        
+
     });
-}
+};
 
 module.exports = function (app, passport, mongoose) {
 
@@ -91,11 +91,11 @@ module.exports = function (app, passport, mongoose) {
             var searchStr = [];
 
             searchStr = searchTag.split('-');
-                    
-            if(searchTag != undefined){
+
+            if(searchTag !== undefined){
                 gameStr = searchTag.split('-').join(' ');
             } else{
-                gameStr = 0
+                gameStr = 0;
             }
 
             if (!user) {
@@ -110,12 +110,12 @@ module.exports = function (app, passport, mongoose) {
                     res.render('index', { title: "O melhor site de games do Brasil!", docs: result[0], games: result[1], searchTag: searchTag, status: status, type: 'inicio'});
                 });
             } else {
-                if(user.deleted == true){
+                if(user.deleted === true){
                     res.redirect('/users/restore');
                 } else {
                     // sessionReload(req, res, next);
 
-                    
+
                     async.parallel([
                         function(cb){
                             Artigos.find({$or: [{ facet: { $all: searchStr}, status: 'publicado' }, {title: new RegExp(gameStr, 'i'), status: 'publicado'}]}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({publishDate: -1}).limit(6).exec(cb);
@@ -138,7 +138,7 @@ module.exports = function (app, passport, mongoose) {
                     res.render('index', { title: "O melhor site de games do Brasil!", docs: docs, status: status, type: 'inicio'});
                 });
             } else {
-                if(user.deleted == true){
+                if(user.deleted === true){
                     res.redirect('/users/restore');
                 } else {
                     // sessionReload(req, res, next);
@@ -173,7 +173,7 @@ module.exports = function (app, passport, mongoose) {
                     }
                 });
             }
-            
+
         });
     });
     */
@@ -184,13 +184,13 @@ module.exports = function (app, passport, mongoose) {
 
         async.parallel([
             function(cb){
-                Artigos.find({facet: new RegExp(data, 'i')}, {facet: 1, _id: 0}, cb)
+                Artigos.find({facet: new RegExp(data, 'i')}, {facet: 1, _id: 0}, cb);
             },
             function(cb){
-                Games.find({title: new RegExp(data, 'i')}, {title: 1, _id: 0}, cb)
+                Games.find({title: new RegExp(data, 'i')}, {title: 1, _id: 0}, cb);
             },
             function(cb){
-                DevPub.find({title: new RegExp(data, 'i')}, {title: 1, _id: 0}, cb)
+                DevPub.find({title: new RegExp(data, 'i')}, {title: 1, _id: 0}, cb);
             }
         ], function(err, result){
 
@@ -224,14 +224,14 @@ module.exports = function (app, passport, mongoose) {
 
             send = {
                 suggestions: filtered
-            }
+            };
 
             res.end(JSON.stringify(send));
         });
     });
 
 
-    // PAGINAÇÃO 
+    // PAGINAÇÃO
     app.get('/pagination', function(req, res){
         n = req.query.n;
 
@@ -270,7 +270,7 @@ module.exports = function (app, passport, mongoose) {
                 Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ 'graph.views': -1 }).limit(12).exec(function (err, docs) {
                     res.render('index', { user: user, title: "O melhor site de games do Brasil!", docs: docs});
                 });
-            
+
             }
         } else {
             if (req.xhr === true) {
@@ -281,10 +281,10 @@ module.exports = function (app, passport, mongoose) {
                 Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ 'graph.views': -1 }).limit(12).exec(function (err, docs) {
                     res.render('index', { title: "O melhor site de games do Brasil!", docs: docs});
                 });
-            
+
             }
         }
-        
+
     });
 
 
@@ -310,10 +310,10 @@ module.exports = function (app, passport, mongoose) {
 
             var gameStr;
             console.log('1');
-            if(req.query.str != undefined){
+            if(req.query.str !== undefined){
                 gameStr = req.query.str.toString().split(/[ ,]+/).join(' ');
             } else{
-                gameStr = 0
+                gameStr = 0;
             }
             if(!user){
 
@@ -350,7 +350,7 @@ module.exports = function (app, passport, mongoose) {
     //Load Related ajax
     app.get('/loadRelated', function(req, res){
         Artigos.find({ facet: { $all: req.query.related.split(',')}, status: 'publicado', _id: {$ne: req.query.id} }, {_id: -1, title: 1, 'graph.views': 1, 'cover.position': 1,slug: 1, type: 1}).sort({'graph.views': -1}).limit(4).exec(function(err, related){
-            res.render('related', {related: related})
+            res.render('related', {related: related});
         });
     });
 
@@ -367,7 +367,7 @@ module.exports = function (app, passport, mongoose) {
 
                 newComments = {sectionId: comment.sectionId, comments: [
                     {authorAvatarUrl: comment.authorAvatarUrl, authorName: comment.authorName, comment: comment.comment, _id: -1}
-                ], _id: -1}
+                ], _id: -1};
 
                 Artigos.update({_id: id}, {$addToSet: {
                     comments: newComments
@@ -390,18 +390,18 @@ module.exports = function (app, passport, mongoose) {
                 });
             }
         });
-        
+
     });
-    
+
     // AJAX E FALLBACK PARA NOTICIAS
     app.get('/noticias/:noticia', function (req, res, next) {
         var user = req.user;
         var noticia = req.params.noticia;
-        
+
         if (req.xhr === true) {
 
             Artigos.findOneAndUpdate({ slug: noticia, type: 'noticia' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                if(docs == null){
+                if(docs === null){
                     res.redirect('/');
                 } else{
                     if(docs.status == 'publicado'){
@@ -434,7 +434,7 @@ module.exports = function (app, passport, mongoose) {
         } else {
             if (!user) {
                 Artigos.findOneAndUpdate({ slug: noticia, type: 'noticia' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                    if(docs == null){
+                    if(docs === null){
                         res.redirect('/');
                     } else{
                         if(docs.status == 'publicado'){
@@ -449,7 +449,7 @@ module.exports = function (app, passport, mongoose) {
                             docs.date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
 
                             Users.find({ _id: docs.authors.main }, {'name.loginName': 1, 'name.first': 1, 'name.last': 1, photo: 1, 'social': 1},function (err, author) {
-                            
+
                                     res.render('artigo', { tipo: 'noticia', article: docs, title: title, body: body, author: author[0], date:date, relate: docs.facet, id: docs._id });
                             });
                         } else{
@@ -458,13 +458,13 @@ module.exports = function (app, passport, mongoose) {
                     }
                 });
             } else {
-                if(user.deleted == true){
+                if(user.deleted === true){
                     res.redirect('/users/restore');
                 } else{
                     plusView(user);
                     // sessionReload(req, res, next);
                     Artigos.findOneAndUpdate({ slug: noticia, type: 'noticia' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                        if(docs == null){
+                        if(docs === null){
                             res.redirect('/');
                         } else{
                             if(docs.status == 'publicado'){
@@ -488,7 +488,7 @@ module.exports = function (app, passport, mongoose) {
                         }
                     });
                 }
-                
+
             }
         }
     });
@@ -500,7 +500,7 @@ module.exports = function (app, passport, mongoose) {
         if (req.xhr === true) {
 
             Artigos.findOneAndUpdate({ slug: artigo, type: 'artigo' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                if(docs == null){
+                if(docs === null){
                     res.redirect('/');
                 } else{
                     if(docs.status == 'publicado'){
@@ -532,7 +532,7 @@ module.exports = function (app, passport, mongoose) {
         } else {
             if (!user) {
                 Artigos.findOneAndUpdate({ slug: artigo, type: 'artigo' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                    if(docs == null){
+                    if(docs === null){
                         res.redirect('/');
                     } else{
                         if(docs.status == 'publicado'){
@@ -548,7 +548,7 @@ module.exports = function (app, passport, mongoose) {
                             docs.date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
 
                             Users.find({ _id: docs.authors.main },{'name.loginName': 1, 'name.first': 1, 'name.last': 1, photo: 1, 'social': 1}, function (err, author) {
-                            
+
                             res.render('artigo', { tipo: 'artigo', article: docs, title: title, body: body, author: author[0], date: date, relate: docs.facet, id: docs._id });
                             });
                         } else {
@@ -557,12 +557,12 @@ module.exports = function (app, passport, mongoose) {
                     }
                 });
             } else {
-                if(user.deleted == true){
+                if(user.deleted === true){
                     res.redirect('/users/restore');
                 } else{
                     // sessionReload(req, res, next);
                     Artigos.findOneAndUpdate({ slug: artigo, type: 'artigo' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                        if(docs == null){
+                        if(docs === null){
                             res.redirect('/');
                         } else{
                             if(docs.status == 'publicado'){
@@ -597,13 +597,13 @@ module.exports = function (app, passport, mongoose) {
         if (req.xhr === true) {
 
             Artigos.findOneAndUpdate({ slug: analise, type: 'analise' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                if(docs == null){
+                if(docs === null){
                     res.redirect('/');
                 } else{
                     if(docs.status == 'publicado'){
                         var title = docs.title,
                             body = decodeURIComponent(docs.text);
-                    
+
                         var scores = docs.review.score.toString().split('.'),
                             score = scores[0],
                             decimal;
@@ -626,9 +626,9 @@ module.exports = function (app, passport, mongoose) {
                         Users.find({ _id: docs.authors.main },{'name.loginName': 1, 'name.first': 1, 'name.last': 1, photo: 1, 'social': 1}, function (err, author) {
                             console.log('1');
                             if(!user){
-                            
+
                                 Games.findOne({slug: analise, status: 'publicado'}, function(err, game){
-                              
+
                                     if(game.release){
                                         var date = game.release;
                                         date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
@@ -638,7 +638,7 @@ module.exports = function (app, passport, mongoose) {
                             } else {
                                 plusView(user);
                                     Games.findOne({slug: analise, status: 'publicado'}, function(err, game){
-                                        if (game != null){
+                                        if (game !== null){
                                             if(game.release){
                                                 var date = game.release;
                                                 date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
@@ -659,7 +659,7 @@ module.exports = function (app, passport, mongoose) {
         } else {
             if (!user) {
                 Artigos.findOneAndUpdate({ slug: analise, type: 'analise' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                    if(docs == null){
+                    if(docs === null){
                         res.redirect('/');
                     } else{
                         if(docs.status == 'publicado'){
@@ -685,7 +685,7 @@ module.exports = function (app, passport, mongoose) {
                             docs.date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                             Users.find({ _id: docs.authors.main },{'name.loginName': 1, 'name.first': 1, 'name.last': 1, photo: 1, 'social': 1}, function (err, author) {
                                 Games.findOne({slug: analise, status: 'publicado'}, function(err, game){
-                                    if (game != null){
+                                    if (game !== null){
                                         if(game.release){
                                             var date = game.release;
                                             date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
@@ -702,12 +702,12 @@ module.exports = function (app, passport, mongoose) {
                     }
                 });
             } else {
-                if(user.deleted == true){
+                if(user.deleted === true){
                     res.redirect('/users/restore');
                 } else{
                     // sessionReload(req, res, next);
                     Artigos.findOneAndUpdate({ slug: analise, type: 'analise' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                        if(docs == null){
+                        if(docs === null){
                             res.redirect('/');
                         } else{
                             if(docs.status == 'publicado'){
@@ -735,7 +735,7 @@ module.exports = function (app, passport, mongoose) {
                                 Users.find({ _id: docs.authors.main },{'name.loginName': 1, 'name.first': 1, 'name.last': 1, photo: 1, 'social': 1}, function (err, author) {
                                     plusView(user);
                                         Games.findOne({slug: analise, status: 'publicado'}, function(err, game){
-                                            if (game != null){
+                                            if (game !== null){
                                                 if(game.release){
                                                     var date = game.release;
                                                     date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
@@ -744,7 +744,7 @@ module.exports = function (app, passport, mongoose) {
                                             } else {
                                                 res.render('artigo', { tipo: 'analise', article: docs, title: title, body: body, user: user, author: author[0], decimal: decimal, score: score, bad: bad, good: good, game: game, date: "indefinido", relate: docs.facet, id: docs._id });
                                             }
-                                            
+
                                         });
                                 });
                             } else {
@@ -764,7 +764,7 @@ module.exports = function (app, passport, mongoose) {
         if (req.xhr === true) {
 
             Artigos.findOneAndUpdate({ slug: video, type: 'video' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                if(docs == null){
+                if(docs === null){
                     res.redirect('/');
                 } else{
                     if(docs.status == 'publicado'){
@@ -795,7 +795,7 @@ module.exports = function (app, passport, mongoose) {
         } else {
             if (!user) {
                 Artigos.findOneAndUpdate({ slug: video, type: 'video' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                    if(docs == null){
+                    if(docs === null){
                         res.redirect('/');
                     } else{
                         if(docs.status == 'publicado'){
@@ -819,12 +819,12 @@ module.exports = function (app, passport, mongoose) {
                     }
                 });
             } else {
-                if(user.deleted == true){
+                if(user.deleted === true){
                     res.redirect('/users/restore');
                 } else{
                     // sessionReload(req, res, next);
                     Artigos.findOneAndUpdate({ slug: video, type: 'video' }, { $inc: { 'graph.views': 1}}, {new: true}, function (err, docs) {
-                        if(docs == null){
+                        if(docs === null){
                             res.redirect('/');
                         } else{
                             if(docs.status == 'publicado'){
@@ -857,14 +857,14 @@ module.exports = function (app, passport, mongoose) {
     app.get('/criar/:tipo', function (req, res, next) {
         var user = req.user;
         var tipo = req.params.tipo;
-        
+
         if (!user) {
             res.redirect('/parceiros')
         } else if (user.status == 'admin' || user.status == 'parceiro' || user.status == 'editor') {
             if(user.deleted == true){
                 res.redirect('/users/restore');
             } else{
-                // sessionReload(req, res, next); 
+                // sessionReload(req, res, next);
                 new Artigos({
                     'authors.main': user._id,
                     'authors.name': user.name.first + ' ' + user.name.last,
@@ -922,7 +922,7 @@ module.exports = function (app, passport, mongoose) {
                         } else {
                             points = 0;
                         }
-                        
+
                         Users.update({ _id: docs.authors.main }, { $inc: {'graph.publications': -publications, 'gamification.points': -points} }, function (err) {
                             res.render('editar', {user: user, article: docs, title: title, body: body, tipo: docs.type, id: docs._id});
                         });
@@ -941,7 +941,7 @@ module.exports = function (app, passport, mongoose) {
     app.post('/deletar/:id', function(req, res){
         var user = req.user;
         var id = req.params.id;
-        
+
         if (user.status == 'admin' || user.status == 'parceiro' || user.status == 'editor') {
             if(user.deleted == true){
                 res.redirect('/users/restore');
@@ -979,7 +979,7 @@ module.exports = function (app, passport, mongoose) {
                 // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
                 fs.unlink(tmp_path, function () {
                     if (err) throw err;
-                    
+
                 });
             });
             var params = {
@@ -998,7 +998,7 @@ module.exports = function (app, passport, mongoose) {
                 // error callback [optional]
                 console.log('Error: ' + JSON.stringify(err));
             });
-        } 
+        }
     });
 
 
@@ -1018,7 +1018,7 @@ module.exports = function (app, passport, mongoose) {
                 // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
                 fs.unlink(tmp_path, function () {
                     if (err) throw err;
-                    
+
                 });
             });
 
@@ -1147,7 +1147,7 @@ module.exports = function (app, passport, mongoose) {
 
             var facet = [];
 
-           
+
             if (games != undefined) { games = func.string_to_slug(b.jogo); if (games.indexOf('-') > -1) { games = games.split(/[\s,-]+/); sendGames = b.jogo.toString().replace(/,\s*$/, "").split(','); facet = facet.concat(games); } else { facet.push(games.split(' ')); sendGames = b.jogo } }
 
             if (tags != undefined) { tags = func.string_to_slug(b.tags); if (tags.indexOf('-') > -1) { tags = tags.split(/[\s,-]+/); sendTags = b.tags.toString().replace(/,\s*$/, "").split(','); facet = facet.concat(tags); } else { facet.push(tags.split(' ')); sendTags = b.tags; } }
@@ -1203,7 +1203,7 @@ module.exports = function (app, passport, mongoose) {
 
                         description: b.descricao,
                         status: status,
-                        publishDate: publishDate,   
+                        publishDate: publishDate,
                         'cover.image': b.coverUrl,
                         'cover.position': b.position,
                         tags: sendTags,
@@ -1380,7 +1380,7 @@ module.exports = function (app, passport, mongoose) {
                                 // Manda pra revisão
                                 res.redirect('/?status=revision');
                             });
-                            
+
                         }
                     });
                 } else if (b.tipo == 'artigo') {
@@ -1955,7 +1955,7 @@ module.exports = function (app, passport, mongoose) {
         }
     });
 
-    
+
 
 
 
@@ -1978,7 +1978,7 @@ module.exports = function (app, passport, mongoose) {
                         var date = user.birthDate;
                         date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                     }
-                    
+
                     plusView(user);
                         res.render('profile',{user: user, title: "" + user.name.first + ' ' + user.name.last, docs: docs, profile: user, canonical: true, date: date, public: false});
                 });
@@ -2010,7 +2010,7 @@ module.exports = function (app, passport, mongoose) {
         }
     });
 
-    
+
     // UPLOAD DE NOVA COVER NA CRIAÇÃO DE PERFIL
     app.post('/newProfileCover', function (req, res, next) {
         var user = req.user;
@@ -2026,7 +2026,7 @@ module.exports = function (app, passport, mongoose) {
                 // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
                 fs.unlink(tmp_path, function () {
                     if (err) throw err;
-                    
+
                 });
             });
             var params = {
@@ -2045,7 +2045,7 @@ module.exports = function (app, passport, mongoose) {
                 // error callback [optional]
                 console.log('Error: ' + JSON.stringify(err));
             });
-        } 
+        }
     });
 
     // UPDATE DA IMAGEM
@@ -2076,14 +2076,14 @@ module.exports = function (app, passport, mongoose) {
         var user = req.user;
         var b = req.body;
         var date, birthDate;
-        
+
         if(b.birthDate != ''){
             date = b.birthDate.split('/');
             birthDate = new Date(date[2], date[1] - 1, date[0]);
         } else {
             birthDate = null;
         }
-        
+
 
         if(!user){
             res.redirect('/');
@@ -2135,7 +2135,7 @@ module.exports = function (app, passport, mongoose) {
     // CONTA
     app.put('/contaSend', function(req, res, next){
         passport.authenticate('local-signup', function(err, user, info){
-            if(err) { 
+            if(err) {
                 return res.send('err' + err);
             } else {
                 return res.send('OK');
@@ -2177,7 +2177,7 @@ module.exports = function (app, passport, mongoose) {
                                 var date = profileUser.birthDate;
                                 date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                             }
-                        
+
                             res.render('profile',{user: user, title: "" + profileUser.name.first + ' ' + profileUser.name.last, docs: docs, profile: profileUser, public: true, date: date});
                         });
                     }
@@ -2212,7 +2212,7 @@ module.exports = function (app, passport, mongoose) {
                     Artigos.find({status: 'publicado', 'graph.consoles': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
                         Games.find({status: 'publicado', 'graph.console': new RegExp(dev.title, 'i')}).sort({'graph.views':-1}).limit(8).exec(function(err, games){
                             var artigo = [];
-                        
+
                             for (i = 0; i < articles.length; i++) {
                                 artigo.push(articles[i]);
                             }
@@ -2245,7 +2245,7 @@ module.exports = function (app, passport, mongoose) {
                         Artigos.find({status: 'publicado', 'graph.consoles': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
                             Games.find({status: 'publicado', 'graph.console': new RegExp(dev.title, 'i')}).sort({'graph.views':-1}).limit(8).exec(function(err, games){
                                 var artigo = [];
-                        
+
                                 for (i = 0; i < articles.length; i++) {
                                     artigo.push(articles[i]);
                                 }
@@ -2260,7 +2260,7 @@ module.exports = function (app, passport, mongoose) {
                                     date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                                 }
 
-                            
+
                                     res.render('console', {user: user, title: "" + dev.title, dev: dev, docs: artigo, games: games, date: date, pub: true });
                             });
                         });
@@ -2365,7 +2365,7 @@ module.exports = function (app, passport, mongoose) {
                     }).save(function(err, docs){
                         res.redirect('/consoles/' + docs.slug);
                     });
-                }           
+                }
             }
         }
     });
@@ -2395,7 +2395,7 @@ module.exports = function (app, passport, mongoose) {
                     Artigos.find({status: 'publicado', 'graph.genres': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
                         Games.find({status: 'publicado', 'graph.genre': new RegExp(dev.title, 'i')}).sort({release:1}).limit(8).exec(function(err, games){
                             var artigo = [];
-                        
+
                             for (i = 0; i < articles.length; i++) {
                                 artigo.push(articles[i]);
                             }
@@ -2423,7 +2423,7 @@ module.exports = function (app, passport, mongoose) {
                         Artigos.find({status: 'publicado', 'graph.genres': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
                             Games.find({status: 'publicado', 'graph.genre': new RegExp(dev.title, 'i')}).sort({release:1}).limit(8).exec(function(err, games){
                                 var artigo = [];
-                        
+
                                 for (i = 0; i < articles.length; i++) {
                                     artigo.push(articles[i]);
                                 }
@@ -2433,7 +2433,7 @@ module.exports = function (app, passport, mongoose) {
                                     games = undefined;
                                 }
 
-                            
+
                                 res.render('genre', {user: user, title: "" + dev.title, dev: dev, docs: artigo, games: games, pub: true });
                             });
                         });
@@ -2530,7 +2530,7 @@ module.exports = function (app, passport, mongoose) {
                     }).save(function(err, docs){
                         res.redirect('/generos/' + docs.slug);
                     });
-                }           
+                }
             }
         }
     });
@@ -2560,7 +2560,7 @@ module.exports = function (app, passport, mongoose) {
                     Artigos.find({status: 'publicado', 'graph.publishers': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
                         Games.find({status: 'publicado', 'graph.publisher': new RegExp(dev.title, 'i')}).sort({release:1}).limit(8).exec(function(err, games){
                             var artigo = [];
-                        
+
                             for (i = 0; i < articles.length; i++) {
                                 artigo.push(articles[i]);
                             }
@@ -2569,7 +2569,7 @@ module.exports = function (app, passport, mongoose) {
                             } else{
                                 games = undefined;
                             }
-                        
+
                             if(dev.startDate){
                                 var date = dev.startDate;
                                 date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
@@ -2593,7 +2593,7 @@ module.exports = function (app, passport, mongoose) {
                         Artigos.find({status: 'publicado', 'graph.publishers': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
                             Games.find({status: 'publicado', 'graph.publisher': new RegExp(dev.title, 'i')}).sort({release:1}).limit(8).exec(function(err, games){
                                 var artigo = [];
-                        
+
                                 for (i = 0; i < articles.length; i++) {
                                     artigo.push(articles[i]);
                                 }
@@ -2602,7 +2602,7 @@ module.exports = function (app, passport, mongoose) {
                                 } else{
                                     games = undefined;
                                 }
-                        
+
                                 if(dev.startDate){
                                     var date = dev.startDate;
                                     date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
@@ -2617,7 +2617,7 @@ module.exports = function (app, passport, mongoose) {
         }
     });
 
-    
+
 
     // PAGINAÇÃO DISTRIBUIDORA
     app.get('/paginationPub', function(req, res){
@@ -2687,7 +2687,7 @@ module.exports = function (app, passport, mongoose) {
                     Artigos.find({status: 'publicado', 'graph.developers': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
                         Games.find({status: 'publicado', 'graph.developer': new RegExp(dev.title, 'i')}).sort({release:1}).limit(8).exec(function(err, games){
                             var artigo = [];
-                        
+
                             for (i = 0; i < articles.length; i++) {
                                 artigo.push(articles[i]);
                             }
@@ -2696,7 +2696,7 @@ module.exports = function (app, passport, mongoose) {
                             } else{
                                 games = undefined;
                             }
-                        
+
                             if(dev.startDate){
                                 var date = dev.startDate;
                                 date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
@@ -2720,7 +2720,7 @@ module.exports = function (app, passport, mongoose) {
                         Artigos.find({status: 'publicado', 'graph.developers': new RegExp(dev.title, 'i'), type: {$ne: 'analise'}}).sort({_id: -1}).limit(6).exec(function(err, articles){
                             Games.find({status: 'publicado', 'graph.developer': new RegExp(dev.title, 'i')}).sort({release:1}).limit(8).exec(function(err, games){
                                 var artigo = [];
-                        
+
                                 for (i = 0; i < articles.length; i++) {
                                     artigo.push(articles[i]);
                                 }
@@ -2729,7 +2729,7 @@ module.exports = function (app, passport, mongoose) {
                                 } else{
                                     games = undefined;
                                 }
-                        
+
                                 if(dev.startDate){
                                     var date = dev.startDate;
                                     date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
@@ -2892,7 +2892,7 @@ module.exports = function (app, passport, mongoose) {
                             res.redirect('/distribuidoras/' + docs.slug);
                         });
                     }
-                }            
+                }
             }
         }
     });
@@ -2913,11 +2913,11 @@ module.exports = function (app, passport, mongoose) {
                         var analise = [];
                             var artigo = [];
                             var decimal, score;
-                        
+
                             for (i = 0; i < articles.length; i++) {
                                 if(articles[i].type == 'analise'){
                                     analise.push(articles[i]);
-                                    
+
                                 } else{
                                     artigo.push(articles[i]);
                                 }
@@ -2934,7 +2934,7 @@ module.exports = function (app, passport, mongoose) {
                             } else{
                                 analise = undefined;
                             }
-                        
+
                             if(game.release){
                                 var date = game.release;
                                 date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
@@ -2955,15 +2955,15 @@ module.exports = function (app, passport, mongoose) {
                         res.redirect('/');
                     } else{
                         Artigos.find({status: 'publicado', $or: [{slug: jogo, type: 'analise'}, {'graph.games': new RegExp(game.title, 'i')}] }).sort({_id: -1}).limit(6).exec(function(err, articles){
-                        
+
                             var analise = [];
                             var artigo = [];
                             var decimal, score;
-                        
+
                             for (i = 0; i < articles.length; i++) {
                                 if(articles[i].type == 'analise'){
                                     analise.push(articles[i]);
-                                    
+
                                 } else{
                                     artigo.push(articles[i]);
                                 }
@@ -2980,7 +2980,7 @@ module.exports = function (app, passport, mongoose) {
                             } else{
                                 analise = undefined;
                             }
-                        
+
                             if(game.release){
                                 var date = game.release;
                                 date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
@@ -3000,7 +3000,7 @@ module.exports = function (app, passport, mongoose) {
         var user = req.user;
         var game = req.body.game;
         var operation = req.body.add;
-        
+
         if(operation == 'true'){
             managePoints(user._id, 2);
             Users.update({_id: user._id}, {$addToSet: {'graph.gamesLike': game}}, function(err){
@@ -3010,11 +3010,11 @@ module.exports = function (app, passport, mongoose) {
             managePoints(user._id, -2);
             Users.update({_id: user._id}, {$pull: {'graph.gamesLike': game}}, function(){
                 res.send('OK');
-            }); 
+            });
         }
     });
 
-    
+
 
     // ADD GAME TO COLLECTION
     app.put('/addToCollection', function(req, res){
@@ -3033,7 +3033,7 @@ module.exports = function (app, passport, mongoose) {
                 Games.update({title: game}, {$inc: {'graph.gamers': -1}}, function(err){
                     res.send('OK');
                 });
-            }); 
+            });
         }
     });
 
@@ -3058,7 +3058,7 @@ module.exports = function (app, passport, mongoose) {
                 res.redirect('/users/restore');
             } else{
                 // sessionReload(req, res, next);
-                
+
                 Games.findOneAndUpdate({slug: jogo}, {status: 'rascunho'}, {new: false}, function(err, docs){
                     if(docs == null){
                         res.redirect('/');
@@ -3110,7 +3110,7 @@ module.exports = function (app, passport, mongoose) {
                 // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
                 fs.unlink(tmp_path, function () {
                     if (err) throw err;
-                    
+
                 });
             });
             var params = {
@@ -3129,7 +3129,7 @@ module.exports = function (app, passport, mongoose) {
                 // error callback [optional]
                 console.log('Error: ' + JSON.stringify(err));
             });
-        } 
+        }
     });
 
 
@@ -3148,7 +3148,7 @@ module.exports = function (app, passport, mongoose) {
                 // delete the temporary file, so that the explicitly set temporary upload dir does not get filled with unwanted files
                 fs.unlink(tmp_path, function () {
                     if (err) throw err;
-                    
+
                 });
             });
             var params = {
@@ -3167,7 +3167,7 @@ module.exports = function (app, passport, mongoose) {
                 // error callback [optional]
                 console.log('Error: ' + JSON.stringify(err));
             });
-        } 
+        }
     });
 
     // CRIAÇÃO GAME
@@ -3211,7 +3211,7 @@ module.exports = function (app, passport, mongoose) {
             sendFacet = facet.filter(function(elem, pos) {
                 return facet.indexOf(elem) == pos;
             });
-            
+
 
         if(!user){
             res.redirect('/');
@@ -3264,14 +3264,14 @@ module.exports = function (app, passport, mongoose) {
                         console.log(docs);
                         res.redirect('/jogos/' + docs.slug);
                     });
-                }                
+                }
             }
         }
     });
 
     // =====================================
     // CHECAR CONTEÚDO =====================
-    // ===================================== 
+    // =====================================
     app.get('/checkContent/:tipo', function(req, res, next){
         var user = req.user;
         var tipo = req.params.tipo;
@@ -3303,7 +3303,7 @@ module.exports = function (app, passport, mongoose) {
                                     var timeStamp = docs[i]._id.toString().substring(0,8);
                                     var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
                                 }
-                                
+
                                 docs[i].date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                             }
                             res.render('checkContent', {title: "Gerenciar Artigos", user: user, articles: docs});
@@ -3320,7 +3320,7 @@ module.exports = function (app, passport, mongoose) {
 
     // =====================================
     // GERENCIAR PÁGINAS ===================
-    // ===================================== 
+    // =====================================
     app.get('/gerenciar/:tipo', function(req, res, next){
         var user = req.user;
         var tipo = req.params.tipo;
@@ -3352,7 +3352,7 @@ module.exports = function (app, passport, mongoose) {
                                     var timeStamp = docs[i]._id.toString().substring(0,8);
                                     var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
                                 }
-                                
+
                                 docs[i].date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                             }
                             res.render('gerenciar', {title: "Gerenciar Artigos", user: user, articles: docs});
@@ -3368,7 +3368,7 @@ module.exports = function (app, passport, mongoose) {
                                     var timeStamp = docs[i]._id.toString().substring(0,8);
                                     var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
                                 }
-                                
+
                                 docs[i].date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                             }
                             res.render('gerenciar', {title: "Gerenciar Artigos", user: user, articles: docs});
@@ -3418,7 +3418,7 @@ module.exports = function (app, passport, mongoose) {
                             res.redirect('/gerenciar/artigos');
                             break
                         }
-                        
+
 
                     case 'consoles':
                         Console.find({}).sort({_id: -1}).exec(function(err, docs){
@@ -3458,7 +3458,7 @@ module.exports = function (app, passport, mongoose) {
                             var timeStamp = docs[i]._id.toString().substring(0,8);
                             var date = new Date( parseInt( timeStamp, 16 ) * 1000 );
                         }
-                                
+
                         docs[i].date = date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
                     }
                     res.render('gerenciar', {title: "Gerenciar Artigos", user: user, articles: docs});
@@ -3471,14 +3471,14 @@ module.exports = function (app, passport, mongoose) {
 
     // =====================================
     // DELETAR ELEMENTOS ===================
-    // ===================================== 
+    // =====================================
 
     // JOGOS
     app.put('/jogos/:jogo/deletar', function(req, res){
         var user = req.user;
         var jogo = req.params.jogo;
         var action = req.body.action;
-        
+
         if(!user){
             res.redirect('/');
         }else{
@@ -3509,7 +3509,7 @@ module.exports = function (app, passport, mongoose) {
         var user = req.user;
         var id = req.params.id;
         var action = req.body.action;
-        
+
         if(!user){
             res.redirect('/');
         }else{
@@ -3540,7 +3540,7 @@ module.exports = function (app, passport, mongoose) {
         var user = req.user;
         var dev = req.params.dev;
         var action = req.body.action;
-        
+
         if(!user){
             res.redirect('/');
         }else{
@@ -3571,7 +3571,7 @@ module.exports = function (app, passport, mongoose) {
         var user = req.user;
         var pub = req.params.pub;
         var action = req.body.action;
-        
+
         if(!user){
             res.redirect('/');
         }else{
@@ -3602,7 +3602,7 @@ module.exports = function (app, passport, mongoose) {
         var user = req.user;
         var gen = req.params.gen;
         var action = req.body.action;
-        
+
         if(!user){
             res.redirect('/');
         }else{
@@ -3633,7 +3633,7 @@ module.exports = function (app, passport, mongoose) {
         var user = req.user;
         var usuario = req.params.usuario;
         var action = req.body.action;
-        
+
         if(!user){
             res.redirect('/');
         }else{
@@ -3664,7 +3664,7 @@ module.exports = function (app, passport, mongoose) {
         var user = req.user;
         var con = req.params.con;
         var action = req.body.action;
-        
+
         if(!user){
             res.redirect('/');
         }else{
@@ -3782,7 +3782,7 @@ module.exports = function (app, passport, mongoose) {
     app.put('/jogos/:jogo/restore', function(req, res){
         var user = req.user;
         var jogo = req.params.jogo;
-        
+
         if(!user){
             res.redirect('/');
         }else{
@@ -3804,7 +3804,7 @@ module.exports = function (app, passport, mongoose) {
     app.put('/artigos/:artigo/restore', function(req, res){
         var user = req.user;
         var artigo = req.params.artigo;
-        
+
         if(!user){
             res.redirect('/');
         }else{
@@ -3826,7 +3826,7 @@ module.exports = function (app, passport, mongoose) {
     app.put('/desenvolvedores/:dev/restore', function(req, res){
         var user = req.user;
         var dev = req.params.dev;
-        
+
         if(!user){
             res.redirect('/');
         }else{
@@ -3848,7 +3848,7 @@ module.exports = function (app, passport, mongoose) {
     app.put('/distribuidoras/:pub/restore', function(req, res){
         var user = req.user;
         var pub = req.params.pub;
-        
+
         if(!user){
             res.redirect('/');
         }else{
@@ -3870,7 +3870,7 @@ module.exports = function (app, passport, mongoose) {
     app.put('/generos/:gen/restore', function(req, res){
         var user = req.user;
         var gen = req.params.gen;
-        
+
         if(!user){
             res.redirect('/');
         }else{
@@ -3892,7 +3892,7 @@ module.exports = function (app, passport, mongoose) {
     app.put('/usuarios/:usuario/restore', function(req, res){
         var user = req.user;
         var usuario = req.params.usuario;
-        
+
         if(!user){
             res.redirect('/');
         }else{
@@ -3914,7 +3914,7 @@ module.exports = function (app, passport, mongoose) {
     app.put('/consoles/:con/restore', function(req, res){
         var user = req.user;
         var con = req.params.con;
-        
+
         if(!user){
             res.redirect('/');
         }else{
@@ -4032,7 +4032,7 @@ module.exports = function (app, passport, mongoose) {
             res.end(JSON.stringify(filtered));
         });
     });
-    
+
     // CATEGORIA ARTIGO
     app.get('/autoArtCat', function(req, res){
         var user = req.user;
@@ -4267,7 +4267,7 @@ module.exports = function (app, passport, mongoose) {
 
     // =====================================
     // PÁGINAS ESPECIAIS ===================
-    // ===================================== 
+    // =====================================
 
 
     // TROCA DE PONTOS
@@ -4377,7 +4377,7 @@ module.exports = function (app, passport, mongoose) {
                     }).save(function(err, docs){
                         res.redirect('/troca');
                     });
-                }           
+                }
             }
         }
     });
@@ -4627,7 +4627,7 @@ module.exports = function (app, passport, mongoose) {
                     });
                 }
 
-                
+
 
                 // Sending the feed as a response
                 res.send(feed.render('atom-1.0'));
@@ -4668,10 +4668,10 @@ module.exports = function (app, passport, mongoose) {
             xml += '</urlset>';
 
             res.header('Content-Type', 'text/xml');
-            res.send(xml);  
+            res.send(xml);
         });
 
-           
+
     });
 
     // Sitemap Games
@@ -4701,7 +4701,7 @@ module.exports = function (app, passport, mongoose) {
             xml += '</urlset>';
 
             res.header('Content-Type', 'text/xml');
-            res.send(xml);  
+            res.send(xml);
         });
     });
 
@@ -4732,7 +4732,7 @@ module.exports = function (app, passport, mongoose) {
             xml += '</urlset>';
 
             res.header('Content-Type', 'text/xml');
-            res.send(xml);  
+            res.send(xml);
         });
     });
 
@@ -4763,7 +4763,7 @@ module.exports = function (app, passport, mongoose) {
             xml += '</urlset>';
 
             res.header('Content-Type', 'text/xml');
-            res.send(xml);  
+            res.send(xml);
         });
     });
 
@@ -4794,7 +4794,7 @@ module.exports = function (app, passport, mongoose) {
             xml += '</urlset>';
 
             res.header('Content-Type', 'text/xml');
-            res.send(xml);  
+            res.send(xml);
         });
     });
 
@@ -4825,7 +4825,7 @@ module.exports = function (app, passport, mongoose) {
             xml += '</urlset>';
 
             res.header('Content-Type', 'text/xml');
-            res.send(xml);  
+            res.send(xml);
         });
     });
 
@@ -4856,7 +4856,7 @@ module.exports = function (app, passport, mongoose) {
             xml += '</urlset>';
 
             res.header('Content-Type', 'text/xml');
-            res.send(xml);  
+            res.send(xml);
         });
     });
 
@@ -4866,7 +4866,7 @@ module.exports = function (app, passport, mongoose) {
     app.post('/signup', passport.authenticate('local-signup', {
         successRedirect: '/', // redirect to the secure profile section
         failureRedirect: '/signup', // redirect back to the signup page if there is an error
-        failureFlash: true // allow flash messages     
+        failureFlash: true // allow flash messages
     }));
 
     app.get('/signup', function (req, res) {
@@ -5091,7 +5091,7 @@ module.exports = function (app, passport, mongoose) {
             );
         }, function(e) {
             console.log('A mandrill error occurred: ' + e.name + ' - ' + e.message);
-            
+
             Users.update(
                 { 'name.loginName': req.user.name.loginName },
                 { $set: {
