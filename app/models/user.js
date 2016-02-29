@@ -80,8 +80,8 @@ var UserSchema = new mongoose.Schema({
         achievements: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Achievement' }]
     },
     dashboard: {
-        grid: {type: String, default: '[{"col":1,"row":1,"size_x":2,"size_y":3}]'},
-        widget: {type: String, default: '["top", "xbox"]'}
+        grid: {type: Array, default: [{col:1,row:1,size_x:2,size_y:3}]},
+        widget: {type: Array, default: ["top", "xbox"]}
     },
     follow: [{_id: false, type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
     followedBy: [{_id: false, type: mongoose.Schema.Types.ObjectId, ref: 'User'}],

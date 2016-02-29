@@ -16,6 +16,7 @@
     "express"
   ],
   "dependencies": {
+    "amcharts3": "git://github.com/amcharts/amcharts3",
     "async": "~0.8.0",
     "bcrypt-nodejs": "*",
     "connect-flash": "*",
@@ -23,6 +24,7 @@
     "express": "~3.5.2",
     "feed": "*",
     "fs": "0.0.2",
+    "googleapis": "^2.1.7",
     "https": "^1.0.0",
     "ip": "*",
     "jade": "*",
