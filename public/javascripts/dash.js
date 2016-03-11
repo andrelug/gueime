@@ -1,5 +1,6 @@
 var gridster;
 var chartNewData = [];
+var chartNewDataBlog = [];
 $(function () { //DOM Ready
 
     gridster = $(".gridster ul").gridster({
@@ -27,10 +28,10 @@ $(function () { //DOM Ready
 
 
     $.each(serialization, function () {
-        gridster.add_widget('<li><div class="panel radius large"><h5>teste</h5><div id="chartdiv" style="width:100%;height:88%;"></div></div></li>', this.size_x, this.size_y, this.col, this.row);
-
+        gridster.add_widget('<li><div class="panel radius large"><h5>Benvenuto</h5><div id="chartdiv" style="width:100%;height:88%;"></div></div></li>', this.size_x, this.size_y, this.col, this.row);
+        return false // tirar e voltar com o outro de baixo pra cá depois
     });
-
+gridster.add_widget('<li><div class="panel radius large"><h5>Blog</h5><div id="chartBlogdiv" style="width:100%;height:88%;"></div></div></li>', 3, 3, 5, 5);
 
     $('.toggle').on('click', function () {
 
@@ -74,30 +75,15 @@ for (i = 0; i< values.totalResults; i++) {
         "Visitas": parseInt(values.rows[i][1])
     });
 }
+for (i = 0; i< valuesBlog.totalResults; i++) {
+    chartNewDataBlog.push({
+        "Data": valuesBlog.rows[i][0].replace('2016', '').slice(2) + "/" + valuesBlog.rows[i][0].replace('2016', '').slice(0,-2) + "/" + "2016",
+        "Visitas": parseInt(valuesBlog.rows[i][1])
+    });
+}
 var chartData = chartNewData;
-/*
-AmCharts.ready(function(){
-    console.log("novo chart " + chartNewData)
-    var chart = new AmCharts.AmSerialChart();
-    chart.dataProvider = chartData;
-    chart.categoryField = "Data";
+var chartDataBlog = chartNewDataBlog;
 
-    var graph = new AmCharts.AmGraph();
-    graph.valueField = "Visitas";
-    graph.fillAlphas = 0.5;
-    graph.bullet="round";
-    graph.bulletSize=5;
-    graph.bulletColor="#FFFFFF";
-    graph.bulletBorderAlpha=1;
-    graph.lineThickness=1;
-    graph.balloonText="<span style='font-size:18px;'>[[value]]</span>"
-    graph.useLineColorForBulletBorder=true;
-    graph.type = "line";
-    chart.addGraph(graph);
-
-    chart.write('chartdiv');
-});
-*/
 var chart = AmCharts.makeChart("chartdiv", {
     "type": "serial",
     "theme": "light",
@@ -135,7 +121,6 @@ var chart = AmCharts.makeChart("chartdiv", {
     }],
 
     "chartCursor": {
-        "pan": true,
         "valueLineEnabled": true,
         "valueLineBalloonEnabled": true,
         "cursorAlpha":1,
@@ -151,6 +136,57 @@ var chart = AmCharts.makeChart("chartdiv", {
     },
     "dataProvider": chartData
 });
+var chart = AmCharts.makeChart("chartBlogdiv", {
+    "type": "serial",
+    "theme": "light",
+    "marginRight": 40,
+    "marginLeft": 40,
+    "autoMarginOffset": 20,
+    "dataDateFormat": "DD/MM/YYYY",
+    "valueAxes": [{
+        "id": "v1",
+        "axisAlpha": 0,
+        "position": "left",
+        "ignoreAxisWidth":true
+    }],
+    "balloon": {
+        "borderThickness": 1,
+        "shadowAlpha": 0
+    },
+    "graphs": [{
+        "id": "g1",
+        "balloon":{
+          "drop":true,
+          "adjustBorderColor":false,
+          "color":"#ffffff"
+        },
+        "bullet": "round",
+        "bulletBorderAlpha": 1,
+        "bulletColor": "#FFFFFF",
+        "bulletSize": 5,
+        "hideBulletsCount": 50,
+        "lineThickness": 2,
+        "title": "red line",
+        "useLineColorForBulletBorder": true,
+        "valueField": "Visitas",
+        "balloonText": "<span style='font-size:18px;'>[[value]]</span>"
+    }],
 
+    "chartCursor": {
+        "valueLineEnabled": true,
+        "valueLineBalloonEnabled": true,
+        "cursorAlpha":1,
+        "cursorColor":"#258cbb",
+        "limitToGraph":"g1",
+        "valueLineAlpha":0.2
+    },
+    "categoryField": "Data",
+    "categoryAxis": {
+        "parseDates": true,
+        "dashLength": 1,
+        "minorGridEnabled": true
+    },
+    "dataProvider": chartDataBlog
+});
 
 });

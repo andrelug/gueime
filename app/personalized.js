@@ -238,6 +238,7 @@ module.exports = function (app, passport, mongoose) {
     var key = require('../node_modules/dashboard-ff2427dd9389.json');
     var jwtClient = new google.auth.JWT(key.client_email, null, key.private_key, ['https://www.googleapis.com/auth/analytics.readonly'], null);
     var VIEW_ID = 'ga:92206921';
+    var VIEW_ID_BLOG = "ga:91195968";
 
     app.get('/dashboard', function (req, res) {
         var user = req.user;
@@ -245,10 +246,10 @@ module.exports = function (app, passport, mongoose) {
 
         // Google Analytics
 
-        function queryData(analytics, callback) {
+        function queryData(analytics, viewId, callback) {
           analytics.data.ga.get({
             'auth': jwtClient,
-            'ids': VIEW_ID,
+            'ids': viewId,
             'metrics': 'ga:sessions',
             'dimensions': 'ga:date',
             'start-date': '30daysAgo',
@@ -276,8 +277,10 @@ module.exports = function (app, passport, mongoose) {
                               return;
                           }
                           var analytics = google.analytics('v3');
-                          queryData(analytics, function(query){
-                              res.render('dash/index', { grid: docs.grid, values: query });
+                          queryData(analytics, "ga:92206921", function(query){
+                            queryData(analytics, "ga:91195968", function(queryBlog){
+                                res.render('dash/index', { grid: docs.grid, values: query, valuesBlog: queryBlog });
+                            });
                           });
 
                       });
@@ -297,12 +300,30 @@ module.exports = function (app, passport, mongoose) {
                   }
               }
           }
+    });
 
+    app.get('/mydash', function (req, res) {
+        var user = req.user;
 
+          if (!user) {
+              Grid.findOne({ name: "1" }, function (err, docs) {
+                  res.render('dash/my');
 
-
-
-
+              });
+          } else {
+              var widgets = [];
+              for (i = 0; i < user.dashboard.widget.length; i++) {
+                  console.log('esse é ' + user.dashboard.widget[i]);
+                  switch (user.dashboard.widget[i]) {
+                      case 'top':
+                          Artigos.find({ status: 'publicado' }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({ 'graph.views': -1 }).limit(10).exec(function (err, docs) {
+                              widgets = docs;
+                              console.log(user.dashboard.grid[0]);
+                              res.render('dash/index', { user: user, widget: widgets, grid: JSON.stringify(user.dashboard.grid) });
+                          });
+                  }
+              }
+          }
     });
 
     app.post('/grid', function (req, res) {

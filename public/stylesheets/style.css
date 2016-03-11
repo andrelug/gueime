@@ -1480,3 +1480,8 @@ a.create:active {
   text-transform: uppercase;
   font-weight: bold;
 }
+.indice ul li {
+  float: left;
+  list-style: none;
+  margin-left: 10px;
+}

@@ -39,13 +39,6 @@ html.no-js(lang="pt_BR")
         
         block content
 
-        script.
-            var serialization = (JSON.parse('!{grid}'))
-            console.log(serialization);
-            var thisWidgets = [];
-            var values = !{values}
-            var valuesBlog = !{valuesBlog}
-            console.log(values);
 
         script(src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js")
         script(src="/javascripts/vendor/fastclick.js")
@@ -62,6 +55,6 @@ html.no-js(lang="pt_BR")
         script(src="/javascripts/vendor/utils.js")
         script(src="/javascripts/vendor/jquery.gridster.js")
         
-        script(src="/javascripts/dash.js")
+        script(src="/javascripts/mydash.js")
         script.
             $(document).foundation();
