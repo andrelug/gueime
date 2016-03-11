@@ -72,6 +72,7 @@ app.configure(function () {
             }
 
         });
+        /*
         app.get('/*', function(req, res, next) {
               if (req.headers.host.match(/^www/) === null ) {
                 res.redirect(301, 'http://' + "www.gueime.com.br" + req.url);
@@ -79,6 +80,7 @@ app.configure(function () {
                 next();
               }
           });
+          */
     }
     app.enable('trust proxy');
 });
