@@ -16,7 +16,7 @@
     "express"
   ],
   "dependencies": {
-    "amcharts3": "git://github.com/amcharts/amcharts3",
+    "amcharts3": "git://github.com/amcharts/amcharts3.git",
     "async": "~0.8.0",
     "bcrypt-nodejs": "*",
     "connect-flash": "*",

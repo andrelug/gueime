@@ -1,67 +1,66 @@
 doctype html
 <!--[if IE 9]><html class="lt-ie10" lang="pt_BR" > <![endif]-->
 html.no-js(lang="pt_BR")
-    head
-        meta(charset="utf-8")
-        meta(name="viewport", content="width=device-width, initial-scale=1.0")
-        title= "Gueime - " + title
-        link(rel="stylesheet", href="/stylesheets/base/normalize.css")
-        link(rel="stylesheet", href="/stylesheets/base/foundation.css")
-        link(rel='stylesheet', href='/stylesheets/vendor/jqueryUi.css')
-        link(rel='stylesheet', href='/stylesheets/vendor/side-comments.min.css')
-        link(rel='stylesheet', href='/stylesheets/vendor/default-theme.min.css')
-        link(rel='stylesheet', href='/stylesheets/vendor/jquery.gridster.css')
-        link(rel="stylesheet", href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css")
-        link(rel='stylesheet', href='/stylesheets/style.css')
-        link(rel="icon", type="image/png", href="/images/favicon.png")
-        link(rel="author", href="humans.txt")
-        meta(property="fb:admins", content="571845260")
-        meta(property="fb:app_id", content="561543940541408")
-    
-        script(src="/javascripts/vendor/modernizr.js")
-        link(rel="canonical", href="http://www.gueime.com.br")
-        meta(name="description", content="Gueime - O melhor site de games do Brasil. Confira as últimas notícias, análises e notícias!")
-        meta(property="og:title", content="Gueime")
-        meta(property="og:type", content="website")
-        meta(property="og:image", content="http://www.gueime.com.br/images/gueime.png")
-        meta(property="og:url", content="http://www.gueime.com.br")
-        meta(property="og:description", content="Gueime - O melhor site de games do Brasil. Confira as últimas notícias, análises e notícias!")
-        meta(name="twitter:card", content="summary")
-        meta(name="twitter:url", content="http://www.gueime.com.br/")
-        meta(name="twitter:title", content="Gueime")
-        meta(name="twitter:description", content="Gueime - O melhor site de games do Brasil. Confira as últimas notícias, análises e notícias!")
-        meta(name="twitter:image", content="http://www.gueime.com.br/images/gueime.png")
-        script(src="/javascripts/vendor/amcharts.js")
-        script(src="/javascripts/vendor/serial.js")
-        script(src="https://www.amcharts.com/lib/3/themes/light.js")
+	head
+		meta(charset="utf-8")
+		meta(name="viewport", content="width=device-width, initial-scale=1.0")
+		title= "Gueime - " + title
+		link(rel="stylesheet", href="/stylesheets/base/normalize.css")
+		link(rel="stylesheet", href="/stylesheets/base/foundation.css")
+		link(rel='stylesheet', href='/stylesheets/vendor/jqueryUi.css')
+		link(rel='stylesheet', href='/stylesheets/vendor/side-comments.min.css')
+		link(rel='stylesheet', href='/stylesheets/vendor/default-theme.min.css')
+		link(rel='stylesheet', href='/stylesheets/vendor/jquery.gridster.css')
+		link(rel="stylesheet", href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css")
+		link(rel='stylesheet', href='/stylesheets/style.css')
+		link(rel="icon", type="image/png", href="/images/favicon.png")
+		link(rel="author", href="humans.txt")
+		meta(property="fb:admins", content="571845260")
+		meta(property="fb:app_id", content="561543940541408")
+	
+		script(src="/javascripts/vendor/modernizr.js")
+		link(rel="canonical", href="http://www.gueime.com.br")
+		meta(name="description", content="Gueime - O melhor site de games do Brasil. Confira as últimas notícias, análises e notícias!")
+		meta(property="og:title", content="Gueime")
+		meta(property="og:type", content="website")
+		meta(property="og:image", content="http://www.gueime.com.br/images/gueime.png")
+		meta(property="og:url", content="http://www.gueime.com.br")
+		meta(property="og:description", content="Gueime - O melhor site de games do Brasil. Confira as últimas notícias, análises e notícias!")
+		meta(name="twitter:card", content="summary")
+		meta(name="twitter:url", content="http://www.gueime.com.br/")
+		meta(name="twitter:title", content="Gueime")
+		meta(name="twitter:description", content="Gueime - O melhor site de games do Brasil. Confira as últimas notícias, análises e notícias!")
+		meta(name="twitter:image", content="http://www.gueime.com.br/images/gueime.png")
+		script(src="/javascripts/vendor/amcharts.js")
+		script(src="/javascripts/vendor/serial.js")
+		script(src="https://www.amcharts.com/lib/3/themes/light.js")
 
-    body(style="overflow:initial;")
-        
-        block content
+	body(style="overflow:initial;")
+		
+		block content
+		
+		script.
+			var serialization = !{grid};
+			console.log(!{grid})
+			var thisWidgets = [];
+			var values = !{values}
+			var valuesBlog = !{valuesBlog}
 
-        script.
-            var serialization = (JSON.parse('!{grid}'))
-            console.log(serialization);
-            var thisWidgets = [];
-            var values = !{values}
-            var valuesBlog = !{valuesBlog}
-            console.log(values);
-
-        script(src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js")
-        script(src="/javascripts/vendor/fastclick.js")
-        script(src="/javascripts/vendor/placeholder.js")
-        script(src="/javascripts/foundation.min.js")
-        script(src="/javascripts/vendor/isotope.js")
-        script(src="/javascripts/vendor/wait.js")
-        script(src="/javascripts/vendor/side-comments.min.js")
-        script(src="/javascripts/vendor/jquery.autocomplete.min.js")
-        script(src="/javascripts/vendor/jquery.draggable.js")
-        script(src="/javascripts/vendor/jquery.collision.js")
-        script(src="/javascripts/vendor/jquery.coords.js")
-        script(src="/javascripts/vendor/jquery.gridster.extras.js")
-        script(src="/javascripts/vendor/utils.js")
-        script(src="/javascripts/vendor/jquery.gridster.js")
-        
-        script(src="/javascripts/dash.js")
-        script.
-            $(document).foundation();
+		script(src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js")
+		script(src="/javascripts/vendor/fastclick.js")
+		script(src="/javascripts/vendor/placeholder.js")
+		script(src="/javascripts/foundation.min.js")
+		script(src="/javascripts/vendor/isotope.js")
+		script(src="/javascripts/vendor/wait.js")
+		script(src="/javascripts/vendor/side-comments.min.js")
+		script(src="/javascripts/vendor/jquery.autocomplete.min.js")
+		script(src="/javascripts/vendor/jquery.draggable.js")
+		script(src="/javascripts/vendor/jquery.collision.js")
+		script(src="/javascripts/vendor/jquery.coords.js")
+		script(src="/javascripts/vendor/jquery.gridster.extras.js")
+		script(src="/javascripts/vendor/utils.js")
+		script(src="/javascripts/vendor/jquery.gridster.js")
+		
+		script(src="/javascripts/dash.js")
+		script.
+			$(document).foundation();
