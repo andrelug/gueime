@@ -2,5 +2,4 @@
 /iisnode
 /favicon.ico
 /newrelic_agent.log
-/node_modules
 node_modules/googleapis/node_modules/gapitoken/node_modules/jws/node_modules/base64url/node_modules/meow/node_modules/indent-string/node_modules/repeating/node_modules/is-finite/node_modules/number-is-nan/package.json
