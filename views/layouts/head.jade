@@ -15,37 +15,44 @@ link(rel="author", href="humans.txt")
 link(rel="manifest", href="/manifest.webmanifest")
 meta(property="fb:admins", content="571845260")
 meta(property="fb:app_id", content="561543940541408")
-    
+	
 script(src="/javascripts/vendor/modernizr.js")
 
 // Segment Analytics
 if(user && user.status == 'admin')
-    script.
-        console.log('Oi Gueimer Admin :D')
-        var thereIsAdmin = true;
+	script.
+		console.log('Oi Gueimer Admin :D')
+		var thereIsAdmin = true;
 else
-    script.
-        var thereIsAdmin = false;
-        !function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.0.1";
-        analytics.load("TvCDywUAbrucnVfaDlSRBYH6cb0wPvCT");
-        analytics.page()
-        }}();
+	script.
+		var thereIsAdmin = false;
+		!function(){var analytics=window.analytics=window.analytics||[];if(!analytics.initialize)if(analytics.invoked)window.console&&console.error&&console.error("Segment snippet included twice.");else{analytics.invoked=!0;analytics.methods=["trackSubmit","trackClick","trackLink","trackForm","pageview","identify","group","track","ready","alias","page","once","off","on"];analytics.factory=function(t){return function(){var e=Array.prototype.slice.call(arguments);e.unshift(t);analytics.push(e);return analytics}};for(var t=0;t<analytics.methods.length;t++){var e=analytics.methods[t];analytics[e]=analytics.factory(e)}analytics.load=function(t){var e=document.createElement("script");e.type="text/javascript";e.async=!0;e.src=("https:"===document.location.protocol?"https://":"http://")+"cdn.segment.com/analytics.js/v1/"+t+"/analytics.min.js";var n=document.getElementsByTagName("script")[0];n.parentNode.insertBefore(e,n)};analytics.SNIPPET_VERSION="3.0.1";
+		analytics.load("TvCDywUAbrucnVfaDlSRBYH6cb0wPvCT");
+		analytics.page()
+		}}();
 
 if(user && user.status != 'admin')
-    script.
-        analytics.identify('#{user.id}', {
-          name: '#{user.name.first} #{user.name.last}',
-          email: '#{user.email}'
-        });
+	script.
+		analytics.identify('#{user.id}', {
+		  name: '#{user.name.first} #{user.name.last}',
+		  email: '#{user.email}'
+		});
 
 script(type="text/javascript", src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-50fe332b305ab390", async="async")
 
 script.
-    (function(f,b){
-        var c;
-        f.hj=f.hj||function(){(f.hj.q=f.hj.q||[]).push(arguments)};
-        f._hjSettings={hjid:16544, hjsv:4};
-        c=b.createElement("script");c.async=1;
-        c.src="//static.hotjar.com/c/hotjar-"+f._hjSettings.hjid+".js?sv="+f._hjSettings.hjsv;
-        b.getElementsByTagName("head")[0].appendChild(c); 
-    })(window,document);
+	(function(f,b){
+		var c;
+		f.hj=f.hj||function(){(f.hj.q=f.hj.q||[]).push(arguments)};
+		f._hjSettings={hjid:16544, hjsv:4};
+		c=b.createElement("script");c.async=1;
+		c.src="//static.hotjar.com/c/hotjar-"+f._hjSettings.hjid+".js?sv="+f._hjSettings.hjsv;
+		b.getElementsByTagName("head")[0].appendChild(c); 
+	})(window,document);
+	
+	(function(w,d,t,u,n,a,m){w['MauticTrackingObject']=n;
+		w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)},a=d.createElement(t),
+		m=d.getElementsByTagName(t)[0];a.async=1;a.src=u;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','https://gueime.mautic.net/mtc.js','mt');
+
+	mt('send', 'pageview');
