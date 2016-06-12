@@ -1,48 +1,79 @@
 extends layouts/layout
 
 block content
-    if(status == 'redirected')
-        div.alert-box(data-alert, style="margin-bottom: 0; height: 60px")
-            p Aparentemente esse artigo que tentou acessar não existe mais...mas temos certeza que algo abaixo vai te agradar!
-            a#alertMessage(href="#", style="color: white; opacity: 1").close &times;
-    if(status == 'deletado')
-        div.alert-box(data-alert, style="margin-bottom: 0; height: 60px")
-            p Seu Artigo foi deletado, mas você ainda tem acesso a ele em sua página de peril.
-            a#alertMessage(href="#", style="color: white; opacity: 1").close &times;
-    if(status == 'revision')
-        div.alert-box(data-alert, style="margin-bottom: 0; height: 60px")
-            p Sensacional! Agora seu artigo foi enviado para revisão! Aguarde um pouco e se tudo estiver correto ele logo será publicado
-            a#alertMessage(href="#", style="color: white; opacity: 1").close &times;
-            
-    div#darken       
-    div.row(style="background-color: white;")
-        div.large-4.medium-6.medium-centered.large-centered.columns.text-center(style="height:8rem;")
-            span.vertical-align-helper
-            a(href="/"): img(src="/images/gueime.png", alt="Gueime Logo")
+	if(status == 'redirected')
+		div.alert-box(data-alert, style="margin-bottom: 0; height: 60px")
+			p Aparentemente esse artigo que tentou acessar não existe mais...mas temos certeza que algo abaixo vai te agradar!
+			a#alertMessage(href="#", style="color: white; opacity: 1").close &times;
+	if(status == 'deletado')
+		div.alert-box(data-alert, style="margin-bottom: 0; height: 60px")
+			p Seu Artigo foi deletado, mas você ainda tem acesso a ele em sua página de peril.
+			a#alertMessage(href="#", style="color: white; opacity: 1").close &times;
+	if(status == 'revision')
+		div.alert-box(data-alert, style="margin-bottom: 0; height: 60px")
+			p Sensacional! Agora seu artigo foi enviado para revisão! Aguarde um pouco e se tudo estiver correto ele logo será publicado
+			a#alertMessage(href="#", style="color: white; opacity: 1").close &times;
+			
+	div#darken       
+	div.row(style="background-color: white;")
+		div.large-4.medium-6.medium-centered.large-centered.columns.text-center(style="height:8rem;")
+			span.vertical-align-helper
+			a(href="/"): img(src="/images/gueime.png", alt="Gueime Logo")
 
-    include partials/nav
-    
-    h1.text-center(style="font-size:14pt;color:#ECF0F1") Melhores artigos sobre Games
-    div#spinning
-        img(src="/images/spinning.gif")
-    div.row#gridArticles
-        if(games != undefined && games.length > 0)
-            for game in games
-                a(href="/jogos/#{game.slug}").item
-                    div.gameAnalise(style="#{game.cover}  margin:0px")
-                        div.analisePattern(style="background-color:rgba(36, 50, 80, 0.6);")
-                            h3(style="color:white;") #{game.title}
-        include partials/tiles
+	include partials/nav
+	
+	div.medium-6.medium-centered.columns
+		a.modalCursos
+			img(src="/images/cursos.jpg")
+		#mauticform_wrapper_gueimeleads.mauticform_wrapper(style="padding:20px;background-color:#fff")
+			span Uma parceria com:
+			div.parceria(style="text-align:center")
+				
+				br
+				img(src="/images/marca.png", style="width: 200px;")
+			h4(style="text-align:center;font-weight:bold") Está na hora de você aprender Photoshop!
+			img(src="/images/cursosbg.jpeg",style="margin:10px 0")
+			h5.lead Deixe seu <b>nome</b> e <b>e-mail</b> que te informamos logo logo quando ele estiver pronto
+			form#mauticform_gueimeleads(autocomplete='false', role='form', method='post', action='http://168.61.50.221/form/submit?formId=1', data-mautic-form='gueimeleads')
+				#mauticform_gueimeleads_error.mauticform-error
+				#mauticform_gueimeleads_message.mauticform-message
+				.mauticform-innerform
+					#mauticform_gueimeleads_nome.mauticform-row.mauticform-text
+						label#mauticform_label_gueimeleads_nome.mauticform-label(for='mauticform_input_gueimeleads_nome') Nome
+						input#mauticform_input_gueimeleads_nome.mauticform-input(name="mauticform[nome]", type="text")
+						span.mauticform-errormsg(style='display: none;')
+					#mauticform_gueimeleads_email.mauticform-row.mauticform-email.mauticform-required(data-validate='email', data-validation-type='email')
+						label#mauticform_label_gueimeleads_email.mauticform-label(for='mauticform_input_gueimeleads_email') E-mail
+						input#mauticform_input_gueimeleads_email.mauticform-input(name='mauticform[email]', value='', type='email')
+						span.mauticform-errormsg(style='display: none;') Isso é obrigatório.
+					#mauticform_gueimeleads_submit.mauticform-row.mauticform-button-wrapper
+						button#mauticform_input_gueimeleads_submit.mauticform-button(type='submit', name='mauticform[submit]', value='', style="width:100%;") Enviar
+						small Valorizamos sua privacidade. Seu e-mail não será compartilhado com terceiros!
+					input#mauticform_gueimeleads_id(type='hidden', name='mauticform[formId]', value='1')
+					input#mauticform_gueimeleads_return(type='hidden', name='mauticform[return]', value='')
+					input#mauticform_gueimeleads_name(type='hidden', name='mauticform[formName]', value='gueimeleads')
+	
+	h1.text-center(style="font-size:14pt;color:#ECF0F1") Melhores artigos sobre Games
+	div#spinning
+		img(src="/images/spinning.gif")
+	div.row#gridArticles
+		if(games != undefined && games.length > 0)
+			for game in games
+				a(href="/jogos/#{game.slug}").item
+					div.gameAnalise(style="#{game.cover}  margin:0px")
+						div.analisePattern(style="background-color:rgba(36, 50, 80, 0.6);")
+							h3(style="color:white;") #{game.title}
+		include partials/tiles
 
-    div.row#load
-        div.medium-6.small-centered.columns
-            if(type == 'inicio')
-                a#loadMore.button Mais artigos
-            else
-                a#loadMoreRelated.button Mais artigos
+	div.row#load
+		div.medium-6.small-centered.columns
+			if(type == 'inicio')
+				a#loadMore.button Mais artigos
+			else
+				a#loadMoreRelated.button Mais artigos
 
-    include partials/footer
+	include partials/footer
 
-    div#myModal.reveal-modal(data-reveal)
-        div#spinningContent
-            img(src="/images/spinning.gif")
+	div#myModal.reveal-modal(data-reveal)
+		div#spinningContent
+			img(src="/images/spinning.gif")
