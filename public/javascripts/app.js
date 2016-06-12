@@ -521,12 +521,12 @@ if(thereIsAdmin != true) {
 		});
 	});
 
-	$('.modalCursos').on('click', function(){
+	$(document).on('click', '.modalCursos', function(){
 		analytics.track('Click Ad Cursos', {
 			referrer: document.referrer
 		});
 		$(this).fadeOut().delay(300);
-		$('#mauticform_wrapper_gueimeleads').delay(500).fadeIn();
+		$(this).siblings('#mauticform_wrapper_gueimeleads').delay(500).fadeIn();
 	});
 
 	var QueryString = function () {
