@@ -1,127 +1,127 @@
 doctype html
 <!--[if IE 9]><html class="lt-ie10" lang="pt_BR" > <![endif]-->
 html.no-js(lang="pt_BR")
-    head
-        include head
-        if(article)
-            meta(name="description", content="#{article.description}")
-            meta(property="og:title", content="#{title}")
-            meta(property="og:type", content="article")
-            meta(property="og:image", content="http://www.gueime.com.br#{article.cover.image}")
-            meta(property="og:url", content="http://www.gueime.com.br/#{article.type}s/#{article.slug}")
-            meta(property="og:description", content="#{article.description}")
-            meta(name="twitter:card", content="summary")
-            meta(name="twitter:url", content="http://www.gueime.com.br/#{article.type}s/#{article.slug}")
-            meta(name="twitter:title", content="#{title}")
-            meta(name="twitter:description", content="#{article.description}")
-            meta(name="twitter:image", content="http://www.gueime.com.br#{article.cover.image}")
+	head
+		include head
+		if(article)
+			meta(name="description", content="#{article.description}")
+			meta(property="og:title", content="#{title}")
+			meta(property="og:type", content="article")
+			meta(property="og:image", content="http://www.gueime.com.br#{article.cover.image}")
+			meta(property="og:url", content="http://www.gueime.com.br/#{article.type}s/#{article.slug}")
+			meta(property="og:description", content="#{article.description}")
+			meta(name="twitter:card", content="summary")
+			meta(name="twitter:url", content="http://www.gueime.com.br/#{article.type}s/#{article.slug}")
+			meta(name="twitter:title", content="#{title}")
+			meta(name="twitter:description", content="#{article.description}")
+			meta(name="twitter:image", content="http://www.gueime.com.br#{article.cover.image}")
 			script.
-			    if (typeof MauticSDKLoaded == 'undefined') {
-			        var MauticSDKLoaded = true;
-			        var head            = document.getElementsByTagName('head')[0];
-			        var script          = document.createElement('script');
-			        script.type         = 'text/javascript';
-			        script.src          = 'http://13.92.177.75/media/js/mautic-form.js';
-			        script.onload       = function() {
-			            MauticSDK.onLoad();
-			        };
-			        head.appendChild(script);
-			        var MauticDomain = 'http://13.92.177.75';
-			        var MauticLang   = {
-			            'submittingMessage': "Agradecemos! :) Em breve você receberá um e-mail"
-			        }
-			    }
+				if (typeof MauticSDKLoaded == 'undefined') {
+					var MauticSDKLoaded = true;
+					var head            = document.getElementsByTagName('head')[0];
+					var script          = document.createElement('script');
+					script.type         = 'text/javascript';
+					script.src          = 'http://13.92.177.75/media/js/mautic-form.js';
+					script.onload       = function() {
+						MauticSDK.onLoad();
+					};
+					head.appendChild(script);
+					var MauticDomain = 'http://13.92.177.75';
+					var MauticLang   = {
+						'submittingMessage': "Agradecemos! :) Em breve você receberá um e-mail"
+					}
+				}
 
 
 
-    body(style="overflow-y: auto; background: url('../images/pattern.png') repeat #34495e")
+	body(style="overflow-y: auto; background: url('../images/pattern.png') repeat #34495e")
 
-        include facebookInit
+		include facebookInit
 
-        div.outWrap(style="overflow:hidden;")
-            block content
-        if(user)
-            script.
-                var articleId = '#{id}';
-                var currentUser = {
-                    id: '#{user.id}',
-                    avatarUrl: '#{user.photo}',
-                    name: '#{user.name.first}'
-                };
-                var existingComments = [!{article.comments}];
-                for (i=0;i<existingComments.length;i++){
-                    existingComments[i].sectionId = existingComments[i].sectionId.toString();
-                }
-                    
-        else
-            script.
-                var articleId = '#{id}';
-                var currentUser = {
-                    id: "anon",
-                    avatarUrl: "http://www.gueime.com.br/images/avatar.jpg",
-                    name: "Amigo Gueimer"
-                }
-                var existingComments = [!{article.comments}];
-                for (i=0;i<existingComments.length;i++){
-                    existingComments[i].sectionId = existingComments[i].sectionId.toString();
-                }
+		div.outWrap(style="overflow:hidden;")
+			block content
+		if(user)
+			script.
+				var articleId = '#{id}';
+				var currentUser = {
+					id: '#{user.id}',
+					avatarUrl: '#{user.photo}',
+					name: '#{user.name.first}'
+				};
+				var existingComments = [!{article.comments}];
+				for (i=0;i<existingComments.length;i++){
+					existingComments[i].sectionId = existingComments[i].sectionId.toString();
+				}
+					
+		else
+			script.
+				var articleId = '#{id}';
+				var currentUser = {
+					id: "anon",
+					avatarUrl: "http://www.gueime.com.br/images/avatar.jpg",
+					name: "Amigo Gueimer"
+				}
+				var existingComments = [!{article.comments}];
+				for (i=0;i<existingComments.length;i++){
+					existingComments[i].sectionId = existingComments[i].sectionId.toString();
+				}
 
-        include scripts
+		include scripts
 
-        include facebook
+		include facebook
 
-        script.
-            $(document).ready(function(){
-                $.ajax({
-                    url: '/loadRelated',
-                    type: 'GET',
-                    data: { related: $('#share').attr('title'), id: $('#share').attr('data-id') }
-                }).done(function (data2) {
-                    $('#share').html(data2);
-                });
-            });
-            
-            $(document).ready(function () {
-                $("#mainText").find('p').each(function (i, obj) {
-                    $(this).attr('data-section-id', i);
-                    $(this).attr('class', 'commentable-section');
-                });
+		script.
+			$(document).ready(function(){
+				$.ajax({
+					url: '/loadRelated',
+					type: 'GET',
+					data: { related: $('#share').attr('title'), id: $('#share').attr('data-id') }
+				}).done(function (data2) {
+					$('#share').html(data2);
+				});
+			});
+			
+			$(document).ready(function () {
+				$("#mainText").find('p').each(function (i, obj) {
+					$(this).attr('data-section-id', i);
+					$(this).attr('class', 'commentable-section');
+				});
 
-                var SideComments = require('side-comments');
-                sideComments = new SideComments('#mainText', currentUser, existingComments);
+				var SideComments = require('side-comments');
+				sideComments = new SideComments('#mainText', currentUser, existingComments);
 
-                sideComments.on('commentPosted', function (comment) {
-                    console.log(comment.comment);
-                    if (comment.comment != "") {
-                        $.ajax({
-                            url: '/comments/' + articleId,
-                            type: 'POST',
-                            data: comment,
-                            success: function (savedComment) {
-                                // Once the comment is saved, you can insert the comment into the comment stream with "insertComment(comment)".
-                                sideComments.insertComment(comment);
-                                console.log(savedComment);
-                            }
-                        });
-                    } else {
-                        $('.comment-box').attr('style', 'outline: 2px solid #E54C3C;').attr('placeholder', 'ops, cadê o texto?')
-                        setTimeout(function () {
-                            $('.comment-box').removeAttr('style').attr('placeholder', 'Diga lá...');
-                        }, 2000);
+				sideComments.on('commentPosted', function (comment) {
+					console.log(comment.comment);
+					if (comment.comment != "") {
+						$.ajax({
+							url: '/comments/' + articleId,
+							type: 'POST',
+							data: comment,
+							success: function (savedComment) {
+								// Once the comment is saved, you can insert the comment into the comment stream with "insertComment(comment)".
+								sideComments.insertComment(comment);
+								console.log(savedComment);
+							}
+						});
+					} else {
+						$('.comment-box').attr('style', 'outline: 2px solid #E54C3C;').attr('placeholder', 'ops, cadê o texto?')
+						setTimeout(function () {
+							$('.comment-box').removeAttr('style').attr('placeholder', 'Diga lá...');
+						}, 2000);
 
-                    }
-            });
+					}
+			});
 
-                // Listen to "commentDeleted" and send a request to your backend to delete the comment.
-                // More about this event in the "docs" section.
-                sideComments.on('commentDeleted', function (commentId) {
-                    $.ajax({
-                        url: '/comments/' + commentId,
-                        type: 'DELETE',
-                        success: function (success) {
-                            // Do something.
-                        }
-                    });
-                });
-            });
-            
+				// Listen to "commentDeleted" and send a request to your backend to delete the comment.
+				// More about this event in the "docs" section.
+				sideComments.on('commentDeleted', function (commentId) {
+					$.ajax({
+						url: '/comments/' + commentId,
+						type: 'DELETE',
+						success: function (success) {
+							// Do something.
+						}
+					});
+				});
+			});
+			
