@@ -15,6 +15,22 @@ html.no-js(lang="pt_BR")
         meta(name="twitter:title", content="Gueime")
         meta(name="twitter:description", content="Gueime - O melhor site de games do Brasil. Confira as últimas notícias, análises e notícias!")
         meta(name="twitter:image", content="http://www.gueime.com.br/images/gueime.png")
+		script.
+			if (typeof MauticSDKLoaded == 'undefined') {
+				var MauticSDKLoaded = true;
+				var head            = document.getElementsByTagName('head')[0];
+				var script          = document.createElement('script');
+				script.type         = 'text/javascript';
+				script.src          = 'http://13.92.177.75/media/js/mautic-form.js';
+				script.onload       = function() {
+					MauticSDK.onLoad();
+				};
+				head.appendChild(script);
+				var MauticDomain = 'http://13.92.177.75';
+				var MauticLang   = {
+					'submittingMessage': "Agradecemos! :) Em breve você receberá um e-mail"
+				}
+			}
 
     body
         include facebookInit 
