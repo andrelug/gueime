@@ -1,20 +1,20 @@
 doctype html
 <!--[if IE 9]><html class="lt-ie10" lang="pt_BR" > <![endif]-->
 html.no-js(lang="pt_BR")
-    head
-        include head
-        link(rel="canonical", href="http://www.gueime.com.br")
-        meta(name="description", content="Gueime - O melhor site de games do Brasil. Confira as últimas notícias, análises e notícias!")
-        meta(property="og:title", content="Gueime")
-        meta(property="og:type", content="website")
-        meta(property="og:image", content="http://www.gueime.com.br/images/gueime.png")
-        meta(property="og:url", content="http://www.gueime.com.br")
-        meta(property="og:description", content="Gueime - O melhor site de games do Brasil. Confira as últimas notícias, análises e notícias!")
-        meta(name="twitter:card", content="summary")
-        meta(name="twitter:url", content="http://www.gueime.com.br/")
-        meta(name="twitter:title", content="Gueime")
-        meta(name="twitter:description", content="Gueime - O melhor site de games do Brasil. Confira as últimas notícias, análises e notícias!")
-        meta(name="twitter:image", content="http://www.gueime.com.br/images/gueime.png")
+	head
+		include head
+		link(rel="canonical", href="http://www.gueime.com.br")
+		meta(name="description", content="Gueime - O melhor site de games do Brasil. Confira as últimas notícias, análises e notícias!")
+		meta(property="og:title", content="Gueime")
+		meta(property="og:type", content="website")
+		meta(property="og:image", content="http://www.gueime.com.br/images/gueime.png")
+		meta(property="og:url", content="http://www.gueime.com.br")
+		meta(property="og:description", content="Gueime - O melhor site de games do Brasil. Confira as últimas notícias, análises e notícias!")
+		meta(name="twitter:card", content="summary")
+		meta(name="twitter:url", content="http://www.gueime.com.br/")
+		meta(name="twitter:title", content="Gueime")
+		meta(name="twitter:description", content="Gueime - O melhor site de games do Brasil. Confira as últimas notícias, análises e notícias!")
+		meta(name="twitter:image", content="http://www.gueime.com.br/images/gueime.png")
 		script.
 			if (typeof MauticSDKLoaded == 'undefined') {
 				var MauticSDKLoaded = true;
@@ -32,175 +32,175 @@ html.no-js(lang="pt_BR")
 				}
 			}
 
-    body
-        include facebookInit 
-            
-        
-        div.outWrap(style="overflow:hidden;")
-            block content
+	body
+		include facebookInit 
+			
+		
+		div.outWrap(style="overflow:hidden;")
+			block content
 
-        include scripts
-        script.scriptLoad.
-            container.waitForImages(function () {
-                $("#spinning").hide();
-                $('body').css('overflow-y', 'auto');
-                container.animate({ 'opacity': 1 });
+		include scripts
+		script.scriptLoad.
+			container.waitForImages(function () {
+				$("#spinning").hide();
+				$('body').css('overflow-y', 'auto');
+				container.animate({ 'opacity': 1 });
 
-                container.isotope({
-                    itemSelector: '.item',
-                    layoutMode: 'masonry',
-                    masonry:{
-                        gutter: 20,
-                        rowHeight: 10
-                    }                    
-                    
-                });
-                $('.filtros').show();
+				container.isotope({
+					itemSelector: '.item',
+					layoutMode: 'masonry',
+					masonry:{
+						gutter: 20,
+						rowHeight: 10
+					}                    
+					
+				});
+				$('.filtros').show();
 
-                $('#mainInput').autocomplete({
-                    serviceUrl: '/autocomplete',
-                    minChars: 3,
-                    deferRequestBy: 400,
-                    autoSelectFirst: true
-                });
+				$('#mainInput').autocomplete({
+					serviceUrl: '/autocomplete',
+					minChars: 3,
+					deferRequestBy: 400,
+					autoSelectFirst: true
+				});
 
-                
+				
 
-                var nav = $('#nav-sticky');
-                nav_sticky = nav.offset().top; //get the Y-position of section
+				var nav = $('#nav-sticky');
+				nav_sticky = nav.offset().top; //get the Y-position of section
 
-                $(window).on({
-                    scroll: function () { // fires when user scrolls
-                        if ($(window).width() > 641) {
-                            var current_position = window.pageYOffset; // get the current window Y-Position
-                            if (current_position > nav_sticky) {
-                                nav.addClass('sticky');
-                                container.css('margin-top', 137); // add class to make the nav sticky using css
-                                if ($(window).width() > 1025){
-                                    $('.gueimeWhite').fadeIn();
-                                }
-                    
-                            } else {
-                                nav.removeClass('sticky');
-                                container.css('margin-top', 0); // remove sticky css class
-                                    $('.gueimeWhite').fadeOut();
-                            }
-                        }
-                    }
-                });
-            }, null, true);
-        script.
-            $(window).on('popstate', function () {
-                $('#myModal').foundation('reveal', 'close');
-            });
+				$(window).on({
+					scroll: function () { // fires when user scrolls
+						if ($(window).width() > 641) {
+							var current_position = window.pageYOffset; // get the current window Y-Position
+							if (current_position > nav_sticky) {
+								nav.addClass('sticky');
+								container.css('margin-top', 137); // add class to make the nav sticky using css
+								if ($(window).width() > 1025){
+									$('.gueimeWhite').fadeIn();
+								}
+					
+							} else {
+								nav.removeClass('sticky');
+								container.css('margin-top', 0); // remove sticky css class
+									$('.gueimeWhite').fadeOut();
+							}
+						}
+					}
+				});
+			}, null, true);
+		script.
+			$(window).on('popstate', function () {
+				$('#myModal').foundation('reveal', 'close');
+			});
 
-        if(searchTag != undefined)
-            if(type == 'inicio')
-                script.
-                    var searchTag = '#{searchTag}';
-                    searchTag = searchTag.split('-');
-                    for(i=0; i < searchTag.length; i++){
-                        console.log(searchTag[i]);
-                        $('#tagSelection').append('<span>' + searchTag[i] + '<a class="tag" id="' + searchTag[i] + '">x</a></span>');
-                        searchStr.push(searchTag[i]);
-                    }
-                
-                    n = $('.item').length;
-                    if (n < 7) {
-                        $.ajax({
-                            type: "GET",
-                            url: "/pagination",
-                            data: { n: n, str: searchStr },
-                            dataType: 'html'
-                        }).done(function (data) {
-                            container.isotope('insert', $(data));
-                        });
-                    }
-            else
-                script.
-                    var searchTag = '#{searchTag}';
-                    searchTag = searchTag.split('-');
-                    for(i=0; i < searchTag.length; i++){
-                        console.log(searchTag[i]);
-                        $('#tagSelection').append('<span>' + searchTag[i] + '<a class="tag" id="' + searchTag[i] + '">x</a></span>');
-                        searchStr.push(searchTag[i]);
-                    }
-                
-                    n = $('.item').length;
-                    if (n < 7) {
-                        $.ajax({
-                            type: "GET",
-                            url: "/pagination/#{type}",
-                            data: { n: n, str: searchStr },
-                            dataType: 'html'
-                        }).done(function (data) {
-                            container.isotope('insert', $(data));
-                        });
-                    }
-                    $('#loadMoreRelated').on('click', function () {
-                        n = $('.item').length;
-                        $.ajax({
-                            type: "GET",
-                            url: "/pagination/#{type}",
-                            data: { n: n, str: searchStr },
-                            dataType: 'html'
-                        }).done(function (data) {
-                            console.log(data)
-                            FB.XFBML.parse();
-                            if (data == '<div id="gridArticles" class="row"></div><style>.autocomplete-suggestions{position:absolute !important;}</style>') {
-                                $("#loadMoreRelated").fadeOut(300, function () {
-                                    $(this).text("Aparentemente não há mais artigos").fadeIn(300).delay(1500).fadeOut(300, function () {
-                                        $(this).text('Mais Artigos').fadeIn(300);
-                                    });
-                                });
-                            }
-                            container.isotope('insert', $(data));
-                        });
-                    });
-        else
-            if(type == 'inicio')
-                script.
-                    n = $('.item').length;
-                    if (n < 7) {
-                        $.ajax({
-                            type: "GET",
-                            url: "/pagination",
-                            data: {n: n},
-                            dataType: 'html'
-                        }).done(function (data) {
-                            container.isotope('insert', $(data));
-                        });
-                    }
-            else
-                script.
-                    n = $('.item').length;
-                    if (n < 7) {
-                        $.ajax({
-                            type: "GET",
-                            url: "/pagination/#{type}",
-                            data: {n: n},
-                            dataType: 'html'
-                        }).done(function (data) {
-                            container.isotope('insert', $(data));
-                        });
-                    }
-                    $('#loadMoreRelated').on('click', function () {
-                        n = $('.item').length;
-                        $.ajax({
-                            type: "GET",
-                            url: "/pagination/#{type}",
-                            data: { n: n, str: searchStr },
-                            dataType: 'html'
-                        }).done(function (data) {
-                            console.log(data)
-                            FB.XFBML.parse();
-                            if (data == '<div id="gridArticles" class="row"></div><style>.autocomplete-suggestions{position:absolute !important;}</style>') {
-                                $("#loadMoreRelated").fadeOut(300, function () {
-                                    $(this).text("Aparentemente não há mais artigos").fadeIn(300).delay(1500).fadeOut(300, function () {
-                                        $(this).text('Mais Artigos').fadeIn(300);
-                                    });
-                                });
-                            }
-                            container.isotope('insert', $(data));
-                        });
-                    });
+		if(searchTag != undefined)
+			if(type == 'inicio')
+				script.
+					var searchTag = '#{searchTag}';
+					searchTag = searchTag.split('-');
+					for(i=0; i < searchTag.length; i++){
+						console.log(searchTag[i]);
+						$('#tagSelection').append('<span>' + searchTag[i] + '<a class="tag" id="' + searchTag[i] + '">x</a></span>');
+						searchStr.push(searchTag[i]);
+					}
+				
+					n = $('.item').length;
+					if (n < 7) {
+						$.ajax({
+							type: "GET",
+							url: "/pagination",
+							data: { n: n, str: searchStr },
+							dataType: 'html'
+						}).done(function (data) {
+							container.isotope('insert', $(data));
+						});
+					}
+			else
+				script.
+					var searchTag = '#{searchTag}';
+					searchTag = searchTag.split('-');
+					for(i=0; i < searchTag.length; i++){
+						console.log(searchTag[i]);
+						$('#tagSelection').append('<span>' + searchTag[i] + '<a class="tag" id="' + searchTag[i] + '">x</a></span>');
+						searchStr.push(searchTag[i]);
+					}
+				
+					n = $('.item').length;
+					if (n < 7) {
+						$.ajax({
+							type: "GET",
+							url: "/pagination/#{type}",
+							data: { n: n, str: searchStr },
+							dataType: 'html'
+						}).done(function (data) {
+							container.isotope('insert', $(data));
+						});
+					}
+					$('#loadMoreRelated').on('click', function () {
+						n = $('.item').length;
+						$.ajax({
+							type: "GET",
+							url: "/pagination/#{type}",
+							data: { n: n, str: searchStr },
+							dataType: 'html'
+						}).done(function (data) {
+							console.log(data)
+							FB.XFBML.parse();
+							if (data == '<div id="gridArticles" class="row"></div><style>.autocomplete-suggestions{position:absolute !important;}</style>') {
+								$("#loadMoreRelated").fadeOut(300, function () {
+									$(this).text("Aparentemente não há mais artigos").fadeIn(300).delay(1500).fadeOut(300, function () {
+										$(this).text('Mais Artigos').fadeIn(300);
+									});
+								});
+							}
+							container.isotope('insert', $(data));
+						});
+					});
+		else
+			if(type == 'inicio')
+				script.
+					n = $('.item').length;
+					if (n < 7) {
+						$.ajax({
+							type: "GET",
+							url: "/pagination",
+							data: {n: n},
+							dataType: 'html'
+						}).done(function (data) {
+							container.isotope('insert', $(data));
+						});
+					}
+			else
+				script.
+					n = $('.item').length;
+					if (n < 7) {
+						$.ajax({
+							type: "GET",
+							url: "/pagination/#{type}",
+							data: {n: n},
+							dataType: 'html'
+						}).done(function (data) {
+							container.isotope('insert', $(data));
+						});
+					}
+					$('#loadMoreRelated').on('click', function () {
+						n = $('.item').length;
+						$.ajax({
+							type: "GET",
+							url: "/pagination/#{type}",
+							data: { n: n, str: searchStr },
+							dataType: 'html'
+						}).done(function (data) {
+							console.log(data)
+							FB.XFBML.parse();
+							if (data == '<div id="gridArticles" class="row"></div><style>.autocomplete-suggestions{position:absolute !important;}</style>') {
+								$("#loadMoreRelated").fadeOut(300, function () {
+									$(this).text("Aparentemente não há mais artigos").fadeIn(300).delay(1500).fadeOut(300, function () {
+										$(this).text('Mais Artigos').fadeIn(300);
+									});
+								});
+							}
+							container.isotope('insert', $(data));
+						});
+					});
