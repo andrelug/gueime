@@ -23,6 +23,7 @@
     "connect-mongo": "*",
     "express": "~3.5.2",
     "feed": "*",
+    "forest-express-mongoose": "^0.2.26",
     "fs": "0.0.2",
     "googleapis": "^2.1.7",
     "https": "^1.0.0",

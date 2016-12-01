@@ -48,6 +48,13 @@ app.configure(function () {
 		}
 	});
 
+	app.use(require('forest-express-mongoose').init({
+  modelsDir: __dirname + '/app/models', // Your models directory.
+  secretKey: 'da330be54621c0185d0d1871aba7f18a0c8d24a92dd50971a8e4cfcb7fba6a00',
+  authKey: 'eCiI!qu$jy(OvvL(', // Choose a secret authentication key.
+  mongoose: require('mongoose') // The mongoose database connection.
+}));
+
 	app.use(app.router);
 	app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 	app.use(express.static(path.join(__dirname, 'public'), { maxAge: 86400000 }));
