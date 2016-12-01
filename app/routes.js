@@ -236,10 +236,10 @@ module.exports = function (app, passport, mongoose) {
 		n = req.query.n;
 
 		var searchStr = [];
-
+		console.log('n ' + n)
 		if (!req.query.str) {
-			Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({publishDate: -1}).limit(6).skip(n).exec(function (err, docs) {
-
+			Artigos.find({status: 'publicado'}, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({publishDate: -1}).limit(6).skip(Number(n)).exec(function (err, docs) {
+				console.log('docs ' +docs)
 				res.render('loadMore', { docs: docs });
 			});
 		} else {
@@ -251,7 +251,7 @@ module.exports = function (app, passport, mongoose) {
 			}
 			searchStr = searchStr.toString().split(',');
 
-			Artigos.find({ facet: { $all: searchStr}, status: 'publicado' }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({publishDate: -1}).limit(6).skip(n).exec(function (err, docs) {
+			Artigos.find({ facet: { $all: searchStr}, status: 'publicado' }, { description: 1, 'authors.name': 1, title: 1, type: 1, 'cover.image': 1, slug: 1, 'graph.views': 1 }).sort({publishDate: -1}).limit(6).skip(Number(n)).exec(function (err, docs) {
 
 				res.render('loadMore', { docs: docs });
 			});
