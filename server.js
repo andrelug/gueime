@@ -50,7 +50,7 @@ app.configure(function () {
 
 	app.use(require('forest-express-mongoose').init({
   modelsDir: __dirname + '/app/models', // Your models directory.
-  secretKey: 'da330be54621c0185d0d1871aba7f18a0c8d24a92dd50971a8e4cfcb7fba6a00',
+  secretKey: configDB.forest,
   authKey: 'eCiI!qu$jy(OvvL(', // Choose a secret authentication key.
   mongoose: require('mongoose') // The mongoose database connection.
 }));
