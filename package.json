@@ -17,7 +17,7 @@
   ],
   "dependencies": {
     "jade": "*",
-    "express": "~3.5.2",
+    "express": "~4.16.0",
     "mongoose": "*",
     "passport": "*",
     "stylus": "~0.44.0",
@@ -32,11 +32,17 @@
     "connect-mongo": "*",
     "node-transloadit": "*",
     "nodemailer": "*",
-    "async": "~0.8.0"
+    "async": "~0.8.0",
+    "snyk": "^1.87.0"
   },
   "noAnalyze": true,
   "license": "Apache",
   "engines": {
     "node": ">=0.6.14"
-  }
+  },
+  "scripts": {
+    "snyk-protect": "snyk protect",
+    "prepare": "npm run snyk-protect"
+  },
+  "snyk": true
 }
