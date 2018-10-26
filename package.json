@@ -17,10 +17,10 @@
   ],
   "dependencies": {
     "jade": "*",
-    "express": "~3.5.2",
+    "express": "~4.15.5",
     "mongoose": "*",
     "passport": "*",
-    "stylus": "~0.44.0",
+    "stylus": "~0.54.3",
     "passport-local": "*",
     "passport-facebook": "*",
     "passport-twitter": "*",
