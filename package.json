@@ -27,7 +27,7 @@
     "passport-google-oauth": "*",
     "connect-flash": "*",
     "bcrypt-nodejs": "*",
-    "newrelic": "~1.5.3",
+    "newrelic": "~1.13.3",
     "ip": "*",
     "connect-mongo": "*",
     "node-transloadit": "*",
