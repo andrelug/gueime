@@ -20,7 +20,7 @@
     "express": "~3.5.2",
     "mongoose": "*",
     "passport": "*",
-    "stylus": "~0.44.0",
+    "stylus": "~0.54.3",
     "passport-local": "*",
     "passport-facebook": "*",
     "passport-twitter": "*",
